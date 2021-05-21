@@ -10,7 +10,37 @@ To set up the development server run
     yarn dev
 ```
 
-Open localhost:3000 on your browser to see the result
+Open localhost:3000 on your browser to see the result!
+
+## Directory Structure
+
+```
+    .
+    ├── LICENSE
+    ├── README.md
+    ├── __tests__
+    │   └── index.spec.ts
+    ├── next-env.d.ts
+    ├── next.config.js
+    ├── package.json
+    ├── pages
+    │   ├── _app.tsx
+    │   ├── _document.tsx
+    │   ├── index.tsx
+    │   └── protected.tsx
+    ├── public
+    │   ├── icons
+    │   └── meta.json
+    ├── src
+    │   ├── components
+    │   ├── definitions
+    │   └── styles
+    ├── test
+    │   ├── jest.config.js
+    │   └── jest.setup.ts
+    ├── tsconfig.json
+    └── yarn.lock
+```
 
 ## Addded Plugins
 

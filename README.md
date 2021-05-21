@@ -2,6 +2,8 @@
 
 HeadsUpGuys platform - Module Builder & Dashboard for interactive resource slides
 
+## Developers!
+
 ## Getting Started
 
 To run the application:

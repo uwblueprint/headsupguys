@@ -4,17 +4,28 @@ HeadsUpGuys platform - Module Builder & Dashboard for interactive resource slide
 
 ## Getting Started
 
-To set up the development server run
+To run the application:
 
 ```bash
-    yarn dev
+# Install dependencies
+yarn
+
+# Run locally
+yarn dev
 ```
 
 Open localhost:3000 on your browser to see the result!
 
+## General Architecture
+
+1. [NodeJS](https://nodejs.org/en/) application powered by the [Next.JS](https://nextjs.org/) with TypeScript
+   framework.
+2. [Chakra UI](https://chakra-ui.com/) along with [Storybook.js](https://storybook.js.org/tutorials/) for frontend components
+3. Vercel for deployment, with Github Actions for pre-merge workflows
+
 ## Directory Structure
 
-```
+```bash
     .
     ├── .babelrc
     ├── .env # Env vars

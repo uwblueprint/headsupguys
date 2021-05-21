@@ -1,48 +1,18 @@
-# headsupguys
+# HeadsUpGuys
 
-This project was generated with [superplate](https://github.com/pankod/superplate).
+HeadsUpGuys platform - Module Builder & Dashboard for interactive resource slides
 
 ## Getting Started
 
-superplate is a Next.js all-in-one project generator. Create your project with the tools you need without spending hours on setting them up.
-
-Every plugin comes with an example to give you a brief knowledge about their usage.
-
-## Available Scripts
-
-### Running the development server.
+To set up the development server run
 
 ```bash
     yarn dev
 ```
 
-### Building for production.
+Open localhost:3000 on your browser to see the result
 
-```bash
-    yarn build
-```
-
-### Running the production server.
-
-```bash
-    yarn start
-```
-
-### Linting & formatting your code.
-
-```bash
-    yarn lint
-```
-
-### Running your tests.
-
-```bash
-    yarn test
-```
-
-## Learn More
-
-To learn more about **superplate**, please check out the [Documentation](https://github.com/pankod/superplate).
+## Addded Plugins
 
 ### **Chakra UI**
 
@@ -113,3 +83,5 @@ GitHub Actions makes it easy to automate all your software workflows, now with w
 ## License
 
 MIT
+
+This project was generated with [Superplate](https://github.com/pankod/superplate).

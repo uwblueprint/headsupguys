@@ -16,6 +16,20 @@ Open localhost:3000 on your browser to see the result!
 
 ```
     .
+    ├── .babelrc
+    ├── .env # Env vars
+    ├── .eslintignore
+    ├── .eslintrc # Eslint
+    ├── .gitattributes
+    ├── .github
+    │   └── workflows # Github Deployment workflows
+    ├── .gitignore
+    ├── .next # Next.js generated files
+    ├── .prettierignore
+    ├── .prettierrc
+    ├── .storybook # Storybook.js config files
+    │   ├── main.js
+    │   └── preview.js
     ├── LICENSE
     ├── README.md
     ├── __tests__
@@ -23,19 +37,20 @@ Open localhost:3000 on your browser to see the result!
     ├── next-env.d.ts
     ├── next.config.js
     ├── package.json
-    ├── pages
+    ├── pages # Pages .../[fileName]
     │   ├── _app.tsx
     │   ├── _document.tsx
-    │   ├── index.tsx
-    │   └── protected.tsx
-    ├── public
+    |   ├── api/ # Serverless API routes
+    │   ├── index.tsx # Home page
+    │   └── protected.tsx # Protected route example
+    ├── public # Assets
     │   ├── icons
     │   └── meta.json
-    ├── src
+    ├── src # Components, styles
     │   ├── components
     │   ├── definitions
     │   └── styles
-    ├── test
+    ├── test # Jest setup
     │   ├── jest.config.js
     │   └── jest.setup.ts
     ├── tsconfig.json

@@ -23,7 +23,7 @@ Open localhost:3000 on your browser to see the result!
 1. [NodeJS](https://nodejs.org/en/) application powered by the [Next.JS](https://nextjs.org/) with TypeScript
    framework.
 2. [Chakra UI](https://chakra-ui.com/) along with [Storybook.js](https://storybook.js.org/tutorials/) for frontend components
-3. Vercel for deployment, with Github Actions for pre-merge workflows
+3. [Vercel](https://vercel.com/) for deployment, with Github Actions for pre-merge workflows
 
 ## Directory Structure
 

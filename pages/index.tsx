@@ -7,7 +7,7 @@ const Home: React.FC = () => {
     return (
         <Flex direction="column" minH="100vh">
             <Header />
-            <Main />
+            <Main title="Testing deployment" />
             <Cards />
             <Spacer />
             <Footer />

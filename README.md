@@ -3,6 +3,7 @@
 HeadsUpGuys platform - Module Builder & Dashboard for interactive resource slides
 
 ## Developers!
+Yash Gajaria
 
 ## Getting Started
 

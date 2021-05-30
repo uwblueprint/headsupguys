@@ -1,12 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "./utils/mongodb";
+import connectDB from "./utils/mongoose";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const { db } = await connectToDatabase();
-    const movies = await db
-        .collection("restaurants")
-        .find({})
-        .limit(20)
-        .toArray();
-    res.json(movies);
+const dbTest = async (req: NextApiRequest, res: NextApiResponse) => {
+    // Use mongoose here!
+    res.status(200).json({ name: "Hello World!!!" });
 };
+
+export default connectDB(dbTest);

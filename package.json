@@ -20,6 +20,7 @@
         "@types/mongodb": "^3.6.16",
         "framer-motion": "^3.2.1",
         "mongodb": "^3.6.9",
+        "mongoose": "^5.12.12",
         "next": "10.2.0",
         "next-compose-plugins": "^2.2.1",
         "prettier": "^2.2.1",
@@ -62,8 +63,6 @@
         ]
     },
     "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged"
-        }
+        "hooks": {}
     }
 }

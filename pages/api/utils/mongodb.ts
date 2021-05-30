@@ -1,5 +1,6 @@
 import { Db, MongoClient } from "mongodb";
 
+// Get environment variables
 const { MONGODB_URI, MONGODB_DB } = process.env;
 
 if (!MONGODB_URI) {

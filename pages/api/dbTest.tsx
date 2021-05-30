@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { connectToDatabase } from "./utils/mongodb";
 import connectDB from "./utils/mongoose";
 
 const dbTest = async (req: NextApiRequest, res: NextApiResponse) => {

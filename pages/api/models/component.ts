@@ -23,11 +23,7 @@ const ComponentSchema = new Schema<ComponentInterface>(
         },
     },
     {
-        timestamps: {
-            currentTime: Date.now,
-            updatedAt: "dateUpdated",
-            createdAt: "dateCreated",
-        },
+        timestamps: true,
     },
 );
 

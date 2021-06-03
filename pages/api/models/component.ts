@@ -1,18 +1,18 @@
 import { Document, model, Schema, Types } from "mongoose";
 
-enum ComponentType {
+export enum ComponentType {
     TEXT = "text",
     VIDEO = "video",
     AUDIO = "audio",
 }
 
-interface ComponentInterface {
+export interface ComponentInterface {
     _id: Types.ObjectId;
     type: ComponentType;
     properties: any;
 }
 
-type ComponentDocument = ComponentInterface & Document;
+export type ComponentDocument = ComponentInterface & Document;
 
 const ComponentSchema = new Schema<ComponentDocument>(
     {
@@ -21,7 +21,7 @@ const ComponentSchema = new Schema<ComponentDocument>(
             required: true,
         },
         properties: {
-            type: any,
+            type: Schema.Types.Mixed,
             required: false,
         },
     },
@@ -36,4 +36,4 @@ const ComponentSchema = new Schema<ComponentDocument>(
 
 const Component = model("Component", ComponentSchema);
 
-export { Component, ComponentDocument, ComponentInterface };
+export { Component, ComponentSchema };

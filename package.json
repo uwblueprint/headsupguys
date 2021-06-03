@@ -17,6 +17,7 @@
         "@emotion/react": "^11.1.4",
         "@emotion/styled": "^11.0.0",
         "@types/jest": "^26.0.23",
+        "auth0-js": "^9.16.2",
         "framer-motion": "^3.2.1",
         "next": "10.2.0",
         "next-compose-plugins": "^2.2.1",

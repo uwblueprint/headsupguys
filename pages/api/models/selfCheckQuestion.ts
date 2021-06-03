@@ -1,18 +1,15 @@
 import { model, Schema } from "mongoose";
 
 enum QuestionType {
-    //Revisit - add more types
     MULTIPLE_CHOICE = "multiple_choice",
     MULTI_SELECT = "multi_select",
-    SHORT_ANSWER = "short_answer",
-    LONG_ANSWER = "long_answer",
 }
 
 interface SelfCheckQuestionInterface {
     _id: Schema.Types.ObjectId;
     type: QuestionType;
     question: string;
-    options: [Schema.Types.Mixed]; //Type of questions
+    options: [Schema.Types.Mixed];
     questionNumber: number;
 }
 

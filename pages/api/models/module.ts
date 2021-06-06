@@ -35,6 +35,7 @@ const ModuleSchema = new Schema<ModuleInterface>(
         },
         editing: {
             type: Boolean,
+            default: false,
         },
     },
     {

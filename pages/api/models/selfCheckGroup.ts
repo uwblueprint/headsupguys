@@ -1,23 +1,19 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
 interface SelfCheckGroupInterface {
-    _id: Schema.Types.ObjectId;
-    questionIDs: [Schema.Types.ObjectId];
+    _id: Types.ObjectId;
+    questionIDs: [Types.ObjectId];
 }
 
 const SelfCheckGroupSchema = new Schema<SelfCheckGroupInterface>(
     {
         questionIDs: {
-            type: [{ type: Schema.Types.ObjectId, ref: "Questions" }],
+            type: [{ type: Types.ObjectId, ref: "SelfCheckQuestion" }],
             default: [],
         },
     },
     {
-        timestamps: {
-            currentTime: Date.now,
-            updatedAt: "dateUpdated",
-            createdAt: "dateCreated",
-        },
+        timestamps: true,
     },
 );
 

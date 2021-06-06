@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
 enum QuestionType {
     MULTIPLE_CHOICE = "multiple_choice",
@@ -6,7 +6,7 @@ enum QuestionType {
 }
 
 interface SelfCheckQuestionInterface {
-    _id: Schema.Types.ObjectId;
+    _id: Types.ObjectId;
     type: QuestionType;
     question: string;
     options: [Schema.Types.Mixed];
@@ -25,7 +25,8 @@ const SelfCheckQuestionSchema = new Schema<SelfCheckQuestionInterface>(
             trim: true,
         },
         options: {
-            type: [{ type: Schema.Types.Mixed, ref: "Options" }],
+            type: [Schema.Types.Mixed],
+            default: [],
         },
         questionNumber: {
             type: Number,
@@ -33,11 +34,7 @@ const SelfCheckQuestionSchema = new Schema<SelfCheckQuestionInterface>(
         },
     },
     {
-        timestamps: {
-            currentTime: Date.now,
-            updatedAt: "dateUpdated",
-            createdAt: "dateCreated",
-        },
+        timestamps: true,
     },
 );
 

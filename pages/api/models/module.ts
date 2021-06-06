@@ -45,4 +45,4 @@ const ModuleSchema = new Schema<ModuleInterface>(
 
 const Module = model("Module", ModuleSchema);
 
-export { Module };
+export { Module, ModuleSchema };

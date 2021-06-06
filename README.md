@@ -4,6 +4,8 @@ HeadsUpGuys platform - Module Builder & Dashboard for interactive resource slide
 
 ## Developers!
 
+Daniel Yu 🥑
+
 ## Getting Started
 
 To run the application:
@@ -70,7 +72,7 @@ Open localhost:3000 on your browser to see the result!
     └── yarn.lock
 ```
 
-## Addded Plugins
+## Added Plugins
 
 ### **Chakra UI**
 

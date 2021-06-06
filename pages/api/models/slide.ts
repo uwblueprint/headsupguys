@@ -12,10 +12,10 @@ const SlideSchema = new Schema<ComponentInterface>(
     {
         components: [ComponentSchema],
         previous: {
-            type: Types.ObjectId,
+            type: Schema.Types.ObjectId,
         },
         next: {
-            type: Types.ObjectId,
+            type: Schema.Types.ObjectId,
         },
     },
     {

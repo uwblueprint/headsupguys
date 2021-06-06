@@ -8,7 +8,7 @@ interface SelfCheckGroupInterface {
 const SelfCheckGroupSchema = new Schema<SelfCheckGroupInterface>(
     {
         questionIDs: {
-            type: [{ type: Types.ObjectId, ref: "SelfCheckQuestion" }],
+            type: [{ type: Schema.Types.ObjectId, ref: "SelfCheckQuestion" }],
             default: [],
         },
     },

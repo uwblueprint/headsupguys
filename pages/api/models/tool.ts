@@ -38,7 +38,10 @@ const ToolSchema = new Schema<ToolInterface>(
                 ref: "Tool",
             },
         ],
-        status: StatusType,
+        status: {
+            type: StatusType,
+            default: StatusType.DRAFT,
+        },
         editing: Boolean,
     },
     {

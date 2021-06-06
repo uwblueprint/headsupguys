@@ -20,6 +20,7 @@ const ComponentSchema = new Schema<ComponentInterface>(
         },
         properties: {
             type: Schema.Types.Mixed,
+            required: true,
         },
     },
     {

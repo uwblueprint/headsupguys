@@ -27,14 +27,14 @@ const ModuleSchema = new Schema<ModuleInterface>(
             type: Schema.Types.ObjectId,
         },
         slides: {
-            type: [{ type: Schema.Types.ObjectId, ref: "Slide" }]
+            type: [{ type: Schema.Types.ObjectId, ref: "Slide" }],
         },
         status: {
             type: StatusType,
             default: "draft",
         },
         editing: {
-            type: Boolean
+            type: Boolean,
         },
     },
     {

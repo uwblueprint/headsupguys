@@ -17,7 +17,7 @@ const SelfCheckQuestionSchema = new Schema<SelfCheckQuestionInterface>(
     {
         type: {
             type: String,
-            enum: Object.values(QuestionType)
+            enum: Object.values(QuestionType),
             required: true,
         },
         question: {

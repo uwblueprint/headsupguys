@@ -51,5 +51,4 @@ const ToolSchema = new Schema<ToolInterface>(
 
 const Tool = model("Tool", ToolSchema);
 
-export { Tool };
-export { ToolSchema };
+export { Tool, ToolSchema };

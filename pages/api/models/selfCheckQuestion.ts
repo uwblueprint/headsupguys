@@ -16,7 +16,8 @@ interface SelfCheckQuestionInterface {
 const SelfCheckQuestionSchema = new Schema<SelfCheckQuestionInterface>(
     {
         type: {
-            type: QuestionType,
+            type: String,
+            enum: Object.values(QuestionType)
             required: true,
         },
         question: {

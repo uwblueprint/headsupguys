@@ -8,7 +8,7 @@ export interface SlideInterface {
     next?: Types.ObjectId;
 }
 
-const SlideSchema = new Schema<ComponentInterface>(
+const SlideSchema = new Schema<SlideInterface>(
     {
         components: [ComponentSchema],
         previous: {

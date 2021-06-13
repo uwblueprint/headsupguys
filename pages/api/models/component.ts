@@ -6,8 +6,8 @@ enum ComponentType {
     AUDIO = "audio",
 }
 
-interface ComponentInterface {
-    _id: Types.ObjectId;
+export interface ComponentInterface {
+    _id?: Types.ObjectId;
     type: ComponentType;
     properties: any;
 }
@@ -30,4 +30,4 @@ const ComponentSchema = new Schema<ComponentInterface>(
 
 const Component = model("Component", ComponentSchema);
 
-export { Component };
+export { Component, ComponentType };

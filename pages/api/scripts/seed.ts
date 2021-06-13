@@ -1,5 +1,6 @@
 import faker from "faker";
 import { MongoClient } from "mongodb";
+import { ComponentInterface, ComponentType } from "../models/component";
 const { MONGODB_URI, MONGODB_DB } = process.env;
 
 async function seedDB() {
@@ -18,7 +19,20 @@ async function seedDB() {
         // Make sure you run it against proper database and collection.
         collection.drop();
 
-        // CREATE SEED DATA
+        const components = [];
+        const componentTypes = Object.keys(ComponentType).map(function (type) {
+            return ComponentType[type];
+        });
+
+        for (let i = 0; i < 50; i++) {
+            const component: ComponentInterface = {
+                type: componentTypes[i % componentTypes.length],
+                properties: {},
+            };
+
+            components.push(component);
+        }
+        collection.insertMany(components);
 
         console.log("Successfully completed seeding");
         client.close();

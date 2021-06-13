@@ -1,6 +1,7 @@
 import faker from "faker";
 import { MongoClient } from "mongodb";
-import { ComponentInterface, ComponentType } from "../models/component";
+import { ComponentInterface, ComponentType } from "database/models/component";
+
 const { MONGODB_URI, MONGODB_DB } = process.env;
 
 async function seedDB() {

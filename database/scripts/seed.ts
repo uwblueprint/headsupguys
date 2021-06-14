@@ -1,45 +1,40 @@
-import faker from "faker";
-import { MongoClient } from "mongodb";
-import { ComponentInterface, ComponentType } from "database/models/component";
+/* eslint-disable @typescript-eslint/no-var-requires */
+require("dotenv").config({ path: ".env.local" });
+const MongoClient = require("mongodb").MongoClient;
 
-const { MONGODB_URI, MONGODB_DB } = process.env;
+const client = new MongoClient(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+});
 
-async function seedDB() {
-    const client = new MongoClient(MONGODB_URI, {
-        useNewUrlParser: true,
-        // useUnifiedTopology: true,
-    });
-
+(async function () {
     try {
         await client.connect();
         console.log("Successfully connected to server");
 
-        const collection = client.db(MONGODB_DB).collection("components");
-
-        // The drop() command destroys all data from a collection.
-        // Make sure you run it against proper database and collection.
-        collection.drop();
-
-        const components = [];
-        const componentTypes = Object.keys(ComponentType).map(function (type) {
-            return ComponentType[type];
-        });
-
-        for (let i = 0; i < 50; i++) {
-            const component: ComponentInterface = {
-                type: componentTypes[i % componentTypes.length],
-                properties: {},
-            };
-
-            components.push(component);
-        }
-        collection.insertMany(components);
+        const componentsCollection = client
+            .db(process.env.MONGODB_DB)
+            .collection("components");
+        componentsCollection.drop(); // destroy previous data
+        componentsCollection.insertMany(mockComponents(50));
 
         console.log("Successfully completed seeding");
         client.close();
+
+        // TODO add data to other collections
     } catch (err) {
         console.log(err.stack);
     }
-}
+})(); // immediately-invoked function expression
 
-seedDB();
+function mockComponents(count) {
+    const componentTypes = ["text", "video", "audio"];
+    const components = [];
+
+    for (let i = 0; i < count; i++) {
+        components.push({
+            type: componentTypes[i % componentTypes.length],
+            properties: {},
+        });
+    }
+    return components;
+}

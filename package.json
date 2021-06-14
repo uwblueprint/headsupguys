@@ -10,7 +10,8 @@
         "build-storybook": "build-storybook",
         "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
         "prettier": "prettier --write '**/*.{js,jsx,ts,tsx}'",
-        "test": "jest -c test/jest.config.js"
+        "test": "jest -c test/jest.config.js",
+        "seed": "node database/scripts/seed.ts"
     },
     "dependencies": {
         "@chakra-ui/react": "^1.1.4",

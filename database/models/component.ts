@@ -6,8 +6,8 @@ enum ComponentType {
     AUDIO = "audio",
 }
 
-export interface ComponentInterface {
-    _id?: Types.ObjectId;
+interface ComponentInterface {
+    _id: Types.ObjectId;
     type: ComponentType;
     properties: any;
 }

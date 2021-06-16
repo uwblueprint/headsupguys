@@ -5,8 +5,10 @@ const faker = require("faker");
 
 // seed config
 const FIRST_RUN = false;
-const QUESTION_COUNT = 18;
+const QUESTION_COUNT = 24;
 const QUESTION_GROUP_SIZE = 5;
+const COMPONENT_COUNT = 50;
+const COMPONENTS_PER_SLIDE = 8;
 
 (async function () {
     const client = new MongoClient(process.env.MONGODB_URI, {
@@ -19,27 +21,32 @@ const QUESTION_GROUP_SIZE = 5;
         console.log("Successfully connected to database");
 
         const db = client.db(process.env.MONGODB_DB);
-        const componentsCollection = db.collection("components");
-        const questionsCollection = db.collection("SelfCheckQuestion");
-        const groupsCollection = db.collection("SelfCheckGroup");
+        const questionCollection = db.collection("SelfCheckQuestion");
+        const groupCollection = db.collection("SelfCheckGroup");
+        const componentCollection = db.collection("Component");
+        const slideCollection = db.collection("Slide");
 
         if (!FIRST_RUN) {
             // destroy previous data
             await Promise.all([
-                questionsCollection.drop(),
-                groupsCollection.drop(),
-                componentsCollection.drop(),
+                questionCollection.drop(),
+                groupCollection.drop(),
+                componentCollection.drop(),
+                slideCollection.drop(),
             ]);
         }
 
-        await questionsCollection.insertMany(mockQuestions(QUESTION_COUNT));
-        await groupsCollection.insertMany(
+        await questionCollection.insertMany(mockQuestions(QUESTION_COUNT));
+        await groupCollection.insertMany(
             mockGroups(Math.floor(QUESTION_COUNT / QUESTION_GROUP_SIZE)),
         );
 
-        await componentsCollection.insertMany(mockComponents(50));
+        await componentCollection.insertMany(mockComponents(COMPONENT_COUNT));
+        await slideCollection.insertMany(
+            mockSlides(Math.floor(COMPONENT_COUNT / COMPONENTS_PER_SLIDE)),
+        );
 
-        // TODO add data to other collections
+        // TODO add data for other collections
 
         console.log("Successfully completed seeding");
         client.close();
@@ -77,7 +84,6 @@ function mockGroups(count) {
         for (let j = 0; j < QUESTION_GROUP_SIZE; j++) {
             questionIDs.push(i * QUESTION_GROUP_SIZE + j);
         }
-
         groups.push({ questionIDs });
     }
     return groups;
@@ -95,4 +101,24 @@ function mockComponents(count) {
         });
     }
     return components;
+}
+
+function mockSlides(count) {
+    const slides = [];
+
+    for (let i = 0; i < count; i++) {
+        const componentIDs = [];
+
+        for (let j = 0; j < COMPONENTS_PER_SLIDE; j++) {
+            componentIDs.push(i * COMPONENTS_PER_SLIDE + j);
+        }
+
+        slides.push({
+            _id: i,
+            componentIDs,
+            prevID: i > 0 ? i - 1 : null,
+            nextID: i < count - 1 ? i + 1 : null,
+        });
+    }
+    return slides;
 }

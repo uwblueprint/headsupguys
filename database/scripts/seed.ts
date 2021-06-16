@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 require("dotenv").config({ path: ".env.local" });
 const MongoClient = require("mongodb").MongoClient;
+const faker = require("faker");
+
+// seed config
+const FIRST_RUN = true;
 
 (async function () {
     const client = new MongoClient(process.env.MONGODB_URI, {
@@ -15,8 +19,21 @@ const MongoClient = require("mongodb").MongoClient;
         const componentsCollection = client
             .db(process.env.MONGODB_DB)
             .collection("components");
-        await componentsCollection.drop(); // destroy previous data
+
+        const questionsCollection = client
+            .db(process.env.MONGODB_DB)
+            .collection("SelfCheckQuestion");
+
+        if (!FIRST_RUN) {
+            // destroy previous data
+            await Promise.all([
+                componentsCollection.drop(),
+                questionsCollection.drop(),
+            ]);
+        }
+
         await componentsCollection.insertMany(mockComponents(50));
+        await questionsCollection.insertMany(mockQuestions(18));
 
         // TODO add data to other collections
 
@@ -38,4 +55,23 @@ function mockComponents(count) {
         });
     }
     return components;
+}
+
+function mockQuestions(count) {
+    const questionTypes = ["multiple_choice", "multi_select"];
+    const mockOptions = [
+        [1, 2, 3],
+        ["yes", "no", "maybe"],
+    ];
+    const questions = [];
+
+    for (let i = 0; i < count; i++) {
+        questions.push({
+            type: questionTypes[i % questionTypes.length],
+            question: faker.lorem.sentence(),
+            options: mockOptions[i % mockOptions.length],
+            questionNumber: (i % 5) + 1,
+        });
+    }
+    return questions;
 }

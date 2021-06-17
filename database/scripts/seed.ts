@@ -6,10 +6,14 @@ const faker = require("faker");
 // seed config
 const FIRST_RUN = false;
 const QUESTION_COUNT = 24;
-const QUESTION_GROUP_SIZE = 5;
-const COMPONENT_COUNT = 50;
-const COMPONENTS_PER_SLIDE = 8;
-const MODULE_COUNT = 2;
+const GROUP_COUNT = 5;
+const COMPONENT_COUNT = 64;
+const SLIDE_COUNT = 16;
+const MODULE_COUNT = 3;
+
+const QUESTIONS_PER_GROUP = Math.floor(QUESTION_COUNT / GROUP_COUNT);
+const COMPONENTS_PER_SLIDE = Math.floor(COMPONENT_COUNT / SLIDE_COUNT);
+const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
 
 (async function () {
     const client = new MongoClient(process.env.MONGODB_URI, {
@@ -40,14 +44,9 @@ const MODULE_COUNT = 2;
         }
 
         await questionCollection.insertMany(mockQuestions(QUESTION_COUNT));
-        await groupCollection.insertMany(
-            mockGroups(Math.floor(QUESTION_COUNT / QUESTION_GROUP_SIZE)),
-        );
-
+        await groupCollection.insertMany(mockGroups(GROUP_COUNT));
         await componentCollection.insertMany(mockComponents(COMPONENT_COUNT));
-        await slideCollection.insertMany(
-            mockSlides(Math.floor(COMPONENT_COUNT / COMPONENTS_PER_SLIDE)),
-        );
+        await slideCollection.insertMany(mockSlides(SLIDE_COUNT));
         await moduleCollection.insertMany(mockModules(MODULE_COUNT));
 
         // TODO add data for other collections
@@ -73,7 +72,7 @@ function mockQuestions(count) {
             type: questionTypes[i % questionTypes.length],
             question: faker.lorem.sentence(),
             options: mockOptions[i % mockOptions.length],
-            questionNumber: (i % QUESTION_GROUP_SIZE) + 1,
+            questionNumber: (i % QUESTIONS_PER_GROUP) + 1,
         });
     }
     return questions;
@@ -85,8 +84,8 @@ function mockGroups(count) {
     for (let i = 0; i < count; i++) {
         const questionIDs = [];
 
-        for (let j = 0; j < QUESTION_GROUP_SIZE; j++) {
-            questionIDs.push(i * QUESTION_GROUP_SIZE + j);
+        for (let j = 0; j < QUESTIONS_PER_GROUP; j++) {
+            questionIDs.push(i * QUESTIONS_PER_GROUP + j);
         }
         groups.push({ questionIDs });
     }
@@ -133,8 +132,8 @@ function mockModules(count) {
     for (let i = 0; i < count; i++) {
         const slideIDs = [];
 
-        for (let j = 0; j < 10; j++) {
-            slideIDs.push(i * 10 + j);
+        for (let j = 0; j < SLIDES_PER_MODULE; j++) {
+            slideIDs.push(i * SLIDES_PER_MODULE + j);
         }
 
         modules.push({

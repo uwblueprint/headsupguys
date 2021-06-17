@@ -9,7 +9,7 @@ const Home: React.FC = () => {
             <Header />
             <Main title="login page" />
             <Cards />
-            <MyButton>Hello</MyButton>
+            <MyButton text="Hello there!" />
             <Spacer />
             <Footer />
         </Flex>

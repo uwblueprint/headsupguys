@@ -6,3 +6,4 @@ export { Cards } from "./cards";
 export { Footer } from "./footer";
 export { TextInput } from "./textInput";
 export { PasswordInput } from "./passwordInput";
+export { CheckboxComp } from "./checkbox";

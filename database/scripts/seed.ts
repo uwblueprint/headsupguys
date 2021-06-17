@@ -4,7 +4,6 @@ const MongoClient = require("mongodb").MongoClient;
 const faker = require("faker");
 
 // seed config
-const FIRST_RUN = true;
 const QUESTION_COUNT = 24;
 const GROUP_COUNT = 5;
 const COMPONENT_COUNT = 64;
@@ -34,7 +33,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         const moduleCollection = db.collection("Module");
         const toolCollection = db.collection("Tool");
 
-        if (!FIRST_RUN) {
+        if (process.argv[2] != "--init") {
             // destroy previous data
             await Promise.all([
                 questionCollection.drop(),

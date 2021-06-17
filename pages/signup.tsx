@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Spacer, Flex, Box } from "@chakra-ui/react";
 
-import { Header, Main, Footer, TextInput, PasswordInput } from "@components";
+import { Header, Main, Footer, TextInput, PasswordInput, MyButton, CheckboxComp } from "@components";
 
 const Home: React.FC = () => {
     const [email, setEmail] = useState("");
@@ -52,6 +52,8 @@ const Home: React.FC = () => {
                     isInvalid={passwordInvalid}
                     onChange={(event) => setPassword(event.currentTarget.value)}
                 />
+                <CheckboxComp text="Testing" required={true} isDisabled={false} onChange={() => console.log("HELLO")} />
+                <MyButton text="Sign up!" />
             </Box>
             <Spacer />
             <Footer />

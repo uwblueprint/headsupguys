@@ -175,6 +175,11 @@ function mockTools() {
                     description: faker.lorem.sentences(),
                     url: faker.internet.url(),
                 },
+                {
+                    title: faker.lorem.words(),
+                    description: faker.lorem.sentences(),
+                    url: faker.internet.url(),
+                },
             ],
             selfCheckGroupID: i < GROUP_COUNT ? i : null,
             relatedToolsIDs: i > 0 ? [0] : null,

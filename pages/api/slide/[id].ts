@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../utils/mongoose";
+import { del } from "./delete";
 import { get } from "./get";
 import { patch } from "./patch";
 
@@ -12,6 +13,7 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
             patch(req, res);
             break;
         case "DELETE":
+            del(req, res);
             break;
     }
 };

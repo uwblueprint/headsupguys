@@ -70,7 +70,7 @@ function mockQuestions(count) {
         questions.push({
             _id: i,
             type: questionTypes[i % questionTypes.length],
-            question: faker.lorem.sentence(),
+            question: faker.lorem.words() + faker.lorem.words() + "?",
             options: mockOptions[i % mockOptions.length],
             questionNumber: (i % QUESTIONS_PER_GROUP) + 1,
         });
@@ -127,6 +127,7 @@ function mockSlides(count) {
 }
 
 function mockModules(count) {
+    const statusTypes = ["complete", "draft", "published"];
     const modules = [];
 
     for (let i = 0; i < count; i++) {
@@ -141,8 +142,8 @@ function mockModules(count) {
             title: faker.lorem.words(),
             tool: i,
             slides: slideIDs,
-            status: "complete",
-            editing: i % 2 == 0,
+            status: statusTypes[i % statusTypes.length],
+            editing: i == 1,
         });
     }
     return modules;

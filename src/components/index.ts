@@ -7,4 +7,3 @@ export { Footer } from "./footer";
 export { TextInput } from "./textInput";
 export { PasswordInput } from "./passwordInput";
 export { CheckboxComp } from "./checkbox";
-export { SignUpForm } from "./signupform";

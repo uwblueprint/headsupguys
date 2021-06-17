@@ -10,6 +10,7 @@ const GROUP_COUNT = 5;
 const COMPONENT_COUNT = 64;
 const SLIDE_COUNT = 16;
 const MODULE_COUNT = 3;
+const TOOL_COUNT = 2;
 
 const QUESTIONS_PER_GROUP = Math.floor(QUESTION_COUNT / GROUP_COUNT);
 const COMPONENTS_PER_SLIDE = Math.floor(COMPONENT_COUNT / SLIDE_COUNT);
@@ -31,6 +32,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         const componentCollection = db.collection("Component");
         const slideCollection = db.collection("Slide");
         const moduleCollection = db.collection("Module");
+        const toolCollection = db.collection("Tool");
 
         if (!FIRST_RUN) {
             // destroy previous data
@@ -40,6 +42,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
                 componentCollection.drop(),
                 slideCollection.drop(),
                 moduleCollection.drop(),
+                toolCollection.drop(),
             ]);
         }
 
@@ -48,6 +51,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         await componentCollection.insertMany(mockComponents(COMPONENT_COUNT));
         await slideCollection.insertMany(mockSlides(SLIDE_COUNT));
         await moduleCollection.insertMany(mockModules(MODULE_COUNT));
+        await toolCollection.insertMany(mockTools(TOOL_COUNT));
 
         // TODO add data for other collections
 
@@ -127,7 +131,7 @@ function mockSlides(count) {
 }
 
 function mockModules(count) {
-    const statusTypes = ["complete", "draft", "published"];
+    const statusTypes = ["complete", "published", "draft"];
     const modules = [];
 
     for (let i = 0; i < count; i++) {
@@ -140,10 +144,42 @@ function mockModules(count) {
         modules.push({
             _id: i,
             title: faker.lorem.words(),
-            tool: i,
+            tool: i < TOOL_COUNT ? i : null,
             slides: slideIDs,
             status: statusTypes[i % statusTypes.length],
-            editing: i == 1,
+            editing: i % statusTypes.length == 2,
+        });
+    }
+    return modules;
+}
+function mockTools(count) {
+    const statusTypes = ["published", "draft"];
+    const modules = [];
+
+    for (let i = 0; i < count; i++) {
+        const slideIDs = [];
+
+        for (let j = 0; j < SLIDES_PER_MODULE; j++) {
+            slideIDs.push(i * SLIDES_PER_MODULE + j);
+        }
+
+        modules.push({
+            _id: i,
+            title: faker.lorem.words(),
+            video: faker.internet.url(),
+            description: faker.lorem.sentences(),
+            moduleID: i < MODULE_COUNT ? i : null,
+            resources: [
+                {
+                    title: faker.lorem.words(),
+                    description: faker.lorem.sentences(),
+                    url: faker.internet.url(),
+                },
+            ],
+            selfCheckGroupID: i < GROUP_COUNT ? i : null,
+            relatedToolsIDs: i > 0 ? [0] : null,
+            status: statusTypes[i % statusTypes.length],
+            editing: i % statusTypes.length == 1,
         });
     }
     return modules;

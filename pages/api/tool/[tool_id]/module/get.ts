@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Module } from "../models/module";
+import { Module } from "../../../models/module";
 
 const get = async (
     req: NextApiRequest,
     res: NextApiResponse,
 ): Promise<void> => {
-    const { id } = req.query;
-    const module = await Module.findById(id).exec();
+    const { toolIid } = req.query;
+    const module = await Module.findById(toolIid).exec();
 
     if (!module)
         return res
@@ -17,3 +17,5 @@ const get = async (
 };
 
 export { get };
+
+//Will each tool only have 1 module associated with it?

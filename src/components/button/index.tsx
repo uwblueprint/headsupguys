@@ -1,12 +1,34 @@
-import React from "react";
-import { Button as BaseButton, ButtonProps } from "@chakra-ui/react";
+import React, { FunctionComponent } from "react";
+import { Button, ButtonGroup } from "@chakra-ui/react";
+import { ButtonProps } from "@chakra-ui/react";
 
-export type IButton = ButtonProps;
+interface Props {
+    text?: string;
+}
 
-export const Button: React.FC<IButton> = ({ ...rest }) => {
+export const MyButton: FunctionComponent<Props> = (props: Props) => {
     return (
         <div>
-            <BaseButton {...rest} />
+            <Button
+                _hover={{
+                    backgroundColour: "blue.100",
+                }}
+                _pressed={{
+                    backgroundColour: "blue.100",
+                }}
+                backgroundColor="blue.500"
+                textColor="white"
+                fontSize="16px"
+                variant="solid"
+                size="md"
+                height="40px"
+                width="312.01px"
+                borderRadius="0px"
+                fontFamily="Geogrotesque"
+                boxShadow="xs"
+            >
+                {props.text}
+            </Button>
         </div>
     );
 };

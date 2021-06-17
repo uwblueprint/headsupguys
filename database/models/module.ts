@@ -25,9 +25,11 @@ const ModuleSchema = new Schema<ModuleInterface>(
         },
         toolID: {
             type: Schema.Types.ObjectId,
+            default: null,
         },
         slideIDs: {
             type: [{ type: Schema.Types.ObjectId, ref: "Slide" }],
+            default: [],
         },
         status: {
             type: StatusType,

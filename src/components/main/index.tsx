@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Box, useTheme } from "@chakra-ui/react";
 
-import { Button } from "@components";
+import { MyButton } from "@components";
 
 interface Props {
     title?: string;
@@ -15,11 +15,11 @@ export const Main: FunctionComponent<Props> = (props: Props) => {
             <p style={{ fontSize: theme.fontSizes["lg"] }}>
                 {props.title || `The frontend boilerplate with superpowers!`}
             </p>
-            <Button colorScheme="blue" variant="solid" size="md">
+            <MyButton>
                 <a href="https://pankod.github.io/superplate/" target="_blank">
                     Docs
                 </a>
-            </Button>
+            </MyButton>
         </Box>
     );
 };

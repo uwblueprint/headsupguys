@@ -1,16 +1,28 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
+import { ComponentInterface, ComponentSchema } from "./component";
 
-//The following file is a placeholder, to be overwritten with the actual Slide Interface
 export interface SlideInterface {
-    _id: Schema.Types.ObjectId;
+    _id: Types.ObjectId;
+    components: ComponentInterface[];
+    previous?: Types.ObjectId;
+    next?: Types.ObjectId;
 }
 
-const SlideSchema = new Schema<SlideInterface>({
-    module: {
-        type: Schema.Types.ObjectId,
+const SlideSchema = new Schema<SlideInterface>(
+    {
+        components: [ComponentSchema],
+        previous: {
+            type: Schema.Types.ObjectId,
+        },
+        next: {
+            type: Schema.Types.ObjectId,
+        },
     },
-});
+    {
+        timestamps: true,
+    },
+);
 
-const Slide = model("Slide", SlideSchema);
+const Slide = model<SlideInterface>("Slide", SlideSchema);
 
-export { Slide };
+export { Slide, SlideSchema };

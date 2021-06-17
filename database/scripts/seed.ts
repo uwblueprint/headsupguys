@@ -9,6 +9,7 @@ const QUESTION_COUNT = 24;
 const QUESTION_GROUP_SIZE = 5;
 const COMPONENT_COUNT = 50;
 const COMPONENTS_PER_SLIDE = 8;
+const MODULE_COUNT = 2;
 
 (async function () {
     const client = new MongoClient(process.env.MONGODB_URI, {
@@ -25,6 +26,7 @@ const COMPONENTS_PER_SLIDE = 8;
         const groupCollection = db.collection("SelfCheckGroup");
         const componentCollection = db.collection("Component");
         const slideCollection = db.collection("Slide");
+        const moduleCollection = db.collection("Module");
 
         if (!FIRST_RUN) {
             // destroy previous data
@@ -33,6 +35,7 @@ const COMPONENTS_PER_SLIDE = 8;
                 groupCollection.drop(),
                 componentCollection.drop(),
                 slideCollection.drop(),
+                moduleCollection.drop(),
             ]);
         }
 
@@ -45,6 +48,7 @@ const COMPONENTS_PER_SLIDE = 8;
         await slideCollection.insertMany(
             mockSlides(Math.floor(COMPONENT_COUNT / COMPONENTS_PER_SLIDE)),
         );
+        await moduleCollection.insertMany(mockModules(MODULE_COUNT));
 
         // TODO add data for other collections
 
@@ -121,4 +125,26 @@ function mockSlides(count) {
         });
     }
     return slides;
+}
+
+function mockModules(count) {
+    const modules = [];
+
+    for (let i = 0; i < count; i++) {
+        const slideIDs = [];
+
+        for (let j = 0; j < 10; j++) {
+            slideIDs.push(i * 10 + j);
+        }
+
+        modules.push({
+            _id: i,
+            title: faker.lorem.words(),
+            tool: i,
+            slides: slideIDs,
+            status: "complete",
+            editing: i % 2 == 0,
+        });
+    }
+    return modules;
 }

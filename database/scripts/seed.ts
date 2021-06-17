@@ -144,8 +144,8 @@ function mockModules(count) {
         modules.push({
             _id: i,
             title: faker.lorem.words(),
-            tool: i < TOOL_COUNT ? i : null,
-            slides: slideIDs,
+            toolID: i < TOOL_COUNT ? i : null,
+            slideIDs,
             status: statusTypes[i % statusTypes.length],
             editing: i % statusTypes.length == 2,
         });

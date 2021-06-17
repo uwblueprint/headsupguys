@@ -4,7 +4,7 @@ const MongoClient = require("mongodb").MongoClient;
 const faker = require("faker");
 
 // seed config
-const FIRST_RUN = false;
+const FIRST_RUN = true;
 const QUESTION_COUNT = 24;
 const GROUP_COUNT = 5;
 const COMPONENT_COUNT = 64;
@@ -46,14 +46,14 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
             ]);
         }
 
-        await questionCollection.insertMany(mockQuestions(QUESTION_COUNT));
-        await groupCollection.insertMany(mockGroups(GROUP_COUNT));
-        await componentCollection.insertMany(mockComponents(COMPONENT_COUNT));
-        await slideCollection.insertMany(mockSlides(SLIDE_COUNT));
-        await moduleCollection.insertMany(mockModules(MODULE_COUNT));
-        await toolCollection.insertMany(mockTools(TOOL_COUNT));
-
-        // TODO add data for other collections
+        await Promise.all([
+            questionCollection.insertMany(mockQuestions()),
+            groupCollection.insertMany(mockGroups()),
+            componentCollection.insertMany(mockComponents()),
+            slideCollection.insertMany(mockSlides()),
+            moduleCollection.insertMany(mockModules()),
+            toolCollection.insertMany(mockTools()),
+        ]);
 
         console.log("Successfully completed seeding");
         client.close();
@@ -62,7 +62,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
     }
 })(); // immediately-invoked function expression
 
-function mockQuestions(count) {
+function mockQuestions() {
     const questionTypes = ["multiple_choice", "multi_select"];
     const mockOptions = [
         [1, 2, 3],
@@ -70,7 +70,7 @@ function mockQuestions(count) {
     ];
     const questions = [];
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < QUESTION_COUNT; i++) {
         questions.push({
             _id: i,
             type: questionTypes[i % questionTypes.length],
@@ -82,10 +82,10 @@ function mockQuestions(count) {
     return questions;
 }
 
-function mockGroups(count) {
+function mockGroups() {
     const groups = [];
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < GROUP_COUNT; i++) {
         const questionIDs = [];
 
         for (let j = 0; j < QUESTIONS_PER_GROUP; j++) {
@@ -96,11 +96,11 @@ function mockGroups(count) {
     return groups;
 }
 
-function mockComponents(count) {
+function mockComponents() {
     const componentTypes = ["text", "video", "audio"];
     const components = [];
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < COMPONENT_COUNT; i++) {
         components.push({
             _id: i,
             type: componentTypes[i % componentTypes.length],
@@ -110,10 +110,10 @@ function mockComponents(count) {
     return components;
 }
 
-function mockSlides(count) {
+function mockSlides() {
     const slides = [];
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < SLIDE_COUNT; i++) {
         const componentIDs = [];
 
         for (let j = 0; j < COMPONENTS_PER_SLIDE; j++) {
@@ -124,17 +124,17 @@ function mockSlides(count) {
             _id: i,
             componentIDs,
             prevID: i > 0 ? i - 1 : null,
-            nextID: i < count - 1 ? i + 1 : null,
+            nextID: i < SLIDE_COUNT - 1 ? i + 1 : null,
         });
     }
     return slides;
 }
 
-function mockModules(count) {
+function mockModules() {
     const statusTypes = ["complete", "published", "draft"];
     const modules = [];
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < MODULE_COUNT; i++) {
         const slideIDs = [];
 
         for (let j = 0; j < SLIDES_PER_MODULE; j++) {
@@ -152,11 +152,12 @@ function mockModules(count) {
     }
     return modules;
 }
-function mockTools(count) {
+
+function mockTools() {
     const statusTypes = ["published", "draft"];
     const modules = [];
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < TOOL_COUNT; i++) {
         const slideIDs = [];
 
         for (let j = 0; j < SLIDES_PER_MODULE; j++) {

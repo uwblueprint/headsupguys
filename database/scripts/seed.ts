@@ -159,7 +159,7 @@ function mockModules() {
             toolID: i < TOOL_COUNT ? i : null,
             slideIDs,
             status: statusTypes[i % statusTypes.length],
-            editing: i % statusTypes.length == 2,
+            editing: i == 2,
         });
     }
     return modules;
@@ -207,7 +207,7 @@ function mockTools() {
             selfCheckGroupID: i < GROUP_COUNT ? i : null,
             relatedToolsIDs,
             status: statusTypes[i % statusTypes.length],
-            editing: i % statusTypes.length == 1,
+            editing: i == 1,
         });
     }
     return modules;

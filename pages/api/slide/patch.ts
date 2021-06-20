@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Slide } from "../models/slide";
+import { ErrorResponse } from "types/ErrorResponse";
+import { Slide, SlideInterface } from "../models/slide";
 
 const patch = async (
     req: NextApiRequest,
-    res: NextApiResponse,
+    res: NextApiResponse<SlideInterface | ErrorResponse>,
 ): Promise<void> => {
     const { id } = req.query;
     const slide = await Slide.findById(id).exec();
@@ -11,7 +12,7 @@ const patch = async (
     if (!slide)
         return res
             .status(404)
-            .send("The slide with the given ID was not found.");
+            .send({ error: "The slide with the given ID was not found." });
 
     for (const key in req.body) {
         if (slide[key] && slide[key] !== req.body[key])

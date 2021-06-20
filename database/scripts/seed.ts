@@ -6,7 +6,7 @@ const faker = require("faker");
 // seed config
 const QUESTION_COUNT = 24;
 const GROUP_COUNT = 5;
-const COMPONENT_COUNT = 64;
+const COMPONENT_COUNT = 60;
 const SLIDE_COUNT = 20;
 const MODULE_COUNT = 5;
 const TOOL_COUNT = 4;

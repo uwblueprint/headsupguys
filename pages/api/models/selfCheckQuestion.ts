@@ -1,4 +1,4 @@
-import { model, Schema, Types } from "mongoose";
+import { models, model, Schema, Types } from "mongoose";
 
 enum QuestionType {
     MULTIPLE_CHOICE = "multiple_choice",
@@ -39,6 +39,8 @@ const SelfCheckQuestionSchema = new Schema<SelfCheckQuestionInterface>(
     },
 );
 
-const SelfCheckQuestion = model("SelfCheckQuestion", SelfCheckQuestionSchema);
+const SelfCheckQuestion =
+    models.SelfCheckQuestion ||
+    model("SelfCheckQuestion", SelfCheckQuestionSchema);
 
 export { SelfCheckQuestion };

@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { stringify } from "querystring";
 import { Module } from "../models/module";
 
 const get = async (
@@ -6,8 +7,8 @@ const get = async (
     res: NextApiResponse,
 ): Promise<void> => {
     const { id } = req.query;
-    const module = await Module.findById(id).exec();
-
+    const all = await Module.find({ _id: id.toString() });
+    console.log(all);
     if (!module)
         return res
             .status(404)

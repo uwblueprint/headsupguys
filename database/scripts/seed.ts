@@ -121,13 +121,15 @@ function mockSlides() {
 
     for (let i = 0; i < SLIDE_COUNT; i++) {
         const componentIDs = [];
-        // when COMPONENTS_PER_SLIDE = 5:
-        // id: 0   componentIDs: [ 0, 1, 2, 3, 4 ]
-        // id: 1   componentIDs: [ 5, 6, 7, 8, 9 ]
-        // id: 2   componentIDs: [ 10, 11, 12, 13, 14 ]
+        // when COMPONENTS_PER_SLIDE = 3:
+        // id: 0   componentIDs: [ 0, 1, 2 ]
+        // id: 1   componentIDs: [ 3, 4, 5 ]
+        // id: 2   componentIDs: [ 6, 7, 8 ]
         for (let j = 0; j < COMPONENTS_PER_SLIDE; j++) {
             componentIDs.push(i * COMPONENTS_PER_SLIDE + j);
         }
+
+        console.log(componentIDs);
 
         slides.push({
             _id: i,

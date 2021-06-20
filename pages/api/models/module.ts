@@ -43,6 +43,6 @@ const ModuleSchema = new Schema<ModuleInterface>(
     },
 );
 
-const Module = model("Module", ModuleSchema);
+const Module = model<ModuleInterface>("Module", ModuleSchema);
 
 export { Module, ModuleSchema };

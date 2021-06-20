@@ -86,11 +86,18 @@ function mockGroups() {
 
     for (let i = 0; i < GROUP_COUNT; i++) {
         const questionIDs = [];
-
+        // when QUESTIONS_PER_GROUP = 4:
+        // id: 0   questionIDs: [ 0, 1, 2, 3 ]
+        // id: 1   questionIDs: [ 4, 5, 6, 7 ]
+        // id: 2   questionIDs: [ 8, 9, 10, 11 ]
         for (let j = 0; j < QUESTIONS_PER_GROUP; j++) {
             questionIDs.push(i * QUESTIONS_PER_GROUP + j);
         }
-        groups.push({ questionIDs });
+
+        groups.push({
+            _id: i,
+            questionIDs,
+        });
     }
     return groups;
 }
@@ -114,7 +121,10 @@ function mockSlides() {
 
     for (let i = 0; i < SLIDE_COUNT; i++) {
         const componentIDs = [];
-
+        // when COMPONENTS_PER_SLIDE = 5:
+        // id: 0   componentIDs: [ 0, 1, 2, 3, 4 ]
+        // id: 1   componentIDs: [ 5, 6, 7, 8, 9 ]
+        // id: 2   componentIDs: [ 10, 11, 12, 13, 14 ]
         for (let j = 0; j < COMPONENTS_PER_SLIDE; j++) {
             componentIDs.push(i * COMPONENTS_PER_SLIDE + j);
         }
@@ -135,7 +145,10 @@ function mockModules() {
 
     for (let i = 0; i < MODULE_COUNT; i++) {
         const slideIDs = [];
-
+        // when SLIDES_PER_MODULE = 5:
+        // id: 0   slideIDs: [ 0, 1, 2, 3, 4 ]
+        // id: 1   slideIDs: [ 5, 6, 7, 8, 9 ]
+        // id: 2   slideIDs: [ 10, 11, 12, 13, 14 ]
         for (let j = 0; j < SLIDES_PER_MODULE; j++) {
             slideIDs.push(i * SLIDES_PER_MODULE + j);
         }

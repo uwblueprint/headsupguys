@@ -7,9 +7,9 @@ const faker = require("faker");
 const QUESTION_COUNT = 24;
 const GROUP_COUNT = 5;
 const COMPONENT_COUNT = 64;
-const SLIDE_COUNT = 16;
-const MODULE_COUNT = 3;
-const TOOL_COUNT = 2;
+const SLIDE_COUNT = 20;
+const MODULE_COUNT = 5;
+const TOOL_COUNT = 4;
 
 const QUESTIONS_PER_GROUP = Math.floor(QUESTION_COUNT / GROUP_COUNT);
 const COMPONENTS_PER_SLIDE = Math.floor(COMPONENT_COUNT / SLIDE_COUNT);
@@ -170,10 +170,20 @@ function mockTools() {
     const modules = [];
 
     for (let i = 0; i < TOOL_COUNT; i++) {
-        const slideIDs = [];
-
-        for (let j = 0; j < SLIDES_PER_MODULE; j++) {
-            slideIDs.push(i * SLIDES_PER_MODULE + j);
+        const relatedToolsIDs = [];
+        // generate random related tools:
+        // id: 0   slideIDs: [ 3, 1 ]
+        // id: 1   slideIDs: [ 0 ]
+        // id: 2   slideIDs: []
+        // id: 3   slideIDs: [ 1, 2, 0 ]
+        while (
+            relatedToolsIDs.length < Math.floor(Math.random() * TOOL_COUNT) // generate random number of related tools between 0 and (TOOL_COUNT - 1)
+        ) {
+            const toolID = Math.floor(Math.random() * TOOL_COUNT);
+            // prevent a tool from relating to itself and another tool multiple times
+            if (toolID != i && relatedToolsIDs.indexOf(toolID) === -1) {
+                relatedToolsIDs.push(toolID);
+            }
         }
 
         modules.push({
@@ -195,7 +205,7 @@ function mockTools() {
                 },
             ],
             selfCheckGroupID: i < GROUP_COUNT ? i : null,
-            relatedToolsIDs: i > 0 ? [0] : null,
+            relatedToolsIDs,
             status: statusTypes[i % statusTypes.length],
             editing: i % statusTypes.length == 1,
         });

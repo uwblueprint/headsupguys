@@ -129,8 +129,6 @@ function mockSlides() {
             componentIDs.push(i * COMPONENTS_PER_SLIDE + j);
         }
 
-        console.log(componentIDs);
-
         slides.push({
             _id: i,
             componentIDs,

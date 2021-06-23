@@ -5,7 +5,7 @@ enum StatusType {
     PUBLISHED = "published",
 }
 
-interface ToolInterface {
+export interface ToolInterface {
     _id: Types.ObjectId;
     title: string;
     video: string;

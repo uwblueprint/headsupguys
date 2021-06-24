@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { models, model, Schema } from "mongoose";
 import { ToolInterface } from "./tool";
 import { SlideInterface } from "./slide";
 
@@ -43,6 +43,6 @@ const ModuleSchema = new Schema<ModuleInterface>(
     },
 );
 
-const Module = model("Module", ModuleSchema);
+const Module = models.Module || model("Module", ModuleSchema);
 
 export { Module, ModuleSchema };

@@ -1,4 +1,4 @@
-import { model, Schema, Types } from "mongoose";
+import { models, model, Schema, Types } from "mongoose";
 import { ComponentInterface, ComponentSchema } from "./component";
 
 export interface SlideInterface {
@@ -23,6 +23,6 @@ const SlideSchema = new Schema<SlideInterface>(
     },
 );
 
-const Slide = model<SlideInterface>("Slide", SlideSchema);
+const Slide = models.Slide || model<SlideInterface>("Slide", SlideSchema);
 
 export { Slide, SlideSchema };

@@ -5,8 +5,9 @@ const getAll = async (
     req: NextApiRequest,
     res: NextApiResponse,
 ): Promise<void> => {
-    const allTools = await Tool.find({});
-    res.status(200).json(allTools);
+    await Tool.find({})
+        .then((tools) => res.status(200).json(tools))
+        .catch((err) => res.status(500).send(err));
 };
 
 export default getAll;

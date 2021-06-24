@@ -26,12 +26,12 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         console.log("Successfully connected to database");
 
         const db = client.db(process.env.MONGODB_DB);
-        const questionCollection = db.collection("SelfCheckQuestion");
-        const groupCollection = db.collection("SelfCheckGroup");
-        const componentCollection = db.collection("Component");
-        const slideCollection = db.collection("Slide");
-        const moduleCollection = db.collection("Module");
-        const toolCollection = db.collection("Tool");
+        const questionCollection = db.collection("self_check_questions");
+        const groupCollection = db.collection("self_check_groups");
+        const componentCollection = db.collection("components");
+        const slideCollection = db.collection("slides");
+        const moduleCollection = db.collection("modules");
+        const toolCollection = db.collection("tools");
 
         if (process.argv[2] != "--init") {
             // destroy previous data

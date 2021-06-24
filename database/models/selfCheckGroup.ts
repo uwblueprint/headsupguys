@@ -18,6 +18,7 @@ const SelfCheckGroupSchema = new Schema<SelfCheckGroupInterface>(
 );
 
 const SelfCheckGroup =
-    models.SelfCheckGroup || model("SelfCheckGroup", SelfCheckGroupSchema);
+    models.SelfCheckGroup ||
+    model("SelfCheckGroup", SelfCheckGroupSchema, "self_check_groups");
 
 export { SelfCheckGroup };

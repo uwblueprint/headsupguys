@@ -41,6 +41,6 @@ const SelfCheckQuestionSchema = new Schema<SelfCheckQuestionInterface>(
 
 const SelfCheckQuestion =
     models.SelfCheckQuestion ||
-    model("SelfCheckQuestion", SelfCheckQuestionSchema);
+    model("SelfCheckQuestion", SelfCheckQuestionSchema, "self_check_questions");
 
 export { SelfCheckQuestion };

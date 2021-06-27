@@ -7,15 +7,19 @@ const post = async (
     req: NextApiRequest,
     res: NextApiResponse<ModuleInterface | ErrorResponse>,
 ): Promise<void> => {
-    const postModule = new Module({
+    if (!req.body.title)
+        return res
+            .status(404)
+            .send({ error: "Please provide your module with a title." });
+    const module = new Module({
         title: req.body.title,
         tool: req.body.tool,
         slides: req.body.slides,
         status: req.body.status,
         editing: req.body.editing,
     });
-    await postModule.save();
-    res.status(200).send(module);
+    await module.save();
+    res.status(200).json(module);
 };
 
 export default connectDB(post);

@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Module } from "../models/module";
+import { ErrorResponse } from "types/ErrorResponse";
+import { Module, ModuleInterface } from "../models/module";
 import connectDB from "../utils/mongoose";
 
 const post = async (
     req: NextApiRequest,
-    res: NextApiResponse,
+    res: NextApiResponse<ModuleInterface | ErrorResponse>,
 ): Promise<void> => {
     const postModule = new Module({
         title: req.body.title,

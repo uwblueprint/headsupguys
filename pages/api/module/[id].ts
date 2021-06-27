@@ -1,10 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { ErrorResponse } from "types/ErrorResponse";
 import connectDB from "../utils/mongoose";
 import { del } from "./delete";
 import { get } from "./get";
 import { patch } from "./patch";
 
-const index = async (req: NextApiRequest, res: NextApiResponse) => {
+const index = async (
+    req: NextApiRequest,
+    res: NextApiResponse<ErrorResponse>,
+) => {
     switch (req.method) {
         case "GET":
             get(req, res);
@@ -15,6 +19,9 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
         case "DELETE":
             del(req, res);
             break;
+        default:
+            res.status(405).json({ error: "Method not supported" });
+            return;
     }
 };
 

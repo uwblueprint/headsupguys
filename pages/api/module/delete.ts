@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { ErrorResponse } from "types/ErrorResponse";
 import { Module } from "../models/module";
 
 const del = async (
     req: NextApiRequest,
-    res: NextApiResponse,
+    res: NextApiResponse<ErrorResponse>,
 ): Promise<void> => {
     const { id } = req.query;
     const module = await Module.findByIdAndDelete(id).exec();
@@ -11,8 +12,8 @@ const del = async (
     if (!module)
         return res
             .status(404)
-            .send("The module with the given ID was not found.");
-    res.status(200).json(module);
+            .send({ error: "The module with the given ID was not found." });
+    res.status(204).send({});
 };
 
 export { del };

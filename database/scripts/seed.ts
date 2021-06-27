@@ -71,7 +71,7 @@ function mockQuestions() {
 
     for (let i = 0; i < QUESTION_COUNT; i++) {
         questions.push({
-            _id: i,
+            _id: i.toString(),
             type: questionTypes[i % questionTypes.length],
             question: faker.lorem.words() + faker.lorem.words() + "?",
             options: mockOptions[i % mockOptions.length],
@@ -87,15 +87,15 @@ function mockGroups() {
     for (let i = 0; i < GROUP_COUNT; i++) {
         const questionIDs = [];
         // when QUESTIONS_PER_GROUP = 4:
-        // id: 0   questionIDs: [ 0, 1, 2, 3 ]
-        // id: 1   questionIDs: [ 4, 5, 6, 7 ]
-        // id: 2   questionIDs: [ 8, 9, 10, 11 ]
+        // id: 0   questionIDs: [ '0', '1', '2', '3' ]
+        // id: 1   questionIDs: [ '4', '5', '6', '7' ]
+        // id: 2   questionIDs: [ '8', '9', '10', '11' ]
         for (let j = 0; j < QUESTIONS_PER_GROUP; j++) {
-            questionIDs.push(i * QUESTIONS_PER_GROUP + j);
+            questionIDs.push((i * QUESTIONS_PER_GROUP + j).toString());
         }
 
         groups.push({
-            _id: i,
+            _id: i.toString(),
             questionIDs,
         });
     }
@@ -108,7 +108,7 @@ function mockComponents() {
 
     for (let i = 0; i < COMPONENT_COUNT; i++) {
         components.push({
-            _id: i,
+            _id: i.toString(),
             type: componentTypes[i % componentTypes.length],
             properties: {},
         });
@@ -126,14 +126,14 @@ function mockSlides() {
         // id: 1   componentIDs: [ 3, 4, 5 ]
         // id: 2   componentIDs: [ 6, 7, 8 ]
         for (let j = 0; j < COMPONENTS_PER_SLIDE; j++) {
-            componentIDs.push(i * COMPONENTS_PER_SLIDE + j);
+            componentIDs.push((i * COMPONENTS_PER_SLIDE + j).toString());
         }
 
         slides.push({
-            _id: i,
+            _id: i.toString(),
             componentIDs,
-            prevID: i > 0 ? i - 1 : null,
-            nextID: i < SLIDE_COUNT - 1 ? i + 1 : null,
+            prevID: i > 0 ? (i - 1).toString() : null,
+            nextID: i < SLIDE_COUNT - 1 ? (i + 1).toString() : null,
         });
     }
     return slides;
@@ -146,17 +146,18 @@ function mockModules() {
     for (let i = 0; i < MODULE_COUNT; i++) {
         const slideIDs = [];
         // when SLIDES_PER_MODULE = 5:
-        // id: 0   slideIDs: [ 0, 1, 2, 3, 4 ]
-        // id: 1   slideIDs: [ 5, 6, 7, 8, 9 ]
-        // id: 2   slideIDs: [ 10, 11, 12, 13, 14 ]
+        // id: 0   slideIDs: [ '0', '1', '2', '3', '4' ]
+        // id: 1   slideIDs: [ '5', '6', '7', '8', '9' ]
+        // id: 2   slideIDs: [ '10', '11', '12', '13', '14' ]
         for (let j = 0; j < SLIDES_PER_MODULE; j++) {
-            slideIDs.push(i * SLIDES_PER_MODULE + j);
+            slideIDs.push((i * SLIDES_PER_MODULE + j).toString());
         }
 
+        console.log(slideIDs);
         modules.push({
-            _id: i,
+            _id: i.toString(),
             title: faker.lorem.words(),
-            toolID: i < TOOL_COUNT ? i : null,
+            toolID: i < TOOL_COUNT ? i.toString() : null,
             slideIDs,
             status: statusTypes[i % statusTypes.length],
             editing: i == 2,
@@ -172,26 +173,26 @@ function mockTools() {
     for (let i = 0; i < TOOL_COUNT; i++) {
         const relatedToolsIDs = [];
         // generate random related tools:
-        // id: 0   slideIDs: [ 3, 1 ]
-        // id: 1   slideIDs: [ 0 ]
+        // id: 0   slideIDs: [ '3', '1' ]
+        // id: 1   slideIDs: [ '0' ]
         // id: 2   slideIDs: []
-        // id: 3   slideIDs: [ 1, 2, 0 ]
+        // id: 3   slideIDs: [ '1', '2', '0' ]
         while (
             relatedToolsIDs.length < Math.floor(Math.random() * TOOL_COUNT) // generate random number of related tools between 0 and (TOOL_COUNT - 1)
         ) {
             const toolID = Math.floor(Math.random() * TOOL_COUNT);
             // prevent a tool from relating to itself and another tool multiple times
             if (toolID != i && relatedToolsIDs.indexOf(toolID) === -1) {
-                relatedToolsIDs.push(toolID);
+                relatedToolsIDs.push(toolID.toString());
             }
         }
 
         modules.push({
-            _id: i,
+            _id: i.toString(),
             title: faker.lorem.words(),
             video: faker.internet.url(),
             description: faker.lorem.sentences(),
-            moduleID: i < MODULE_COUNT ? i : null,
+            moduleID: i < MODULE_COUNT ? i.toString() : null,
             resources: [
                 {
                     title: faker.lorem.words(),
@@ -204,7 +205,7 @@ function mockTools() {
                     url: faker.internet.url(),
                 },
             ],
-            selfCheckGroupID: i < GROUP_COUNT ? i : null,
+            selfCheckGroupID: i < GROUP_COUNT ? i.toString() : null,
             relatedToolsIDs,
             status: statusTypes[i % statusTypes.length],
             editing: i == 1,

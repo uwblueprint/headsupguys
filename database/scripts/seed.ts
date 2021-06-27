@@ -53,8 +53,12 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         );
         const groupIDs = groups.ops.map((x) => x._id);
 
-        await componentCollection.insertMany(mockComponents());
-        await slideCollection.insertMany(mockSlides());
+        const components = await componentCollection.insertMany(
+            mockComponents(),
+        );
+        const componentIDs = components.ops.map((x) => x._id);
+
+        await slideCollection.insertMany(mockSlides(componentIDs));
         await moduleCollection.insertMany(mockModules());
         await toolCollection.insertMany(mockTools());
 
@@ -107,7 +111,6 @@ function mockComponents() {
 
     for (let i = 0; i < COMPONENT_COUNT; i++) {
         components.push({
-            _id: i.toString(),
             type: componentTypes[i % componentTypes.length],
             properties: {},
         });
@@ -115,24 +118,15 @@ function mockComponents() {
     return components;
 }
 
-function mockSlides() {
+function mockSlides(componentIDs) {
     const slides = [];
 
     for (let i = 0; i < SLIDE_COUNT; i++) {
-        const componentIDs = [];
-        // when COMPONENTS_PER_SLIDE = 3:
-        // id: 0   componentIDs: [ 0, 1, 2 ]
-        // id: 1   componentIDs: [ 3, 4, 5 ]
-        // id: 2   componentIDs: [ 6, 7, 8 ]
-        for (let j = 0; j < COMPONENTS_PER_SLIDE; j++) {
-            componentIDs.push((i * COMPONENTS_PER_SLIDE + j).toString());
-        }
-
         slides.push({
-            _id: i.toString(),
-            componentIDs,
-            prevID: i > 0 ? (i - 1).toString() : null,
-            nextID: i < SLIDE_COUNT - 1 ? (i + 1).toString() : null,
+            componentIDs: componentIDs.slice(
+                COMPONENTS_PER_SLIDE * i,
+                COMPONENTS_PER_SLIDE * (i + 1),
+            ),
         });
     }
     return slides;

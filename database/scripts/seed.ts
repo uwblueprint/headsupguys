@@ -48,7 +48,11 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         const questions = await questionCollection.insertMany(mockQuestions());
         const questionIDs = questions.ops.map((x) => x._id);
 
-        await groupCollection.insertMany(mockGroups(questionIDs));
+        const groups = await groupCollection.insertMany(
+            mockGroups(questionIDs),
+        );
+        const groupIDs = groups.ops.map((x) => x._id);
+
         await componentCollection.insertMany(mockComponents());
         await slideCollection.insertMany(mockSlides());
         await moduleCollection.insertMany(mockModules());
@@ -82,18 +86,18 @@ function mockQuestions() {
 
 function mockGroups(questionIDs) {
     const groups = [];
-    // when QUESTIONS_PER_GROUP = 4:
-    // id: 0   questionIDs: [ questionIDs[0], questionIDs[1], questionIDs[2], questionIDs[3] ]
-    // id: 1   questionIDs: [ questionIDs[4], questionIDs[5], questionIDs[6], questionIDs[7] ]
-    // id: 2   questionIDs: [ questionIDs[8], questionIDs[9], questionIDs[10], questionIDs[11] ]
     for (let i = 0; i < GROUP_COUNT; i++) {
+        // when QUESTIONS_PER_GROUP = 4:
+        // id: 0   questionIDs: [ questionIDs[0], questionIDs[1], questionIDs[2], questionIDs[3] ]
+        // id: 1   questionIDs: [ questionIDs[4], questionIDs[5], questionIDs[6], questionIDs[7] ]
+        // id: 2   questionIDs: [ questionIDs[8], questionIDs[9], questionIDs[10], questionIDs[11] ]
         groups.push({
             questionIDs: questionIDs.slice(
                 QUESTIONS_PER_GROUP * i,
                 QUESTIONS_PER_GROUP * (i + 1),
             ),
         });
-
+    }
     return groups;
 }
 

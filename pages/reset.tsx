@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Spacer, Flex, Box, Heading, Text } from "@chakra-ui/react";
+import { Spacer, Flex, Box, Heading, Text, Center } from "@chakra-ui/react";
 import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/react";
@@ -53,6 +53,45 @@ const ResetPassword: React.FC = () => {
         }
     };
 
+    const validatePassword = () => {
+        //TODO: update password validation requirements
+        if (newPassword.length > 7) {
+            setPasswordRequirements({ isInvalid: false, reason: "" });
+        } else {
+            setPasswordRequirements({
+                isInvalid: true,
+                reason: "Password does not meet requirements",
+            });
+            setCanContinue(false);
+        }
+    };
+
+    const incrementStage = () => {
+        // add logic to check if it's possible
+        if (currStage < stages.length) setCurrStage(currStage + 1);
+        if (currStage == 2) {
+            setCanContinue(true);
+            console.log("REACHED END");
+            return;
+        }
+        setCanContinue(false);
+        console.log(canContinue);
+        console.log(currStage);
+        console.log(stages[currStage]);
+    };
+
+    const decrementStage = () => {
+        // slight "bug" is that when going back, setContinue will be set to false
+        // that means that you will need to focus on the input field to have it re-validate
+        // even if it's technically already valid
+        // alternatively we can individually call the validate fncs for each section
+        // in this going back fnc (seperate if for each stage) instead of always setting canContinue to false
+        if (currStage >= 0) {
+            setCurrStage(currStage - 1);
+            setCanContinue(false);
+        }
+    };
+
     const EmailStage = (
         <>
             <Text textAlign="left">
@@ -71,6 +110,11 @@ const ResetPassword: React.FC = () => {
                 onChange={(event) => setEmail(event.currentTarget.value)}
                 onBlur={validateEmail}
             />
+            <AuthButton
+                text="Send Instructions"
+                onClick={incrementStage}
+                isDisabled={!canContinue}
+            />
         </>
     );
 
@@ -87,31 +131,13 @@ const ResetPassword: React.FC = () => {
                 isInvalid={passwordRequirements.isInvalid}
                 errorMessage={passwordRequirements.reason}
                 isRequired
-                onChange={(event) => {
-                    setNewPassword(event.currentTarget.value);
-                    // password validation
-                    if (
-                        /[A-Z]/.test(newPassword) &&
-                        /[a-z]/.test(newPassword) &&
-                        /[0-9]/.test(newPassword) &&
-                        /[^A-Za-z0-9]/.test(newPassword) &&
-                        newPassword.length > 8
-                    ) {
-                        setPasswordRequirements({
-                            isInvalid: false,
-                            reason: "",
-                        });
-                    } else {
-                        setPasswordRequirements({
-                            isInvalid: true,
-                            reason: "Password does not meet requirements",
-                        });
-                        setCanContinue(true);
-                    }
-                }}
+                onChange={(event) => setNewPassword(event.currentTarget.value)}
+                onBlur={validatePassword}
                 mb={5}
             />
-            {/* check to make sure passwords match at this point */}
+            {/* check to make sure passwords match at this point 
+            verify that is original password changes, both checks still run 
+            */}
             <PasswordInput
                 name="password"
                 label="Re-Enter your Password"
@@ -141,8 +167,13 @@ const ResetPassword: React.FC = () => {
             />
             <Text textAlign="left">
                 Passwords must contain one uppercase, one lowercase, one number,
-                one symbol and must be at least 8 characters
+                one symbol and must be at least 8 characters.
             </Text>
+            <AuthButton
+                text="Reset Password"
+                onClick={incrementStage}
+                isDisabled={!canContinue}
+            />
         </>
     );
 
@@ -150,7 +181,6 @@ const ResetPassword: React.FC = () => {
         {
             title: "Reset Password",
             component: EmailStage,
-            buttonText: "Send Instructions",
         },
         {
             title: "Check Email",
@@ -160,46 +190,46 @@ const ResetPassword: React.FC = () => {
                         Password recovery instructions have been sent to your
                         email.
                     </Text>
-                    {/* TODO: add continue hyperlink */}
+                    <AuthButton
+                        text="Open Email App"
+                        onClick={() => (location.href = "maito:l")}
+                        isDisabled={false}
+                    />
+                    <Center>
+                        <Text mt="5" as="u">
+                            <Link onClick={incrementStage} mt="5">
+                                Continue
+                            </Link>
+                        </Text>
+                    </Center>
+                    <Text mt="70%">
+                        Did not recieve the email? Check your spam folder or{" "}
+                        <Link onClick={decrementStage}>
+                            <Text as="u">try again.</Text>
+                            {/* Verify whether try again takes users back or will initiate "send email again" flow */}
+                        </Link>
+                    </Text>
                 </Box>
             ),
-            buttonText: "Open Email App",
         },
         {
             title: "New Password",
             component: NewPassword,
-            buttonText: "Reset Password",
         },
         {
-            title: "Success",
+            title: "Success!",
             component: (
                 <Box>
-                    <Text>Password reset successful.</Text>
+                    <Text textAlign="left">Password reset successful.</Text>
+                    <AuthButton
+                        text="Log in to my account"
+                        onClick={() => (location.href = "/login")}
+                        isDisabled={false}
+                    />
                 </Box>
             ),
-            buttonText: "Log in to my account",
         },
     ];
-
-    const incrementStage = () => {
-        // add logic to check if it's possible
-        if (currStage < stages.length) setCurrStage(currStage + 1);
-        if (currStage == stages.length) return; // go to the "get started" link
-        setCanContinue(false);
-    };
-
-    const decrementStage = () => {
-        // what does pressing back do?
-        // slight "bug" is that when going back, setContinue will be set to false
-        // that means that you will need to focus on the input field to have it re-validate
-        // even if it's technically already valid
-        // alternatively we can individually call the validate fncs for each section
-        // in this going back fnc (seperate if for each stage) instead of always setting canContinue to false
-        if (currStage >= 0) {
-            setCurrStage(currStage - 1);
-            setCanContinue(false);
-        }
-    };
 
     return (
         <Flex
@@ -215,6 +245,8 @@ const ResetPassword: React.FC = () => {
                     tabindex="0"
                     role="button"
                     onClick={decrementStage}
+                    mb="-5"
+                    mt="2"
                 >
                     <ChevronLeftIcon />
                     Back
@@ -232,18 +264,6 @@ const ResetPassword: React.FC = () => {
                 </Heading>
                 {stages[currStage].component}
             </Box>
-
-            <AuthButton
-                text={stages[currStage].buttonText}
-                onClick={incrementStage}
-                isDisabled={!canContinue}
-            />
-            {currStage == 1 ? (
-                <>
-                    <Link onClick={incrementStage}>Continue</Link>
-                    {/* Insert Footer here with links */}
-                </>
-            ) : null}
         </Flex>
     );
 };

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 require("dotenv").config({ path: ".env.local" });
 const MongoClient = require("mongodb").MongoClient;
+const ObjectId = require("mongodb").ObjectId;
 const faker = require("faker");
 
 // seed config
@@ -63,8 +64,12 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         );
         const slideIDs = slides.ops.map((x) => x._id);
 
-        await moduleCollection.insertMany(mockModules(slideIDs));
-        await toolCollection.insertMany(mockTools());
+        const modules = await moduleCollection.insertMany(
+            mockModules(slideIDs),
+        );
+        const moduleIDs = modules.ops.map((x) => x._id);
+
+        await toolCollection.insertMany(mockTools(moduleIDs, groupIDs));
 
         console.log("Successfully completed seeding");
         client.close();
@@ -154,33 +159,33 @@ function mockModules(slideIDs) {
     return modules;
 }
 
-function mockTools() {
+function mockTools(moduleIDs, groupIDs) {
     const statusTypes = ["published", "draft"];
-    const modules = [];
+    const toolIDs = [];
+    const tools = [];
+
+    for (let i = 0; i < TOOL_COUNT; i++) {
+        toolIDs.push(new ObjectId());
+    }
 
     for (let i = 0; i < TOOL_COUNT; i++) {
         const relatedToolsIDs = [];
-        // generate random related tools:
-        // id: 0   slideIDs: [ '3', '1' ]
-        // id: 1   slideIDs: [ '0' ]
-        // id: 2   slideIDs: []
-        // id: 3   slideIDs: [ '1', '2', '0' ]
         while (
             relatedToolsIDs.length < Math.floor(Math.random() * TOOL_COUNT) // generate random number of related tools between 0 and (TOOL_COUNT - 1)
         ) {
-            const toolID = Math.floor(Math.random() * TOOL_COUNT);
+            const index = Math.floor(Math.random() * TOOL_COUNT);
             // prevent a tool from relating to itself and another tool multiple times
-            if (toolID != i && relatedToolsIDs.indexOf(toolID) === -1) {
-                relatedToolsIDs.push(toolID.toString());
+            if (index != i && relatedToolsIDs.indexOf(toolIDs[index]) === -1) {
+                relatedToolsIDs.push(toolIDs[index]);
             }
         }
 
-        modules.push({
-            _id: i.toString(),
+        tools.push({
+            _id: toolIDs[i],
             title: faker.lorem.words(),
             video: faker.internet.url(),
             description: faker.lorem.sentences(),
-            moduleID: i < MODULE_COUNT ? i.toString() : null,
+            moduleID: i < MODULE_COUNT ? moduleIDs[i] : null,
             resources: [
                 {
                     title: faker.lorem.words(),
@@ -193,11 +198,11 @@ function mockTools() {
                     url: faker.internet.url(),
                 },
             ],
-            selfCheckGroupID: i < GROUP_COUNT ? i.toString() : null,
+            selfCheckGroupID: i < GROUP_COUNT ? groupIDs[i] : null,
             relatedToolsIDs,
             status: statusTypes[i % statusTypes.length],
             editing: i == 1,
         });
     }
-    return modules;
+    return tools;
 }

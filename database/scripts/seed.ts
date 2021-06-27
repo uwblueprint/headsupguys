@@ -58,8 +58,12 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         );
         const componentIDs = components.ops.map((x) => x._id);
 
-        await slideCollection.insertMany(mockSlides(componentIDs));
-        await moduleCollection.insertMany(mockModules());
+        const slides = await slideCollection.insertMany(
+            mockSlides(componentIDs),
+        );
+        const slideIDs = slides.ops.map((x) => x._id);
+
+        await moduleCollection.insertMany(mockModules(slideIDs));
         await toolCollection.insertMany(mockTools());
 
         console.log("Successfully completed seeding");
@@ -132,25 +136,17 @@ function mockSlides(componentIDs) {
     return slides;
 }
 
-function mockModules() {
+function mockModules(slideIDs) {
     const statusTypes = ["complete", "published", "draft"];
     const modules = [];
 
     for (let i = 0; i < MODULE_COUNT; i++) {
-        const slideIDs = [];
-        // when SLIDES_PER_MODULE = 5:
-        // id: 0   slideIDs: [ '0', '1', '2', '3', '4' ]
-        // id: 1   slideIDs: [ '5', '6', '7', '8', '9' ]
-        // id: 2   slideIDs: [ '10', '11', '12', '13', '14' ]
-        for (let j = 0; j < SLIDES_PER_MODULE; j++) {
-            slideIDs.push((i * SLIDES_PER_MODULE + j).toString());
-        }
-
         modules.push({
-            _id: i.toString(),
             title: faker.lorem.words(),
-            toolID: i < TOOL_COUNT ? i.toString() : null,
-            slideIDs,
+            slideIDs: slideIDs.slice(
+                SLIDES_PER_MODULE * i,
+                SLIDES_PER_MODULE * (i + 1),
+            ),
             status: statusTypes[i % statusTypes.length],
             editing: i == 2,
         });

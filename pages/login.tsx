@@ -1,7 +1,7 @@
 import React from "react";
 import { Spacer, Flex } from "@chakra-ui/react";
 
-import { Header, Main, Cards, Footer, MyButton } from "@components";
+import { Header, Main, Cards, Footer, AuthButton } from "@components";
 
 const LoginPage: React.FC = () => {
     return (
@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
                     </h2>
                     <p className="mt-2 text-center text-md text-gray-600">
                         {"Don't have an account? "}
-                        <MyButton text="signup" />
+                        <AuthButton text="signup" />
                     </p>
                 </div>
                 <div className="mt-8 bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">

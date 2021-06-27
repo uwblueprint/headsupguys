@@ -15,7 +15,7 @@ export interface TextInputProps extends InputProps {
     placeholder?: string;
     errorMessage?: string;
     helperText?: string;
-    isInvalid: boolean;
+    isInvalid?: boolean;
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
@@ -28,8 +28,11 @@ export const TextInput: React.FC<TextInputProps> = ({
     ...rest
 }) => {
     return (
-        <FormControl id={name} isInvalid={isInvalid}>
-            <FormLabel color={isInvalid ? "red.500" : "blackAlpha"}>
+        <FormControl id={name} isInvalid={isInvalid} mb={5}>
+            <FormLabel
+                fontWeight={400}
+                color={isInvalid ? "red.500" : "blackAlpha"}
+            >
                 {label}
             </FormLabel>
             <Input
@@ -40,7 +43,7 @@ export const TextInput: React.FC<TextInputProps> = ({
             />
             {errorMessage && (
                 <FormErrorMessage>
-                    <WarningIcon mr={1} /> {errorMessage}
+                    <WarningIcon mr={2} /> {errorMessage}
                 </FormErrorMessage>
             )}
             {helperText && !isInvalid && (

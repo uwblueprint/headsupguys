@@ -17,7 +17,7 @@ export interface PasswordInputProps extends InputProps {
     placeholder?: string;
     errorMessage?: string;
     helperText?: string;
-    isInvalid: boolean;
+    isInvalid?: boolean;
 }
 
 export const PasswordInput: React.FC<PasswordInputProps> = ({

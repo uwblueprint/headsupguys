@@ -2,11 +2,14 @@ import React, { FunctionComponent } from "react";
 import { Button, ButtonGroup } from "@chakra-ui/react";
 import { ButtonProps } from "@chakra-ui/react";
 
-interface Props {
+interface AuthButtonProps extends ButtonProps {
     text?: string;
 }
 
-export const MyButton: FunctionComponent<Props> = (props: Props) => {
+export const AuthButton: FunctionComponent<AuthButtonProps> = ({
+    text,
+    ...rest
+}) => {
     return (
         <div>
             <Button
@@ -26,8 +29,9 @@ export const MyButton: FunctionComponent<Props> = (props: Props) => {
                 borderRadius="0px"
                 fontFamily="Geogrotesque"
                 boxShadow="xs"
+                {...rest}
             >
-                {props.text}
+                {text}
             </Button>
         </div>
     );

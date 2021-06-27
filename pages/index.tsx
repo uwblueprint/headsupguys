@@ -1,7 +1,7 @@
 import React from "react";
 import { Spacer, Flex } from "@chakra-ui/react";
 
-import { Header, Main, Cards, Footer, MyButton } from "@components";
+import { Header, Main, Cards, Footer, AuthButton } from "@components";
 
 const Home: React.FC = () => {
     return (
@@ -9,7 +9,7 @@ const Home: React.FC = () => {
             <Header />
             <Main title="login page" />
             <Cards />
-            <MyButton text="Hello there!" />
+            <AuthButton text="Hello there!" />
             <Spacer />
             <Footer />
         </Flex>

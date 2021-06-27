@@ -45,14 +45,14 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
             ]);
         }
 
-        await Promise.all([
-            questionCollection.insertMany(mockQuestions()),
-            groupCollection.insertMany(mockGroups()),
-            componentCollection.insertMany(mockComponents()),
-            slideCollection.insertMany(mockSlides()),
-            moduleCollection.insertMany(mockModules()),
-            toolCollection.insertMany(mockTools()),
-        ]);
+        const questions = await questionCollection.insertMany(mockQuestions());
+        const questionIDs = questions.ops.map((x) => x._id);
+
+        await groupCollection.insertMany(mockGroups(questionIDs));
+        await componentCollection.insertMany(mockComponents());
+        await slideCollection.insertMany(mockSlides());
+        await moduleCollection.insertMany(mockModules());
+        await toolCollection.insertMany(mockTools());
 
         console.log("Successfully completed seeding");
         client.close();
@@ -71,7 +71,6 @@ function mockQuestions() {
 
     for (let i = 0; i < QUESTION_COUNT; i++) {
         questions.push({
-            _id: i.toString(),
             type: questionTypes[i % questionTypes.length],
             question: faker.lorem.words() + faker.lorem.words() + "?",
             options: mockOptions[i % mockOptions.length],
@@ -81,24 +80,20 @@ function mockQuestions() {
     return questions;
 }
 
-function mockGroups() {
+function mockGroups(questionIDs) {
     const groups = [];
-
+    // when QUESTIONS_PER_GROUP = 4:
+    // id: 0   questionIDs: [ questionIDs[0], questionIDs[1], questionIDs[2], questionIDs[3] ]
+    // id: 1   questionIDs: [ questionIDs[4], questionIDs[5], questionIDs[6], questionIDs[7] ]
+    // id: 2   questionIDs: [ questionIDs[8], questionIDs[9], questionIDs[10], questionIDs[11] ]
     for (let i = 0; i < GROUP_COUNT; i++) {
-        const questionIDs = [];
-        // when QUESTIONS_PER_GROUP = 4:
-        // id: 0   questionIDs: [ '0', '1', '2', '3' ]
-        // id: 1   questionIDs: [ '4', '5', '6', '7' ]
-        // id: 2   questionIDs: [ '8', '9', '10', '11' ]
-        for (let j = 0; j < QUESTIONS_PER_GROUP; j++) {
-            questionIDs.push((i * QUESTIONS_PER_GROUP + j).toString());
-        }
-
         groups.push({
-            _id: i.toString(),
-            questionIDs,
+            questionIDs: questionIDs.slice(
+                QUESTIONS_PER_GROUP * i,
+                QUESTIONS_PER_GROUP * (i + 1),
+            ),
         });
-    }
+
     return groups;
 }
 
@@ -153,7 +148,6 @@ function mockModules() {
             slideIDs.push((i * SLIDES_PER_MODULE + j).toString());
         }
 
-        console.log(slideIDs);
         modules.push({
             _id: i.toString(),
             title: faker.lorem.words(),

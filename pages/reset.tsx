@@ -1,24 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Spacer, Flex, Box, Heading, Text, Center } from "@chakra-ui/react";
+import { Flex, Box, Heading, Text, Center } from "@chakra-ui/react";
 import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/react";
 
 import { TextInput, PasswordInput, AuthButton } from "@components";
-
-// outer component
-// canMoveOn = false
-// email = ""
-// validateEmail = () => {validates stuff}
-
-// inner component calls setCanMoveOn(true)
-// inner component needs to set email?
-// how does inner access email?
-// -> but then who validates email?
-// inner calls validateEamil to validate it and then passes result forwards
-
-// outer component waits for changes and if canMoveOn is true, make the button enabled
-// once you click button, reset canMoveOn and change the stage
 
 const ResetPassword: React.FC = () => {
     const [currStage, setCurrStage] = useState(0);

@@ -11,8 +11,8 @@ enum StatusType {
 export interface ModuleInterface {
     _id: Schema.Types.ObjectId;
     title: string;
-    tool: ToolInterface["_id"];
-    slides: SlideInterface["_id"][];
+    toolID: ToolInterface["_id"];
+    slidesIDs: SlideInterface["_id"][];
     status: StatusType;
     editing: boolean;
 }

@@ -12,7 +12,7 @@ export interface ModuleInterface {
     _id: Schema.Types.ObjectId;
     title: string;
     toolID: ToolInterface["_id"];
-    slidesIDs: SlideInterface["_id"][];
+    slideIDs: SlideInterface["_id"][];
     status: StatusType;
     editing: boolean;
 }

@@ -7,13 +7,16 @@ import { patchSelfCheckByID } from "./patch";
 const index = async (req: NextApiRequest, res: NextApiResponse) => {
     switch (req.method) {
         case "GET":
-            getSelfCheckByID(req, res);
+            await getSelfCheckByID(req, res);
             break;
         case "PATCH":
-            patchSelfCheckByID(req, res);
+            await patchSelfCheckByID(req, res);
             break;
         case "DELETE":
-            delSelfCheckByID(req, res);
+            await delSelfCheckByID(req, res);
+            break;
+        default:
+            res.status(400).send({ error: "Invalid HTTP request" });
             break;
     }
 };

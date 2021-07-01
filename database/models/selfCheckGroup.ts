@@ -1,4 +1,4 @@
-import { model, Schema, Types } from "mongoose";
+import { models, model, Schema, Types } from "mongoose";
 
 interface SelfCheckGroupInterface {
     _id: Types.ObjectId;
@@ -17,6 +17,8 @@ const SelfCheckGroupSchema = new Schema<SelfCheckGroupInterface>(
     },
 );
 
-const SelfCheckGroup = model("SelfCheckGroup", SelfCheckGroupSchema);
+const SelfCheckGroup =
+    models.SelfCheckGroup ||
+    model("SelfCheckGroup", SelfCheckGroupSchema, "self_check_groups");
 
 export { SelfCheckGroup };

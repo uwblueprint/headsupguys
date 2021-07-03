@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../utils/mongoose";
+import deleteOne from "./deleteOne";
 import getOne from "./getOne";
 import update from "./update";
 
@@ -10,6 +11,9 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
             break;
         case "PATCH":
             await update(req, res);
+            break;
+        case "DELETE":
+            await deleteOne(req, res);
             break;
         default:
             res.status(405).json({ error: "Method not supported" });

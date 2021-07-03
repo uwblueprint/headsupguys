@@ -8,7 +8,6 @@ const getOne = async (
     const { id } = req.query;
 
     await Tool.findById(id)
-        .exec()
         .then((tool) => res.status(200).json(tool))
         .catch((err) => res.status(500).send(err));
 };

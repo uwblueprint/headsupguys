@@ -17,4 +17,5 @@ const index = async (
     }
 };
 
+
 export default connectDB(index);

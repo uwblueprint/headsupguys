@@ -26,7 +26,7 @@ const ToolSchema = new Schema<ToolInterface>(
         },
         video: String,
         description: String,
-        moduleID: { type: Schema.Types.ObjectId, ref: "Module" },
+        moduleID: { type: Schema.Types.ObjectId, ref: "Module", default: null },
         resources: [{ title: String, description: String, url: String }],
         selfCheckGroupID: {
             type: Schema.Types.ObjectId,

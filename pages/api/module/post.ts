@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import { Module, ModuleInterface } from "../../../database/models/module";
+import { Tool } from "../../../database/models/tool";
 import connectDB from "../utils/mongoose";
 
 const post = async (
@@ -13,11 +14,28 @@ const post = async (
             .send({ error: "Please provide your module with a title." });
     const module = new Module({
         title: req.body.title,
-        tool: req.body.tool,
-        slides: req.body.slides,
+        toolID: req.body.toolID,
+        slideIDs: req.body.slideIDs,
         status: req.body.status,
         editing: req.body.editing,
     });
+    if (module.toolID) {
+        const tool = await Tool.findById(module.toolID).exec();
+        if (tool) {
+            if (!tool.moduleID) {
+                tool.moduleID = module.id;
+                await tool.save();
+            } else {
+                return res.status(404).send({
+                    error: "The given tool is already associated with a module.",
+                });
+            }
+        } else {
+            return res.status(404).send({
+                error: "Invalid toolID.",
+            });
+        }
+    }
     await module.save();
     res.status(200).json(module);
 };

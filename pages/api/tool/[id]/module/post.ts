@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Tool } from "../../../models/tool";
+import { Tool } from "../../../../../database/models/tool";
 import post from "../../../module/post";
+import connectDB from "../../../utils/mongoose";
 
 const toolPost = async (
     req: NextApiRequest,
@@ -11,8 +12,9 @@ const toolPost = async (
     if (!tool)
         return res
             .status(404)
-            .send({ error: "The module with the given ID was not found." });
+            .send({ error: "The tool with the given ID was not found." });
+    req.body.toolID = id;
     post(req, res);
 };
 
-export { toolPost };
+export default connectDB(toolPost);

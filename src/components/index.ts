@@ -6,3 +6,7 @@ export { Cards } from "./cards";
 export { Footer } from "./footer";
 export { Layout } from "./Layout";
 export { Modal } from "./modal";
+export { TextInput } from "./textInput";
+export { PasswordInput } from "./passwordInput";
+export { CheckboxComp } from "./checkbox";
+export { AuthButton } from "./authButton";

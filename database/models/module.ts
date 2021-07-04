@@ -47,8 +47,6 @@ const ModuleSchema = new Schema<ModuleInterface>(
     },
 );
 
-
 const Module = models.Module || model<ModuleInterface>("Module", ModuleSchema);
-
 
 export { Module, ModuleSchema };

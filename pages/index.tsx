@@ -1,7 +1,9 @@
 import React from "react";
 import { Spacer, Flex } from "@chakra-ui/react";
-
 import { Header, Main, Cards, Footer, AuthButton } from "@components";
+
+import Amplify from "@aws-amplify/core";
+import { Auth } from "aws-amplify";
 
 const Home: React.FC = () => {
     return (
@@ -9,7 +11,6 @@ const Home: React.FC = () => {
             <Header />
             <Main title="login page" />
             <Cards />
-            <AuthButton text="Hello there!" />
             <Spacer />
             <Footer />
         </Flex>

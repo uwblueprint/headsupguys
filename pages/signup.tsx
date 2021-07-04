@@ -4,6 +4,7 @@ import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 import { TextInput, PasswordInput, AuthButton } from "@components";
+import { Auth } from "aws-amplify";
 
 const Signup: React.FC = () => {
     const [currStage, setCurrStage] = useState(0);
@@ -13,9 +14,24 @@ const Signup: React.FC = () => {
         reason: "",
     });
     const [name, setName] = useState("");
-    const [password, setPassword] = useState();
+    const [password, setPassword] = useState("");
     const [termsAgreement, setTermsAgreement] = useState();
     const [canContinue, setCanContinue] = useState(false);
+
+    async function signup(event) {
+        event.preventDefault();
+
+        try {
+            //Create new user with Cognito
+            const newUser = await Auth.signUp({
+                username: email,
+                password: password,
+            });
+            console.log("USER CREATED", newUser);
+        } catch (e) {
+            console.log("ERROR");
+        }
+    }
 
     const validateEmail = () => {
         if (isEmail(email)) {
@@ -87,8 +103,8 @@ const Signup: React.FC = () => {
                 label="Password"
                 placeholder="******"
                 value={password}
-                onChange={(event) => setName(event.currentTarget.value)}
-                onBlur={validateName}
+                onChange={(event) => setPassword(event.currentTarget.value)}
+                // onBlur={validateName}
                 isInvalid={true} // update
             />
         </>
@@ -174,12 +190,15 @@ const Signup: React.FC = () => {
                 <Heading m={5}>{stages[currStage].title}</Heading>
                 {stages[currStage].component}
             </Box>
-
-            <AuthButton
-                text={stages[currStage].buttonText}
-                onClick={incrementStage}
-                isDisabled={!canContinue}
-            />
+            {currStage == 2 ? (
+                <AuthButton text="SIGN UP" onClick={signup} />
+            ) : (
+                <AuthButton
+                    text={stages[currStage].buttonText}
+                    onClick={incrementStage}
+                    isDisabled={!canContinue}
+                />
+            )}
             {/* progress bar */}
         </Flex>
     );

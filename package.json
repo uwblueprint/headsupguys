@@ -14,6 +14,7 @@
         "seed": "node database/scripts/seed.ts"
     },
     "dependencies": {
+        "@aws-amplify/cli": "^5.1.0",
         "@chakra-ui/core": "^0.8.0",
         "@chakra-ui/icons": "^1.0.13",
         "@chakra-ui/react": "^1.1.4",
@@ -24,6 +25,7 @@
         "faker": "^5.5.3",
         "add": "^2.0.6",
         "framer-motion": "^3.2.1",
+        "global": "^4.4.0",
         "mongodb": "^3.6.9",
         "mongoose": "^5.12.12",
         "next": "10.2.0",

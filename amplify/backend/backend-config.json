@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "headsupguys8e874416": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

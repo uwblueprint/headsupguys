@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Flex, Box, Heading, Text, Spacer, Link } from "@chakra-ui/react";
-import { Link as ReachLink } from "@reach/router"
 import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { Auth } from "aws-amplify";
 
 import { TextInput, PasswordInput, AuthButton } from "@components";
 
@@ -34,17 +34,21 @@ const Login: React.FC = () => {
         }
     };
 
-    const logIn = () => {
-        if (password.length > 5) {  // implement login backend logic here
+    async function logIn(event) {
+        event.preventDefault();
+        try {
             setPasswordInvalid({ isInvalid: false, reason: "" });
+            await Auth.signIn(email, password);
+            //   userHasAuthenticated(true);
             incrementStage();
-        } else {
+        } catch (e) {
+            console.log("ERROR", e);
             setPasswordInvalid({
                 isInvalid: true,
                 reason: "Incorrect Password",
             });
         }
-    };
+    }
 
     const loginEmailStage = (
         <>
@@ -101,7 +105,7 @@ const Login: React.FC = () => {
                 <Box>
                     <Text>You are now logged in!</Text>
                 </Box>
-            )
+            ),
         },
     ];
 
@@ -135,16 +139,12 @@ const Login: React.FC = () => {
         >
             {/* dont have account button */}
             {currStage == 0 && (
-                <Flex
-                    direction="row"
-                    m={10}
-                    h="0vh"
-                    paddingTop="15%"
-                    >
-                    <Text>
-                            Don't have an account?                    
-                    </Text>
-                    <Link href="/signup" style={{fontWeight: "bold"}} > Sign Up</Link>
+                <Flex direction="row" m={10} h="0vh" paddingTop="15%">
+                    <Text>Don't have an account?</Text>
+                    <Link href="/signup" style={{ fontWeight: "bold" }}>
+                        {" "}
+                        Sign Up
+                    </Link>
                 </Flex>
             )}
 
@@ -160,8 +160,19 @@ const Login: React.FC = () => {
                     Back
                 </Text>
             )}
-            <Box align="center" className="login-form" m={8} pt={20} pb={0} fontFamily="Geogrotesque">
-                <Heading fontFamily="Geogrotesque" style={{fontWeight: "bold"}} h="25%">
+            <Box
+                align="center"
+                className="login-form"
+                m={8}
+                pt={20}
+                pb={0}
+                fontFamily="Geogrotesque"
+            >
+                <Heading
+                    fontFamily="Geogrotesque"
+                    style={{ fontWeight: "bold" }}
+                    h="25%"
+                >
                     {stages[currStage].title}
                 </Heading>
                 {stages[currStage].component}
@@ -169,7 +180,7 @@ const Login: React.FC = () => {
 
             {currStage == 0 && (
                 <AuthButton
-                paddingTop="-10%"
+                    paddingTop="-10%"
                     text={stages[currStage].buttonText}
                     onClick={incrementStage}
                     isDisabled={!canContinue}
@@ -178,7 +189,6 @@ const Login: React.FC = () => {
 
             {currStage == 1 && (
                 <AuthButton
-                    
                     text={stages[currStage].buttonText}
                     //onClick={logIn}
                     onClick={logIn}
@@ -186,7 +196,6 @@ const Login: React.FC = () => {
                 />
             )}
 
-            
             {/* progress bar */}
         </Flex>
     );

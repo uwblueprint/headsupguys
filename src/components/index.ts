@@ -8,3 +8,4 @@ export { TextInput } from "./textInput";
 export { PasswordInput } from "./passwordInput";
 export { CheckboxComp } from "./checkbox";
 export { AuthButton } from "./authButton";
+export { ProgressDots } from "./progressDots";

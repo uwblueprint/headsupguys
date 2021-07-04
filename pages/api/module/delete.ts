@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
-import { Module } from "../models/module";
+import { Module } from "../../../database/models/module";
 
 const del = async (
     req: NextApiRequest,

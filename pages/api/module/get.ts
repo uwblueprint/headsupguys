@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
-import { Module, ModuleInterface } from "../models/module";
+import { Module, ModuleInterface } from "../../../database/models/module";
 
 const get = async (
     req: NextApiRequest,

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
-import { Module } from "../models/module";
-import { Slide, SlideInterface } from "../models/slide";
+import { Module } from "../../../database/models/module";
+import { Slide, SlideInterface } from "../../../database/models/slide";
 
 const post = async (
     req: NextApiRequest,

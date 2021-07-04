@@ -1,11 +1,11 @@
-import { model, Schema, Types } from "mongoose";
+import { model, models, Schema, Types } from "mongoose";
 
 enum StatusType {
     DRAFT = "draft",
     PUBLISHED = "published",
 }
 
-interface ToolInterface {
+export interface ToolInterface {
     _id: Types.ObjectId;
     title: string;
     video: string;
@@ -49,6 +49,6 @@ const ToolSchema = new Schema<ToolInterface>(
     },
 );
 
-const Tool = model("Tool", ToolSchema);
+const Tool = models.Tool || model("Tool", ToolSchema);
 
 export { Tool, ToolSchema };

@@ -1,12 +1,11 @@
-import { model, Schema, Types } from "mongoose";
-
+import { models, model, Schema, Types } from "mongoose";
 enum ComponentType {
     TEXT = "text",
     VIDEO = "video",
     AUDIO = "audio",
 }
 
-interface ComponentInterface {
+export interface ComponentInterface {
     _id: Types.ObjectId;
     type: ComponentType;
     properties: any;
@@ -28,6 +27,6 @@ const ComponentSchema = new Schema<ComponentInterface>(
     },
 );
 
-const Component = model("Component", ComponentSchema);
+const Component = models.Component || model("Component", ComponentSchema);
 
-export { Component };
+export { Component, ComponentSchema };

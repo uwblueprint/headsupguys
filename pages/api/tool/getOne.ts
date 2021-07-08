@@ -12,7 +12,9 @@ const getOne = async (
             if (tool) {
                 res.status(200).json(tool);
             } else {
-                res.status(404).send("Tool with given id was not found.");
+                res.status(404).send({
+                    error: "Tool with given id was not found",
+                });
             }
         })
         .catch((err) => res.status(500).send(err));

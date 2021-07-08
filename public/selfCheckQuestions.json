@@ -3,28 +3,23 @@
     "plugins": [
         {
             "number": "1.",
-            "description": "Chakra UI is a simple, modular and accessible component library that gives you the building blocks you need to build your React applications.",
-            "url": "https://chakra-ui.com/docs/getting-started"
+            "questionType": "Multiple Choice Select"
         },
         {
             "number": "2.",
-            "description": "Next.js comes with built-in support for CSS and styled-jsx. Styled-jsx is full, scoped and component-friendly CSS support for JSX (rendered on the server or the client).",
-            "url": "https://github.com/vercel/styled-jsx"
+            "questionType": "Multi Select"
         },
         {
             "number": "3.",
-            "description": "Next.js has a built-in polyfill for the fetch API. You don't need to worry about using it on either server or client side.",
-            "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API"
+            "questionType": "Short Answer"
         },
         {
             "number": "4.",
-            "description": "Storybook is an open source tool for developing UI components in isolation for React, Vue, Angular, and more. It makes building stunning UIs organized and efficient.",
-            "url": "https://storybook.js.org/docs/react/get-started/introduction"
+            "questionType": "Long Answer"
         },
         {
             "number": "5.",
-            "description": "Use environment variables in your next.js project for server side, client or both.",
-            "url": "https://github.com/vercel/next.js/tree/canary/examples/environment-variables"
+            "questionType": "Slider"
         }
     ]
 }

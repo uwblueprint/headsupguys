@@ -22,14 +22,8 @@ const post = async (
     if (module.toolID) {
         const tool = await Tool.findById(module.toolID).exec();
         if (tool) {
-            if (!tool.moduleID) {
-                tool.moduleID = module.id;
-                await tool.save();
-            } else {
-                return res.status(404).send({
-                    error: "The given tool is already associated with a module.",
-                });
-            }
+            tool.moduleID = module.id;
+            await tool.save();
         } else {
             return res.status(404).send({
                 error: "Invalid toolID.",

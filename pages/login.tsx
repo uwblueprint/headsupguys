@@ -52,7 +52,13 @@ const Login: React.FC = () => {
 
     const loginEmailStage = (
         <>
-            <AuthButton text="Continue with Google [placeholder]" />
+            {/* <AuthButton text="Continue with Google [placeholder]" /> */}
+            {/* <button
+                onClick={() => Auth.federatedSignIn({ provider: "Google" })}
+            >
+                Open Google
+            </button> */}
+
             <Text m={5}>OR</Text>
             <TextInput
                 fontFamily="Geogrotesque"

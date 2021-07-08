@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "headsupguys8e874416_identitypool_8e874416",
+    "identityPoolName": "headsupguys9716c6d8_identitypool_9716c6d8",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "headsu8e874416",
-    "userPoolName": "headsupguys8e874416_userpool_8e874416",
+    "resourceNameTruncated": "headsu9716c6d8",
+    "userPoolName": "headsupguys9716c6d8_userpool_9716c6d8",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -18,7 +18,8 @@
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
-        "email"
+        "email",
+        "name"
     ],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
@@ -28,10 +29,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "headsu8e874416_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "headsu9716c6d8_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "8e874416",
-    "resourceName": "headsupguys8e874416",
+    "sharedId": "9716c6d8",
+    "resourceName": "headsupguys9716c6d8",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -45,18 +46,18 @@
             "Arn"
         ]
     },
-    "useDefault": "defaultSocial",
+    "useDefault": "default",
     "usernameAttributes": [
         "email"
     ],
+    "triggers": "{}",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "dependsOn": [],
-    "hostedUI": true,
-    "hostedUIDomainName": "headsupguys7f21b125-7f21b125",
-    "authProvidersUserPool": [],
-    "hostedUIProviderMeta": "[]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/\"],\"LogoutURLs\":[\"http://localhost:3000/\"]}",
-    "authProviders": []
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "breakCircularDependency": true,
+    "permissions": [],
+    "dependsOn": []
 }

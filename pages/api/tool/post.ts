@@ -1,7 +1,7 @@
 import { Tool } from "database/models/tool";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const create = async (
+const post = async (
     req: NextApiRequest,
     res: NextApiResponse,
 ): Promise<void> => {
@@ -10,4 +10,4 @@ const create = async (
         .catch((err) => res.status(400).send(err));
 };
 
-export default create;
+export default post;

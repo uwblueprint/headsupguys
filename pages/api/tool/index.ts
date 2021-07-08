@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../utils/mongoose";
-import create from "./create";
+import post from "./post";
 import getAll from "./getAll";
 
 const index = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -9,7 +9,7 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
             await getAll(req, res);
             break;
         case "POST":
-            await create(req, res);
+            await post(req, res);
             break;
         default:
             res.status(405).json({ error: "Method not supported" });

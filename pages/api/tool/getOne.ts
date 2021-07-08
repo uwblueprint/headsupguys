@@ -8,7 +8,13 @@ const getOne = async (
     const { id } = req.query;
 
     await Tool.findById(id)
-        .then((tool) => res.status(200).json(tool))
+        .then((tool) => {
+            if (tool) {
+                res.status(200).json(tool);
+            } else {
+                res.status(404).send("Tool with given id was not found.");
+            }
+        })
         .catch((err) => res.status(500).send(err));
 };
 

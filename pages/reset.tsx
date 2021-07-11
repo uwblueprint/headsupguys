@@ -57,13 +57,9 @@ const ResetPassword: React.FC = () => {
         if (currStage < stages.length) setCurrStage(currStage + 1);
         if (currStage == 2) {
             setCanContinue(true);
-            console.log("REACHED END");
             return;
         }
         setCanContinue(false);
-        console.log(canContinue);
-        console.log(currStage);
-        console.log(stages[currStage]);
     };
 
     const decrementStage = () => {
@@ -218,13 +214,7 @@ const ResetPassword: React.FC = () => {
     ];
 
     return (
-        <Flex
-            direction="column"
-            align="center"
-            // justifyContent="center"
-            minH="100vh"
-        >
-            {/* back button */}
+        <Flex direction="column" align="center" minH="100vh">
             {currStage > 0 && (
                 <Text
                     alignSelf="start"

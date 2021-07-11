@@ -2,24 +2,39 @@
     "name": "Tool Self Check",
     "questions": [
         {
-            "number": "1",
-            "questionType": "Multiple Choice"
+            "_id": "60e642d7e4a1ae34207a92a3",
+            "type": "multiple_choice",
+            "question": "autem sunt eiusdolores nesciunt impedit?",
+            "options": ["Option 1", "Option 2", "Option 3"],
+            "questionNumber": 1
         },
         {
-            "number": "2",
-            "questionType": "Multi Select"
+            "_id": "60e642d7e4a1ae34207a92a4",
+            "type": "multi_select",
+            "question": "autem sunt eiusdolores nesciunt impedit?",
+            "options": ["Option 1", "Option 2", "Option 3"],
+            "questionNumber": 2
         },
         {
-            "number": "3",
-            "questionType": "Short Answer"
+            "_id": "60e642d7e4a1ae34207a92a5",
+            "type": "short_answer",
+            "question": "autem sunt eiusdolores nesciunt impedit?",
+            "options": ["1", "2", "3"],
+            "questionNumber": 3
         },
         {
-            "number": "4",
-            "questionType": "Long Answer"
+            "_id": "60e642d7e4a1ae34207a92a6",
+            "type": "long_answer",
+            "question": "autem sunt eiusdolores nesciunt impedit?",
+            "options": ["1", "2", "3"],
+            "questionNumber": 4
         },
         {
-            "number": "5",
-            "questionType": "Slider"
+            "_id": "60e642d7e4a1ae34207a92a7",
+            "type": "slider",
+            "question": "autem sunt eiusdolores nesciunt impedit?",
+            "options": ["1", "2", "3"],
+            "questionNumber": 5
         }
     ]
 }

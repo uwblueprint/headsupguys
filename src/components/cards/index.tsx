@@ -8,10 +8,13 @@ import {
     Box,
     Heading,
     Text,
-    Input,
     Menu,
-    ButtonGroup,
+    Input,
+    InputLeftElement,
+    InputGroup,
     Button,
+    ButtonGroup,
+    Stack,
     IconButton,
     Select,
     Textarea,
@@ -25,7 +28,7 @@ import {
     ModalCloseButton,
 } from "@chakra-ui/react";
 
-import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
+import { ArrowUpIcon, ArrowDownIcon, PhoneIcon } from "@chakra-ui/icons";
 
 import data from "@public/meta.json";
 import selfCheckData from "@public/selfCheckQuestions.json";
@@ -54,13 +57,13 @@ export const SelfCheckQuestionCards: React.FC = () => {
     const onChangeQty = (key) => {
         [selfCheckData?.questions ?? []][0][key].number = "5";
     };
-    const questionType = [
-        "Multiple Choice",
-        "Multi Select",
-        "Short Answer",
-        "Long Answer",
-        "Slider",
-    ];
+    const questionTypeDict = {
+        multiple_choice: "Multiple Choice",
+        multi_select: "Multi Select",
+        short_answer: "Short Answer",
+        long_answer: "Long Answer",
+        slider: "Slider",
+    };
 
     const [values, setValues] = useState({
         title: "",
@@ -75,12 +78,15 @@ export const SelfCheckQuestionCards: React.FC = () => {
             // );
         };
     };
+    const selfCheckQuestionSize = (selfCheckData?.questions ?? []).map(
+        (question) => null,
+    ).length;
 
     return (
         <SimpleGrid columns={1} spacing={0} px={10} py={10}>
             {(selfCheckData?.questions ?? []).map((question) => (
                 <Box overflowX="auto">
-                    {question.number == 1 && (
+                    {question.questionNumber == 1 && (
                         <Button
                             borderWidth="2px"
                             borderRadius="lg"
@@ -90,7 +96,7 @@ export const SelfCheckQuestionCards: React.FC = () => {
                             borderColor="#3182CE"
                             color="#3182CE"
                             width={"full"}
-                            key={question.number}
+                            key={question.questionNumber}
                             fontWeight={600}
                         >
                             + Question
@@ -111,51 +117,181 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                     alignSelf="center"
                                     mr={6}
                                 >
-                                    {question.number}.
+                                    {question.questionNumber}.
                                 </Heading>
                                 <Input
                                     variant="flushed"
                                     placeholder="Title"
                                     width={"full"}
+                                    pl={2}
                                     mr={6}
                                     onChange={set("title")}
                                 />
 
                                 <Select
-                                    onChange={(e) =>
-                                        onChangeQty(question.number)
-                                    }
                                     minWidth={160}
                                     width={280}
                                     mr={6}
+                                    placeholder={
+                                        questionTypeDict[question.type]
+                                    }
                                 >
-                                    {questionType.map((c) => (
-                                        <option key={c}>{c}</option>
-                                    ))}
+                                    {question.type != "multiple_choice" && (
+                                        <option value="option1">
+                                            {
+                                                questionTypeDict[
+                                                    "multiple_choice"
+                                                ]
+                                            }
+                                        </option>
+                                    )}
+                                    {question.type != "multi_select" && (
+                                        <option value="option1">
+                                            {questionTypeDict["multi_select"]}
+                                        </option>
+                                    )}
+                                    {question.type != "short_answer" && (
+                                        <option value="option2">
+                                            {questionTypeDict["short_answer"]}
+                                        </option>
+                                    )}
+                                    {question.type != "long_answer" && (
+                                        <option value="option3">
+                                            {questionTypeDict["long_answer"]}
+                                        </option>
+                                    )}
+                                    {question.type != "slider" && (
+                                        <option
+                                            value={questionTypeDict["slider"]}
+                                        >
+                                            Slider
+                                        </option>
+                                    )}
                                 </Select>
                             </Menu>
-                            <IconButton mr={2.5} icon={<ArrowUpIcon />} />
-                            <IconButton icon={<ArrowDownIcon />} />
+                            {question.questionNumber != 1 && (
+                                <IconButton icon={<ArrowUpIcon />} />
+                            )}
+                            {question.questionNumber !=
+                                selfCheckQuestionSize && (
+                                <IconButton ml={2.5} icon={<ArrowDownIcon />} />
+                            )}
                         </Flex>
                         <Flex alignContent="center">
-                            {question.questionType == "Short Answer" && (
+                            {question.type == "multiple_choice" && (
+                                <Flex width={"full"}>
+                                    <Stack minWidth={"50%"} spacing={3}>
+                                        {(question?.options ?? []).map(
+                                            (option) => (
+                                                <InputGroup>
+                                                    <InputLeftElement
+                                                        pointerEvents="none"
+                                                        children={
+                                                            <strong>〇</strong>
+                                                        }
+                                                    />
+                                                    <Input
+                                                        variant="flushed"
+                                                        placeholder={option}
+                                                        mr={6}
+                                                        onChange={set("title")}
+                                                    />
+                                                </InputGroup>
+                                            ),
+                                        )}
+                                        <Button
+                                            maxWidth={"120"}
+                                            variant="ghost"
+                                        >
+                                            +Add Option
+                                        </Button>
+                                    </Stack>
+                                </Flex>
+                            )}
+                            {question.type == "multi_select" && (
+                                <Flex width={"full"}>
+                                    <Stack minWidth={"50%"} spacing={3}>
+                                        {(question?.options ?? []).map(
+                                            (option) => (
+                                                <InputGroup>
+                                                    <InputLeftElement
+                                                        pointerEvents="none"
+                                                        children={
+                                                            <strong>▢</strong>
+                                                        }
+                                                    />
+                                                    <Input
+                                                        variant="flushed"
+                                                        placeholder={option}
+                                                        mr={6}
+                                                        onChange={set("title")}
+                                                    />
+                                                </InputGroup>
+                                            ),
+                                        )}
+                                        <Button
+                                            maxWidth={"120"}
+                                            variant="ghost"
+                                        >
+                                            +Add Option
+                                        </Button>
+                                    </Stack>
+                                </Flex>
+                            )}
+                            {question.type == "short_answer" && (
                                 <Textarea
-                                    height={100}
+                                    height={10}
                                     maxHeight={300}
                                     resize={"vertical"}
                                     mr={3}
-                                    placeholder={"Cool"}
+                                    placeholder={"Short answer text"}
                                 />
                             )}
-                            <ButtonGroup
-                                ml={2.5}
-                                size="sm"
-                                isAttached
-                                variant="outline"
-                            >
-                                <Button>Aa</Button>
-                                <Button>123</Button>
-                            </ButtonGroup>
+                            {question.type == "long_answer" && (
+                                <Textarea
+                                    height={10}
+                                    maxHeight={300}
+                                    resize={"vertical"}
+                                    mr={3}
+                                    placeholder={"Long answer text"}
+                                />
+                            )}
+                            {question.type == "slider" && (
+                                <Flex>
+                                    <Select minWidth={160} width={280} mr={6}>
+                                        <option value={0}>0</option>
+                                        <option value={1}>1</option>
+                                    </Select>
+                                    <h3>to</h3>
+                                    <Select
+                                        minWidth={160}
+                                        width={280}
+                                        ml={6}
+                                        mr={6}
+                                    >
+                                        <option value={2}>2</option>
+                                        <option value={3}>3</option>
+                                        <option value={4}>4</option>
+                                        <option value={5}>5</option>
+                                        <option value={6}>6</option>
+                                        <option value={7}>7</option>
+                                        <option value={8}>8</option>
+                                        <option value={9}>9</option>
+                                        <option value={10}>10</option>
+                                    </Select>
+                                </Flex>
+                            )}
+                            {question.type != "slider" && (
+                                <ButtonGroup
+                                    ml={2.5}
+                                    size="sm"
+                                    isAttached
+                                    variant="outline"
+                                >
+                                    <Button>Aa</Button>
+                                    <Button>123</Button>
+                                </ButtonGroup>
+                            )}
                         </Flex>
                         <Flex direction={"rowReverse"} justify={"flex-end"}>
                             <Button
@@ -217,5 +353,5 @@ export const SelfCheckQuestionCards: React.FC = () => {
             ))}
         </SimpleGrid>
     );
-    connectDB(SelfCheckQuestionCards);
 };
+connectDB(SelfCheckQuestionCards);

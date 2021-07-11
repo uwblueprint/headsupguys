@@ -12,7 +12,7 @@ const Home: React.FC = () => {
             <Spacer />
             <Footer />
         </Flex>
-    );
 };
+);
 
 export default Home;

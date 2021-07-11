@@ -1,12 +1,17 @@
 import React from "react";
-import { Flex } from "@chakra-ui/react";
+import { Spacer, Flex } from "@chakra-ui/react";
 
-import { SelfCheckQuestionCards } from "@components";
+import { Header, SelfCheckQuestionCards, Footer } from "@components";
 
 const Home: React.FC = () => {
     return (
         <Flex direction="column" minH="100vh">
+            <Header />
             <SelfCheckQuestionCards />
+            <Spacer />
+            <Spacer />
+            <Spacer />
+            <Footer />
         </Flex>
     );
 };

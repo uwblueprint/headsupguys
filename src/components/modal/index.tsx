@@ -12,29 +12,31 @@ import {
 } from "@chakra-ui/react";
 
 export interface ModalProps {
+    isOpen: boolean;
+    onCancel: () => void;
+    onConfirm: () => void;
     header: string;
     bodyText?: string;
     cancelText?: string;
     confirmText?: string;
     alignButtonsRight?: boolean;
-    isOpen: boolean;
-    onCancel: () => void;
-    onConfirm: () => void;
-} // TODO pass in style overrides
+    confirmButtonColor?: string;
+}
 
 // to control modals:
 // const { isOpen, onOpen, onClose } = useDisclosure();
 
 export const Modal: React.FC<ModalProps> = (props) => {
     const {
+        isOpen,
+        onCancel,
+        onConfirm,
         header,
         bodyText,
         cancelText = "Cancel",
         confirmText = "Confirm",
         alignButtonsRight = true,
-        isOpen,
-        onCancel,
-        onConfirm,
+        confirmButtonColor = "black",
     } = props;
 
     return (
@@ -48,11 +50,24 @@ export const Modal: React.FC<ModalProps> = (props) => {
                         {props.children}
                     </ModalBody>
                     <ModalFooter>
-                        <Button mr="8" onClick={onCancel}>
+                        <Button
+                            mr="8"
+                            color="black"
+                            bg="transparent"
+                            borderWidth={4}
+                            borderColor="black"
+                            onClick={onCancel}
+                        >
                             {cancelText}
                         </Button>
                         {!alignButtonsRight && <Spacer />}
-                        <Button onClick={onConfirm}>{confirmText}</Button>
+                        <Button
+                            color="white"
+                            bg={confirmButtonColor}
+                            onClick={onConfirm}
+                        >
+                            {confirmText}
+                        </Button>
                     </ModalFooter>
                 </ModalContent>
             </ChakraModal>

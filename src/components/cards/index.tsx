@@ -47,7 +47,7 @@ export const Cards: React.FC = () => {
         </SimpleGrid>
     );
 };
-
+//Self check question card component
 export const SelfCheckQuestionCards: React.FC = () => {
     //Keeps track of the modal state for the delete question button
     const { isOpen, onOpen, onClose } = useDisclosure();

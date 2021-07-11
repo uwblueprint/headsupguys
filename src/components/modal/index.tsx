@@ -8,6 +8,7 @@ import {
     ModalBody,
     Button,
     Text,
+    Spacer,
 } from "@chakra-ui/react";
 
 export interface ModalProps {
@@ -15,6 +16,7 @@ export interface ModalProps {
     bodyText?: string;
     cancelText?: string;
     confirmText?: string;
+    alignButtonsRight?: boolean;
     isOpen: boolean;
     onCancel: () => void;
     onConfirm: () => void;
@@ -29,6 +31,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
         bodyText,
         cancelText = "Cancel",
         confirmText = "Confirm",
+        alignButtonsRight = true,
         isOpen,
         onCancel,
         onConfirm,
@@ -45,7 +48,10 @@ export const Modal: React.FC<ModalProps> = (props) => {
                         {props.children}
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={onCancel}>{cancelText}</Button>
+                        <Button mr="8" onClick={onCancel}>
+                            {cancelText}
+                        </Button>
+                        {!alignButtonsRight && <Spacer />}
                         <Button onClick={onConfirm}>{confirmText}</Button>
                     </ModalFooter>
                 </ModalContent>

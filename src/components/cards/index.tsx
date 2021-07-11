@@ -18,6 +18,7 @@ import {
     IconButton,
     Select,
     Textarea,
+    useBoolean,
     useDisclosure,
     Modal,
     ModalHeader,
@@ -50,13 +51,7 @@ export const Cards: React.FC = () => {
 
 export const SelfCheckQuestionCards: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    // const [value, setValue] = React.useState("Multiple Choice");
-    // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     setValue(event.target.value);
-    // };
-    const onChangeQty = (key) => {
-        [selfCheckData?.questions ?? []][0][key].number = "5";
-    };
+    const [flag, setFlag] = useBoolean();
     const questionTypeDict = {
         multiple_choice: "Multiple Choice",
         multi_select: "Multi Select",
@@ -65,19 +60,6 @@ export const SelfCheckQuestionCards: React.FC = () => {
         slider: "Slider",
     };
 
-    const [values, setValues] = useState({
-        title: "",
-        questionType: "",
-    });
-
-    const set = (name) => {
-        return ({ target: { value } }) => {
-            setValues((oldValues) => ({ ...oldValues, [name]: value }));
-            // console.log(
-            //     Number([selfCheckData?.questions ?? []][0][key].number) - 1,
-            // );
-        };
-    };
     const selfCheckQuestionSize = (selfCheckData?.questions ?? []).map(
         (question) => null,
     ).length;
@@ -121,52 +103,33 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                 </Heading>
                                 <Input
                                     variant="flushed"
-                                    placeholder="Title"
+                                    placeholder="Untitled Question"
                                     width={"full"}
                                     pl={2}
                                     mr={6}
-                                    onChange={set("title")}
                                 />
 
                                 <Select
                                     minWidth={160}
                                     width={280}
                                     mr={6}
-                                    placeholder={
-                                        questionTypeDict[question.type]
-                                    }
+                                    defaultValue={question.type}
                                 >
-                                    {question.type != "multiple_choice" && (
-                                        <option value="option1">
-                                            {
-                                                questionTypeDict[
-                                                    "multiple_choice"
-                                                ]
-                                            }
-                                        </option>
-                                    )}
-                                    {question.type != "multi_select" && (
-                                        <option value="option1">
-                                            {questionTypeDict["multi_select"]}
-                                        </option>
-                                    )}
-                                    {question.type != "short_answer" && (
-                                        <option value="option2">
-                                            {questionTypeDict["short_answer"]}
-                                        </option>
-                                    )}
-                                    {question.type != "long_answer" && (
-                                        <option value="option3">
-                                            {questionTypeDict["long_answer"]}
-                                        </option>
-                                    )}
-                                    {question.type != "slider" && (
-                                        <option
-                                            value={questionTypeDict["slider"]}
-                                        >
-                                            Slider
-                                        </option>
-                                    )}
+                                    <option value="multiple_choice">
+                                        {questionTypeDict["multiple_choice"]}
+                                    </option>
+                                    <option value="multi_select">
+                                        {questionTypeDict["multi_select"]}
+                                    </option>
+                                    <option value="short_answer">
+                                        {questionTypeDict["short_answer"]}
+                                    </option>
+                                    <option value="long_answer">
+                                        {questionTypeDict["long_answer"]}
+                                    </option>
+                                    <option value="slider">
+                                        {questionTypeDict["slider"]}
+                                    </option>
                                 </Select>
                             </Menu>
                             {question.questionNumber != 1 && (
@@ -194,7 +157,6 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                                         variant="flushed"
                                                         placeholder={option}
                                                         mr={6}
-                                                        onChange={set("title")}
                                                     />
                                                 </InputGroup>
                                             ),
@@ -224,7 +186,6 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                                         variant="flushed"
                                                         placeholder={option}
                                                         mr={6}
-                                                        onChange={set("title")}
                                                     />
                                                 </InputGroup>
                                             ),
@@ -257,29 +218,57 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                 />
                             )}
                             {question.type == "slider" && (
-                                <Flex>
-                                    <Select minWidth={160} width={280} mr={6}>
-                                        <option value={0}>0</option>
-                                        <option value={1}>1</option>
-                                    </Select>
-                                    <h3>to</h3>
-                                    <Select
-                                        minWidth={160}
-                                        width={280}
-                                        ml={6}
-                                        mr={6}
-                                    >
-                                        <option value={2}>2</option>
-                                        <option value={3}>3</option>
-                                        <option value={4}>4</option>
-                                        <option value={5}>5</option>
-                                        <option value={6}>6</option>
-                                        <option value={7}>7</option>
-                                        <option value={8}>8</option>
-                                        <option value={9}>9</option>
-                                        <option value={10}>10</option>
-                                    </Select>
-                                </Flex>
+                                <Stack width={"50%"} alignItems="left" ml={10}>
+                                    <Flex alignItems="center" direction="row">
+                                        <Select
+                                            variant="flushed"
+                                            defaultValue={1}
+                                            mr={10}
+                                        >
+                                            <option value={0}>0</option>
+                                            <option value={1}>1</option>
+                                        </Select>
+                                        <h3>to</h3>
+                                        <Select
+                                            variant="flushed"
+                                            ml={10}
+                                            mr={6}
+                                            defaultValue={5}
+                                        >
+                                            <option value={2}>2</option>
+                                            <option value={3}>3</option>
+                                            <option value={4}>4</option>
+                                            <option value={5}>5</option>
+                                            <option value={7}>7</option>
+                                            <option value={8}>8</option>
+                                            <option value={9}>9</option>
+                                            <option value={10}>10</option>
+                                        </Select>
+                                    </Flex>
+                                    <Stack>
+                                        {(question?.options ?? []).map(
+                                            (option) => (
+                                                <Flex>
+                                                    <Heading
+                                                        fontSize={16}
+                                                        fontWeight="500"
+                                                        alignSelf="center"
+                                                        mr={2}
+                                                    >
+                                                        {option[0]}
+                                                    </Heading>
+                                                    <Input
+                                                        variant="flushed"
+                                                        placeholder="Label (Obtional)"
+                                                        width={"full"}
+                                                        pl={2}
+                                                        mr={6}
+                                                    />
+                                                </Flex>
+                                            ),
+                                        )}
+                                    </Stack>
+                                </Stack>
                             )}
                             {question.type != "slider" && (
                                 <ButtonGroup
@@ -288,8 +277,18 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                     isAttached
                                     variant="outline"
                                 >
-                                    <Button>Aa</Button>
-                                    <Button>123</Button>
+                                    <Button
+                                        color={flag ? "white" : "black"}
+                                        background={flag ? "black" : "white"}
+                                    >
+                                        Aa
+                                    </Button>
+                                    <Button
+                                        color={flag ? "black" : "white"}
+                                        background={flag ? "white" : "black"}
+                                    >
+                                        123
+                                    </Button>
                                 </ButtonGroup>
                             )}
                         </Flex>
@@ -310,7 +309,7 @@ export const SelfCheckQuestionCards: React.FC = () => {
                             motionPreset="slideInBottom"
                         >
                             <ModalOverlay />
-                            <ModalContent>
+                            <ModalContent p={"5"}>
                                 <ModalHeader>Delete Question</ModalHeader>
                                 <ModalCloseButton />
                                 <ModalBody>
@@ -344,7 +343,7 @@ export const SelfCheckQuestionCards: React.FC = () => {
                         borderColor="#3182CE"
                         color="#3182CE"
                         width={"full"}
-                        key={question.number}
+                        key={question.questionNumber}
                         fontWeight={600}
                     >
                         + Question

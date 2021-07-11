@@ -19,7 +19,7 @@
             "_id": "60e642d7e4a1ae34207a92a5",
             "type": "short_answer",
             "question": "autem sunt eiusdolores nesciunt impedit?",
-            "options": ["1", "2", "3"],
+            "answer": "",
             "questionNumber": 3
         },
         {
@@ -27,13 +27,20 @@
             "type": "long_answer",
             "question": "autem sunt eiusdolores nesciunt impedit?",
             "options": ["1", "2", "3"],
+            "answer": "",
             "questionNumber": 4
         },
         {
             "_id": "60e642d7e4a1ae34207a92a7",
             "type": "slider",
             "question": "autem sunt eiusdolores nesciunt impedit?",
-            "options": ["1", "2", "3"],
+            "options": [
+                ["1","1", ""],
+                ["2", "2", ""],
+                ["3", "3", ""],
+                ["4", "4", ""],
+                ["5", "5", ""]
+            ],
             "questionNumber": 5
         }
     ]

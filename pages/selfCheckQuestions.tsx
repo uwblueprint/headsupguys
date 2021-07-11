@@ -9,8 +9,6 @@ const Home: React.FC = () => {
             <Header />
             <SelfCheckQuestionCards />
             <Spacer />
-            <Spacer />
-            <Spacer />
             <Footer />
         </Flex>
     );

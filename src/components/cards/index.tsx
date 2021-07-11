@@ -28,7 +28,7 @@ import {
     ModalCloseButton,
 } from "@chakra-ui/react";
 
-import { ArrowUpIcon, ArrowDownIcon, PhoneIcon } from "@chakra-ui/icons";
+import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 
 import data from "@public/meta.json";
 import selfCheckData from "@public/selfCheckQuestions.json";
@@ -49,8 +49,11 @@ export const Cards: React.FC = () => {
 };
 
 export const SelfCheckQuestionCards: React.FC = () => {
+    //Keeps track of the modal state for the delete question button
     const { isOpen, onOpen, onClose } = useDisclosure();
+    //TO DO: connect these booleans with the actual database values
     const [flag, setFlag] = useBoolean();
+    // To convert between the variable Name and the common English name
     const questionTypeDict = {
         multiple_choice: "Multiple Choice",
         multi_select: "Multi Select",
@@ -58,7 +61,7 @@ export const SelfCheckQuestionCards: React.FC = () => {
         long_answer: "Long Answer",
         slider: "Slider",
     };
-
+    //To count the number of Self Check Questions
     const selfCheckQuestionSize = (selfCheckData?.questions ?? []).map(
         (question) => null,
     ).length;

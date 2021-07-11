@@ -3,6 +3,7 @@ import { Flex, Box, Heading, Text, Center } from "@chakra-ui/react";
 import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/react";
+import { Auth } from "aws-amplify";
 
 import { TextInput, PasswordInput, AuthButton } from "@components";
 
@@ -23,11 +24,11 @@ const ResetPassword: React.FC = () => {
     });
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [confirmationCode, setConfirmationCode] = useState("");
     const [canContinue, setCanContinue] = useState(false);
 
     const validateEmail = () => {
         if (isEmail(email)) {
-            //TODO: check that an account exists
             setEmailInvalid({ isInvalid: false, reason: "" });
             setCanContinue(true);
         } else {
@@ -57,13 +58,9 @@ const ResetPassword: React.FC = () => {
         if (currStage < stages.length) setCurrStage(currStage + 1);
         if (currStage == 2) {
             setCanContinue(true);
-            console.log("REACHED END");
             return;
         }
         setCanContinue(false);
-        console.log(canContinue);
-        console.log(currStage);
-        console.log(stages[currStage]);
     };
 
     const decrementStage = () => {
@@ -98,7 +95,13 @@ const ResetPassword: React.FC = () => {
             />
             <AuthButton
                 text="Send Instructions"
-                onClick={incrementStage}
+                onClick={() => {
+                    // Send confirmation code to user's email
+                    Auth.forgotPassword(email)
+                        .then((data) => console.log(data))
+                        .catch((err) => alert(err.message));
+                    incrementStage();
+                }}
                 isDisabled={!canContinue}
             />
         </>
@@ -109,6 +112,17 @@ const ResetPassword: React.FC = () => {
             <Text textAlign="left">
                 Your new password must be different from previous passwords.
             </Text>
+            {/* improve validation to ensure confirmation code is present */}
+            <TextInput
+                name="confirmationCode"
+                label="Enter your password reset Confirmation Code"
+                placeholder="Confirmation Code"
+                value={confirmationCode}
+                isRequired
+                onChange={(event) =>
+                    setConfirmationCode(event.currentTarget.value)
+                }
+            />
             {/* Check to see if password meets requirements */}
             <PasswordInput
                 name="password"
@@ -157,7 +171,18 @@ const ResetPassword: React.FC = () => {
             </Text>
             <AuthButton
                 text="Reset Password"
-                onClick={incrementStage}
+                onClick={() => {
+                    Auth.forgotPasswordSubmit(
+                        email,
+                        confirmationCode,
+                        newPassword,
+                    )
+                        .then((data) => {
+                            console.log(data);
+                            incrementStage();
+                        })
+                        .catch((err) => console.log(err));
+                }}
                 isDisabled={!canContinue}
             />
         </>
@@ -218,13 +243,7 @@ const ResetPassword: React.FC = () => {
     ];
 
     return (
-        <Flex
-            direction="column"
-            align="center"
-            // justifyContent="center"
-            minH="100vh"
-        >
-            {/* back button */}
+        <Flex direction="column" align="center" minH="100vh">
             {currStage > 0 && (
                 <Text
                     alignSelf="start"

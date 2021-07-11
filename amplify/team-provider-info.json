@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "headsupguys9716c6d8": {}
+      },
+      "function": {
+        "headsupguys9716c6d8PreSignup": {
+          "deploymentBucketName": "amplify-headsupguys-dev-211912-deployment",
+          "s3Key": "amplify-builds/headsupguys9716c6d8PreSignup-51466b32454f72446976-build.zip"
+        }
       }
     }
   }

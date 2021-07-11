@@ -9,6 +9,18 @@ Parameters:
     Type: String
 
   
+  
+  
+  functionheadsupguys9716c6d8PreSignupArn:
+    Type: String
+    Default: functionheadsupguys9716c6d8PreSignupArn
+  
+  functionheadsupguys9716c6d8PreSignupName:
+    Type: String
+    Default: functionheadsupguys9716c6d8PreSignupName
+  
+  
+  
 
     
   identityPoolName:
@@ -75,10 +87,10 @@ Parameters:
   userpoolClientGenerateSecret:
     Type: String
             
-    
   userpoolClientRefreshTokenValidity:
-    Type: Number
-          
+    Type: String
+  
+            
         
   userpoolClientWriteAttributes:
     Type: CommaDelimitedList
@@ -125,7 +137,6 @@ Parameters:
   userPoolGroupList:
     Type: CommaDelimitedList
       
-            
   serviceName:
     Type: String
   
@@ -148,6 +159,31 @@ Parameters:
       
         
   dependsOn:
+    Type: CommaDelimitedList
+      
+  
+  thirdPartyAuth:
+    Type: String
+            
+  
+  userPoolGroups:
+    Type: String
+            
+  
+  adminQueries:
+    Type: String
+            
+  
+  hostedUI:
+    Type: String
+            
+            
+  authTriggerConnections:
+    Type: String
+  
+            
+        
+  authProviders:
     Type: CommaDelimitedList
       
 Conditions:

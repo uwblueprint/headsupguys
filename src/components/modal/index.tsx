@@ -53,8 +53,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
                         <Button
                             mr="8"
                             color="black"
-                            bg="transparent"
-                            borderWidth={4}
+                            variant="outline"
                             borderColor="black"
                             onClick={onCancel}
                         >

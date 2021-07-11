@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../pages/api/utils/mongoose";
-
 import { useState, React } from "react";
 import {
     SimpleGrid,
@@ -38,7 +37,7 @@ export const Cards: React.FC = () => {
     return (
         <SimpleGrid columns={4} spacing={10} px={20} py={10}>
             {(data?.plugins ?? []).map((plugin) => (
-                <Box key={plugin.name}>
+                <Box>
                     <Heading fontSize={16} fontWeight="500" py={5}>
                         {plugin.name}
                     </Heading>
@@ -78,7 +77,6 @@ export const SelfCheckQuestionCards: React.FC = () => {
                             borderColor="#3182CE"
                             color="#3182CE"
                             width={"full"}
-                            key={question.questionNumber}
                             fontWeight={600}
                         >
                             + Question
@@ -94,7 +92,7 @@ export const SelfCheckQuestionCards: React.FC = () => {
                         <Flex alignContent="center" pb={15}>
                             <Menu>
                                 <Heading
-                                    fontSize={16}
+                                    fontSize={20}
                                     fontWeight="500"
                                     alignSelf="center"
                                     mr={6}
@@ -102,6 +100,7 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                     {question.questionNumber}.
                                 </Heading>
                                 <Input
+                                    size={"lg"}
                                     variant="flushed"
                                     placeholder="Untitled Question"
                                     width={"full"}
@@ -150,7 +149,14 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                                     <InputLeftElement
                                                         pointerEvents="none"
                                                         children={
-                                                            <strong>〇</strong>
+                                                            <Heading
+                                                                fontSize={20}
+                                                                fontWeight="bold"
+                                                                alignSelf="center"
+                                                                mr={6}
+                                                            >
+                                                                〇
+                                                            </Heading>
                                                         }
                                                     />
                                                     <Input
@@ -179,7 +185,14 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                                     <InputLeftElement
                                                         pointerEvents="none"
                                                         children={
-                                                            <strong>▢</strong>
+                                                            <Heading
+                                                                fontSize={20}
+                                                                fontWeight="bold"
+                                                                alignSelf="center"
+                                                                mr={6}
+                                                            >
+                                                                ▢
+                                                            </Heading>
                                                         }
                                                     />
                                                     <Input
@@ -221,6 +234,7 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                 <Stack width={"50%"} alignItems="left" ml={10}>
                                     <Flex alignItems="center" direction="row">
                                         <Select
+                                            minWidth={"50"}
                                             variant="flushed"
                                             defaultValue={1}
                                             mr={10}
@@ -230,6 +244,7 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                         </Select>
                                         <h3>to</h3>
                                         <Select
+                                            minWidth={"50"}
                                             variant="flushed"
                                             ml={10}
                                             mr={6}
@@ -259,7 +274,7 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                                     </Heading>
                                                     <Input
                                                         variant="flushed"
-                                                        placeholder="Label (Obtional)"
+                                                        placeholder="Label (Optional)"
                                                         width={"full"}
                                                         pl={2}
                                                         mr={6}
@@ -343,7 +358,6 @@ export const SelfCheckQuestionCards: React.FC = () => {
                         borderColor="#3182CE"
                         color="#3182CE"
                         width={"full"}
-                        key={question.questionNumber}
                         fontWeight={600}
                     >
                         + Question

@@ -1,24 +1,24 @@
 {
     "name": "Tool Self Check",
-    "plugins": [
+    "questions": [
         {
-            "number": "1.",
-            "questionType": "Multiple Choice Select"
+            "number": "1",
+            "questionType": "Multiple Choice"
         },
         {
-            "number": "2.",
+            "number": "2",
             "questionType": "Multi Select"
         },
         {
-            "number": "3.",
+            "number": "3",
             "questionType": "Short Answer"
         },
         {
-            "number": "4.",
+            "number": "4",
             "questionType": "Long Answer"
         },
         {
-            "number": "5.",
+            "number": "5",
             "questionType": "Slider"
         }
     ]

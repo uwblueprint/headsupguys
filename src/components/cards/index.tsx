@@ -1,4 +1,7 @@
-import React from "react";
+import { NextApiRequest, NextApiResponse } from "next";
+import connectDB from "../../../pages/api/utils/mongoose";
+
+import { useState, React } from "react";
 import {
     SimpleGrid,
     Flex,
@@ -12,6 +15,14 @@ import {
     IconButton,
     Select,
     Textarea,
+    useDisclosure,
+    Modal,
+    ModalHeader,
+    ModalOverlay,
+    ModalContent,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
 } from "@chakra-ui/react";
 
 import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
@@ -35,28 +46,59 @@ export const Cards: React.FC = () => {
 };
 
 export const SelfCheckQuestionCards: React.FC = () => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    // const [value, setValue] = React.useState("Multiple Choice");
+    // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setValue(event.target.value);
+    // };
+    const onChangeQty = (key) => {
+        [selfCheckData?.questions ?? []][0][key].number = "5";
+    };
+    const questionType = [
+        "Multiple Choice",
+        "Multi Select",
+        "Short Answer",
+        "Long Answer",
+        "Slider",
+    ];
+
+    const [values, setValues] = useState({
+        title: "",
+        questionType: "",
+    });
+
+    const set = (name) => {
+        return ({ target: { value } }) => {
+            setValues((oldValues) => ({ ...oldValues, [name]: value }));
+            // console.log(
+            //     Number([selfCheckData?.questions ?? []][0][key].number) - 1,
+            // );
+        };
+    };
+
     return (
-        <SimpleGrid columns={1} spacing={10} px={10} py={10}>
-            {(selfCheckData?.plugins ?? []).map((plugin) => (
-                <Box>
-                    <Button
-                        borderWidth="2px"
-                        borderRadius="lg"
-                        p={3}
-                        mb={5}
-                        bg={"white"}
-                        borderColor="#3182CE"
-                        color="#3182CE"
-                        width={"full"}
-                        key={plugin.number}
-                        fontWeight={600}
-                    >
-                        + Question
-                    </Button>
+        <SimpleGrid columns={1} spacing={0} px={10} py={10}>
+            {(selfCheckData?.questions ?? []).map((question) => (
+                <Box overflowX="auto">
+                    {question.number == 1 && (
+                        <Button
+                            borderWidth="2px"
+                            borderRadius="lg"
+                            p={3}
+                            mb={5}
+                            bg={"white"}
+                            borderColor="#3182CE"
+                            color="#3182CE"
+                            width={"full"}
+                            key={question.number}
+                            fontWeight={600}
+                        >
+                            + Question
+                        </Button>
+                    )}
                     <Box
                         borderWidth="2px"
                         borderRadius="lg"
-                        key={plugin.number}
                         rounded={"md"}
                         p={6}
                         borderColor="#C0BABA"
@@ -69,38 +111,42 @@ export const SelfCheckQuestionCards: React.FC = () => {
                                     alignSelf="center"
                                     mr={6}
                                 >
-                                    {plugin.number}
+                                    {question.number}.
                                 </Heading>
                                 <Input
                                     variant="flushed"
                                     placeholder="Title"
                                     width={"full"}
                                     mr={6}
+                                    onChange={set("title")}
                                 />
 
-                                <Select minWidth={160} width={280} mr={6}>
-                                    <option value="option1">
-                                        Multiple Choice
-                                    </option>
-                                    <option value="option1">
-                                        Multi Select
-                                    </option>
-                                    <option value="option2">
-                                        Short Answer
-                                    </option>
-                                    <option value="option3">Long Answer</option>
-                                    <option value="option4">Slider</option>
+                                <Select
+                                    onChange={(e) =>
+                                        onChangeQty(question.number)
+                                    }
+                                    minWidth={160}
+                                    width={280}
+                                    mr={6}
+                                >
+                                    {questionType.map((c) => (
+                                        <option key={c}>{c}</option>
+                                    ))}
                                 </Select>
                             </Menu>
                             <IconButton mr={2.5} icon={<ArrowUpIcon />} />
                             <IconButton icon={<ArrowDownIcon />} />
                         </Flex>
                         <Flex alignContent="center">
-                            <Textarea
-                                resizr={"horizontal"}
-                                placeholder={plugin.questionType}
-                                mr={3}
-                            />
+                            {question.questionType == "Short Answer" && (
+                                <Textarea
+                                    height={100}
+                                    maxHeight={300}
+                                    resize={"vertical"}
+                                    mr={3}
+                                    placeholder={"Cool"}
+                                />
+                            )}
                             <ButtonGroup
                                 ml={2.5}
                                 size="sm"
@@ -113,20 +159,63 @@ export const SelfCheckQuestionCards: React.FC = () => {
                         </Flex>
                         <Flex direction={"rowReverse"} justify={"flex-end"}>
                             <Button
-                                mt={15}
-                                pt={1}
-                                pb={1}
-                                pr={3}
-                                pl={3}
+                                onClick={onOpen}
+                                py={1}
+                                px={3}
                                 variant="ghost"
                                 colorScheme="red"
                             >
                                 Delete
                             </Button>
                         </Flex>
+                        <Modal
+                            isOpen={isOpen}
+                            onClose={onClose}
+                            motionPreset="slideInBottom"
+                        >
+                            <ModalOverlay />
+                            <ModalContent>
+                                <ModalHeader>Delete Question</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody>
+                                    Are you sure you want to delete this
+                                    question? This is a permanent action that
+                                    cannot be undone.
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button
+                                        variant="outline"
+                                        colorScheme="black"
+                                        mr={3}
+                                        w={100}
+                                        onClick={onClose}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button w={100} colorScheme="red">
+                                        Delete
+                                    </Button>
+                                </ModalFooter>
+                            </ModalContent>
+                        </Modal>
                     </Box>
+                    <Button
+                        borderWidth="2px"
+                        borderRadius="lg"
+                        p={3}
+                        my={5}
+                        bg={"white"}
+                        borderColor="#3182CE"
+                        color="#3182CE"
+                        width={"full"}
+                        key={question.number}
+                        fontWeight={600}
+                    >
+                        + Question
+                    </Button>
                 </Box>
             ))}
         </SimpleGrid>
     );
+    connectDB(SelfCheckQuestionCards);
 };

@@ -1,7 +1,8 @@
+import { NextApiRequest, NextApiResponse } from "next";
+import connectDB from "../../../pages/api/utils/mongoose";
 import { useState, React } from "react";
 import {
     SimpleGrid,
-    Spacer,
     Flex,
     Box,
     Heading,
@@ -27,59 +28,16 @@ import {
 } from "@chakra-ui/react";
 
 import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
-import { Header, Footer } from "@components";
-import selfCheckData from "@public/selfCheckQuestions.json";
-const data = [
-    {
-        _id: "60e642d7e4a1ae34207a92a3",
-        type: "multiple_choice",
-        question: "autem sunt eiusdolores nesciunt impedit?",
-        options: ["Option 1", "Option 2", "Option 3"],
-        questionNumber: 1,
-    },
-    {
-        _id: "60e642d7e4a1ae34207a92a4",
-        type: "multi_select",
-        question: "autem sunt eiusdolores nesciunt impedit?",
-        options: ["Option 1", "Option 2", "Option 3"],
-        questionNumber: 2,
-    },
-    {
-        _id: "60e642d7e4a1ae34207a92a5",
-        type: "short_answer",
-        question: "autem sunt eiusdolores nesciunt impedit?",
-        answer: "",
-        questionNumber: 3,
-    },
-    {
-        _id: "60e642d7e4a1ae34207a92a6",
-        type: "long_answer",
-        question: "autem sunt eiusdolores nesciunt impedit?",
-        options: ["1", "2", "3"],
-        answer: "",
-        questionNumber: 4,
-    },
-    {
-        _id: "60e642d7e4a1ae34207a92a7",
-        type: "slider",
-        question: "autem sunt eiusdolores nesciunt impedit?",
-        options: [
-            ["1", "1", ""],
-            ["2", "2", ""],
-            ["3", "3", ""],
-            ["4", "4", ""],
-            ["5", "5", ""],
-        ],
-        questionNumber: 5,
-    },
-];
 
-const SelfCheckQuestionCards = ({
+import selfCheckData from "@public/selfCheckQuestions.json";
+
+//Self check question card component
+export const SelfCheckQuestionCards: React.FC = (
     questionNumber,
     selfCheckQuestionSize,
     type,
     options,
-}) => {
+) => {
     //Keeps track of the modal state for the delete question button
     const { isOpen, onOpen, onClose } = useDisclosure();
     //TO DO: connect these booleans with the actual database values
@@ -93,10 +51,7 @@ const SelfCheckQuestionCards = ({
         slider: "Slider",
     };
     //To count the number of Self Check Questions
-    const [isSelected, setIsSelected] = useState(false);
-    const handleButtonClick = (id) => {
-        setIsSelected(!isSelected);
-    };
+
     return (
         <SimpleGrid columns={1} spacing={0} px={10} py={10}>
             <Box overflowX="auto">
@@ -388,18 +343,3 @@ const SelfCheckQuestionCards = ({
         </SimpleGrid>
     );
 };
-const Home: React.FC = () => {
-    const selfCheckQuestionSize = data.map((question) => null).length;
-    return (
-        <Flex direction="column" minH="100vh">
-            <Header />
-            {data.map((items) => (
-                <SelfCheckQuestionCards questionNumber={items.questionNumber} />
-            ))}
-            <Spacer />
-            <Footer />
-        </Flex>
-    );
-};
-
-export default Home;

@@ -29,15 +29,13 @@ import {
 
 import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 
-import selfCheckData from "@public/selfCheckQuestions.json";
-
 //Self check question card component
-export const SelfCheckQuestionCards: React.FC = (
+export const SelfCheckQuestionCards = ({
     questionNumber,
     selfCheckQuestionSize,
     type,
     options,
-) => {
+}) => {
     //Keeps track of the modal state for the delete question button
     const { isOpen, onOpen, onClose } = useDisclosure();
     //TO DO: connect these booleans with the actual database values
@@ -51,7 +49,10 @@ export const SelfCheckQuestionCards: React.FC = (
         slider: "Slider",
     };
     //To count the number of Self Check Questions
-
+    const [isSelected, setIsSelected] = useState(false);
+    const handleButtonClick = (id) => {
+        setIsSelected(!isSelected);
+    };
     return (
         <SimpleGrid columns={1} spacing={0} px={10} py={10}>
             <Box overflowX="auto">

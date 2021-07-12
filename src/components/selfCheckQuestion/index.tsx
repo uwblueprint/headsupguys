@@ -31,6 +31,7 @@ import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 
 //Self check question card component
 export const SelfCheckQuestionCards = ({
+    questionId,
     questionNumber,
     selfCheckQuestionSize,
     type,
@@ -40,6 +41,10 @@ export const SelfCheckQuestionCards = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
     //TO DO: connect these booleans with the actual database values
     const [flag, setFlag] = useBoolean();
+    // const handleButtonClick = (id) => {
+    //     setFlag();
+    // };
+
     // To convert between the variable Name and the common English name
     const questionTypeDict = {
         multiple_choice: "Multiple Choice",
@@ -48,11 +53,7 @@ export const SelfCheckQuestionCards = ({
         long_answer: "Long Answer",
         slider: "Slider",
     };
-    //To count the number of Self Check Questions
-    const [isSelected, setIsSelected] = useState(false);
-    const handleButtonClick = (id) => {
-        setIsSelected(!isSelected);
-    };
+
     return (
         <SimpleGrid columns={1} spacing={0} px={10} py={10}>
             <Box overflowX="auto">
@@ -276,6 +277,7 @@ export const SelfCheckQuestionCards = ({
                                     Aa
                                 </Button>
                                 <Button
+                                    id={questionId}
                                     onClick={setFlag.off}
                                     color={flag ? "black" : "white"}
                                     background={flag ? "white" : "black"}

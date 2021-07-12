@@ -13,6 +13,7 @@ const Home: React.FC = () => {
             <Header />
             {(selfCheckData?.questions ?? []).map((question) => (
                 <SelfCheckQuestionCards
+                    questionId={question._id}
                     questionNumber={question.questionNumber}
                     selfCheckQuestionSize={selfCheckQuestionSize}
                     type={question.type}

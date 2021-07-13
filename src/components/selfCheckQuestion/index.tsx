@@ -33,11 +33,12 @@ import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 //Self check question card component
 export const SelfCheckQuestionCard = ({
     item,
+    onAdd,
     onRemove,
-    list,
+    onMoveDown,
+    onMoveUp,
     questionIndex,
     questionId,
-    questionNumber,
     selfCheckQuestionSize,
     type,
     options,
@@ -46,15 +47,6 @@ export const SelfCheckQuestionCard = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
     //TO DO: connect these booleans with the actual database values
     const [flag, setFlag] = useBoolean();
-
-    // To convert between the variable Name and the common English name
-    const questionTypeDict = {
-        multiple_choice: "Multiple Choice",
-        multi_select: "Multi Select",
-        short_answer: "Short Answer",
-        long_answer: "Long Answer",
-        slider: "Slider",
-    };
 
     return (
         <Box overflowX="auto">
@@ -92,33 +84,29 @@ export const SelfCheckQuestionCard = ({
                             defaultValue={type}
                         >
                             <option value="multiple_choice">
-                                {questionTypeDict["multiple_choice"]}
+                                Multiple Choice
                             </option>
-                            <option value="multi_select">
-                                {questionTypeDict["multi_select"]}
-                            </option>
-                            <option value="short_answer">
-                                {questionTypeDict["short_answer"]}
-                            </option>
-                            <option value="long_answer">
-                                {questionTypeDict["long_answer"]}
-                            </option>
-                            <option value="slider">
-                                {questionTypeDict["slider"]}
-                            </option>
+                            <option value="multi_select">Multi Select</option>
+                            <option value="short_answer">Short Answer</option>
+                            <option value="long_answer">Long Answer</option>
+                            <option value="slider">Slider</option>
                         </Select>
                     </Menu>
                     {questionIndex != 0 && (
                         <IconButton
+                            onClick={() => onMoveUp(questionIndex)}
                             ml={
-                                questionNumber == selfCheckQuestionSize ? 10 : 0
+                                questionIndex + 1 == selfCheckQuestionSize
+                                    ? 10
+                                    : 0
                             }
                             icon={<ArrowUpIcon />}
                         />
                     )}
                     {questionIndex != selfCheckQuestionSize - 1 && (
                         <IconButton
-                            ml={questionNumber == 1 ? 10 : 2.5}
+                            onClick={() => onMoveDown(questionIndex)}
+                            ml={questionIndex == 0 ? 10 : 2.5}
                             icon={<ArrowDownIcon />}
                         />
                     )}
@@ -128,7 +116,10 @@ export const SelfCheckQuestionCard = ({
                         <Flex width={"full"}>
                             <Stack minWidth={"50%"} spacing={3}>
                                 {(options ?? []).map((option, index) => (
-                                    <InputGroup id={questionId}>
+                                    <InputGroup
+                                        id={questionId}
+                                        key={questionId + index}
+                                    >
                                         <InputLeftElement
                                             pointerEvents="none"
                                             children={
@@ -250,7 +241,7 @@ export const SelfCheckQuestionCard = ({
                             </Flex>
                             <Stack>
                                 {(options ?? []).map((option) => (
-                                    <Flex>
+                                    <Flex key={option}>
                                         <Heading
                                             fontSize={16}
                                             fontWeight="500"
@@ -281,6 +272,7 @@ export const SelfCheckQuestionCard = ({
                         >
                             <Button
                                 onClick={setFlag.on}
+                                _hover={{ bg: flag ? "black" : "white" }}
                                 color={flag ? "white" : "black"}
                                 background={flag ? "black" : "white"}
                             >
@@ -288,6 +280,7 @@ export const SelfCheckQuestionCard = ({
                             </Button>
                             <Button
                                 onClick={setFlag.off}
+                                _hover={{ bg: flag ? "white" : "black" }}
                                 color={flag ? "black" : "white"}
                                 background={flag ? "white" : "black"}
                             >
@@ -354,6 +347,7 @@ export const SelfCheckQuestionCard = ({
                 color="#3182CE"
                 width={"full"}
                 fontWeight={600}
+                onClick={() => onAdd(questionIndex)}
             >
                 + Question
             </Button>

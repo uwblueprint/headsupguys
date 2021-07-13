@@ -62,16 +62,57 @@ const questionList = [
 
 const Home: React.FC = () => {
     const [list, setList] = React.useState(questionList);
+    const [count, setCount] = React.useState(6);
+    // const handleAddItem = (e) => {
+    //     const newQuestion = {
+    //         _id: "60e642d7e4a1ae34207a92a3",
+    //         type: "multiple_choice",
+    //         question: "autem sunt eiusdolores nesciunt impedit?",
+    //         options: ["Option 1", "Option 2", "Option 3"],
+    //         questionNumber: 1,
+    //     };
+    //     updateList([...list, newQuestion]);
+    // };
+    function addOneQuestion(index) {
+        const newQuestion = {
+            _id: `60e642d7e4a1ae34207a92a${count}`,
+            type: "multiple_choice",
+            question: "autem sunt eiusdolores nesciunt impedit?",
+            options: ["Option 1", "Option 2", "Option 3"],
+            questionNumber: 1,
+        };
+        // console.log(index);
+        const newList = list.slice(0);
+        const newCount = count + 1;
+        newList.splice(index + 1, 0, newQuestion);
+        setCount(newCount);
+        setList(newList);
+    }
+    function moveQuesitonDown(index) {
+        const newList = list.slice(0);
+        const tempQuestion = newList[index];
+        newList[index] = newList[index + 1];
+        newList[index + 1] = tempQuestion;
+        setList(newList);
+    }
+    function moveQuesitonUp(index) {
+        const newList = list.slice(0);
+        const tempQuestion = newList[index];
+        newList[index] = newList[index - 1];
+        newList[index - 1] = tempQuestion;
+        setList(newList);
+    }
 
     function removeOneQuestion(id) {
         const newList = list.filter((item) => item._id !== id);
-
         setList(newList);
     }
     function removeAllQuestions() {
         const newList = list.filter((item) => null);
         setList(newList);
+        onClose;
     }
+
     const selfCheckQuestionSize = (questionList ?? []).map(
         (question) => null,
     ).length;
@@ -79,7 +120,7 @@ const Home: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Flex direction="column" minH="100vh">
-            <Header mb={12} />
+            <Header />
 
             <Flex mt={10} wrap={"wrap"} justifyContent={"left"} width={"full"}>
                 <Text mx={10} fontWeight="bold" fontSize="4xl">
@@ -124,7 +165,7 @@ const Home: React.FC = () => {
                     <ModalHeader>Delete Tool </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        Are you sure you want to delete this tool? This is a
+                        Are you sure you want to discard this tool? This is a
                         permanent action that cannot be undone.
                     </ModalBody>
                     <ModalFooter>
@@ -142,7 +183,7 @@ const Home: React.FC = () => {
                             w={100}
                             colorScheme="red"
                         >
-                            Delete
+                            Discard
                         </Button>
                     </ModalFooter>
                 </ModalContent>
@@ -150,7 +191,7 @@ const Home: React.FC = () => {
             <SimpleGrid columns={1} spacing={0} px={10} py={10}>
                 <Button
                     id={"shmexy"}
-                    // onClick={handleAddItem}
+                    onClick={() => addOneQuestion(-1)}
                     borderWidth="2px"
                     borderRadius="lg"
                     p={3}
@@ -172,9 +213,12 @@ const Home: React.FC = () => {
                         selfCheckQuestionSize={selfCheckQuestionSize}
                         type={item.type}
                         options={item.options}
-                        key={item._id}
+                        key={index + item._id}
                         item={item}
                         onRemove={removeOneQuestion}
+                        onAdd={addOneQuestion}
+                        onMoveDown={moveQuesitonDown}
+                        onMoveUp={moveQuesitonUp}
                     />
                 ))}
             </SimpleGrid>

@@ -137,7 +137,7 @@ const Home: React.FC = () => {
 
     function addOneQuestion(index) {
         const newQuestion = {
-            _id: `60e642d7e4a1ae34207a92a${count}`,
+            _id: `60e642d7e4a1ae34207a92a${count + 1}`,
             type: "multiple_choice",
             question: "autem sunt eiusdolores nesciunt impedit?",
             options: ["Option 1", "Option 2", "Option 3"],
@@ -193,6 +193,10 @@ const Home: React.FC = () => {
                         color="white"
                         background="black"
                         variant="outline"
+                        onClick={() => {
+                            alert(list);
+                            console.log(list);
+                        }}
                     >
                         Save
                     </Button>

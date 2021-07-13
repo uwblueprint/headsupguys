@@ -129,7 +129,7 @@ export const SelfCheckQuestionCard = ({
                             {optionList.map((choice, index) => (
                                 <option
                                     index={index}
-                                    key={choice.value}
+                                    key={choice.value + questionId}
                                     value={choice.value}
                                 >
                                     {choice.label}
@@ -164,10 +164,7 @@ export const SelfCheckQuestionCard = ({
                         <Flex width={"full"}>
                             <Stack minWidth={"50%"} spacing={3}>
                                 {(options ?? []).map((option, index) => (
-                                    <InputGroup
-                                        id={questionId}
-                                        key={questionId + index}
-                                    >
+                                    <InputGroup key={questionId + index}>
                                         <InputLeftElement
                                             pointerEvents="none"
                                             children={
@@ -212,7 +209,7 @@ export const SelfCheckQuestionCard = ({
                         <Flex width={"full"}>
                             <Stack minWidth={"50%"} spacing={3}>
                                 {(options ?? []).map((option, index) => (
-                                    <InputGroup id={option}>
+                                    <InputGroup key={option + questionId}>
                                         <InputLeftElement
                                             pointerEvents="none"
                                             children={
@@ -309,7 +306,7 @@ export const SelfCheckQuestionCard = ({
                             </Flex>
                             <Stack>
                                 {(options ?? []).map((option, index) => (
-                                    <Flex key={option}>
+                                    <Flex key={questionId + option}>
                                         {options[0] == 0 && (
                                             <Heading
                                                 fontSize={16}

@@ -43,15 +43,14 @@ export const SelfCheckQuestionCard = ({
     onMoveUpQuestion,
     questionIndex,
     questionId,
-    selfCheckQuestionSize,
     type,
     options,
+    selfCheckQuestionSize,
 }) => {
     //Keeps track of the modal state for the delete question button
     const { isOpen, onOpen, onClose } = useDisclosure();
     //TO DO: connect these booleans with the actual database values
     const [flag, setFlag] = useBoolean();
-
     const optionList = [
         {
             value: "multiple_choice",

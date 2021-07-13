@@ -11,3 +11,4 @@ export { PasswordInput } from "./passwordInput";
 export { CheckboxComp } from "./checkbox";
 export { AuthButton } from "./authButton";
 export { ProgressDots } from "./progressDots";
+export { ToolCard } from "./toolCard";

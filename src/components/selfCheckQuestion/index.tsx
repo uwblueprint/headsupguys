@@ -278,7 +278,7 @@ export const SelfCheckQuestionCard = ({
                                     minWidth={"50"}
                                     variant="flushed"
                                     onChange={(e) => sliderLowerBound(e)}
-                                    value={sliderStart}
+                                    value={options[0] == "0" ? "0" : "1"}
                                     mr={10}
                                 >
                                     <option value={0}>0</option>
@@ -291,7 +291,11 @@ export const SelfCheckQuestionCard = ({
                                     ml={10}
                                     mr={6}
                                     onChange={(e) => sliderUpperBound(e)}
-                                    value={sliderEnd}
+                                    value={
+                                        options[0] == "0"
+                                            ? String(options.length - 1)
+                                            : options.length
+                                    }
                                 >
                                     <option value={2}>2</option>
                                     <option value={3}>3</option>

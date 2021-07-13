@@ -86,8 +86,8 @@ const Home: React.FC = () => {
     function changeSliderOption(id, target) {
         const optionList = [];
         const newList = list.slice(0);
-        let lowerBound = 1;
-        let upperBound = 5;
+        let lowerBound = target;
+        let upperBound = target;
         if (target < 2) {
             lowerBound = target;
             if (target == 0) {
@@ -155,7 +155,6 @@ const Home: React.FC = () => {
         setList(newList);
     }
     function removeAllQuestions() {
-        onClose;
         const newList = [];
         setList(newList);
     }
@@ -224,7 +223,10 @@ const Home: React.FC = () => {
                             Cancel
                         </Button>
                         <Button
-                            onClick={() => removeAllQuestions()}
+                            onClick={() => {
+                                onClose();
+                                removeAllQuestions();
+                            }}
                             w={100}
                             colorScheme="red"
                         >

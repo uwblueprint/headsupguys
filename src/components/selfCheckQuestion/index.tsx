@@ -36,6 +36,7 @@ export const SelfCheckQuestionCard = ({
     onAddOption,
     onRemoveOption,
     onChangeSliderOption,
+    onChangeQuestionType,
     onAddQuestion,
     onRemoveQuestion,
     onMoveDownQuestion,
@@ -74,12 +75,22 @@ export const SelfCheckQuestionCard = ({
         },
     ];
 
-    const [selectedOption, setSelectedOption] = React.useState(
-        optionas[0].value,
-    );
+    const [selectedOption, setSelectedOption] = React.useState(type);
     function questionType(e) {
         setSelectedOption(e.target.value);
-        console.log(e.target.value);
+        onChangeQuestionType(questionId, e.target.value);
+    }
+    const [sliderStart, setSliderStart] = React.useState(1);
+    const [sliderEnd, setSliderEnd] = React.useState(options.length);
+
+    function sliderLowerBound(e) {
+        setSliderStart(e.target.value);
+        onChangeSliderOption(questionId, e.target.value);
+        console.log(options)
+    }
+    function sliderUpperBound(e) {
+        setSliderEnd(e.target.value);
+        onChangeSliderOption(questionId, e.target.value);
     }
 
     return (
@@ -114,12 +125,16 @@ export const SelfCheckQuestionCard = ({
                             value={selectedOption}
                             minWidth={160}
                             width={280}
-                            mr={6}
+                            mr={selfCheckQuestionSize == 1 ? 0 : 6}
                             onChange={(e) => questionType(e)}
                         >
-                            {optionas.map((o) => (
-                                <option key={o.value} value={o.value}>
-                                    {o.label}
+                            {optionas.map((choice, index) => (
+                                <option
+                                    index={index}
+                                    key={choice.value}
+                                    value={choice.value}
+                                >
+                                    {choice.label}
                                 </option>
                             ))}
                         </Select>
@@ -135,13 +150,16 @@ export const SelfCheckQuestionCard = ({
                             icon={<ArrowUpIcon />}
                         />
                     )}
-                    {questionIndex != selfCheckQuestionSize - 1 && (
-                        <IconButton
-                            onClick={() => onMoveDownQuestion(questionIndex)}
-                            ml={questionIndex == 0 ? 10 : 2.5}
-                            icon={<ArrowDownIcon />}
-                        />
-                    )}
+                    {questionIndex != selfCheckQuestionSize - 1 &&
+                        selfCheckQuestionSize > 1 && (
+                            <IconButton
+                                onClick={() =>
+                                    onMoveDownQuestion(questionIndex)
+                                }
+                                ml={questionIndex == 0 ? 10 : 2.5}
+                                icon={<ArrowDownIcon />}
+                            />
+                        )}
                 </Flex>
                 <Flex alignContent="center">
                     {type == "multiple_choice" && (
@@ -261,7 +279,8 @@ export const SelfCheckQuestionCard = ({
                                 <Select
                                     minWidth={"50"}
                                     variant="flushed"
-                                    defaultValue={options[0]}
+                                    onChange={(e) => sliderLowerBound(e)}
+                                    value={sliderStart}
                                     mr={10}
                                 >
                                     <option value={0}>0</option>
@@ -273,7 +292,8 @@ export const SelfCheckQuestionCard = ({
                                     variant="flushed"
                                     ml={10}
                                     mr={6}
-                                    defaultValue={options[options.length - 1]}
+                                    onChange={(e) => sliderUpperBound(e)}
+                                    value={sliderEnd}
                                 >
                                     <option value={2}>2</option>
                                     <option value={3}>3</option>
@@ -286,17 +306,30 @@ export const SelfCheckQuestionCard = ({
                                 </Select>
                             </Flex>
                             <Stack>
-                                {(options ?? []).map((option) => (
+                                {(options ?? []).map((option, index) => (
                                     <Flex key={option}>
-                                        <Heading
-                                            fontSize={16}
-                                            fontWeight="500"
-                                            alignSelf="center"
-                                            mr={2}
-                                        >
-                                            {option[0]}
-                                        </Heading>
+                                        {options[0] == 0 && (
+                                            <Heading
+                                                fontSize={16}
+                                                fontWeight="500"
+                                                alignSelf="center"
+                                                mr={2}
+                                            >
+                                                {index}
+                                            </Heading>
+                                        )}
+                                        {options[0] != 0 && (
+                                            <Heading
+                                                fontSize={16}
+                                                fontWeight="500"
+                                                alignSelf="center"
+                                                mr={2}
+                                            >
+                                                {index + 1}
+                                            </Heading>
+                                        )}
                                         <Input
+                                            index={index}
                                             variant="flushed"
                                             placeholder="Label (Optional)"
                                             width={"full"}

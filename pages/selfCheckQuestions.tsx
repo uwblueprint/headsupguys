@@ -14,6 +14,7 @@ import {
     SimpleGrid,
     Button,
     ButtonGroup,
+    usePopover,
 } from "@chakra-ui/react";
 import { Header, SelfCheckQuestionCard, Footer } from "@components";
 const questionList = [
@@ -68,11 +69,9 @@ const Home: React.FC = () => {
     //     };
     //     updateList([...list, newQuestion]);
     // };
-    function changeQuestionType(id) {
+    function changeQuestionType(id, target) {
         const newList = list.slice(0);
-        const tempQuestion = newList[index];
-        newList[index] = newList[index + 1];
-        newList[index + 1] = tempQuestion;
+        newList[newList.findIndex((e) => e._id === id)].type = target;
         setList(newList);
     }
     function addOneOption(id) {
@@ -84,7 +83,6 @@ const Home: React.FC = () => {
                 1
             }`,
         ];
-        // (...(newList[newList.findIndex((e) => e._id === id)].options), (newList[newList.findIndex((e) => e._id === id)].options).length + 1)
         setList(newList);
     }
 
@@ -94,34 +92,32 @@ const Home: React.FC = () => {
             index,
             1,
         );
-        // (...(newList[newList.findIndex((e) => e._id === id)].options), (newList[newList.findIndex((e) => e._id === id)].options).length + 1)
         setList(newList);
-        // const newList = list.filter((item) => item.options[index] != index);
-        console.log(newList);
-        // setList(newList);
     }
-    function changeSliderOption(id) {
-        const newList = [];
-        for (
-            let i = newList[newList.findIndex((e) => e._id === id)].options[0];
-            i <=
-            newList[newList.findIndex((e) => e._id === id)].options[
-                newList[newList.findIndex((e) => e._id === id)].options.length -
-                    1
-            ];
-            i++
-        ) {
-            newList.push(i);
+    function changeSliderOption(id, target) {
+        const optionList = [];
+        const newList = list.slice(0);
+        console.log(target);
+        let lowerBound = 1;
+        let upperBound = 5;
+
+        if (target < 2) {
+            lowerBound = target;
+            upperBound =
+                newList[newList.findIndex((e) => e._id === id)].options[
+                    newList[newList.findIndex((e) => e._id === id)].options
+                        .length - 1
+                ];
+        } else {
+            upperBound = target;
+            lowerBound =
+                newList[newList.findIndex((e) => e._id === id)].options[0];
         }
-        newList[newList.findIndex((e) => e._id === id)].options.splice(
-            index,
-            1,
-        );
-        // (...(newList[newList.findIndex((e) => e._id === id)].options), (newList[newList.findIndex((e) => e._id === id)].options).length + 1)
+        for (let i = lowerBound; i <= upperBound; i++) {
+            optionList.push(i);
+        }
+        newList[newList.findIndex((e) => e._id === id)].options = optionList;
         setList(newList);
-        // const newList = list.filter((item) => item.options[index] != index);
-        console.log(newList);
-        // setList(newList);
     }
     function moveQuesitonDown(index) {
         const newList = list.slice(0);
@@ -146,7 +142,6 @@ const Home: React.FC = () => {
             options: ["Option 1", "Option 2", "Option 3"],
             questionNumber: 1,
         };
-        // console.log(index);
         const newList = list.slice(0);
         const newCount = count + 1;
         newList.splice(index + 1, 0, newQuestion);
@@ -159,13 +154,12 @@ const Home: React.FC = () => {
         setList(newList);
     }
     function removeAllQuestions() {
+        onClose;
         const newList = [];
         setList(newList);
     }
 
-    const selfCheckQuestionSize = (questionList ?? []).map(
-        (question) => null,
-    ).length;
+    const selfCheckQuestionSize = list.length;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
@@ -229,7 +223,7 @@ const Home: React.FC = () => {
                             Cancel
                         </Button>
                         <Button
-                            onClick={removeAllQuestions}
+                            onClick={() => removeAllQuestions()}
                             w={100}
                             colorScheme="red"
                         >
@@ -271,6 +265,7 @@ const Home: React.FC = () => {
                         onRemoveOption={removeOneOption}
                         onAddOption={addOneOption}
                         onChangeSliderOption={changeSliderOption}
+                        onChangeQuestionType={changeQuestionType}
                     />
                 ))}
             </SimpleGrid>

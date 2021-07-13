@@ -1,12 +1,16 @@
-import { useState, React } from "react";
+import React, { useState } from "react";
 import {
     Flex,
     Box,
     Heading,
     Menu,
+    Circle,
+    Square,
     Input,
     InputLeftElement,
+    InputRightElement,
     InputGroup,
+    CloseButton,
     Button,
     ButtonGroup,
     Stack,
@@ -27,7 +31,7 @@ import {
 import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 
 //Self check question card component
-export const questionArray = [
+export const questionList = [
     {
         _id: "60e642d7e4a1ae34207a92a3",
         type: "multiple_choice",
@@ -46,7 +50,7 @@ export const questionArray = [
         _id: "60e642d7e4a1ae34207a92a5",
         type: "short_answer",
         question: "autem sunt eiusdolores nesciunt impedit?",
-        answer: "",
+        options: ["1", "2", "3"],
         questionNumber: 3,
     },
     {
@@ -54,7 +58,6 @@ export const questionArray = [
         type: "long_answer",
         question: "autem sunt eiusdolores nesciunt impedit?",
         options: ["1", "2", "3"],
-        answer: "",
         questionNumber: 4,
     },
     {
@@ -78,7 +81,7 @@ export const SelfCheckQuestionCards = ({
     type,
     options,
 }) => {
-    // const [list, setList] = useState(questionArray);
+    // const [list, setList] = useState(questionList);
 
     //Keeps track of the modal state for the delete question button
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -96,35 +99,39 @@ export const SelfCheckQuestionCards = ({
         long_answer: "Long Answer",
         slider: "Slider",
     };
-    const defaultList = [
-        { name: "ItemOne" },
-        { name: "ItemTwo" },
-        { name: "ItemThree" },
-    ];
 
-    const [list, updateList] = useState(defaultList);
+    // const [list, updateList] = useState(questionList);
+    const [list, setList] = React.useState(questionList);
 
-    const handleRemoveItem = (e) => {
-        const name = e.target.getAttribute("id");
-        updateList(list.filter((item) => item.name !== name));
-    };
-    const handleAddItem = (e) => {
-        const name = e.target.getAttribute("id");
-        const items = list;
-        var row = {
-            key: "99",
-            name: "I am New",
-        };
-        updateList([...items, row]);
-    };
+    function handleRemove(id) {
+        console.log(id);
+        const newList = list.filter((item) => item.id !== id);
+        console.log(newList);
+        setList(newList);
+    }
+
+    // function handleRemoveItem(_id) {
+    //     console.log(_id);
+    //     updateList(options.filter((list) => list._id != _id));
+    // }
+    // const handleAddItem = (e) => {
+    //     const newQuestion = {
+    //         _id: "60e642d7e4a1ae34207a92a3",
+    //         type: "multiple_choice",
+    //         question: "autem sunt eiusdolores nesciunt impedit?",
+    //         options: ["Option 1", "Option 2", "Option 3"],
+    //         questionNumber: 1,
+    //     };
+    //     updateList([...list, newQuestion]);
+    // };
     return (
-        <Box overflowX="auto">
-            <div>
+        <Box overflowX="auto" key={questionId}>
+            {/* <div>
                 {list.map((item) => {
                     return (
                         <>
                             <ul>
-                                <span id={item.name} onClick={handleRemoveItem}>
+                                <span id={item.id} onClick={handleRemoveItem}>
                                     x
                                 </span>
                                 <span>{item.name}</span>
@@ -132,12 +139,13 @@ export const SelfCheckQuestionCards = ({
                         </>
                     );
                 })}
-                <span id={"Add item"} onClick={handleAddItem}>
+                <span name={"Add item"} onClick={handleAddItem}>
                     Add item
                 </span>
-            </div>
+            </div> */}
             {questionNumber == 1 && (
                 <Button
+                    // onClick={handleAddItem}
                     borderWidth="2px"
                     borderRadius="lg"
                     p={3}
@@ -175,6 +183,7 @@ export const SelfCheckQuestionCards = ({
                             width={"full"}
                             pl={2}
                             mr={6}
+                            isTruncated
                         />
 
                         <Select
@@ -200,44 +209,48 @@ export const SelfCheckQuestionCards = ({
                             </option>
                         </Select>
                     </Menu>
-                    {questionNumber != 1 && (
-                        <IconButton
-                            aria-label="Move Question Up"
-                            icon={<ArrowUpIcon />}
-                        />
-                    )}
-                    {questionNumber != selfCheckQuestionSize && (
-                        <IconButton
-                            aria-label="Move Question Down"
-                            ml={2.5}
-                            icon={<ArrowDownIcon />}
-                        />
-                    )}
+                    <IconButton
+                        isDisabled={questionNumber == 1 ? true : false}
+                        aria-label="Move Question Up"
+                        icon={<ArrowUpIcon />}
+                    />
+                    <IconButton
+                        isDisabled={
+                            questionNumber == selfCheckQuestionSize
+                                ? true
+                                : false
+                        }
+                        aria-label="Move Question Down"
+                        ml={2.5}
+                        icon={<ArrowDownIcon />}
+                    />
                 </Flex>
                 <Flex alignContent="center">
                     {type == "multiple_choice" && (
                         <Flex width={"full"}>
                             <Stack minWidth={"50%"} spacing={3}>
-                                {(options ?? []).map((option) => (
-                                    <InputGroup>
+                                {(options ?? []).map((option, index) => (
+                                    <InputGroup id={index}>
                                         <InputLeftElement
                                             pointerEvents="none"
                                             children={
-                                                <Heading
-                                                    fontSize={20}
-                                                    fontWeight="bold"
-                                                    alignSelf="center"
-                                                    mr={6}
-                                                >
-                                                    〇
-                                                </Heading>
+                                                <Circle
+                                                    size="15px"
+                                                    color="white"
+                                                    borderWidth="2px"
+                                                    borderColor="black"
+                                                ></Circle>
                                             }
                                         />
                                         <Input
                                             variant="flushed"
                                             placeholder={option}
                                             mr={6}
+                                            isTruncated
                                         />
+                                        <InputRightElement width="4.5rem">
+                                            <CloseButton />
+                                        </InputRightElement>
                                     </InputGroup>
                                 ))}
                                 <Button maxWidth={"120"} variant="ghost">
@@ -250,25 +263,31 @@ export const SelfCheckQuestionCards = ({
                         <Flex width={"full"}>
                             <Stack minWidth={"50%"} spacing={3}>
                                 {(options ?? []).map((option) => (
-                                    <InputGroup>
+                                    <InputGroup id={option}>
                                         <InputLeftElement
                                             pointerEvents="none"
                                             children={
-                                                <Heading
-                                                    fontSize={20}
-                                                    fontWeight="bold"
-                                                    alignSelf="center"
-                                                    mr={6}
-                                                >
-                                                    ▢
-                                                </Heading>
+                                                <Square
+                                                    size="15px"
+                                                    borderWidth="2px"
+                                                    borderColor="black"
+                                                    borderRadius="sm"
+                                                ></Square>
                                             }
                                         />
                                         <Input
                                             variant="flushed"
                                             placeholder={option}
                                             mr={6}
+                                            isTruncated
                                         />
+                                        <InputRightElement width="4.5rem">
+                                            <CloseButton
+                                                onClick={() =>
+                                                    handleRemove(questionId)
+                                                }
+                                            />
+                                        </InputRightElement>
                                     </InputGroup>
                                 ))}
                                 <Button maxWidth={"120"} variant="ghost">
@@ -342,6 +361,7 @@ export const SelfCheckQuestionCards = ({
                                             width={"full"}
                                             pl={2}
                                             mr={6}
+                                            isTruncated
                                         />
                                     </Flex>
                                 ))}
@@ -384,6 +404,7 @@ export const SelfCheckQuestionCards = ({
                     </Button>
                 </Flex>
                 <Modal
+                    blockScrollOnMount={false}
                     isOpen={isOpen}
                     onClose={onClose}
                     motionPreset="slideInBottom"
@@ -409,9 +430,9 @@ export const SelfCheckQuestionCards = ({
                                 Cancel
                             </Button>
                             <Button
+                                onClick={() => handleRemove(questionId)}
                                 w={100}
                                 colorScheme="red"
-                                onClick={() => handleRemoveItem(questionId)}
                             >
                                 Delete
                             </Button>

@@ -22,14 +22,14 @@ const questionList = [
         _id: "60e642d7e4a1ae34207a92a3",
         type: "multiple_choice",
         question: "autem sunt eiusdolores nesciunt impedit?",
-        options: ["Option 1", "Option 2", "Option 3"],
+        options: ["1", "2", "3"],
         questionNumber: 1,
     },
     {
         _id: "60e642d7e4a1ae34207a92a4",
         type: "multi_select",
         question: "autem sunt eiusdolores nesciunt impedit?",
-        options: ["Option 1", "Option 2", "Option 3"],
+        options: ["1", "2", "3"],
         questionNumber: 2,
     },
     {
@@ -95,24 +95,63 @@ const Home: React.FC = () => {
         setList(newList);
     }
     function changeSliderOption(id, target) {
+        // console.log(optiona1, optiona2);
         const optionList = [];
+        // console.log(id.target);
         const newList = list.slice(0);
-        console.log(target);
         let lowerBound = 1;
         let upperBound = 5;
-
+        // console.log(newList[newList.findIndex((e) => e._id === id)].options);
+        // if (
+        //     Number.isNan(
+        //         newList[newList.findIndex((e) => e._id === id)].options[0],
+        //     )
+        // ) {
+        //     lowerBound = 1;
+        // }
+        // if (
+        //     Number.isNan(
+        //         newList[newList.findIndex((e) => e._id === id)].options[
+        //             newList[newList.findIndex((e) => e._id === id)].options
+        //                 .length - 1
+        //         ],
+        //     )
+        // ) {
+        //     upperBound = 1;
+        // }
         if (target < 2) {
             lowerBound = target;
-            upperBound =
-                newList[newList.findIndex((e) => e._id === id)].options[
+            if (target == 0) {
+                upperBound =
                     newList[newList.findIndex((e) => e._id === id)].options
-                        .length - 1
-                ];
-        } else {
+                        .length;
+            } else {
+                upperBound =
+                    newList[newList.findIndex((e) => e._id === id)].options
+                        .length - 1;
+            }
+        } else if (target >= 2) {
             upperBound = target;
-            lowerBound =
-                newList[newList.findIndex((e) => e._id === id)].options[0];
+            if (
+                newList[newList.findIndex((e) => e._id === id)].options[0] ==
+                "0"
+            ) {
+                lowerBound = 0;
+            } else if (
+                newList[newList.findIndex((e) => e._id === id)].options[0] ==
+                "1"
+            ) {
+                lowerBound = 1;
+            }
+        } else {
+            console.log("whackkkk");
         }
+        // } else if (target >= 2) {
+        //     upperBound = target;
+        //     lowerBound =
+        //         newList[newList.findIndex((e) => e._id === id)].options[0];
+        //     console.log("b", upperBound, lowerBound);
+        // }
         for (let i = lowerBound; i <= upperBound; i++) {
             optionList.push(i);
         }

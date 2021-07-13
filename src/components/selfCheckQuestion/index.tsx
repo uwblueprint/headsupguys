@@ -86,7 +86,6 @@ export const SelfCheckQuestionCard = ({
     function sliderLowerBound(e) {
         setSliderStart(e.target.value);
         onChangeSliderOption(questionId, e.target.value);
-        console.log(options)
     }
     function sliderUpperBound(e) {
         setSliderEnd(e.target.value);

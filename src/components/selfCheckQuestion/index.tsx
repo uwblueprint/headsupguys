@@ -33,10 +33,13 @@ import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 //Self check question card component
 export const SelfCheckQuestionCard = ({
     item,
-    onAdd,
-    onRemove,
-    onMoveDown,
-    onMoveUp,
+    onAddOption,
+    onRemoveOption,
+    onChangeSliderOption,
+    onAddQuestion,
+    onRemoveQuestion,
+    onMoveDownQuestion,
+    onMoveUpQuestion,
     questionIndex,
     questionId,
     selfCheckQuestionSize,
@@ -47,7 +50,19 @@ export const SelfCheckQuestionCard = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
     //TO DO: connect these booleans with the actual database values
     const [flag, setFlag] = useBoolean();
+    const [option, setOptions] = React.useState(options);
+    // function addOneOption() {
+    //     const newOptions = [];
+    //     console.log(newOptions);
+    //     // newOptions.append(newOptions.length + 1);
+    //     setOptions(newOptions);
+    // }
 
+    // function removeOneOption(index) {
+    //     const newList = list.filter((item) => item.options[index] != index);
+    //     console.log(newList);
+    //     // setList(newList);
+    // }
     return (
         <Box overflowX="auto">
             <Box
@@ -94,7 +109,7 @@ export const SelfCheckQuestionCard = ({
                     </Menu>
                     {questionIndex != 0 && (
                         <IconButton
-                            onClick={() => onMoveUp(questionIndex)}
+                            onClick={() => onMoveUpQuestion(questionIndex)}
                             ml={
                                 questionIndex + 1 == selfCheckQuestionSize
                                     ? 10
@@ -105,7 +120,7 @@ export const SelfCheckQuestionCard = ({
                     )}
                     {questionIndex != selfCheckQuestionSize - 1 && (
                         <IconButton
-                            onClick={() => onMoveDown(questionIndex)}
+                            onClick={() => onMoveDownQuestion(questionIndex)}
                             ml={questionIndex == 0 ? 10 : 2.5}
                             icon={<ArrowDownIcon />}
                         />
@@ -133,7 +148,7 @@ export const SelfCheckQuestionCard = ({
                                         />
                                         <Input
                                             variant="flushed"
-                                            placeholder={option}
+                                            placeholder={`Option ${index + 1}`}
                                             mr={6}
                                             isTruncated
                                         />
@@ -141,13 +156,20 @@ export const SelfCheckQuestionCard = ({
                                             <CloseButton
                                                 name={questionId}
                                                 onClick={() =>
-                                                    onRemove(questionId)
+                                                    onRemoveOption(
+                                                        questionId,
+                                                        index,
+                                                    )
                                                 }
                                             />
                                         </InputRightElement>
                                     </InputGroup>
                                 ))}
-                                <Button maxWidth={"120"} variant="ghost">
+                                <Button
+                                    maxWidth={"120"}
+                                    variant="ghost"
+                                    onClick={() => onAddOption(questionId)}
+                                >
                                     +Add Option
                                 </Button>
                             </Stack>
@@ -156,7 +178,7 @@ export const SelfCheckQuestionCard = ({
                     {type == "multi_select" && (
                         <Flex width={"full"}>
                             <Stack minWidth={"50%"} spacing={3}>
-                                {(options ?? []).map((option) => (
+                                {(options ?? []).map((option, index) => (
                                     <InputGroup id={option}>
                                         <InputLeftElement
                                             pointerEvents="none"
@@ -171,7 +193,7 @@ export const SelfCheckQuestionCard = ({
                                         />
                                         <Input
                                             variant="flushed"
-                                            placeholder={option}
+                                            placeholder={`Option ${index + 1}`}
                                             mr={6}
                                             isTruncated
                                         />
@@ -179,13 +201,20 @@ export const SelfCheckQuestionCard = ({
                                             <CloseButton
                                                 name={questionId}
                                                 onClick={() =>
-                                                    onRemove(questionId)
+                                                    onRemoveOption(
+                                                        questionId,
+                                                        index,
+                                                    )
                                                 }
                                             />
                                         </InputRightElement>
                                     </InputGroup>
                                 ))}
-                                <Button maxWidth={"120"} variant="ghost">
+                                <Button
+                                    maxWidth={"120"}
+                                    variant="ghost"
+                                    onClick={() => onAddOption(questionId)}
+                                >
                                     +Add Option
                                 </Button>
                             </Stack>
@@ -215,7 +244,7 @@ export const SelfCheckQuestionCard = ({
                                 <Select
                                     minWidth={"50"}
                                     variant="flushed"
-                                    defaultValue={1}
+                                    defaultValue={options[0]}
                                     mr={10}
                                 >
                                     <option value={0}>0</option>
@@ -227,7 +256,7 @@ export const SelfCheckQuestionCard = ({
                                     variant="flushed"
                                     ml={10}
                                     mr={6}
-                                    placeholder={5}
+                                    defaultValue={options[options.length - 1]}
                                 >
                                     <option value={2}>2</option>
                                     <option value={3}>3</option>
@@ -327,7 +356,7 @@ export const SelfCheckQuestionCard = ({
                                 Cancel
                             </Button>
                             <Button
-                                onClick={() => onRemove(item._id)}
+                                onClick={() => onRemoveQuestion(item._id)}
                                 w={100}
                                 colorScheme="red"
                             >
@@ -347,7 +376,7 @@ export const SelfCheckQuestionCard = ({
                 color="#3182CE"
                 width={"full"}
                 fontWeight={600}
-                onClick={() => onAdd(questionIndex)}
+                onClick={() => onAddQuestion(questionIndex)}
             >
                 + Question
             </Button>

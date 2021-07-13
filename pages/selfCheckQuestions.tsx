@@ -49,13 +49,8 @@ const questionList = [
         _id: "60e642d7e4a1ae34207a92a7",
         type: "slider",
         question: "autem sunt eiusdolores nesciunt impedit?",
-        options: [
-            ["1", "1", ""],
-            ["2", "2", ""],
-            ["3", "3", ""],
-            ["4", "4", ""],
-            ["5", "5", ""],
-        ],
+        options: ["1", "2", "3", "4", "5"],
+
         questionNumber: 5,
     },
 ];
@@ -73,20 +68,60 @@ const Home: React.FC = () => {
     //     };
     //     updateList([...list, newQuestion]);
     // };
-    function addOneQuestion(index) {
-        const newQuestion = {
-            _id: `60e642d7e4a1ae34207a92a${count}`,
-            type: "multiple_choice",
-            question: "autem sunt eiusdolores nesciunt impedit?",
-            options: ["Option 1", "Option 2", "Option 3"],
-            questionNumber: 1,
-        };
-        // console.log(index);
+    function changeQuestionType(id) {
         const newList = list.slice(0);
-        const newCount = count + 1;
-        newList.splice(index + 1, 0, newQuestion);
-        setCount(newCount);
+        const tempQuestion = newList[index];
+        newList[index] = newList[index + 1];
+        newList[index + 1] = tempQuestion;
         setList(newList);
+    }
+    function addOneOption(id) {
+        const newList = list.slice(0);
+        newList[newList.findIndex((e) => e._id === id)].options = [
+            ...newList[newList.findIndex((e) => e._id === id)].options,
+            `Option ${
+                newList[newList.findIndex((e) => e._id === id)].options.length +
+                1
+            }`,
+        ];
+        // (...(newList[newList.findIndex((e) => e._id === id)].options), (newList[newList.findIndex((e) => e._id === id)].options).length + 1)
+        setList(newList);
+    }
+
+    function removeOneOption(id, index) {
+        const newList = list.slice(0);
+        newList[newList.findIndex((e) => e._id === id)].options.splice(
+            index,
+            1,
+        );
+        // (...(newList[newList.findIndex((e) => e._id === id)].options), (newList[newList.findIndex((e) => e._id === id)].options).length + 1)
+        setList(newList);
+        // const newList = list.filter((item) => item.options[index] != index);
+        console.log(newList);
+        // setList(newList);
+    }
+    function changeSliderOption(id) {
+        const newList = [];
+        for (
+            let i = newList[newList.findIndex((e) => e._id === id)].options[0];
+            i <=
+            newList[newList.findIndex((e) => e._id === id)].options[
+                newList[newList.findIndex((e) => e._id === id)].options.length -
+                    1
+            ];
+            i++
+        ) {
+            newList.push(i);
+        }
+        newList[newList.findIndex((e) => e._id === id)].options.splice(
+            index,
+            1,
+        );
+        // (...(newList[newList.findIndex((e) => e._id === id)].options), (newList[newList.findIndex((e) => e._id === id)].options).length + 1)
+        setList(newList);
+        // const newList = list.filter((item) => item.options[index] != index);
+        console.log(newList);
+        // setList(newList);
     }
     function moveQuesitonDown(index) {
         const newList = list.slice(0);
@@ -103,14 +138,29 @@ const Home: React.FC = () => {
         setList(newList);
     }
 
+    function addOneQuestion(index) {
+        const newQuestion = {
+            _id: `60e642d7e4a1ae34207a92a${count}`,
+            type: "multiple_choice",
+            question: "autem sunt eiusdolores nesciunt impedit?",
+            options: ["Option 1", "Option 2", "Option 3"],
+            questionNumber: 1,
+        };
+        // console.log(index);
+        const newList = list.slice(0);
+        const newCount = count + 1;
+        newList.splice(index + 1, 0, newQuestion);
+        setCount(newCount);
+        setList(newList);
+    }
+
     function removeOneQuestion(id) {
         const newList = list.filter((item) => item._id !== id);
         setList(newList);
     }
     function removeAllQuestions() {
-        const newList = list.filter((item) => null);
+        const newList = [];
         setList(newList);
-        onClose;
     }
 
     const selfCheckQuestionSize = (questionList ?? []).map(
@@ -209,16 +259,18 @@ const Home: React.FC = () => {
                     <SelfCheckQuestionCard
                         questionId={item._id}
                         questionIndex={index}
-                        questionNumber={item.questionNumber}
                         selfCheckQuestionSize={selfCheckQuestionSize}
                         type={item.type}
                         options={item.options}
                         key={index + item._id}
                         item={item}
-                        onRemove={removeOneQuestion}
-                        onAdd={addOneQuestion}
-                        onMoveDown={moveQuesitonDown}
-                        onMoveUp={moveQuesitonUp}
+                        onRemoveQuestion={removeOneQuestion}
+                        onAddQuestion={addOneQuestion}
+                        onMoveDownQuestion={moveQuesitonDown}
+                        onMoveUpQuestion={moveQuesitonUp}
+                        onRemoveOption={removeOneOption}
+                        onAddOption={addOneOption}
+                        onChangeSliderOption={changeSliderOption}
                     />
                 ))}
             </SimpleGrid>

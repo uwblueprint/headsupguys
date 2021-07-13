@@ -14,7 +14,6 @@ import {
     SimpleGrid,
     Button,
     ButtonGroup,
-    usePopover,
 } from "@chakra-ui/react";
 import { Header, SelfCheckQuestionCard, Footer } from "@components";
 const questionList = [
@@ -59,16 +58,6 @@ const questionList = [
 const Home: React.FC = () => {
     const [list, setList] = React.useState(questionList);
     const [count, setCount] = React.useState(6);
-    // const handleAddItem = (e) => {
-    //     const newQuestion = {
-    //         _id: "60e642d7e4a1ae34207a92a3",
-    //         type: "multiple_choice",
-    //         question: "autem sunt eiusdolores nesciunt impedit?",
-    //         options: ["Option 1", "Option 2", "Option 3"],
-    //         questionNumber: 1,
-    //     };
-    //     updateList([...list, newQuestion]);
-    // };
     function changeQuestionType(id, target) {
         const newList = list.slice(0);
         newList[newList.findIndex((e) => e._id === id)].type = target;
@@ -95,30 +84,10 @@ const Home: React.FC = () => {
         setList(newList);
     }
     function changeSliderOption(id, target) {
-        // console.log(optiona1, optiona2);
         const optionList = [];
-        // console.log(id.target);
         const newList = list.slice(0);
         let lowerBound = 1;
         let upperBound = 5;
-        // console.log(newList[newList.findIndex((e) => e._id === id)].options);
-        // if (
-        //     Number.isNan(
-        //         newList[newList.findIndex((e) => e._id === id)].options[0],
-        //     )
-        // ) {
-        //     lowerBound = 1;
-        // }
-        // if (
-        //     Number.isNan(
-        //         newList[newList.findIndex((e) => e._id === id)].options[
-        //             newList[newList.findIndex((e) => e._id === id)].options
-        //                 .length - 1
-        //         ],
-        //     )
-        // ) {
-        //     upperBound = 1;
-        // }
         if (target < 2) {
             lowerBound = target;
             if (target == 0) {
@@ -143,15 +112,8 @@ const Home: React.FC = () => {
             ) {
                 lowerBound = 1;
             }
-        } else {
-            console.log("whackkkk");
         }
-        // } else if (target >= 2) {
-        //     upperBound = target;
-        //     lowerBound =
-        //         newList[newList.findIndex((e) => e._id === id)].options[0];
-        //     console.log("b", upperBound, lowerBound);
-        // }
+
         for (let i = lowerBound; i <= upperBound; i++) {
             optionList.push(i);
         }

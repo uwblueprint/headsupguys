@@ -52,7 +52,7 @@ export const SelfCheckQuestionCard = ({
     //TO DO: connect these booleans with the actual database values
     const [flag, setFlag] = useBoolean();
 
-    const optionas = [
+    const optionList = [
         {
             value: "multiple_choice",
             label: "Multiple Choice",
@@ -127,7 +127,7 @@ export const SelfCheckQuestionCard = ({
                             mr={selfCheckQuestionSize == 1 ? 0 : 6}
                             onChange={(e) => questionType(e)}
                         >
-                            {optionas.map((choice, index) => (
+                            {optionList.map((choice, index) => (
                                 <option
                                     index={index}
                                     key={choice.value}

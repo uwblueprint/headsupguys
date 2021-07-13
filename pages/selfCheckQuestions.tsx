@@ -194,7 +194,7 @@ const Home: React.FC = () => {
                         background="black"
                         variant="outline"
                         onClick={() => {
-                            alert(list);
+                            alert("Check the console for the object");
                             console.log(list);
                         }}
                     >

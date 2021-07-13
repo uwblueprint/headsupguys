@@ -50,19 +50,38 @@ export const SelfCheckQuestionCard = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
     //TO DO: connect these booleans with the actual database values
     const [flag, setFlag] = useBoolean();
-    const [option, setOptions] = React.useState(options);
-    // function addOneOption() {
-    //     const newOptions = [];
-    //     console.log(newOptions);
-    //     // newOptions.append(newOptions.length + 1);
-    //     setOptions(newOptions);
-    // }
 
-    // function removeOneOption(index) {
-    //     const newList = list.filter((item) => item.options[index] != index);
-    //     console.log(newList);
-    //     // setList(newList);
-    // }
+    const optionas = [
+        {
+            value: "multiple_choice",
+            label: "Multiple Choice",
+        },
+        {
+            value: "multi_select",
+            label: "Multi Select",
+        },
+        {
+            value: "short_answer",
+            label: "Short Answer",
+        },
+        {
+            value: "long_answer",
+            label: "Long Answer",
+        },
+        {
+            value: "slider",
+            label: "Slider",
+        },
+    ];
+
+    const [selectedOption, setSelectedOption] = React.useState(
+        optionas[0].value,
+    );
+    function questionType(e) {
+        setSelectedOption(e.target.value);
+        console.log(e.target.value);
+    }
+
     return (
         <Box overflowX="auto">
             <Box
@@ -91,20 +110,18 @@ export const SelfCheckQuestionCard = ({
                             mr={6}
                             isTruncated
                         />
-
                         <Select
+                            value={selectedOption}
                             minWidth={160}
                             width={280}
                             mr={6}
-                            defaultValue={type}
+                            onChange={(e) => questionType(e)}
                         >
-                            <option value="multiple_choice">
-                                Multiple Choice
-                            </option>
-                            <option value="multi_select">Multi Select</option>
-                            <option value="short_answer">Short Answer</option>
-                            <option value="long_answer">Long Answer</option>
-                            <option value="slider">Slider</option>
+                            {optionas.map((o) => (
+                                <option key={o.value} value={o.value}>
+                                    {o.label}
+                                </option>
+                            ))}
                         </Select>
                     </Menu>
                     {questionIndex != 0 && (

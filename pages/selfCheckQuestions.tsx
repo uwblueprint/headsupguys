@@ -15,18 +15,72 @@ import {
     Button,
     ButtonGroup,
 } from "@chakra-ui/react";
-import { Header, SelfCheckQuestionCards, Footer } from "@components";
-import { questionList } from "@components/selfCheckQuestion";
-import selfCheckData from "@public/selfCheckQuestions.json";
+import { Header, SelfCheckQuestionCard, Footer } from "@components";
+const questionList = [
+    {
+        _id: "60e642d7e4a1ae34207a92a3",
+        type: "multiple_choice",
+        question: "autem sunt eiusdolores nesciunt impedit?",
+        options: ["Option 1", "Option 2", "Option 3"],
+        questionNumber: 1,
+    },
+    {
+        _id: "60e642d7e4a1ae34207a92a4",
+        type: "multi_select",
+        question: "autem sunt eiusdolores nesciunt impedit?",
+        options: ["Option 1", "Option 2", "Option 3"],
+        questionNumber: 2,
+    },
+    {
+        _id: "60e642d7e4a1ae34207a92a5",
+        type: "short_answer",
+        question: "autem sunt eiusdolores nesciunt impedit?",
+        options: ["1", "2", "3"],
+        questionNumber: 3,
+    },
+    {
+        _id: "60e642d7e4a1ae34207a92a6",
+        type: "long_answer",
+        question: "autem sunt eiusdolores nesciunt impedit?",
+        options: ["1", "2", "3"],
+        questionNumber: 4,
+    },
+    {
+        _id: "60e642d7e4a1ae34207a92a7",
+        type: "slider",
+        question: "autem sunt eiusdolores nesciunt impedit?",
+        options: [
+            ["1", "1", ""],
+            ["2", "2", ""],
+            ["3", "3", ""],
+            ["4", "4", ""],
+            ["5", "5", ""],
+        ],
+        questionNumber: 5,
+    },
+];
 
 const Home: React.FC = () => {
-    const selfCheckQuestionSize = (selfCheckData?.questions ?? []).map(
+    const [list, setList] = React.useState(questionList);
+
+    function removeOneQuestion(id) {
+        const newList = list.filter((item) => item._id !== id);
+
+        setList(newList);
+    }
+    function removeAllQuestions() {
+        const newList = list.filter((item) => null);
+        setList(newList);
+    }
+    const selfCheckQuestionSize = (questionList ?? []).map(
         (question) => null,
     ).length;
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Flex direction="column" minH="100vh">
             <Header mb={12} />
+
             <Flex mt={10} wrap={"wrap"} justifyContent={"left"} width={"full"}>
                 <Text mx={10} fontWeight="bold" fontSize="4xl">
                     Create a Tool
@@ -83,21 +137,44 @@ const Home: React.FC = () => {
                         >
                             Cancel
                         </Button>
-                        <Button w={100} colorScheme="red">
+                        <Button
+                            onClick={removeAllQuestions}
+                            w={100}
+                            colorScheme="red"
+                        >
                             Delete
                         </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
             <SimpleGrid columns={1} spacing={0} px={10} py={10}>
-                {(questionList ?? []).map((question) => (
-                    <SelfCheckQuestionCards
-                        key={question.questionNumber}
-                        questionId={question._id}
-                        questionNumber={question.questionNumber}
+                <Button
+                    id={"shmexy"}
+                    // onClick={handleAddItem}
+                    borderWidth="2px"
+                    borderRadius="lg"
+                    p={3}
+                    mb={5}
+                    bg={"white"}
+                    borderColor="#3182CE"
+                    color="#3182CE"
+                    width={"full"}
+                    fontWeight={600}
+                >
+                    + Question
+                </Button>
+
+                {list.map((item, index) => (
+                    <SelfCheckQuestionCard
+                        questionId={item._id}
+                        questionIndex={index}
+                        questionNumber={item.questionNumber}
                         selfCheckQuestionSize={selfCheckQuestionSize}
-                        type={question.type}
-                        options={question.options}
+                        type={item.type}
+                        options={item.options}
+                        key={item._id}
+                        item={item}
+                        onRemove={removeOneQuestion}
                     />
                 ))}
             </SimpleGrid>

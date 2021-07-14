@@ -13,7 +13,6 @@ import {
     Flex,
     SimpleGrid,
     Button,
-    ButtonGroup,
 } from "@chakra-ui/react";
 import { Header, SelfCheckQuestionCard, Footer } from "@components";
 
@@ -164,12 +163,11 @@ const Home: React.FC = () => {
         <Flex direction="column" minH="100vh">
             <Header />
 
-            <Flex mt={10} wrap={"wrap"} justifyContent={"left"} width={"full"}>
-                <Text mx={10} fontWeight="bold" fontSize="4xl">
+            <Flex mt={10} wrap={"wrap"} justify={"left"} width={"full"}>
+                <Text ml={10} mr={2} fontWeight="bold" fontSize="4xl">
                     Create a Tool
                 </Text>
-                <Spacer />
-                <ButtonGroup wrap={"wrap"} spacing={"1.5rem"} mx={12}>
+                <Flex wrap={"wrap"} ml={"auto"} mr={10}>
                     <Button
                         _hover={{ bg: "#F3F3F3" }}
                         _active={{
@@ -187,6 +185,7 @@ const Home: React.FC = () => {
                         _active={{
                             transform: "scale(0.95)",
                         }}
+                        ml={"5"}
                         minWidth={"90"}
                         color="white"
                         background="black"
@@ -198,7 +197,7 @@ const Home: React.FC = () => {
                     >
                         Save
                     </Button>
-                </ButtonGroup>
+                </Flex>
             </Flex>
             <Modal
                 blockScrollOnMount={false}

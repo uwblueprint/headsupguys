@@ -16,12 +16,15 @@ import {
     ButtonGroup,
 } from "@chakra-ui/react";
 import { Header, SelfCheckQuestionCard, Footer } from "@components";
+
+//Default question list, can be shortened as needed
 const questionList = [
     {
         _id: "60e642d7e4a1ae34207a92a3",
         type: "multiple_choice",
         question: "autem sunt eiusdolores nesciunt impedit?",
         options: ["1", "2", "3"],
+        alphanumericInput: true,
         questionNumber: 1,
     },
     {
@@ -29,6 +32,7 @@ const questionList = [
         type: "multi_select",
         question: "autem sunt eiusdolores nesciunt impedit?",
         options: ["1", "2", "3"],
+        alphanumericInput: true,
         questionNumber: 2,
     },
     {
@@ -36,6 +40,7 @@ const questionList = [
         type: "short_answer",
         question: "autem sunt eiusdolores nesciunt impedit?",
         options: ["1", "2", "3"],
+        alphanumericInput: true,
         questionNumber: 3,
     },
     {
@@ -43,6 +48,7 @@ const questionList = [
         type: "long_answer",
         question: "autem sunt eiusdolores nesciunt impedit?",
         options: ["1", "2", "3"],
+        alphanumericInput: true,
         questionNumber: 4,
     },
     {
@@ -50,14 +56,15 @@ const questionList = [
         type: "slider",
         question: "autem sunt eiusdolores nesciunt impedit?",
         options: ["1", "2", "3", "4", "5"],
-
+        alphanumericInput: true,
         questionNumber: 5,
     },
 ];
 
+//Self Check Questions React functional component
 const Home: React.FC = () => {
     const [list, setList] = React.useState(questionList);
-    const [count, setCount] = React.useState(6);
+    const [count, setCount] = React.useState(questionList.length + 1);
     const newSliderRange0 = [];
     for (let i = 1; i <= 3; i++) {
         newSliderRange0.push(i);
@@ -66,59 +73,17 @@ const Home: React.FC = () => {
     function changeQuestionType(id, target) {
         const newList = list.slice(0);
         newList[newList.findIndex((e) => e._id === id)].type = target;
-        if (target == "slider") {
-            if (
-                newList[newList.findIndex((e) => e._id === id)].options[0] ==
-                "0"
-            ) {
-                if (
-                    newList[newList.findIndex((e) => e._id === id)].options
-                        .length == 0
-                ) {
-                    addOneOption(id);
-                    addOneOption(id);
-                    addOneOption(id);
-                } else if (
-                    newList[newList.findIndex((e) => e._id === id)].options
-                        .length == 1
-                ) {
-                    addOneOption(id);
-                    addOneOption(id);
-                }
-            } else if (
-                newList[newList.findIndex((e) => e._id === id)].options[0] ==
-                "1"
-            ) {
-                if (
-                    newList[newList.findIndex((e) => e._id === id)].options
-                        .length == 0
-                ) {
-                    addOneOption(id);
-                    addOneOption(id);
-                } else if (
-                    newList[newList.findIndex((e) => e._id === id)].options
-                        .length == 1
-                ) {
-                    addOneOption(id);
-                }
-            } else if (
-                newList[newList.findIndex((e) => e._id === id)].options
-                    .length == 0
-            ) {
-                addOneOption(id);
-                addOneOption(id);
-            } else if (
-                newList[newList.findIndex((e) => e._id === id)].options
-                    .length == 1
-            ) {
-                addOneOption(id);
-            }
-        }
+
+        setList(newList);
+    }
+    function changeAlphanumeric(id, target) {
+        const newList = list.slice(0);
+        newList[newList.findIndex((e) => e._id === id)].alphanumericInput =
+            target;
         setList(newList);
     }
     function addOneOption(id) {
         const newList = list.slice(0);
-        console.log(newList[newList.findIndex((e) => e._id === id)].options);
         newList[newList.findIndex((e) => e._id === id)].options = [
             ...newList[newList.findIndex((e) => e._id === id)].options,
             `${
@@ -126,18 +91,15 @@ const Home: React.FC = () => {
                 1
             }`,
         ];
-        // console.log(newList)
         setList(newList);
     }
 
     function removeOneOption(id, index) {
         const newList = list.slice(0);
-        console.log(newList[newList.findIndex((e) => e._id === id)].options);
         newList[newList.findIndex((e) => e._id === id)].options.splice(
             index,
             1,
         );
-        // console.log(newList)
         setList(newList);
     }
     function changeSliderOption(id, lowerBound, upperBound) {
@@ -153,7 +115,6 @@ const Home: React.FC = () => {
         }
 
         newList[newList.findIndex((e) => e._id === id)].options = optionList;
-        console.log(optionList);
         setSliderRange(newSliderRange);
         setList(newList);
     }
@@ -174,11 +135,11 @@ const Home: React.FC = () => {
 
     function addOneQuestion(index) {
         const newQuestion = {
-            _id: `60e642d7e4a1ae34207a92a${count + 1}`,
+            _id: `60e642d7e4a1ae34207a92a${count}`,
             type: "multiple_choice",
             question: "autem sunt eiusdolores nesciunt impedit?",
             options: ["1", "2", "3"],
-            questionNumber: 1,
+            questionNumber: count,
         };
         const newList = list.slice(0);
         const newCount = count + 1;
@@ -299,9 +260,11 @@ const Home: React.FC = () => {
                         questionIndex={index}
                         selfCheckQuestionSize={selfCheckQuestionSize}
                         type={item.type}
+                        alphanumeric={item.alphanumericInput}
                         options={item.options}
                         key={index + item._id}
                         item={item}
+                        onChangeAlphanumeric={changeAlphanumeric}
                         onRemoveQuestion={removeOneQuestion}
                         onAddQuestion={addOneQuestion}
                         onMoveDownQuestion={moveQuesitonDown}

@@ -3,7 +3,6 @@ import {
     Flex,
     Box,
     Heading,
-    Menu,
     Circle,
     Square,
     Input,
@@ -17,7 +16,6 @@ import {
     IconButton,
     Select,
     Textarea,
-    useBoolean,
     useDisclosure,
     Modal,
     ModalHeader,
@@ -46,12 +44,14 @@ export const SelfCheckQuestionCard = ({
     questionId,
     type,
     options,
+    alphanumeric,
+    onChangeAlphanumeric,
     selfCheckQuestionSize,
 }) => {
     //Keeps track of the modal state for the delete question button
     const { isOpen, onOpen, onClose } = useDisclosure();
     //TO DO: connect these booleans with the actual database values
-    const [flag, setFlag] = useBoolean();
+
     const optionList = [
         {
             value: "multiple_choice",
@@ -74,7 +74,12 @@ export const SelfCheckQuestionCard = ({
             label: "Slider",
         },
     ];
-
+    const [alphanumericInput, setAlphanumericInput] =
+        React.useState(alphanumeric);
+    function changeAlphanumeric(e) {
+        setAlphanumericInput(e);
+        onChangeAlphanumeric(questionId, e);
+    }
     const [selectedOption, setSelectedOption] = React.useState(type);
     function questionType(e) {
         setSelectedOption(e.target.value);
@@ -84,12 +89,10 @@ export const SelfCheckQuestionCard = ({
     const [sliderEnd, setSliderEnd] = React.useState(options.length);
 
     function sliderLowerBound(e) {
-        console.log(e.target.value, sliderEnd);
         setSliderStart(e.target.value);
         onChangeSliderOption(questionId, e.target.value, sliderEnd);
     }
     function sliderUpperBound(e) {
-        console.log(sliderStart, e.target.value);
         setSliderEnd(e.target.value);
         onChangeSliderOption(questionId, sliderStart, e.target.value);
     }
@@ -103,8 +106,8 @@ export const SelfCheckQuestionCard = ({
                 p={6}
                 borderColor="#C0BABA"
             >
-                <Flex alignContent="center" pb={15}>
-                    <Menu>
+                <Flex wrap={"wrap"}>
+                    <Flex minWidth={"40%"} p="2">
                         <Heading
                             fontSize={20}
                             fontWeight="500"
@@ -114,18 +117,19 @@ export const SelfCheckQuestionCard = ({
                             {questionIndex + 1}.
                         </Heading>
                         <Input
+                            width={"full"}
                             size={"lg"}
                             variant="flushed"
                             placeholder="Untitled Question"
-                            width={"full"}
-                            pl={2}
                             mr={6}
+                            pl={2}
                             isTruncated
                         />
+                    </Flex>
+                    <Flex pb={15} marginLeft={"auto"}>
                         <Select
                             value={selectedOption}
-                            minWidth={160}
-                            width={280}
+                            minWidth={"165"}
                             mr={selfCheckQuestionSize == 1 ? 0 : 6}
                             onChange={(e) => questionType(e)}
                         >
@@ -139,29 +143,31 @@ export const SelfCheckQuestionCard = ({
                                 </option>
                             ))}
                         </Select>
-                    </Menu>
-                    {questionIndex != 0 && (
-                        <IconButton
-                            onClick={() => onMoveUpQuestion(questionIndex)}
-                            ml={
-                                questionIndex + 1 == selfCheckQuestionSize
-                                    ? 10
-                                    : 0
-                            }
-                            icon={<ArrowUpIcon />}
-                        />
-                    )}
-                    {questionIndex != selfCheckQuestionSize - 1 &&
-                        selfCheckQuestionSize > 1 && (
+
+                        {questionIndex != 0 && (
                             <IconButton
-                                onClick={() =>
-                                    onMoveDownQuestion(questionIndex)
+                                onClick={() => onMoveUpQuestion(questionIndex)}
+                                ml={
+                                    questionIndex + 1 == selfCheckQuestionSize
+                                        ? "10"
+                                        : "0"
                                 }
-                                ml={questionIndex == 0 ? 10 : 2.5}
-                                icon={<ArrowDownIcon />}
+                                icon={<ArrowUpIcon />}
                             />
                         )}
+                        {questionIndex != selfCheckQuestionSize - 1 &&
+                            selfCheckQuestionSize > 1 && (
+                                <IconButton
+                                    onClick={() =>
+                                        onMoveDownQuestion(questionIndex)
+                                    }
+                                    ml={questionIndex == 0 ? "10" : "2"}
+                                    icon={<ArrowDownIcon />}
+                                />
+                            )}
+                    </Flex>
                 </Flex>
+
                 <Flex alignContent="center">
                     {type == "multiple_choice" && (
                         <Flex width={"full"}>
@@ -351,18 +357,26 @@ export const SelfCheckQuestionCard = ({
                             variant="outline"
                         >
                             <Button
-                                onClick={setFlag.on}
-                                _hover={{ bg: flag ? "black" : "white" }}
-                                color={flag ? "white" : "black"}
-                                background={flag ? "black" : "white"}
+                                onClick={() => changeAlphanumeric(true)}
+                                _hover={{
+                                    bg: alphanumericInput ? "black" : "white",
+                                }}
+                                color={alphanumericInput ? "white" : "black"}
+                                background={
+                                    alphanumericInput ? "black" : "white"
+                                }
                             >
                                 Aa
                             </Button>
                             <Button
-                                onClick={setFlag.off}
-                                _hover={{ bg: flag ? "white" : "black" }}
-                                color={flag ? "black" : "white"}
-                                background={flag ? "white" : "black"}
+                                onClick={() => changeAlphanumeric(false)}
+                                _hover={{
+                                    bg: alphanumericInput ? "white" : "black",
+                                }}
+                                color={alphanumericInput ? "black" : "white"}
+                                background={
+                                    alphanumericInput ? "white" : "black"
+                                }
                             >
                                 123
                             </Button>

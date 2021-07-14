@@ -58,6 +58,11 @@ const questionList = [
 const Home: React.FC = () => {
     const [list, setList] = React.useState(questionList);
     const [count, setCount] = React.useState(6);
+    const newSliderRange0 = [];
+    for (let i = 1; i <= 3; i++) {
+        newSliderRange0.push(i);
+    }
+    const [sliderRange, setSliderRange] = React.useState(newSliderRange0);
     function changeQuestionType(id, target) {
         const newList = list.slice(0);
         newList[newList.findIndex((e) => e._id === id)].type = target;
@@ -96,65 +101,60 @@ const Home: React.FC = () => {
                 ) {
                     addOneOption(id);
                 }
+            } else if (
+                newList[newList.findIndex((e) => e._id === id)].options
+                    .length == 0
+            ) {
+                addOneOption(id);
+                addOneOption(id);
+            } else if (
+                newList[newList.findIndex((e) => e._id === id)].options
+                    .length == 1
+            ) {
+                addOneOption(id);
             }
         }
         setList(newList);
     }
     function addOneOption(id) {
         const newList = list.slice(0);
+        console.log(newList[newList.findIndex((e) => e._id === id)].options);
         newList[newList.findIndex((e) => e._id === id)].options = [
             ...newList[newList.findIndex((e) => e._id === id)].options,
-            `Option ${
+            `${
                 newList[newList.findIndex((e) => e._id === id)].options.length +
                 1
             }`,
         ];
+        // console.log(newList)
         setList(newList);
     }
 
     function removeOneOption(id, index) {
         const newList = list.slice(0);
+        console.log(newList[newList.findIndex((e) => e._id === id)].options);
         newList[newList.findIndex((e) => e._id === id)].options.splice(
             index,
             1,
         );
+        // console.log(newList)
         setList(newList);
     }
-    function changeSliderOption(id, target) {
+    function changeSliderOption(id, lowerBound, upperBound) {
         const optionList = [];
         const newList = list.slice(0);
-        let lowerBound = target;
-        let upperBound = target;
-        if (target < 2) {
-            lowerBound = target;
-            if (target == 0) {
-                upperBound =
-                    newList[newList.findIndex((e) => e._id === id)].options
-                        .length;
-            } else {
-                upperBound =
-                    newList[newList.findIndex((e) => e._id === id)].options
-                        .length - 1;
-            }
-        } else if (target >= 2) {
-            upperBound = target;
-            if (
-                newList[newList.findIndex((e) => e._id === id)].options[0] ==
-                "0"
-            ) {
-                lowerBound = 0;
-            } else if (
-                newList[newList.findIndex((e) => e._id === id)].options[0] ==
-                "1"
-            ) {
-                lowerBound = 1;
-            }
-        }
+        lowerBound = parseInt(lowerBound);
+        upperBound = parseInt(upperBound);
+        const newSliderRange = [];
 
         for (let i = lowerBound; i <= upperBound; i++) {
-            optionList.push(i);
+            optionList.push(String(i));
+            newSliderRange.push(i);
         }
+
         newList[newList.findIndex((e) => e._id === id)].options = optionList;
+        console.log(optionList);
+        setSliderRange(newSliderRange);
         setList(newList);
     }
     function moveQuesitonDown(index) {
@@ -177,7 +177,7 @@ const Home: React.FC = () => {
             _id: `60e642d7e4a1ae34207a92a${count + 1}`,
             type: "multiple_choice",
             question: "autem sunt eiusdolores nesciunt impedit?",
-            options: ["Option 1", "Option 2", "Option 3"],
+            options: ["1", "2", "3"],
             questionNumber: 1,
         };
         const newList = list.slice(0);
@@ -278,7 +278,6 @@ const Home: React.FC = () => {
             </Modal>
             <SimpleGrid columns={1} spacing={0} px={10} py={10}>
                 <Button
-                    id={"shmexy"}
                     onClick={() => addOneQuestion(-1)}
                     borderWidth="2px"
                     borderRadius="lg"
@@ -295,6 +294,7 @@ const Home: React.FC = () => {
 
                 {list.map((item, index) => (
                     <SelfCheckQuestionCard
+                        sliderRange={sliderRange}
                         questionId={item._id}
                         questionIndex={index}
                         selfCheckQuestionSize={selfCheckQuestionSize}

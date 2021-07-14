@@ -33,6 +33,7 @@ import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 //Self check question card component
 export const SelfCheckQuestionCard = ({
     item,
+    sliderRange,
     onAddOption,
     onRemoveOption,
     onChangeSliderOption,
@@ -83,12 +84,14 @@ export const SelfCheckQuestionCard = ({
     const [sliderEnd, setSliderEnd] = React.useState(options.length);
 
     function sliderLowerBound(e) {
+        console.log(e.target.value, sliderEnd);
         setSliderStart(e.target.value);
-        onChangeSliderOption(questionId, e.target.value);
+        onChangeSliderOption(questionId, e.target.value, sliderEnd);
     }
     function sliderUpperBound(e) {
+        console.log(sliderStart, e.target.value);
         setSliderEnd(e.target.value);
-        onChangeSliderOption(questionId, e.target.value);
+        onChangeSliderOption(questionId, sliderStart, e.target.value);
     }
 
     return (
@@ -129,7 +132,7 @@ export const SelfCheckQuestionCard = ({
                             {optionList.map((choice, index) => (
                                 <option
                                     index={index}
-                                    key={choice.value + questionId}
+                                    key={choice.value + index + questionId}
                                     value={choice.value}
                                 >
                                     {choice.label}
@@ -274,8 +277,10 @@ export const SelfCheckQuestionCard = ({
                                 <Select
                                     minWidth={"50"}
                                     variant="flushed"
-                                    onChange={(e) => sliderLowerBound(e)}
-                                    value={options[0] == "0" ? "0" : "1"}
+                                    onChange={(e) => {
+                                        sliderLowerBound(e);
+                                    }}
+                                    value={sliderStart}
                                     mr={10}
                                 >
                                     <option value={0}>0</option>
@@ -288,16 +293,13 @@ export const SelfCheckQuestionCard = ({
                                     ml={10}
                                     mr={6}
                                     onChange={(e) => sliderUpperBound(e)}
-                                    value={
-                                        options[0] == "0"
-                                            ? String(options.length - 1)
-                                            : options.length
-                                    }
+                                    value={sliderEnd}
                                 >
                                     <option value={2}>2</option>
                                     <option value={3}>3</option>
                                     <option value={4}>4</option>
                                     <option value={5}>5</option>
+                                    <option value={5}>6</option>
                                     <option value={7}>7</option>
                                     <option value={8}>8</option>
                                     <option value={9}>9</option>
@@ -305,9 +307,9 @@ export const SelfCheckQuestionCard = ({
                                 </Select>
                             </Flex>
                             <Stack>
-                                {(options ?? []).map((option, index) => (
+                                {(sliderRange ?? []).map((option, index) => (
                                     <Flex key={questionId + option}>
-                                        {options[0] == 0 && (
+                                        {sliderStart == 0 && (
                                             <Heading
                                                 fontSize={16}
                                                 fontWeight="500"
@@ -317,7 +319,7 @@ export const SelfCheckQuestionCard = ({
                                                 {index}
                                             </Heading>
                                         )}
-                                        {options[0] != 0 && (
+                                        {sliderStart != 0 && (
                                             <Heading
                                                 fontSize={16}
                                                 fontWeight="500"

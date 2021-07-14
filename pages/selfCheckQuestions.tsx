@@ -61,6 +61,43 @@ const Home: React.FC = () => {
     function changeQuestionType(id, target) {
         const newList = list.slice(0);
         newList[newList.findIndex((e) => e._id === id)].type = target;
+        if (target == "slider") {
+            if (
+                newList[newList.findIndex((e) => e._id === id)].options[0] ==
+                "0"
+            ) {
+                if (
+                    newList[newList.findIndex((e) => e._id === id)].options
+                        .length == 0
+                ) {
+                    addOneOption(id);
+                    addOneOption(id);
+                    addOneOption(id);
+                } else if (
+                    newList[newList.findIndex((e) => e._id === id)].options
+                        .length == 1
+                ) {
+                    addOneOption(id);
+                    addOneOption(id);
+                }
+            } else if (
+                newList[newList.findIndex((e) => e._id === id)].options[0] ==
+                "1"
+            ) {
+                if (
+                    newList[newList.findIndex((e) => e._id === id)].options
+                        .length == 0
+                ) {
+                    addOneOption(id);
+                    addOneOption(id);
+                } else if (
+                    newList[newList.findIndex((e) => e._id === id)].options
+                        .length == 1
+                ) {
+                    addOneOption(id);
+                }
+            }
+        }
         setList(newList);
     }
     function addOneOption(id) {

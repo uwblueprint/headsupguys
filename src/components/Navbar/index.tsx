@@ -9,7 +9,7 @@ const NavItem = ({ children, ...rest }) => (
     </Heading>
 );
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
     return (
         <Flex
             as="nav"

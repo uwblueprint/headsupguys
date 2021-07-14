@@ -11,6 +11,7 @@ import {
     Flex,
     Button,
     IconButton,
+    Tooltip,
 } from "@chakra-ui/react";
 import { CheckIcon, DeleteIcon, StarIcon } from "@chakra-ui/icons";
 
@@ -51,6 +52,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
     const styles = {
         card: {
             border: "1px solid #000",
+            width: "850px",
         },
         moduleTag: {
             backgroundColor: "#86FC2F",
@@ -59,41 +61,69 @@ export const ToolCard: React.FC<ToolCardProps> = ({
 
     return (
         <SimpleGrid columns={2} px={5} py={5} __css={styles.card}>
-            <Box px={5}>
-                <Flex justify="space-between">
-                    <Heading fontSize={20} fontWeight="500">
-                        {title}
-                        {"  "}
-                        {published && <StarIcon boxSize="0.75em" />}
-                    </Heading>
-                    <Flex>
-                        <Button>Link Module</Button>
-                        <Button>Publish Tool</Button>
-                        <IconButton
-                            aria-label="Delete tool"
-                            icon={<DeleteIcon />}
-                        />
+            <Flex>
+                <Box bg="lightgrey" w="25%" h="157px" />
+                <Box px={10} w="75%">
+                    <Flex justify="space-between">
+                        <Heading fontSize={20} fontWeight="500">
+                            {title}
+                            {"  "}
+                            {published && <StarIcon boxSize="0.75em" />}
+                        </Heading>
+                        <Flex justify="space-around" w="60%">
+                            {!published && (
+                                <Button variant="outline" borderColor="black">
+                                    {module ? "Unlink" : "Link Module"}
+                                </Button>
+                            )}
+                            {!published && !module ? (
+                                <Tooltip
+                                    label="Link a module to publish your tool!"
+                                    hasArrow
+                                    placement="top"
+                                >
+                                    <Button colorScheme="blackAlpha">
+                                        Publish Tool
+                                    </Button>
+                                </Tooltip>
+                            ) : (
+                                <Button colorScheme="blackAlpha">
+                                    {published
+                                        ? "Unpublish Tool"
+                                        : "Publish Tool"}
+                                </Button>
+                            )}
+                            {!published && (
+                                <IconButton
+                                    aria-label="Delete tool"
+                                    variant="ghost"
+                                    icon={<DeleteIcon />}
+                                />
+                            )}
+                        </Flex>
                     </Flex>
-                </Flex>
-
-                <Text fontSize={16}>Created By: {creatorsText}</Text>
-                {module && (
-                    <Tag borderRadius="full" __css={styles.moduleTag}>
-                        <TagLeftIcon boxSize="12px" as={CheckIcon} />
-                        <TagLabel>
-                            {published ? "Module Connected" : "Module Linked"}
-                        </TagLabel>
-                    </Tag>
-                )}
-                <Text fontSize={16} align="right">
-                    Last Updated{" "}
-                    {lastUpdated === 0
-                        ? "Today"
-                        : lastUpdated === 1
-                        ? "Yesterday"
-                        : lastUpdated + " days ago"}
-                </Text>
-            </Box>
+                    <br />
+                    <Text fontSize={16}>Created By: {creatorsText}</Text>
+                    {module && (
+                        <Tag borderRadius="full" __css={styles.moduleTag}>
+                            <TagLeftIcon boxSize="12px" as={CheckIcon} />
+                            <TagLabel>
+                                {published
+                                    ? "Module Connected"
+                                    : "Module Linked"}
+                            </TagLabel>
+                        </Tag>
+                    )}
+                    <Text fontSize={16} align="right">
+                        Last Updated{" "}
+                        {lastUpdated === 0
+                            ? "Today"
+                            : lastUpdated === 1
+                            ? "Yesterday"
+                            : lastUpdated + " days ago"}
+                    </Text>
+                </Box>
+            </Flex>
         </SimpleGrid>
     );
 };

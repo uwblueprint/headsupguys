@@ -21,8 +21,6 @@
         "@types/jest": "^26.0.23",
         "@types/mongodb": "^3.6.16",
         "add": "^2.0.6",
-        "auth0-js": "^9.16.2",
-        "firebase": "^8.6.5",
         "framer-motion": "^3.2.1",
         "mongodb": "^3.6.9",
         "mongoose": "^5.12.12",

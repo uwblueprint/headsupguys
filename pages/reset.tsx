@@ -53,7 +53,6 @@ const ResetPassword: React.FC = () => {
     };
 
     const incrementStage = () => {
-        // add logic to check if it's possible
         if (currStage < stages.length) setCurrStage(currStage + 1);
         if (currStage == 2) {
             setCanContinue(true);
@@ -63,11 +62,6 @@ const ResetPassword: React.FC = () => {
     };
 
     const decrementStage = () => {
-        // slight "bug" is that when going back, setContinue will be set to false
-        // that means that you will need to focus on the input field to have it re-validate
-        // even if it's technically already valid
-        // alternatively we can individually call the validate fncs for each section
-        // in this going back fnc (seperate if for each stage) instead of always setting canContinue to false
         if (currStage >= 0) {
             setCurrStage(currStage - 1);
             setCanContinue(false);
@@ -134,7 +128,7 @@ const ResetPassword: React.FC = () => {
                     if (confirmPassword != newPassword) {
                         setPasswordInvalid({
                             isInvalid: true,
-                            reason: "Passwords Do Not Match",
+                            reason: "Passwords do not match",
                         });
                         setCanContinue(false);
                     } else {
@@ -174,7 +168,8 @@ const ResetPassword: React.FC = () => {
                     </Text>
                     <AuthButton
                         text="Open Email App"
-                        onClick={() => (location.href = "maito:l")}
+                        // TODO: Need to verify whether we actually want to support opening the mail app from this button
+                        onClick={() => (location.href = "mailto:")}
                         isDisabled={false}
                     />
                     <Center>
@@ -214,7 +209,7 @@ const ResetPassword: React.FC = () => {
     ];
 
     return (
-        <Flex direction="column" align="center" minH="100vh">
+        <Flex direction="column" align="center" minH="100vh" m={4}>
             {currStage > 0 && (
                 <Text
                     alignSelf="start"

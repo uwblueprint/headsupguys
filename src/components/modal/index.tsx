@@ -6,10 +6,10 @@ import {
     ModalHeader,
     ModalFooter,
     ModalBody,
-    Button,
     Text,
     Spacer,
 } from "@chakra-ui/react";
+import { Button } from "..";
 
 export interface ModalProps {
     isOpen: boolean;
@@ -52,7 +52,6 @@ export const Modal: React.FC<ModalProps> = (props) => {
                     <ModalFooter>
                         <Button
                             mr="8"
-                            color="black"
                             variant="outline"
                             borderColor="black"
                             onClick={onCancel}
@@ -60,11 +59,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
                             {cancelText}
                         </Button>
                         {!alignButtonsRight && <Spacer />}
-                        <Button
-                            color="white"
-                            bg={confirmButtonColor}
-                            onClick={onConfirm}
-                        >
+                        <Button bg={confirmButtonColor} onClick={onConfirm}>
                             {confirmText}
                         </Button>
                     </ModalFooter>

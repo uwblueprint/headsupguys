@@ -21,6 +21,11 @@ const Button = {
             color: "white",
             _active: { bg: "brand.lime" },
         },
+        brand: {
+            bg: "brand.green",
+            color: "white",
+            _active: { bg: "brand.lime" },
+        },
     },
     defaultProps: {
         variant: "default",

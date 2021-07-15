@@ -21,6 +21,7 @@ export interface ModalProps {
     confirmText?: string;
     alignButtonsRight?: boolean;
     confirmButtonColor?: string;
+    size?: string; // "xs", "sm", "md", "lg", "xl", "full"
 }
 
 // to control modals:
@@ -37,14 +38,20 @@ export const Modal: React.FC<ModalProps> = (props) => {
         confirmText = "Confirm",
         alignButtonsRight = true,
         confirmButtonColor = "black",
+        size = "md",
     } = props;
 
     return (
         <>
-            <ChakraModal onClose={onCancel} isOpen={isOpen} isCentered>
+            <ChakraModal
+                size={size}
+                isCentered
+                onClose={onCancel}
+                isOpen={isOpen}
+            >
                 <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>{header}</ModalHeader>
+                <ModalContent p="12">
+                    <ModalHeader fontSize="36">{header}</ModalHeader>
                     <ModalBody>
                         {bodyText && <Text fontSize="lg">{bodyText}</Text>}
                         {props.children}

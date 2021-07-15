@@ -7,7 +7,7 @@
   "functionName": "headsupguys9716c6d8PreSignup",
   "resourceName": "headsupguys9716c6d8PreSignup",
   "parentStack": "auth",
-  "triggerEnvs": [],
+  "triggerEnvs": "[]",
   "triggerDir": "/snapshot/node_modules/amplify-category-auth/provider-utils/awscloudformation/triggers/PreSignup",
   "triggerTemplate": "PreSignup.json.ejs",
   "triggerEventPath": "PreSignup.event.json",

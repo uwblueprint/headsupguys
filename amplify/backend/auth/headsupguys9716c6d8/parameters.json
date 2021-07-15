@@ -70,10 +70,12 @@
             ]
         }
     ],
-    "thirdPartyAuth": false,
+    "thirdPartyAuth": true,
     "userPoolGroups": false,
     "adminQueries": false,
     "hostedUI": false,
     "authTriggerConnections": "[\n  {\n    \"triggerType\": \"PreSignUp\",\n    \"lambdaFunctionName\": \"headsupguys9716c6d8PreSignup\"\n  }\n]",
-    "authProviders": []
+    "authProviders": [
+        "accounts.google.com"
+    ]
 }

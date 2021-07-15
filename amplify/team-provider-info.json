@@ -13,7 +13,9 @@
     },
     "categories": {
       "auth": {
-        "headsupguys9716c6d8": {}
+        "headsupguys9716c6d8": {
+          "googleClientId": "1056539824258-o157g074gefnbkt93nbblgmn9o92tfa1.apps.googleusercontent.com"
+        }
       },
       "function": {
         "headsupguys9716c6d8PreSignup": {

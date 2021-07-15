@@ -17,53 +17,20 @@ import {
 import { Header, SelfCheckQuestionCard, Footer } from "@components";
 
 //Default question list, can be shortened as needed
-const questionList = [
-    {
-        _id: "60e642d7e4a1ae34207a92a3",
-        type: "multiple_choice",
-        question: "",
-        options: ["", "", ""],
-        alphanumericInput: true,
-        questionNumber: 1,
-    },
-    {
-        _id: "60e642d7e4a1ae34207a92a4",
-        type: "multi_select",
-        question: "",
-        options: ["", "", ""],
-        alphanumericInput: true,
-        questionNumber: 2,
-    },
-    {
-        _id: "60e642d7e4a1ae34207a92a5",
-        type: "short_answer",
-        question: "",
-        options: [""],
-        alphanumericInput: true,
-        questionNumber: 3,
-    },
-    {
-        _id: "60e642d7e4a1ae34207a92a6",
-        type: "long_answer",
-        question: "",
-        options: [""],
-        alphanumericInput: true,
-        questionNumber: 4,
-    },
-    {
-        _id: "60e642d7e4a1ae34207a92a7",
-        type: "slider",
-        question: "",
-        options: ["", "", ""],
-        alphanumericInput: true,
-        questionNumber: 5,
-    },
-];
 
 //Self Check Questions React functional component
 const Home: React.FC = () => {
-    const [list, setList] = useState(questionList);
-    const [count, setCount] = useState(questionList.length + 1);
+    const [list, setList] = useState([
+        {
+            _id: "60e642d7e4a1ae34207a92a3",
+            type: "multiple_choice",
+            question: "",
+            options: ["", "", ""],
+            alphanumericInput: true,
+            questionNumber: 1,
+        },
+    ]);
+    const [count, setCount] = useState(2);
     const newSliderRange0 = [];
     for (let i = 1; i <= 3; i++) {
         newSliderRange0.push(i);

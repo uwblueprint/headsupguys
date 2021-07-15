@@ -50,7 +50,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
                 isOpen={isOpen}
             >
                 <ModalOverlay />
-                <ModalContent p="12">
+                <ModalContent padding="8">
                     <ModalHeader fontSize="36" fontFamily="Geogrotesque Bold">
                         {header}
                     </ModalHeader>

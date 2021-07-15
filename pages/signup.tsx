@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Flex, Box, Heading, Text, Spacer } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+import { Flex, Box, Heading, Text, Icon } from "@chakra-ui/react";
 import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
-
-import { TextInput, PasswordInput, AuthButton } from "@components";
+import { IoCheckmarkCircle } from "react-icons/io5";
+import {
+    TextInput,
+    PasswordInput,
+    AuthButton,
+    CheckboxComp,
+    ProgressDots,
+} from "@components";
 import { Auth } from "aws-amplify";
 
 const Signup: React.FC = () => {
+    const router = useRouter();
     const [currStage, setCurrStage] = useState(0);
     const [email, setEmail] = useState("");
     const [emailInvalid, setEmailInvalid] = useState({
@@ -15,29 +23,27 @@ const Signup: React.FC = () => {
     });
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
-    const [termsAgreement, setTermsAgreement] = useState();
+    const [passwordInvalid, setPasswordInvalid] = useState({
+        isInvalid: false,
+        reason: "",
+    });
+    const [termsAgreement, setTermsAgreement] = useState({
+        saveEmail: false,
+        saveProgress: false,
+        participateSurvey: false,
+    });
     const [canContinue, setCanContinue] = useState(false);
 
     async function signup(event) {
         event.preventDefault();
-
-        try {
-            //Create new user with Cognito
-            const newUser = await Auth.signUp({
-                username: email,
-                password: password,
-                attributes: {
-                    name: name,
-                },
-            });
-            console.log("USER CREATED", newUser);
-        } catch (e) {
-            console.log("ERROR");
-        }
     }
 
     const validateEmail = () => {
-        if (isEmail(email)) {
+        if (email == "") {
+            // don't set as error state if it's currently empty
+            setEmailInvalid({ isInvalid: false, reason: "" });
+            setCanContinue(false);
+        } else if (isEmail(email)) {
             setEmailInvalid({ isInvalid: false, reason: "" });
             setCanContinue(true);
         } else {
@@ -57,6 +63,35 @@ const Signup: React.FC = () => {
             setCanContinue(false);
         } else {
             setCanContinue(true);
+        }
+    };
+
+    const validatePassword = () => {
+        if (password == "") {
+            // don't set as error state if it's currently empty
+            setPasswordInvalid({ isInvalid: false, reason: "" });
+            setCanContinue(false);
+        } else if (password.length < 8) {
+            // add actual validations here later
+            setPasswordInvalid({
+                isInvalid: true,
+                reason: "Password is too short",
+            });
+            setCanContinue(false);
+        } else {
+            setPasswordInvalid({
+                isInvalid: false,
+                reason: "",
+            });
+            setCanContinue(true);
+        }
+    };
+
+    const validateTermsAgreement = (agreements = termsAgreement) => {
+        if (agreements.saveEmail && agreements.saveProgress) {
+            setCanContinue(true);
+        } else {
+            setCanContinue(false);
         }
     };
 
@@ -107,10 +142,63 @@ const Signup: React.FC = () => {
                 placeholder="******"
                 value={password}
                 onChange={(event) => setPassword(event.currentTarget.value)}
-                // onBlur={validateName}
-                isInvalid={true} // update
+                onBlur={validatePassword}
+                isInvalid={passwordInvalid.isInvalid}
+                errorMessage={passwordInvalid.reason}
             />
         </>
+    );
+
+    const termsAgreementStage = (
+        <Box m={2} textAlign="left">
+            <CheckboxComp
+                mb={5}
+                text="I agree to have my email saved in order to create my account, and for Email Check-ins"
+                isChecked={termsAgreement.saveEmail}
+                isRequired={true}
+                onChange={() => {
+                    setTermsAgreement({
+                        ...termsAgreement,
+                        saveEmail: !termsAgreement.saveEmail,
+                    });
+                    validateTermsAgreement({
+                        ...termsAgreement,
+                        saveEmail: !termsAgreement.saveEmail,
+                    });
+                }}
+            />
+            <CheckboxComp
+                mb={5}
+                text="I agree to have my Tool Progress saved and tracked"
+                isChecked={termsAgreement.saveProgress}
+                isRequired={true}
+                onChange={() => {
+                    setTermsAgreement({
+                        ...termsAgreement,
+                        saveProgress: !termsAgreement.saveProgress,
+                    });
+                    validateTermsAgreement({
+                        ...termsAgreement,
+                        saveProgress: !termsAgreement.saveProgress,
+                    });
+                }}
+            />
+            <CheckboxComp
+                text="I agree to to participate in a brief survey and share my demographic data with HUG "
+                isChecked={termsAgreement.participateSurvey}
+                isRequired={false}
+                onChange={() => {
+                    setTermsAgreement({
+                        ...termsAgreement,
+                        participateSurvey: !termsAgreement.participateSurvey,
+                    });
+                    validateTermsAgreement({
+                        ...termsAgreement,
+                        participateSurvey: !termsAgreement.participateSurvey,
+                    });
+                }}
+            />
+        </Box>
     );
 
     const stages = [
@@ -118,67 +206,75 @@ const Signup: React.FC = () => {
             title: "Create an Account",
             component: signupEmailStage,
             buttonText: "Continue",
+            validation: validateEmail,
         },
         {
             title: "Create an Account",
             component: signupNameStage,
             buttonText: "Continue",
+            validation: validateName,
         },
         {
             title: "Create an Account",
             component: signupPasswordStage,
             buttonText: "Continue",
+            validation: validatePassword,
         },
         {
-            title: "Create an Account",
-            component: (
-                <Box>
-                    <Text>terms of agreement</Text>
-                </Box>
-            ),
+            title: "Terms Agreement",
+            component: termsAgreementStage,
             buttonText: "Sign up",
+            validation: validateTermsAgreement,
         },
         {
-            title: "You're all set", // will need to change this
             component: (
-                <Box>
-                    <Text>You're all set</Text>
+                <Box mt={24}>
+                    <Icon as={IoCheckmarkCircle} boxSize={24}></Icon>
+                    <Heading>You're all set</Heading>
                 </Box>
             ),
             buttonText: "Get started",
         },
     ];
 
-    const incrementStage = () => {
-        // add logic to check if it's possible
-        if (currStage < stages.length) setCurrStage(currStage + 1);
-        if (currStage == stages.length) return; // go to the "get started" link
-        setCanContinue(false);
+    const incrementStage = async () => {
+        if (currStage < stages.length - 2) {
+            setCanContinue(false);
+            stages[currStage + 1].validation();
+            setCurrStage(currStage + 1);
+        } else if (currStage == stages.length - 2) {
+            try {
+                //Create new user with Cognito
+                const newUser = await Auth.signUp({
+                    username: email,
+                    password: password,
+                    attributes: {
+                        name: name,
+                    },
+                });
+                // last stage before signup
+                setCanContinue(true);
+                setCurrStage(currStage + 1);
+                console.log("USER CREATED", newUser);
+            } catch (e) {
+                console.log("ERROR");
+            }
+        } else {
+            // go to "Get Started" link
+            router.push("/"); // temporary link back to "/"
+        }
     };
 
     const decrementStage = () => {
-        // what does pressing back do?
-        // slight "bug" is that when going back, setContinue will be set to false
-        // that means that you will need to focus on the input field to have it re-validate
-        // even if it's technically already valid
-        // alternatively we can individually call the validate fncs for each section
-        // in this going back fnc (seperate if for each stage) instead of always setting canContinue to false
         if (currStage >= 0) {
             setCurrStage(currStage - 1);
-            setCanContinue(false);
+            stages[currStage - 1].validation();
         }
     };
 
     return (
-        <Flex
-            direction="column"
-            align="center"
-            // justifyContent="center"
-            h="100vh"
-            m={4}
-        >
-            {/* back button */}
-            {currStage > 0 && (
+        <Flex direction="column" align="center" h="100vh" m={4}>
+            {currStage > 0 && currStage < stages.length - 1 && (
                 <Text
                     alignSelf="start"
                     tabindex="0"
@@ -189,20 +285,26 @@ const Signup: React.FC = () => {
                     Back
                 </Text>
             )}
-            <Box align="center" className="login-form" pt={24} h="60%">
-                <Heading m={5}>{stages[currStage].title}</Heading>
+            <Box align="center" className="login-form" mt={24} h="50%">
+                {stages[currStage].title && (
+                    <Heading m={5}>{stages[currStage].title}</Heading>
+                )}
                 {stages[currStage].component}
             </Box>
-            {currStage == 2 ? (
-                <AuthButton text="SIGN UP" onClick={signup} />
-            ) : (
-                <AuthButton
-                    text={stages[currStage].buttonText}
-                    onClick={incrementStage}
-                    isDisabled={!canContinue}
+
+            <AuthButton
+                text={stages[currStage].buttonText}
+                onClick={incrementStage}
+                isDisabled={!canContinue}
+                mb={5}
+            />
+            {currStage < stages.length - 1 && (
+                <ProgressDots
+                    m={5}
+                    numStages={stages.length - 1}
+                    currStage={currStage}
                 />
             )}
-            {/* progress bar */}
         </Flex>
     );
 };

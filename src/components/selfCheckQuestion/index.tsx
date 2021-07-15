@@ -35,6 +35,8 @@ export const SelfCheckQuestionCard = ({
     onAddOption,
     onRemoveOption,
     onChangeSliderOption,
+    onChangeQuestionInput,
+    onChangeOptionInput,
     onChangeQuestionType,
     onAddQuestion,
     onRemoveQuestion,
@@ -42,6 +44,7 @@ export const SelfCheckQuestionCard = ({
     onMoveUpQuestion,
     questionIndex,
     questionId,
+    question,
     type,
     options,
     alphanumeric,
@@ -76,9 +79,19 @@ export const SelfCheckQuestionCard = ({
     ];
     const [alphanumericInput, setAlphanumericInput] =
         React.useState(alphanumeric);
+    const [questionInput, setQuestionInput] = React.useState(question);
+    const [optionInput, setOptionInput] = React.useState();
     function changeAlphanumeric(e) {
         setAlphanumericInput(e);
         onChangeAlphanumeric(questionId, e);
+    }
+    function changeQuestionInput(e) {
+        setQuestionInput(e.target.value);
+        onChangeQuestionInput(questionId, e.target.value);
+    }
+    function changeOptionInput(e, index) {
+        setOptionInput(e.target.value);
+        onChangeOptionInput(questionId, index, e.target.value);
     }
     const [selectedOption, setSelectedOption] = React.useState(type);
     function questionType(e) {
@@ -117,9 +130,11 @@ export const SelfCheckQuestionCard = ({
                             {questionIndex + 1}.
                         </Heading>
                         <Input
+                            onChange={(e) => changeQuestionInput(e)}
                             width={"full"}
                             size={"lg"}
                             variant="flushed"
+                            value={questionInput}
                             placeholder="Untitled Question"
                             mr={6}
                             pl={2}
@@ -135,8 +150,9 @@ export const SelfCheckQuestionCard = ({
                         >
                             {optionList.map((choice, index) => (
                                 <option
-                                    index={index}
-                                    key={choice.value + index + questionId}
+                                    key={`Question Type: ${
+                                        questionId + index
+                                    }=${choice.value}`}
                                     value={choice.value}
                                 >
                                     {choice.label}
@@ -173,7 +189,11 @@ export const SelfCheckQuestionCard = ({
                         <Flex width={"full"}>
                             <Stack minWidth={"50%"} spacing={3}>
                                 {(options ?? []).map((option, index) => (
-                                    <InputGroup key={questionId + index}>
+                                    <InputGroup
+                                        key={`Multiple Choice: ${
+                                            questionId + index
+                                        }=${option.value}`}
+                                    >
                                         <InputLeftElement
                                             pointerEvents="none"
                                             children={
@@ -186,6 +206,10 @@ export const SelfCheckQuestionCard = ({
                                             }
                                         />
                                         <Input
+                                            onChange={(e) =>
+                                                changeOptionInput(e, index)
+                                            }
+                                            value={options[index]}
                                             variant="flushed"
                                             placeholder={`Option ${index + 1}`}
                                             mr={6}
@@ -218,7 +242,11 @@ export const SelfCheckQuestionCard = ({
                         <Flex width={"full"}>
                             <Stack minWidth={"50%"} spacing={3}>
                                 {(options ?? []).map((option, index) => (
-                                    <InputGroup key={option + questionId}>
+                                    <InputGroup
+                                        key={`Multi Select: ${
+                                            questionId + index
+                                        }=${option.value}`}
+                                    >
                                         <InputLeftElement
                                             pointerEvents="none"
                                             children={
@@ -231,6 +259,9 @@ export const SelfCheckQuestionCard = ({
                                             }
                                         />
                                         <Input
+                                            onChange={(e) =>
+                                                changeOptionInput(e, index)
+                                            }
                                             variant="flushed"
                                             placeholder={`Option ${index + 1}`}
                                             mr={6}
@@ -266,6 +297,8 @@ export const SelfCheckQuestionCard = ({
                             resize={"vertical"}
                             mr={3}
                             placeholder={"Short answer text"}
+                            onChange={(e) => changeOptionInput(e, 0)}
+                            value={options[0]}
                         />
                     )}
                     {type == "long_answer" && (
@@ -275,6 +308,8 @@ export const SelfCheckQuestionCard = ({
                             resize={"vertical"}
                             mr={3}
                             placeholder={"Long answer text"}
+                            onChange={(e) => changeOptionInput(e, 0)}
+                            value={options[0]}
                         />
                     )}
                     {type == "slider" && (
@@ -314,7 +349,11 @@ export const SelfCheckQuestionCard = ({
                             </Flex>
                             <Stack>
                                 {(sliderRange ?? []).map((option, index) => (
-                                    <Flex key={questionId + option}>
+                                    <Flex
+                                        key={`Slider: ${
+                                            questionId + index
+                                        }=${option}`}
+                                    >
                                         {sliderStart == 0 && (
                                             <Heading
                                                 fontSize={16}
@@ -336,7 +375,9 @@ export const SelfCheckQuestionCard = ({
                                             </Heading>
                                         )}
                                         <Input
-                                            index={index}
+                                            onChange={(e) =>
+                                                changeOptionInput(e, index)
+                                            }
                                             variant="flushed"
                                             placeholder="Label (Optional)"
                                             width={"full"}

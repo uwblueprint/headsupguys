@@ -21,40 +21,40 @@ const questionList = [
     {
         _id: "60e642d7e4a1ae34207a92a3",
         type: "multiple_choice",
-        question: "autem sunt eiusdolores nesciunt impedit?",
-        options: ["1", "2", "3"],
+        question: "",
+        options: ["", "", ""],
         alphanumericInput: true,
         questionNumber: 1,
     },
     {
         _id: "60e642d7e4a1ae34207a92a4",
         type: "multi_select",
-        question: "autem sunt eiusdolores nesciunt impedit?",
-        options: ["1", "2", "3"],
+        question: "",
+        options: ["", "", ""],
         alphanumericInput: true,
         questionNumber: 2,
     },
     {
         _id: "60e642d7e4a1ae34207a92a5",
         type: "short_answer",
-        question: "autem sunt eiusdolores nesciunt impedit?",
-        options: ["1", "2", "3"],
+        question: "",
+        options: [""],
         alphanumericInput: true,
         questionNumber: 3,
     },
     {
         _id: "60e642d7e4a1ae34207a92a6",
         type: "long_answer",
-        question: "autem sunt eiusdolores nesciunt impedit?",
-        options: ["1", "2", "3"],
+        question: "",
+        options: [""],
         alphanumericInput: true,
         questionNumber: 4,
     },
     {
         _id: "60e642d7e4a1ae34207a92a7",
         type: "slider",
-        question: "autem sunt eiusdolores nesciunt impedit?",
-        options: ["1", "2", "3", "4", "5"],
+        question: "",
+        options: ["", "", ""],
         alphanumericInput: true,
         questionNumber: 5,
     },
@@ -75,20 +75,27 @@ const Home: React.FC = () => {
 
         setList(newList);
     }
+    function changeQuestionInput(id, target) {
+        const newList = list.slice(0);
+        newList[newList.findIndex((e) => e._id === id)].question = target;
+        setList(newList);
+    }
     function changeAlphanumeric(id, target) {
         const newList = list.slice(0);
         newList[newList.findIndex((e) => e._id === id)].alphanumericInput =
             target;
         setList(newList);
     }
+    function changeOptionInput(id, index, target) {
+        const newList = list.slice(0);
+        newList[newList.findIndex((e) => e._id === id)].options[index] = target;
+        setList(newList);
+    }
     function addOneOption(id) {
         const newList = list.slice(0);
         newList[newList.findIndex((e) => e._id === id)].options = [
             ...newList[newList.findIndex((e) => e._id === id)].options,
-            `${
-                newList[newList.findIndex((e) => e._id === id)].options.length +
-                1
-            }`,
+            "",
         ];
         setList(newList);
     }
@@ -136,8 +143,8 @@ const Home: React.FC = () => {
         const newQuestion = {
             _id: `60e642d7e4a1ae34207a92a${count}`,
             type: "multiple_choice",
-            question: "autem sunt eiusdolores nesciunt impedit?",
-            options: ["1", "2", "3"],
+            question: "",
+            options: ["", "", ""],
             questionNumber: count,
         };
         const newList = list.slice(0);
@@ -260,6 +267,7 @@ const Home: React.FC = () => {
                         selfCheckQuestionSize={selfCheckQuestionSize}
                         type={item.type}
                         alphanumeric={item.alphanumericInput}
+                        question={item.question}
                         options={item.options}
                         key={index + item._id}
                         item={item}
@@ -268,6 +276,8 @@ const Home: React.FC = () => {
                         onAddQuestion={addOneQuestion}
                         onMoveDownQuestion={moveQuesitonDown}
                         onMoveUpQuestion={moveQuesitonUp}
+                        onChangeQuestionInput={changeQuestionInput}
+                        onChangeOptionInput={changeOptionInput}
                         onRemoveOption={removeOneOption}
                         onAddOption={addOneOption}
                         onChangeSliderOption={changeSliderOption}

@@ -11,6 +11,11 @@ const Button = {
         outline: {
             colorScheme: "black",
         },
+        brand: {
+            bg: "brand.green",
+            color: "white",
+            _active: { bg: "brand.lime" },
+        },
     },
     defaultProps: {
         variant: "default",

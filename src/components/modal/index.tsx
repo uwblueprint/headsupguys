@@ -51,7 +51,9 @@ export const Modal: React.FC<ModalProps> = (props) => {
             >
                 <ModalOverlay />
                 <ModalContent p="12">
-                    <ModalHeader fontSize="36">{header}</ModalHeader>
+                    <ModalHeader fontSize="36" fontFamily="Geogrotesque Bold">
+                        {header}
+                    </ModalHeader>
                     <ModalBody>
                         {bodyText && <Text fontSize="lg">{bodyText}</Text>}
                         {props.children}

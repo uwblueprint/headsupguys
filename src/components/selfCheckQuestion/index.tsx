@@ -5,6 +5,7 @@ import {
     Heading,
     Circle,
     Square,
+    Spacer,
     Input,
     InputLeftElement,
     InputRightElement,
@@ -30,26 +31,27 @@ import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 
 //Self check question card component
 export const SelfCheckQuestionCard: React.FC = ({
+    type,
     item,
-    sliderRange,
+    options,
     onAddOption,
+    sliderRange,
+    alphanumeric,
     onRemoveOption,
+    correspondingValues,
+    onChangeAlphanumeric,
+    selfCheckQuestionSize,
     onChangeSliderOption,
     onChangeQuestionInput,
     onChangeOptionInput,
     onChangeQuestionType,
-    onAddQuestion,
-    onRemoveQuestion,
     onMoveDownQuestion,
+    onRemoveQuestion,
     onMoveUpQuestion,
+    onAddQuestion,
     questionIndex,
     questionId,
     question,
-    type,
-    options,
-    alphanumeric,
-    onChangeAlphanumeric,
-    selfCheckQuestionSize,
 }) => {
     //Keeps track of the modal state for the delete question button
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -136,7 +138,8 @@ export const SelfCheckQuestionCard: React.FC = ({
                             value={questionInput}
                             placeholder="Untitled Question"
                             mr={6}
-                            pl={2}
+                            ml={2}
+                            mb={3}
                             isTruncated
                         />
                     </Flex>
@@ -167,6 +170,11 @@ export const SelfCheckQuestionCard: React.FC = ({
                                         ? "10"
                                         : "0"
                                 }
+                                mr={
+                                    questionIndex + 1 == selfCheckQuestionSize
+                                        ? "5"
+                                        : "0"
+                                }
                                 icon={<ArrowUpIcon />}
                             />
                         )}
@@ -177,21 +185,93 @@ export const SelfCheckQuestionCard: React.FC = ({
                                         onMoveDownQuestion(questionIndex)
                                     }
                                     ml={questionIndex == 0 ? "10" : "2"}
+                                    mr={"5"}
                                     icon={<ArrowDownIcon />}
                                 />
                             )}
                     </Flex>
                 </Flex>
 
-                <Flex alignContent="center">
+                <Flex
+                    alignContent="left"
+                    alignItems={"left"}
+                    align={"left"}
+                    justify={"left"}
+                    justifyContent={"left"}
+                >
                     {type == "multiple_choice" && (
                         <Flex width={"full"}>
-                            <Stack minWidth={"50%"} spacing={3}>
+                            <Stack mr={0} minWidth={"50%"} spacing={3}>
+                                <Flex
+                                    width={"full"}
+                                    justify={"right"}
+                                    wrap={"wrap"}
+                                >
+                                    <Heading
+                                        ml={"3"}
+                                        fontSize={20}
+                                        fontWeight="bold"
+                                    >
+                                        User Facing Options
+                                    </Heading>
+                                    <Spacer></Spacer>
+                                    <ButtonGroup
+                                        mr={"5"}
+                                        size="sm"
+                                        isAttached
+                                        variant="outline"
+                                    >
+                                        <Button
+                                            onClick={() =>
+                                                changeAlphanumeric(true)
+                                            }
+                                            _hover={{
+                                                bg: alphanumericInput
+                                                    ? "black"
+                                                    : "white",
+                                            }}
+                                            color={
+                                                alphanumericInput
+                                                    ? "white"
+                                                    : "black"
+                                            }
+                                            background={
+                                                alphanumericInput
+                                                    ? "black"
+                                                    : "white"
+                                            }
+                                        >
+                                            Aa
+                                        </Button>
+                                        <Button
+                                            onClick={() =>
+                                                changeAlphanumeric(false)
+                                            }
+                                            _hover={{
+                                                bg: alphanumericInput
+                                                    ? "white"
+                                                    : "black",
+                                            }}
+                                            color={
+                                                alphanumericInput
+                                                    ? "black"
+                                                    : "white"
+                                            }
+                                            background={
+                                                alphanumericInput
+                                                    ? "white"
+                                                    : "black"
+                                            }
+                                        >
+                                            123
+                                        </Button>
+                                    </ButtonGroup>
+                                </Flex>
                                 {(options ?? []).map((option, index) => (
                                     <InputGroup
                                         key={`Multiple Choice: ${
                                             questionId + index
-                                        }=${option.value}`}
+                                        }=${options[index]}`}
                                     >
                                         <InputLeftElement
                                             pointerEvents="none"
@@ -235,11 +315,182 @@ export const SelfCheckQuestionCard: React.FC = ({
                                     +Add Option
                                 </Button>
                             </Stack>
+                            <Stack minWidth={"50%"} spacing={3}>
+                                <Flex
+                                    width={"full"}
+                                    justify={"right"}
+                                    wrap={"wrap"}
+                                >
+                                    <Heading fontSize={20} fontWeight="bold">
+                                        Corresponding Values
+                                    </Heading>
+                                    <Spacer></Spacer>
+                                    <ButtonGroup
+                                        ml={"2.5"}
+                                        mr={"5"}
+                                        size="sm"
+                                        isAttached
+                                        variant="outline"
+                                    >
+                                        <Button
+                                            onClick={() =>
+                                                changeAlphanumeric(true)
+                                            }
+                                            _hover={{
+                                                bg: alphanumericInput
+                                                    ? "black"
+                                                    : "white",
+                                            }}
+                                            color={
+                                                alphanumericInput
+                                                    ? "white"
+                                                    : "black"
+                                            }
+                                            background={
+                                                alphanumericInput
+                                                    ? "black"
+                                                    : "white"
+                                            }
+                                        >
+                                            Aa
+                                        </Button>
+                                        <Button
+                                            onClick={() =>
+                                                changeAlphanumeric(false)
+                                            }
+                                            _hover={{
+                                                bg: alphanumericInput
+                                                    ? "white"
+                                                    : "black",
+                                            }}
+                                            color={
+                                                alphanumericInput
+                                                    ? "black"
+                                                    : "white"
+                                            }
+                                            background={
+                                                alphanumericInput
+                                                    ? "white"
+                                                    : "black"
+                                            }
+                                        >
+                                            123
+                                        </Button>
+                                    </ButtonGroup>
+                                </Flex>
+                                {(options ?? []).map((option, index) => (
+                                    <InputGroup
+                                        key={`Corresponding Choice: ${
+                                            questionId + index
+                                        }=${option.value}`}
+                                    >
+                                        <Input
+                                            onChange={(e) =>
+                                                changeOptionInput(e, index)
+                                            }
+                                            value={options[index]}
+                                            variant="flushed"
+                                            placeholder={`Option ${index + 1}`}
+                                            mr={6}
+                                            isTruncated
+                                        />
+                                        <InputRightElement width="4.5rem">
+                                            <CloseButton
+                                                name={questionId}
+                                                onClick={() =>
+                                                    onRemoveOption(
+                                                        questionId,
+                                                        index,
+                                                    )
+                                                }
+                                            />
+                                        </InputRightElement>
+                                    </InputGroup>
+                                ))}
+                            </Stack>
                         </Flex>
                     )}
                     {type == "multi_select" && (
-                        <Flex width={"full"}>
-                            <Stack minWidth={"50%"} spacing={3}>
+                        <Flex
+                            width={"full"}
+                            justifyContent={"left"}
+                            justify={"left"}
+                            justifySelf={"right"}
+                            alignItems={"flex-start"}
+                            alignContent={"flex-start"}
+                        >
+                            <Stack
+                                minWidth={"50%"}
+                                alignContent={"flex-start"}
+                                spacing={3}
+                            >
+                                <Flex
+                                    width={"full"}
+                                    justify={"right"}
+                                    wrap={"wrap"}
+                                >
+                                    <Heading
+                                        ml={"3"}
+                                        fontSize={20}
+                                        fontWeight="bold"
+                                    >
+                                        User Facing Options
+                                    </Heading>
+                                    <Spacer></Spacer>
+                                    {type != "slider" && (
+                                        <ButtonGroup
+                                            mr={"5"}
+                                            size="sm"
+                                            isAttached
+                                            variant="outline"
+                                        >
+                                            <Button
+                                                onClick={() =>
+                                                    changeAlphanumeric(true)
+                                                }
+                                                _hover={{
+                                                    bg: alphanumericInput
+                                                        ? "black"
+                                                        : "white",
+                                                }}
+                                                color={
+                                                    alphanumericInput
+                                                        ? "white"
+                                                        : "black"
+                                                }
+                                                background={
+                                                    alphanumericInput
+                                                        ? "black"
+                                                        : "white"
+                                                }
+                                            >
+                                                Aa
+                                            </Button>
+                                            <Button
+                                                onClick={() =>
+                                                    changeAlphanumeric(false)
+                                                }
+                                                _hover={{
+                                                    bg: alphanumericInput
+                                                        ? "white"
+                                                        : "black",
+                                                }}
+                                                color={
+                                                    alphanumericInput
+                                                        ? "black"
+                                                        : "white"
+                                                }
+                                                background={
+                                                    alphanumericInput
+                                                        ? "white"
+                                                        : "black"
+                                                }
+                                            >
+                                                123
+                                            </Button>
+                                        </ButtonGroup>
+                                    )}
+                                </Flex>
                                 {(options ?? []).map((option, index) => (
                                     <InputGroup
                                         key={`Multi Select: ${
@@ -286,6 +537,100 @@ export const SelfCheckQuestionCard: React.FC = ({
                                 >
                                     +Add Option
                                 </Button>
+                            </Stack>
+                            <Stack minWidth={"50%"} spacing={3}>
+                                <Flex
+                                    width={"full"}
+                                    justify={"right"}
+                                    wrap={"wrap"}
+                                >
+                                    <Heading fontSize={20} fontWeight="bold">
+                                        Corresponding Values
+                                    </Heading>
+                                    <Spacer></Spacer>
+                                    {type != "slider" && (
+                                        <ButtonGroup
+                                            ml={"2.5"}
+                                            mr={"5"}
+                                            size="sm"
+                                            isAttached
+                                            variant="outline"
+                                        >
+                                            <Button
+                                                onClick={() =>
+                                                    changeAlphanumeric(true)
+                                                }
+                                                _hover={{
+                                                    bg: alphanumericInput
+                                                        ? "black"
+                                                        : "white",
+                                                }}
+                                                color={
+                                                    alphanumericInput
+                                                        ? "white"
+                                                        : "black"
+                                                }
+                                                background={
+                                                    alphanumericInput
+                                                        ? "black"
+                                                        : "white"
+                                                }
+                                            >
+                                                Aa
+                                            </Button>
+                                            <Button
+                                                onClick={() =>
+                                                    changeAlphanumeric(false)
+                                                }
+                                                _hover={{
+                                                    bg: alphanumericInput
+                                                        ? "white"
+                                                        : "black",
+                                                }}
+                                                color={
+                                                    alphanumericInput
+                                                        ? "black"
+                                                        : "white"
+                                                }
+                                                background={
+                                                    alphanumericInput
+                                                        ? "white"
+                                                        : "black"
+                                                }
+                                            >
+                                                123
+                                            </Button>
+                                        </ButtonGroup>
+                                    )}
+                                </Flex>
+                                {(options ?? []).map((option, index) => (
+                                    <InputGroup
+                                        key={`Multi Select: ${
+                                            questionId + index
+                                        }=${option.value}`}
+                                    >
+                                        <Input
+                                            onChange={(e) =>
+                                                changeOptionInput(e, index)
+                                            }
+                                            variant="flushed"
+                                            placeholder={`Option ${index + 1}`}
+                                            mr={6}
+                                            isTruncated
+                                        />
+                                        <InputRightElement width="4.5rem">
+                                            <CloseButton
+                                                name={questionId}
+                                                onClick={() =>
+                                                    onRemoveOption(
+                                                        questionId,
+                                                        index,
+                                                    )
+                                                }
+                                            />
+                                        </InputRightElement>
+                                    </InputGroup>
+                                ))}
                             </Stack>
                         </Flex>
                     )}
@@ -388,39 +733,6 @@ export const SelfCheckQuestionCard: React.FC = ({
                                 ))}
                             </Stack>
                         </Stack>
-                    )}
-                    {type != "slider" && (
-                        <ButtonGroup
-                            ml={2.5}
-                            size="sm"
-                            isAttached
-                            variant="outline"
-                        >
-                            <Button
-                                onClick={() => changeAlphanumeric(true)}
-                                _hover={{
-                                    bg: alphanumericInput ? "black" : "white",
-                                }}
-                                color={alphanumericInput ? "white" : "black"}
-                                background={
-                                    alphanumericInput ? "black" : "white"
-                                }
-                            >
-                                Aa
-                            </Button>
-                            <Button
-                                onClick={() => changeAlphanumeric(false)}
-                                _hover={{
-                                    bg: alphanumericInput ? "white" : "black",
-                                }}
-                                color={alphanumericInput ? "black" : "white"}
-                                background={
-                                    alphanumericInput ? "white" : "black"
-                                }
-                            >
-                                123
-                            </Button>
-                        </ButtonGroup>
                     )}
                 </Flex>
                 <Flex direction={"rowReverse"} justify={"flex-end"}>

@@ -16,17 +16,17 @@ import {
 } from "@chakra-ui/react";
 import { Header, SelfCheckQuestionCard, Footer } from "@components";
 
-//Default question list, can be shortened as needed
-
 //Self Check Questions React functional component
 const Home: React.FC = () => {
-    const [list, setList] = useState([
+    const [questionList, setQuestionList] = useState([
         {
             _id: "60e642d7e4a1ae34207a92a0",
             type: "multiple_choice",
             question: "",
             options: ["", "", ""],
+            correspondingValues: ["", "", ""],
             alphanumericInput: true,
+            alphanumericValueInput: true,
             questionNumber: 1,
         },
     ]);
@@ -37,47 +37,47 @@ const Home: React.FC = () => {
     }
     const [sliderRange, setSliderRange] = useState(newSliderRange0);
     const changeQuestionType = (id, target) => {
-        const newList = list.slice(0);
+        const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].type = target;
 
-        setList(newList);
+        setQuestionList(newList);
     };
     const changeQuestionInput = (id, target) => {
-        const newList = list.slice(0);
+        const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].question = target;
-        setList(newList);
+        setQuestionList(newList);
     };
     const changeAlphanumeric = (id, target) => {
-        const newList = list.slice(0);
+        const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].alphanumericInput =
             target;
-        setList(newList);
+        setQuestionList(newList);
     };
     const changeOptionInput = (id, index, target) => {
-        const newList = list.slice(0);
+        const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].options[index] = target;
-        setList(newList);
+        setQuestionList(newList);
     };
     const addOneOption = (id) => {
-        const newList = list.slice(0);
+        const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].options = [
             ...newList[newList.findIndex((e) => e._id === id)].options,
             "",
         ];
-        setList(newList);
+        setQuestionList(newList);
     };
 
     const removeOneOption = (id, index) => {
-        const newList = list.slice(0);
+        const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].options.splice(
             index,
             1,
         );
-        setList(newList);
+        setQuestionList(newList);
     };
     const changeSliderOption = (id, lowerBound, upperBound) => {
         const optionList = [];
-        const newList = list.slice(0);
+        const newList = questionList.slice(0);
         lowerBound = parseInt(lowerBound);
         upperBound = parseInt(upperBound);
         const newSliderRange = [];
@@ -89,21 +89,21 @@ const Home: React.FC = () => {
 
         newList[newList.findIndex((e) => e._id === id)].options = optionList;
         setSliderRange(newSliderRange);
-        setList(newList);
+        setQuestionList(newList);
     };
     const moveQuesitonDown = (index) => {
-        const newList = list.slice(0);
+        const newList = questionList.slice(0);
         const tempQuestion = newList[index];
         newList[index] = newList[index + 1];
         newList[index + 1] = tempQuestion;
-        setList(newList);
+        setQuestionList(newList);
     };
     const moveQuesitonUp = (index) => {
-        const newList = list.slice(0);
+        const newList = questionList.slice(0);
         const tempQuestion = newList[index];
         newList[index] = newList[index - 1];
         newList[index - 1] = tempQuestion;
-        setList(newList);
+        setQuestionList(newList);
     };
 
     const addOneQuestion = (index) => {
@@ -112,23 +112,25 @@ const Home: React.FC = () => {
             type: "multiple_choice",
             question: "",
             options: ["", "", ""],
-            alphanumericInput: true,
+            correspondingValues: ["", "", ""],
+            alphanumericUserInput: true,
+            alphanumericCorrespondingInput: true,
             questionNumber: count,
         };
-        const newList = list.slice(0);
+        const newList = questionList.slice(0);
         newList.splice(index + 1, 0, newQuestion);
         setCount(count + 1);
-        setList(newList);
+        setQuestionList(newList);
     };
 
     const removeOneQuestion = (id) => {
-        setList(list.filter((item) => item._id !== id));
+        setQuestionList(questionList.filter((item) => item._id !== id));
     };
     const removeAllQuestions = () => {
-        setList([]);
+        setQuestionList([]);
     };
 
-    const selfCheckQuestionSize = list.length;
+    const selfCheckQuestionSize = questionList.length;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
@@ -166,7 +168,7 @@ const Home: React.FC = () => {
                         //rather than just logging it in the console
                         onClick={() => {
                             alert("Check the console for the object");
-                            console.log(list);
+                            console.log(questionList);
                         }}
                     >
                         Save
@@ -226,16 +228,17 @@ const Home: React.FC = () => {
                     + Question
                 </Button>
 
-                {list.map((item, index) => (
+                {questionList.map((item, index) => (
                     <SelfCheckQuestionCard
-                        sliderRange={sliderRange}
                         questionId={item._id}
                         questionIndex={index}
+                        sliderRange={sliderRange}
                         selfCheckQuestionSize={selfCheckQuestionSize}
                         type={item.type}
                         alphanumeric={item.alphanumericInput}
                         question={item.question}
                         options={item.options}
+                        correspondingValues={item.correspondingValues}
                         key={index + item._id}
                         item={item}
                         onChangeAlphanumeric={changeAlphanumeric}

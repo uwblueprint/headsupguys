@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Flex,
     Box,
@@ -77,38 +77,37 @@ export const SelfCheckQuestionCard = ({
             label: "Slider",
         },
     ];
-    const [alphanumericInput, setAlphanumericInput] =
-        React.useState(alphanumeric);
-    const [questionInput, setQuestionInput] = React.useState(question);
-    const [optionInput, setOptionInput] = React.useState();
-    function changeAlphanumeric(e) {
+    const [alphanumericInput, setAlphanumericInput] = useState(alphanumeric);
+    const [questionInput, setQuestionInput] = useState(question);
+    const [optionInput, setOptionInput] = useState();
+    const changeAlphanumeric = (e) => {
         setAlphanumericInput(e);
         onChangeAlphanumeric(questionId, e);
-    }
-    function changeQuestionInput(e) {
+    };
+    const changeQuestionInput = (e) => {
         setQuestionInput(e.target.value);
         onChangeQuestionInput(questionId, e.target.value);
-    }
-    function changeOptionInput(e, index) {
+    };
+    const changeOptionInput = (e, index) => {
         setOptionInput(e.target.value);
         onChangeOptionInput(questionId, index, e.target.value);
-    }
-    const [selectedOption, setSelectedOption] = React.useState(type);
+    };
+    const [selectedOption, setSelectedOption] = useState(type);
     function questionType(e) {
         setSelectedOption(e.target.value);
         onChangeQuestionType(questionId, e.target.value);
     }
-    const [sliderStart, setSliderStart] = React.useState(1);
-    const [sliderEnd, setSliderEnd] = React.useState(options.length);
+    const [sliderStart, setSliderStart] = useState(1);
+    const [sliderEnd, setSliderEnd] = useState(options.length);
 
-    function sliderLowerBound(e) {
+    const sliderLowerBound = (e) => {
         setSliderStart(e.target.value);
         onChangeSliderOption(questionId, e.target.value, sliderEnd);
-    }
-    function sliderUpperBound(e) {
+    };
+    const sliderUpperBound = (e) => {
         setSliderEnd(e.target.value);
         onChangeSliderOption(questionId, sliderStart, e.target.value);
-    }
+    };
 
     return (
         <Box overflowX="auto">

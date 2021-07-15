@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Spacer,
     Text,
@@ -62,53 +62,53 @@ const questionList = [
 
 //Self Check Questions React functional component
 const Home: React.FC = () => {
-    const [list, setList] = React.useState(questionList);
-    const [count, setCount] = React.useState(questionList.length + 1);
+    const [list, setList] = useState(questionList);
+    const [count, setCount] = useState(questionList.length + 1);
     const newSliderRange0 = [];
     for (let i = 1; i <= 3; i++) {
         newSliderRange0.push(i);
     }
-    const [sliderRange, setSliderRange] = React.useState(newSliderRange0);
-    function changeQuestionType(id, target) {
+    const [sliderRange, setSliderRange] = useState(newSliderRange0);
+    const changeQuestionType = (id, target) => {
         const newList = list.slice(0);
         newList[newList.findIndex((e) => e._id === id)].type = target;
 
         setList(newList);
-    }
-    function changeQuestionInput(id, target) {
+    };
+    const changeQuestionInput = (id, target) => {
         const newList = list.slice(0);
         newList[newList.findIndex((e) => e._id === id)].question = target;
         setList(newList);
-    }
-    function changeAlphanumeric(id, target) {
+    };
+    const changeAlphanumeric = (id, target) => {
         const newList = list.slice(0);
         newList[newList.findIndex((e) => e._id === id)].alphanumericInput =
             target;
         setList(newList);
-    }
-    function changeOptionInput(id, index, target) {
+    };
+    const changeOptionInput = (id, index, target) => {
         const newList = list.slice(0);
         newList[newList.findIndex((e) => e._id === id)].options[index] = target;
         setList(newList);
-    }
-    function addOneOption(id) {
+    };
+    const addOneOption = (id) => {
         const newList = list.slice(0);
         newList[newList.findIndex((e) => e._id === id)].options = [
             ...newList[newList.findIndex((e) => e._id === id)].options,
             "",
         ];
         setList(newList);
-    }
+    };
 
-    function removeOneOption(id, index) {
+    const removeOneOption = (id, index) => {
         const newList = list.slice(0);
         newList[newList.findIndex((e) => e._id === id)].options.splice(
             index,
             1,
         );
         setList(newList);
-    }
-    function changeSliderOption(id, lowerBound, upperBound) {
+    };
+    const changeSliderOption = (id, lowerBound, upperBound) => {
         const optionList = [];
         const newList = list.slice(0);
         lowerBound = parseInt(lowerBound);
@@ -123,45 +123,43 @@ const Home: React.FC = () => {
         newList[newList.findIndex((e) => e._id === id)].options = optionList;
         setSliderRange(newSliderRange);
         setList(newList);
-    }
-    function moveQuesitonDown(index) {
+    };
+    const moveQuesitonDown = (index) => {
         const newList = list.slice(0);
         const tempQuestion = newList[index];
         newList[index] = newList[index + 1];
         newList[index + 1] = tempQuestion;
         setList(newList);
-    }
-    function moveQuesitonUp(index) {
+    };
+    const moveQuesitonUp = (index) => {
         const newList = list.slice(0);
         const tempQuestion = newList[index];
         newList[index] = newList[index - 1];
         newList[index - 1] = tempQuestion;
         setList(newList);
-    }
+    };
 
-    function addOneQuestion(index) {
+    const addOneQuestion = (index) => {
         const newQuestion = {
             _id: `60e642d7e4a1ae34207a92a${count}`,
             type: "multiple_choice",
             question: "",
             options: ["", "", ""],
+            alphanumericInput: true,
             questionNumber: count,
         };
         const newList = list.slice(0);
-        const newCount = count + 1;
         newList.splice(index + 1, 0, newQuestion);
-        setCount(newCount);
+        setCount(count + 1);
         setList(newList);
-    }
+    };
 
-    function removeOneQuestion(id) {
-        const newList = list.filter((item) => item._id !== id);
-        setList(newList);
-    }
-    function removeAllQuestions() {
-        const newList = [];
-        setList(newList);
-    }
+    const removeOneQuestion = (id) => {
+        setList(list.filter((item) => item._id !== id));
+    };
+    const removeAllQuestions = () => {
+        setList([]);
+    };
 
     const selfCheckQuestionSize = list.length;
 
@@ -197,6 +195,8 @@ const Home: React.FC = () => {
                         color="white"
                         background="black"
                         variant="outline"
+                        //TODO: Send this output to the database
+                        //rather than just logging it in the console
                         onClick={() => {
                             alert("Check the console for the object");
                             console.log(list);

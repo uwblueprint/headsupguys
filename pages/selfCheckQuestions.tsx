@@ -22,7 +22,7 @@ import { Header, SelfCheckQuestionCard, Footer } from "@components";
 const Home: React.FC = () => {
     const [list, setList] = useState([
         {
-            _id: "60e642d7e4a1ae34207a92a3",
+            _id: "60e642d7e4a1ae34207a92a0",
             type: "multiple_choice",
             question: "",
             options: ["", "", ""],
@@ -30,7 +30,7 @@ const Home: React.FC = () => {
             questionNumber: 1,
         },
     ]);
-    const [count, setCount] = useState(2);
+    const [count, setCount] = useState(1);
     const newSliderRange0 = [];
     for (let i = 1; i <= 3; i++) {
         newSliderRange0.push(i);

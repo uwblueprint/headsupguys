@@ -29,7 +29,7 @@ import {
 import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 
 //Self check question card component
-export const SelfCheckQuestionCard = ({
+export const SelfCheckQuestionCard: React.FC = ({
     item,
     sliderRange,
     onAddOption,
@@ -79,7 +79,7 @@ export const SelfCheckQuestionCard = ({
     ];
     const [alphanumericInput, setAlphanumericInput] = useState(alphanumeric);
     const [questionInput, setQuestionInput] = useState(question);
-    const [optionInput, setOptionInput] = useState();
+    const [_, setOptionInput] = useState("");
     const changeAlphanumeric = (e) => {
         setAlphanumericInput(e);
         onChangeAlphanumeric(questionId, e);

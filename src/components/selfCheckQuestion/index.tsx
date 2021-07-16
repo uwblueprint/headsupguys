@@ -408,7 +408,7 @@ export const SelfCheckQuestionCard: React.FC = ({
                                             }
                                             value={options[index][1]}
                                             variant="flushed"
-                                            placeholder={`Option ${index + 1}`}
+                                            placeholder={`Value ${index + 1}`}
                                             mr={6}
                                             isTruncated
                                         />
@@ -659,7 +659,7 @@ export const SelfCheckQuestionCard: React.FC = ({
                                             }
                                             variant="flushed"
                                             value={options[index][1]}
-                                            placeholder={`Option ${index + 1}`}
+                                            placeholder={`Value ${index + 1}`}
                                             mr={6}
                                             isTruncated
                                         />

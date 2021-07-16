@@ -33,11 +33,11 @@ const Home: React.FC = () => {
         },
     ]);
     const [count, setCount] = useState(1);
-    const newSliderRange0 = [];
+    const newSliderRange = [];
     for (let i = 1; i <= 3; i++) {
-        newSliderRange0.push(i);
+        newSliderRange.push(i);
     }
-    const [sliderRange, setSliderRange] = useState(newSliderRange0);
+    const [sliderRange, setSliderRange] = useState(newSliderRange);
     const changeQuestionType = (id, target) => {
         const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].type = target;
@@ -90,8 +90,8 @@ const Home: React.FC = () => {
         const newSliderRange = [];
 
         for (let i = lowerBound; i <= upperBound; i++) {
-            optionList.push(String(i));
-            newSliderRange.push(i);
+            optionList.push("");
+            newSliderRange.push("");
         }
 
         newList[newList.findIndex((e) => e._id === id)].options = optionList;

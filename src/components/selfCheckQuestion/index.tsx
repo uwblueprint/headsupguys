@@ -38,7 +38,6 @@ export const SelfCheckQuestionCard: React.FC = ({
     sliderRange,
     alphanumeric,
     onRemoveOption,
-    correspondingValues,
     onChangeAlphanumeric,
     selfCheckQuestionSize,
     onChangeSliderOption,
@@ -79,20 +78,16 @@ export const SelfCheckQuestionCard: React.FC = ({
             label: "Slider",
         },
     ];
-    const [alphanumericInput, setAlphanumericInput] = useState(alphanumeric);
     const [questionInput, setQuestionInput] = useState(question);
-    const [_, setOptionInput] = useState("");
-    const changeAlphanumeric = (e) => {
-        setAlphanumericInput(e);
-        onChangeAlphanumeric(questionId, e);
+    const changeAlphanumeric = (e, optionOrValue) => {
+        onChangeAlphanumeric(questionId, e, optionOrValue);
     };
     const changeQuestionInput = (e) => {
         setQuestionInput(e.target.value);
         onChangeQuestionInput(questionId, e.target.value);
     };
-    const changeOptionInput = (e, index) => {
-        setOptionInput(e.target.value);
-        onChangeOptionInput(questionId, index, e.target.value);
+    const changeOptionInput = (e, index, optionOrValue) => {
+        onChangeOptionInput(questionId, index, e.target.value, optionOrValue);
     };
     const [selectedOption, setSelectedOption] = useState(type);
     function questionType(e) {
@@ -216,27 +211,32 @@ export const SelfCheckQuestionCard: React.FC = ({
                                     </Heading>
                                     <Spacer></Spacer>
                                     <ButtonGroup
-                                        mr={"5"}
+                                        mr={"6"}
+                                        ml={"4"}
                                         size="sm"
                                         isAttached
                                         variant="outline"
                                     >
                                         <Button
+                                            value={alphanumeric[0]}
                                             onClick={() =>
-                                                changeAlphanumeric(true)
+                                                changeAlphanumeric(
+                                                    true,
+                                                    "option",
+                                                )
                                             }
                                             _hover={{
-                                                bg: alphanumericInput
+                                                bg: alphanumeric[0]
                                                     ? "black"
                                                     : "white",
                                             }}
                                             color={
-                                                alphanumericInput
+                                                alphanumeric[0]
                                                     ? "white"
                                                     : "black"
                                             }
                                             background={
-                                                alphanumericInput
+                                                alphanumeric[0]
                                                     ? "black"
                                                     : "white"
                                             }
@@ -244,21 +244,25 @@ export const SelfCheckQuestionCard: React.FC = ({
                                             Aa
                                         </Button>
                                         <Button
+                                            value={alphanumeric[0]}
                                             onClick={() =>
-                                                changeAlphanumeric(false)
+                                                changeAlphanumeric(
+                                                    false,
+                                                    "option",
+                                                )
                                             }
                                             _hover={{
-                                                bg: alphanumericInput
+                                                bg: alphanumeric[0]
                                                     ? "white"
                                                     : "black",
                                             }}
                                             color={
-                                                alphanumericInput
+                                                alphanumeric[0]
                                                     ? "black"
                                                     : "white"
                                             }
                                             background={
-                                                alphanumericInput
+                                                alphanumeric[0]
                                                     ? "white"
                                                     : "black"
                                             }
@@ -271,7 +275,7 @@ export const SelfCheckQuestionCard: React.FC = ({
                                     <InputGroup
                                         key={`Multiple Choice: ${
                                             questionId + index
-                                        }=${options[index]}`}
+                                        }=${option.value}`}
                                     >
                                         <InputLeftElement
                                             pointerEvents="none"
@@ -286,9 +290,13 @@ export const SelfCheckQuestionCard: React.FC = ({
                                         />
                                         <Input
                                             onChange={(e) =>
-                                                changeOptionInput(e, index)
+                                                changeOptionInput(
+                                                    e,
+                                                    index,
+                                                    "option",
+                                                )
                                             }
-                                            value={options[index]}
+                                            value={options[index][0]}
                                             variant="flushed"
                                             placeholder={`Option ${index + 1}`}
                                             mr={6}
@@ -333,21 +341,25 @@ export const SelfCheckQuestionCard: React.FC = ({
                                         variant="outline"
                                     >
                                         <Button
+                                            value={alphanumeric[1]}
                                             onClick={() =>
-                                                changeAlphanumeric(true)
+                                                changeAlphanumeric(
+                                                    true,
+                                                    "value",
+                                                )
                                             }
                                             _hover={{
-                                                bg: alphanumericInput
+                                                bg: alphanumeric[1]
                                                     ? "black"
                                                     : "white",
                                             }}
                                             color={
-                                                alphanumericInput
+                                                alphanumeric[1]
                                                     ? "white"
                                                     : "black"
                                             }
                                             background={
-                                                alphanumericInput
+                                                alphanumeric[1]
                                                     ? "black"
                                                     : "white"
                                             }
@@ -355,21 +367,25 @@ export const SelfCheckQuestionCard: React.FC = ({
                                             Aa
                                         </Button>
                                         <Button
+                                            value={alphanumeric[1]}
                                             onClick={() =>
-                                                changeAlphanumeric(false)
+                                                changeAlphanumeric(
+                                                    false,
+                                                    "value",
+                                                )
                                             }
                                             _hover={{
-                                                bg: alphanumericInput
+                                                bg: alphanumeric[1]
                                                     ? "white"
                                                     : "black",
                                             }}
                                             color={
-                                                alphanumericInput
+                                                alphanumeric[1]
                                                     ? "black"
                                                     : "white"
                                             }
                                             background={
-                                                alphanumericInput
+                                                alphanumeric[1]
                                                     ? "white"
                                                     : "black"
                                             }
@@ -380,15 +396,19 @@ export const SelfCheckQuestionCard: React.FC = ({
                                 </Flex>
                                 {(options ?? []).map((option, index) => (
                                     <InputGroup
-                                        key={`Corresponding Choice: ${
+                                        key={`Corresponding Value: ${
                                             questionId + index
                                         }=${option.value}`}
                                     >
                                         <Input
                                             onChange={(e) =>
-                                                changeOptionInput(e, index)
+                                                changeOptionInput(
+                                                    e,
+                                                    index,
+                                                    "value",
+                                                )
                                             }
-                                            value={options[index]}
+                                            value={options[index][1]}
                                             variant="flushed"
                                             placeholder={`Option ${index + 1}`}
                                             mr={6}
@@ -439,27 +459,32 @@ export const SelfCheckQuestionCard: React.FC = ({
                                     <Spacer></Spacer>
                                     {type != "slider" && (
                                         <ButtonGroup
-                                            mr={"5"}
+                                            mr={"6"}
+                                            ml={"4"}
                                             size="sm"
                                             isAttached
                                             variant="outline"
                                         >
                                             <Button
+                                                value={alphanumeric[0]}
                                                 onClick={() =>
-                                                    changeAlphanumeric(true)
+                                                    changeAlphanumeric(
+                                                        true,
+                                                        "option",
+                                                    )
                                                 }
                                                 _hover={{
-                                                    bg: alphanumericInput
+                                                    bg: alphanumeric[0]
                                                         ? "black"
                                                         : "white",
                                                 }}
                                                 color={
-                                                    alphanumericInput
+                                                    alphanumeric[0]
                                                         ? "white"
                                                         : "black"
                                                 }
                                                 background={
-                                                    alphanumericInput
+                                                    alphanumeric[0]
                                                         ? "black"
                                                         : "white"
                                                 }
@@ -467,21 +492,25 @@ export const SelfCheckQuestionCard: React.FC = ({
                                                 Aa
                                             </Button>
                                             <Button
+                                                value={alphanumeric[0]}
                                                 onClick={() =>
-                                                    changeAlphanumeric(false)
+                                                    changeAlphanumeric(
+                                                        false,
+                                                        "option",
+                                                    )
                                                 }
                                                 _hover={{
-                                                    bg: alphanumericInput
+                                                    bg: alphanumeric[0]
                                                         ? "white"
                                                         : "black",
                                                 }}
                                                 color={
-                                                    alphanumericInput
+                                                    alphanumeric[0]
                                                         ? "black"
                                                         : "white"
                                                 }
                                                 background={
-                                                    alphanumericInput
+                                                    alphanumeric[0]
                                                         ? "white"
                                                         : "black"
                                                 }
@@ -493,25 +522,30 @@ export const SelfCheckQuestionCard: React.FC = ({
                                 </Flex>
                                 {(options ?? []).map((option, index) => (
                                     <InputGroup
-                                        key={`Multi Select: ${
+                                        key={`Multiple Choice: ${
                                             questionId + index
                                         }=${option.value}`}
                                     >
                                         <InputLeftElement
                                             pointerEvents="none"
                                             children={
-                                                <Square
+                                                <Circle
                                                     size="15px"
+                                                    color="white"
                                                     borderWidth="2px"
                                                     borderColor="black"
-                                                    borderRadius="sm"
-                                                ></Square>
+                                                ></Circle>
                                             }
                                         />
                                         <Input
                                             onChange={(e) =>
-                                                changeOptionInput(e, index)
+                                                changeOptionInput(
+                                                    e,
+                                                    index,
+                                                    "option",
+                                                )
                                             }
+                                            value={options[index][0]}
                                             variant="flushed"
                                             placeholder={`Option ${index + 1}`}
                                             mr={6}
@@ -557,21 +591,25 @@ export const SelfCheckQuestionCard: React.FC = ({
                                             variant="outline"
                                         >
                                             <Button
+                                                value={alphanumeric[1]}
                                                 onClick={() =>
-                                                    changeAlphanumeric(true)
+                                                    changeAlphanumeric(
+                                                        true,
+                                                        "value",
+                                                    )
                                                 }
                                                 _hover={{
-                                                    bg: alphanumericInput
+                                                    bg: alphanumeric[1]
                                                         ? "black"
                                                         : "white",
                                                 }}
                                                 color={
-                                                    alphanumericInput
+                                                    alphanumeric[1]
                                                         ? "white"
                                                         : "black"
                                                 }
                                                 background={
-                                                    alphanumericInput
+                                                    alphanumeric[1]
                                                         ? "black"
                                                         : "white"
                                                 }
@@ -579,21 +617,25 @@ export const SelfCheckQuestionCard: React.FC = ({
                                                 Aa
                                             </Button>
                                             <Button
+                                                value={alphanumeric[1]}
                                                 onClick={() =>
-                                                    changeAlphanumeric(false)
+                                                    changeAlphanumeric(
+                                                        false,
+                                                        "value",
+                                                    )
                                                 }
                                                 _hover={{
-                                                    bg: alphanumericInput
+                                                    bg: alphanumeric[1]
                                                         ? "white"
                                                         : "black",
                                                 }}
                                                 color={
-                                                    alphanumericInput
+                                                    alphanumeric[1]
                                                         ? "black"
                                                         : "white"
                                                 }
                                                 background={
-                                                    alphanumericInput
+                                                    alphanumeric[1]
                                                         ? "white"
                                                         : "black"
                                                 }
@@ -611,9 +653,14 @@ export const SelfCheckQuestionCard: React.FC = ({
                                     >
                                         <Input
                                             onChange={(e) =>
-                                                changeOptionInput(e, index)
+                                                changeOptionInput(
+                                                    e,
+                                                    index,
+                                                    "value",
+                                                )
                                             }
                                             variant="flushed"
+                                            value={options[index][1]}
                                             placeholder={`Option ${index + 1}`}
                                             mr={6}
                                             isTruncated
@@ -641,8 +688,8 @@ export const SelfCheckQuestionCard: React.FC = ({
                             resize={"vertical"}
                             mr={3}
                             placeholder={"Short answer text"}
-                            onChange={(e) => changeOptionInput(e, 0)}
-                            value={options[0]}
+                            onChange={(e) => changeOptionInput(e, 0, "option")}
+                            value={options[0][0]}
                         />
                     )}
                     {type == "long_answer" && (
@@ -652,8 +699,8 @@ export const SelfCheckQuestionCard: React.FC = ({
                             resize={"vertical"}
                             mr={3}
                             placeholder={"Long answer text"}
-                            onChange={(e) => changeOptionInput(e, 0)}
-                            value={options[0]}
+                            onChange={(e) => changeOptionInput(e, 0, "option")}
+                            value={options[0][0]}
                         />
                     )}
                     {type == "slider" && (
@@ -720,8 +767,13 @@ export const SelfCheckQuestionCard: React.FC = ({
                                         )}
                                         <Input
                                             onChange={(e) =>
-                                                changeOptionInput(e, index)
+                                                changeOptionInput(
+                                                    e,
+                                                    index,
+                                                    "option",
+                                                )
                                             }
+                                            value={options[index][0]}
                                             variant="flushed"
                                             placeholder="Label (Optional)"
                                             width={"full"}

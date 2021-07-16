@@ -23,10 +23,12 @@ const Home: React.FC = () => {
             _id: "60e642d7e4a1ae34207a92a0",
             type: "multiple_choice",
             question: "",
-            options: ["", "", ""],
-            correspondingValues: ["", "", ""],
-            alphanumericInput: true,
-            alphanumericValueInput: true,
+            options: [
+                ["", ""],
+                ["", ""],
+                ["", ""],
+            ],
+            alphanumericInput: [true, true],
             questionNumber: 1,
         },
     ]);
@@ -47,22 +49,28 @@ const Home: React.FC = () => {
         newList[newList.findIndex((e) => e._id === id)].question = target;
         setQuestionList(newList);
     };
-    const changeAlphanumeric = (id, target) => {
+    const changeAlphanumeric = (id, target, optionOrValue) => {
         const newList = questionList.slice(0);
-        newList[newList.findIndex((e) => e._id === id)].alphanumericInput =
-            target;
+        const changeIndex = optionOrValue == "option" ? 0 : 1;
+        newList[newList.findIndex((e) => e._id === id)].alphanumericInput[
+            changeIndex
+        ] = target;
         setQuestionList(newList);
     };
-    const changeOptionInput = (id, index, target) => {
+    const changeOptionInput = (id, index, target, optionOrValue) => {
         const newList = questionList.slice(0);
-        newList[newList.findIndex((e) => e._id === id)].options[index] = target;
+        const changeIndex = optionOrValue == "option" ? 0 : 1;
+        console.log(optionOrValue);
+        newList[newList.findIndex((e) => e._id === id)].options[index][
+            changeIndex
+        ] = target;
         setQuestionList(newList);
     };
     const addOneOption = (id) => {
         const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].options = [
             ...newList[newList.findIndex((e) => e._id === id)].options,
-            "",
+            ["", ""],
         ];
         setQuestionList(newList);
     };
@@ -111,10 +119,12 @@ const Home: React.FC = () => {
             _id: `60e642d7e4a1ae34207a92a${count}`,
             type: "multiple_choice",
             question: "",
-            options: ["", "", ""],
-            correspondingValues: ["", "", ""],
-            alphanumericUserInput: true,
-            alphanumericCorrespondingInput: true,
+            options: [
+                ["", ""],
+                ["", ""],
+                ["", ""],
+            ],
+            alphanumericInput: [true, true],
             questionNumber: count,
         };
         const newList = questionList.slice(0);
@@ -238,7 +248,6 @@ const Home: React.FC = () => {
                         alphanumeric={item.alphanumericInput}
                         question={item.question}
                         options={item.options}
-                        correspondingValues={item.correspondingValues}
                         key={index + item._id}
                         item={item}
                         onChangeAlphanumeric={changeAlphanumeric}

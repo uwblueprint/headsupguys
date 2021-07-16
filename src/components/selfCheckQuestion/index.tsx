@@ -78,12 +78,10 @@ export const SelfCheckQuestionCard: React.FC = ({
             label: "Slider",
         },
     ];
-    const [questionInput, setQuestionInput] = useState(question);
     const changeAlphanumeric = (e, optionOrValue) => {
         onChangeAlphanumeric(questionId, e, optionOrValue);
     };
     const changeQuestionInput = (e) => {
-        setQuestionInput(e.target.value);
         onChangeQuestionInput(questionId, e.target.value);
     };
     const changeOptionInput = (e, index, optionOrValue) => {
@@ -130,7 +128,7 @@ export const SelfCheckQuestionCard: React.FC = ({
                             width={"full"}
                             size={"lg"}
                             variant="flushed"
-                            value={questionInput}
+                            value={question}
                             placeholder="Untitled Question"
                             mr={6}
                             ml={2}

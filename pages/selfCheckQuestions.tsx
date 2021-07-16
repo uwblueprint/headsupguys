@@ -60,7 +60,6 @@ const Home: React.FC = () => {
     const changeOptionInput = (id, index, target, optionOrValue) => {
         const newList = questionList.slice(0);
         const changeIndex = optionOrValue == "option" ? 0 : 1;
-        console.log(optionOrValue);
         newList[newList.findIndex((e) => e._id === id)].options[index][
             changeIndex
         ] = target;

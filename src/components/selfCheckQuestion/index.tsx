@@ -40,7 +40,7 @@ export const SelfCheckQuestionCard: React.FC = ({
     onRemoveOption,
     onChangeAlphanumeric,
     selfCheckQuestionSize,
-    onChangeSliderOption,
+    onChangeSliderRange,
     onChangeQuestionInput,
     onChangeOptionInput,
     onChangeQuestionType,
@@ -97,11 +97,11 @@ export const SelfCheckQuestionCard: React.FC = ({
 
     const sliderLowerBound = (e) => {
         setSliderStart(e.target.value);
-        onChangeSliderOption(questionId, e.target.value, sliderEnd);
+        onChangeSliderRange(questionId, e.target.value, sliderEnd);
     };
     const sliderUpperBound = (e) => {
         setSliderEnd(e.target.value);
-        onChangeSliderOption(questionId, sliderStart, e.target.value);
+        onChangeSliderRange(questionId, sliderStart, e.target.value);
     };
 
     return (

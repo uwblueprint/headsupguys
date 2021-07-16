@@ -82,7 +82,7 @@ const Home: React.FC = () => {
         );
         setQuestionList(newList);
     };
-    const changeSliderOption = (id, lowerBound, upperBound) => {
+    const changeSliderRange = (id, lowerBound, upperBound) => {
         const optionList = [];
         const newList = questionList.slice(0);
         lowerBound = parseInt(lowerBound);
@@ -258,7 +258,7 @@ const Home: React.FC = () => {
                         onChangeOptionInput={changeOptionInput}
                         onRemoveOption={removeOneOption}
                         onAddOption={addOneOption}
-                        onChangeSliderOption={changeSliderOption}
+                        onChangeSliderRange={changeSliderRange}
                         onChangeQuestionType={changeQuestionType}
                     />
                 ))}

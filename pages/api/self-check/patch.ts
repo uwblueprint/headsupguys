@@ -8,24 +8,35 @@ const patchSelfCheckByID = async (
 ): Promise<void> => {
     // Find self check by id
     const { id } = req.query;
-    let selfCheck;
-    try {
-        selfCheck = await SelfCheckGroup.findById(id);
-    } catch (err) {
-        console.log("error is ", err);
-    }
-    if (!selfCheck) {
-        return res
-            .status(404)
-            .send({ error: "The self check with the given ID was not found." });
-    }
+    const selfCheck = await SelfCheckGroup.findById(id)
+        .exec()
+        .catch(() => {
+            if (!selfCheck) {
+                return res.status(404).send({
+                    error: "The self check with the given ID was not found.",
+                });
+            }
+        });
+
+    // Delete all questions in self check
+    selfCheck.questionIDs.forEach((i) => {
+        const selfCheckQuestion = SelfCheckQuestion.findByIdAndDelete(i)
+            .exec()
+            .catch(() => {
+                if (!selfCheckQuestion) {
+                    return res.status(404).send({
+                        error: "The self check question with the given ID was not found.",
+                    });
+                }
+            });
+    });
 
     // Get a list of self check questions, create a SelfCheckQuestion for each
     const { questions } = req.body;
     const selfCheckQuestions = await SelfCheckQuestion.insertMany(
         questions,
-    ).catch(function (error) {
-        console.log(error); // Failure
+    ).catch((error) => {
+        return res.status(501).send({ error: error }); // Failure
     });
 
     // Get ID of each self check question

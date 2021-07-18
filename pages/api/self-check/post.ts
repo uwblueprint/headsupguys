@@ -8,22 +8,19 @@ const postSelfCheck = async (
 ): Promise<void> => {
     // Get a list of self check questions
     const { questions } = req.body;
-    console.log(questions);
 
     // For each, create a SelfCheckQuestion
     const selfCheckQuestions = await SelfCheckQuestion.insertMany(
         questions,
-    ).catch(function (error) {
-        console.log(error); // Failure
+    ).catch((error) => {
+        return res.status(501).send({ error: error }); // Failure
     });
-    console.log(selfCheckQuestions);
 
     // Get ID of each self check question
     const questionIDs = [];
     for (let i = 0; i < selfCheckQuestions.length; i++) {
         questionIDs.push(selfCheckQuestions[i]._id);
     }
-    console.log(questionIDs);
 
     // Use IDs to create SelfCheckGroup
     const selfCheck = new SelfCheckGroup({

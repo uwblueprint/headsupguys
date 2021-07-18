@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Flex, Box, Heading, Text, Icon } from "@chakra-ui/react";
 import isEmail from "validator/lib/isEmail";
@@ -33,9 +33,21 @@ const Signup: React.FC = () => {
         participateSurvey: false,
     });
     const [canContinue, setCanContinue] = useState(false);
+    const [fromGoogle, setFromGoogle] = useState(false);
 
-    // Get the QUERY URL HERE
-    console.log(router.query);
+    useEffect(() => {
+        // Go directly to the TOS if coming from the google flow
+        if (!router.isReady) {
+            // router not ready yet
+            // TODO: add spinner
+        }
+        if (router.query["GoogleFlow"]) {
+            setFromGoogle(true);
+            setCurrStage(3);
+        } else {
+            setFromGoogle(false);
+        }
+    }, [router.isReady]);
 
     const userExist = async (email) => {
         return await Auth.signIn(email.toLowerCase(), "123")
@@ -64,7 +76,7 @@ const Signup: React.FC = () => {
             setCanContinue(false);
         } else if (isEmail(email)) {
             //Check if account already exists
-            var emailExists = await userExist(email);
+            const emailExists = await userExist(email);
             if (emailExists) {
                 setEmailInvalid({
                     isInvalid: true,
@@ -105,7 +117,7 @@ const Signup: React.FC = () => {
             });
             setCanContinue(false);
         } else {
-            var pattern = new RegExp(
+            const pattern = new RegExp(
                 "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-+_!@#$%^&*.,?]).+$",
             );
 
@@ -285,18 +297,23 @@ const Signup: React.FC = () => {
             setCurrStage(currStage + 1);
         } else if (currStage == stages.length - 2) {
             try {
-                //Create new user with Cognito
-                const newUser = await Auth.signUp({
-                    username: email,
-                    password: password,
-                    attributes: {
-                        name: name,
-                    },
-                });
-                // last stage before signup
-                setCanContinue(true);
-                setCurrStage(currStage + 1);
-                console.log("USER CREATED", newUser);
+                if (!fromGoogle) {
+                    // Create new user with Cognito (if not going through google flow)
+                    const newUser = await Auth.signUp({
+                        username: email,
+                        password: password,
+                        attributes: {
+                            name: name,
+                        },
+                    });
+                    console.log("USER CREATED", newUser);
+                }
+                if (termsAgreement.participateSurvey) {
+                    router.push("/survey"); // jump to demographic survey
+                } else {
+                    setCanContinue(true);
+                    setCurrStage(currStage + 1); // jump to next stage
+                }
             } catch (e) {
                 console.log("ERROR");
             }
@@ -315,7 +332,7 @@ const Signup: React.FC = () => {
 
     return (
         <Flex direction="column" align="center" h="100vh" m={4}>
-            {currStage > 0 && currStage < stages.length - 1 && (
+            {currStage > 0 && currStage < stages.length - 1 && !fromGoogle && (
                 <Text
                     alignSelf="start"
                     tabindex="0"

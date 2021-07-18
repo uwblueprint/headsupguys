@@ -329,12 +329,7 @@ const Signup: React.FC = () => {
     return (
         <Flex direction="column" align="center" h="100vh" m={4}>
             {currStage > 0 && currStage < stages.length - 1 && !fromGoogle && (
-                <Text
-                    alignSelf="start"
-                    tabindex="0"
-                    role="button"
-                    onClick={decrementStage}
-                >
+                <Text alignSelf="start" role="button" onClick={decrementStage}>
                     <ChevronLeftIcon />
                     Back
                 </Text>

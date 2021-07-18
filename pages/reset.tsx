@@ -308,7 +308,6 @@ const ResetPassword: React.FC = () => {
             {currStage > 0 && (
                 <Text
                     alignSelf="start"
-                    tabindex="0"
                     role="button"
                     onClick={decrementStage}
                     mb="-5"

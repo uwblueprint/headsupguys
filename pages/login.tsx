@@ -176,12 +176,7 @@ const Login: React.FC = () => {
 
             {/* back button */}
             {currStage == 1 && (
-                <Text
-                    alignSelf="start"
-                    tabindex="0"
-                    role="button"
-                    onClick={decrementStage}
-                >
+                <Text alignSelf="start" role="button" onClick={decrementStage}>
                     <ChevronLeftIcon />
                     Back
                 </Text>

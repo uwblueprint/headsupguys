@@ -20,7 +20,7 @@ export interface ModalProps {
     cancelText?: string;
     confirmText?: string;
     alignButtonsRight?: boolean;
-    confirmButtonColor?: string;
+    confirmButtonColorScheme?: string;
 }
 
 // to control modals:
@@ -36,7 +36,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
         cancelText = "Cancel",
         confirmText = "Confirm",
         alignButtonsRight = true,
-        confirmButtonColor = "black",
+        confirmButtonColorScheme,
         ...rest
     } = props;
 
@@ -67,7 +67,14 @@ export const Modal: React.FC<ModalProps> = (props) => {
                             {cancelText}
                         </Button>
                         {!alignButtonsRight && <Spacer />}
-                        <Button bg={confirmButtonColor} onClick={onConfirm}>
+                        {/* variant="solid" to apply colorScheme */}
+                        <Button
+                            variant={
+                                confirmButtonColorScheme ? "solid" : "default"
+                            }
+                            colorScheme={confirmButtonColorScheme}
+                            onClick={onConfirm}
+                        >
                             {confirmText}
                         </Button>
                     </ModalFooter>

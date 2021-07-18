@@ -82,12 +82,18 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                     hasArrow
                                     placement="top"
                                 >
-                                    <Button colorScheme="blackAlpha" onClick={onPublish}>
+                                    <Button
+                                        colorScheme="blackAlpha"
+                                        onClick={onPublish}
+                                    >
                                         Publish Tool
                                     </Button>
                                 </Tooltip>
                             ) : (
-                                <Button colorScheme="blackAlpha" onClick={onPublish}>
+                                <Button
+                                    colorScheme="blackAlpha"
+                                    onClick={onPublish}
+                                >
                                     {published
                                         ? "Unpublish Tool"
                                         : "Publish Tool"}

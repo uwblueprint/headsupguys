@@ -20,11 +20,40 @@ const Login: React.FC = () => {
     });
     const [canContinue, setCanContinue] = useState(false);
 
-    const validateEmail = () => {
+    const userExist = async (email) => {
+        return await Auth.signIn(email.toLowerCase(), "123")
+            .then((res) => {
+                return false;
+            })
+            .catch((error) => {
+                const code = error.code;
+                switch (code) {
+                    case "UserNotFoundException":
+                        return false;
+                    case "NotAuthorizedException":
+                        return true;
+                    case "PasswordResetRequiredException":
+                        return true;
+                    default:
+                        return false;
+                }
+            });
+    };
+
+    const validateEmail = async () => {
         // instead of isEmail, use a check to see if email exists
         if (isEmail(email)) {
-            setEmailInvalid({ isInvalid: false, reason: "" });
-            setCanContinue(true);
+            var emailExists = await userExist(email);
+            if (!emailExists) {
+                setEmailInvalid({
+                    isInvalid: true,
+                    reason: "Invalid email- no account associated with this email",
+                });
+                setCanContinue(false);
+            } else {
+                setEmailInvalid({ isInvalid: false, reason: "" });
+                setCanContinue(true);
+            }
         } else {
             setEmailInvalid({
                 isInvalid: true,
@@ -39,7 +68,6 @@ const Login: React.FC = () => {
         try {
             setPasswordInvalid({ isInvalid: false, reason: "" });
             await Auth.signIn(email, password);
-            //   userHasAuthenticated(true);
             incrementStage();
         } catch (e) {
             console.log("ERROR", e);
@@ -52,12 +80,10 @@ const Login: React.FC = () => {
 
     const loginEmailStage = (
         <>
-            {/* <AuthButton text="Continue with Google [placeholder]" /> */}
-            {/* <button
+            <AuthButton
+                text={"Login with Google"}
                 onClick={() => Auth.federatedSignIn({ provider: "Google" })}
-            >
-                Open Google
-            </button> */}
+            ></AuthButton>
 
             <Text m={5}>OR</Text>
             <TextInput
@@ -78,7 +104,10 @@ const Login: React.FC = () => {
 
     const loginPasswordStage = (
         <>
-            <AuthButton text="Continue with Google [placeholder]" />
+            <AuthButton
+                text={"Login with Google"}
+                onClick={() => Auth.federatedSignIn({ provider: "Google" })}
+            ></AuthButton>
             <PasswordInput
                 fontFamily="Geogrotesque"
                 name="password"
@@ -116,19 +145,12 @@ const Login: React.FC = () => {
     ];
 
     const incrementStage = () => {
-        // add logic to check if it's possible
         if (currStage < stages.length) setCurrStage(currStage + 1);
         if (currStage == stages.length) return; // go to the "get started" link
         setCanContinue(false);
     };
 
     const decrementStage = () => {
-        // what does pressing back do?
-        // slight "bug" is that when going back, setContinue will be set to false
-        // that means that you will need to focus on the input field to have it re-validate
-        // even if it's technically already valid
-        // alternatively we can individually call the validate fncs for each section
-        // in this going back fnc (seperate if for each stage) instead of always setting canContinue to false
         if (currStage >= 0) {
             setCurrStage(currStage - 1);
             setCanContinue(false);
@@ -196,7 +218,6 @@ const Login: React.FC = () => {
             {currStage == 1 && (
                 <AuthButton
                     text={stages[currStage].buttonText}
-                    //onClick={logIn}
                     onClick={logIn}
                     isDisabled={false}
                 />

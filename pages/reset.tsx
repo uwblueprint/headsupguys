@@ -238,7 +238,8 @@ const ResetPassword: React.FC = () => {
                         newPassword,
                     )
                         .then((data) => {
-                            console.log(data);
+                            // console.log(data);
+                            setMessage(null);
                             incrementStage();
                         })
                         .catch((err) => setMessage(err.message));
@@ -330,7 +331,7 @@ const ResetPassword: React.FC = () => {
                 </Heading>
                 {stages[currStage].component}
             </Box>
-            {message ? (
+            {message != null ? (
                 <Text textAlign="center" color="red">
                     {" "}
                     {message}{" "}

@@ -1,14 +1,14 @@
 import React from "react";
-import { Flex, Button, VStack, Spacer, Link } from "@chakra-ui/react";
+import { Flex, Heading, VStack, Spacer, Link } from "@chakra-ui/react";
 
 import NextLink from "next/link";
 const NAVBAR_WIDTH = "280px";
 
 const NavItem = ({ children, to, ...rest }) => (
     <Link as={NextLink} href={to}>
-        <Button variant="link" size="sm" as="span" size="lg" {...rest}>
+        <Heading as="span" size="lg" {...rest}>
             {children}
-        </Button>
+        </Heading>
     </Link>
 );
 

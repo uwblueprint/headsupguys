@@ -13,9 +13,9 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     return (
         <>
             <ChakraProvider theme={theme}>
-                <Layout>
-                    <Component {...pageProps} />
-                </Layout>
+                {/* <Layout> */}
+                <Component {...pageProps} />
+                {/* </Layout> */}
             </ChakraProvider>
         </>
     );

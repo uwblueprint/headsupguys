@@ -307,7 +307,7 @@ const Signup: React.FC = () => {
                     });
                 }
                 if (termsAgreement.participateSurvey) {
-                    router.push("/survey"); // jump to demographic survey
+                    router.push("/demographic"); // jump to demographic survey
                 } else {
                     setCanContinue(true);
                     setCurrStage(currStage + 1); // jump to next stage

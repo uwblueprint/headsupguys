@@ -1,19 +1,22 @@
 import React from "react";
-import { Flex, Heading, VStack, Spacer } from "@chakra-ui/react";
+import { Flex, Button, VStack, Spacer, Link } from "@chakra-ui/react";
 
+import NextLink from "next/link";
 const NAVBAR_WIDTH = "280px";
 
-const NavItem = ({ children, ...rest }) => (
-    <Heading as="span" size="lg" {...rest}>
-        <Flex>{children}</Flex>
-    </Heading>
+const NavItem = ({ children, to, ...rest }) => (
+    <Link as={NextLink} href={to}>
+        <Button variant="link" size="sm" as="span" size="lg" {...rest}>
+            {children}
+        </Button>
+    </Link>
 );
 
 const Navbar: React.FC = () => {
     return (
         <Flex
             as="nav"
-            bg="gray.100"
+            bg="background.light"
             direction="column"
             w={NAVBAR_WIDTH}
             h="100%"
@@ -27,12 +30,14 @@ const Navbar: React.FC = () => {
             left="0"
             top="0"
         >
-            <NavItem mb={8}>Home</NavItem>
+            <NavItem to="/" mb={8}>
+                HeadsUpGuys
+            </NavItem>
             <VStack spacing={2} align="flex-start">
-                <NavItem>Tools</NavItem>
-                <NavItem>Modules</NavItem>
-                <NavItem>Insights</NavItem>
-                <NavItem>Settings</NavItem>
+                <NavItem to="/admin/tools">Tools</NavItem>
+                <NavItem to="/admin/modules">Modules</NavItem>
+                <NavItem to="/admin/insights">Insights</NavItem>
+                <NavItem to="/admin/settings">Settings</NavItem>
             </VStack>
             <Spacer />
         </Flex>

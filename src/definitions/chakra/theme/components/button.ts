@@ -8,8 +8,13 @@ const Button = {
             _hover: { bg: "gray.700" },
             _active: { bg: "gray.600" },
         },
-        outline: {
-            colorScheme: "black",
+        outlineBlack: {
+            borderColor: "black",
+            borderWidth: "1px",
+            bg: "transparent",
+            _hover: {
+                bg: "gray.100",
+            },
         },
         brand: {
             bg: "brand.green",

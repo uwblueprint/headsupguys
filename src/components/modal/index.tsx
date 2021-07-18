@@ -60,8 +60,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
                     <ModalFooter>
                         <Button
                             mr="8"
-                            variant="outline"
-                            borderColor="black"
+                            variant="outlineBlack"
                             onClick={onCancel}
                         >
                             {cancelText}

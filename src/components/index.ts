@@ -4,4 +4,6 @@ export { Main } from "./main";
 export { Button } from "./button";
 export { Cards } from "./cards";
 export { Footer } from "./footer";
-export { Layout } from "./Layout";
+export { AdminLayout } from "./layouts/AdminLayout";
+export { BuilderLayout } from "./layouts/BuilderLayout";
+export { PublicLayout } from "./layouts/PublicLayout";

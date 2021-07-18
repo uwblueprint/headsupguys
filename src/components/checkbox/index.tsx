@@ -1,39 +1,43 @@
-import React, { FunctionComponent, CSSProperties } from "react";
-import {
-    Checkbox,
-    CheckboxGroup,
-    useProps,
-    Text,
-    Center,
-    Stack,
-} from "@chakra-ui/react";
+import React, { FunctionComponent } from "react";
+import { Checkbox, CheckboxProps, Text, Stack } from "@chakra-ui/react";
 
-interface Props {
+interface Props extends CheckboxProps {
     text?: string;
-    value?: boolean;
-    isDisabled?: boolean;
-    required?: boolean;
-    onChange(event: any): any;
+    isRequired?: boolean;
 }
 
-export const CheckboxComp: FunctionComponent<Props> = (props: Props) => {
-    const [checkedItem, setCheckedItem] = React.useState(props.value);
-
+export const CheckboxComp: FunctionComponent<Props> = ({
+    text,
+    isRequired,
+    isChecked,
+    isDisabled,
+    onChange,
+    mb,
+    ...rest
+}) => {
     return (
         <>
-            <Stack spacing={1} direction="row">
+            <Stack spacing={1} direction="row" mb={mb}>
                 <Checkbox
                     borderColor="black"
                     borderEndColor="black"
-                    isChecked={checkedItem}
-                    isDisabled={props.isDisabled}
+                    isChecked={isChecked}
+                    isDisabled={isDisabled}
                     iconColor="black"
                     colorScheme="whiteAlpha"
-                    onChange={(e) => props.onChange(e)}
-                    isRequired={props.required}
+                    onChange={(e) => onChange(e)}
+                    isRequired={isRequired}
+                    mr={3}
+                    {...rest}
                 />
-                {props.required ? <Text color="red.500">*</Text> : null}
-                <Text>{props.text}</Text>
+                <Text as="span">
+                    {isRequired ? (
+                        <Text color="red.500" as="span">
+                            *{" "}
+                        </Text>
+                    ) : null}
+                    {text}
+                </Text>
             </Stack>
         </>
     );

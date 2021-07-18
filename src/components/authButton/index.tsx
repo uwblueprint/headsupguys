@@ -27,7 +27,6 @@ export const AuthButton: FunctionComponent<AuthButtonProps> = ({
                 height="40px"
                 width="312.01px"
                 borderRadius="0px"
-                fontFamily="Geogrotesque"
                 boxShadow="xs"
                 {...rest}
             >

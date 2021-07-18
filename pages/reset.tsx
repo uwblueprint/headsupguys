@@ -148,7 +148,7 @@ const ResetPassword: React.FC = () => {
                 onClick={() => {
                     // Send confirmation code to user's email
                     Auth.forgotPassword(email)
-                        .then((data) => console.log(data))
+                        .then()
                         .catch((err) => alert(err.message));
                     incrementStage();
                 }}
@@ -238,7 +238,6 @@ const ResetPassword: React.FC = () => {
                         newPassword,
                     )
                         .then((data) => {
-                            // console.log(data);
                             setMessage(null);
                             incrementStage();
                         })

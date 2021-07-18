@@ -97,7 +97,6 @@ const Signup: React.FC = () => {
     };
 
     const validateName = () => {
-        // is first name a required field? or is it allowed to be empty?
         if (name == "") {
             setCanContinue(false);
         } else {
@@ -130,7 +129,7 @@ const Signup: React.FC = () => {
             } else {
                 setPasswordInvalid({
                     isInvalid: true,
-                    reason: "Password does not contain a special character, capital letter, lowecase, and digit.",
+                    reason: "Password must contain a digit, special character, uppercase and lowercase letter.",
                 });
                 setCanContinue(false);
             }
@@ -306,7 +305,6 @@ const Signup: React.FC = () => {
                             name: name,
                         },
                     });
-                    console.log("USER CREATED", newUser);
                 }
                 if (termsAgreement.participateSurvey) {
                     router.push("/survey"); // jump to demographic survey
@@ -314,9 +312,7 @@ const Signup: React.FC = () => {
                     setCanContinue(true);
                     setCurrStage(currStage + 1); // jump to next stage
                 }
-            } catch (e) {
-                console.log("ERROR");
-            }
+            } catch (e) {}
         } else {
             // go to "Get Started" link
             router.push("/"); // temporary link back to "/"

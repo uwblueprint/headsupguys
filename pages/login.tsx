@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Flex, Box, Heading, Text, Spacer, Link } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Flex, Box, Heading, Text, Link } from "@chakra-ui/react";
 import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Auth } from "aws-amplify";
@@ -41,7 +41,6 @@ const Login: React.FC = () => {
     };
 
     const validateEmail = async () => {
-        // instead of isEmail, use a check to see if email exists
         if (isEmail(email)) {
             var emailExists = await userExist(email);
             if (!emailExists) {
@@ -70,7 +69,6 @@ const Login: React.FC = () => {
             await Auth.signIn(email, password);
             incrementStage();
         } catch (e) {
-            console.log("ERROR", e);
             setPasswordInvalid({
                 isInvalid: true,
                 reason: "Incorrect Password",
@@ -146,7 +144,7 @@ const Login: React.FC = () => {
 
     const incrementStage = () => {
         if (currStage < stages.length) setCurrStage(currStage + 1);
-        if (currStage == stages.length) return; // go to the "get started" link
+        if (currStage == stages.length) return;
         setCanContinue(false);
     };
 
@@ -222,8 +220,6 @@ const Login: React.FC = () => {
                     isDisabled={false}
                 />
             )}
-
-            {/* progress bar */}
         </Flex>
     );
 };

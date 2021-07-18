@@ -13,7 +13,7 @@
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
     "emailVerificationSubject": "Your verification code",
-    "emailVerificationMessage": "Thank you for signing up for HUG. Verification code {####}",
+    "emailVerificationMessage": "Your verification code is {####}",
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
@@ -22,7 +22,7 @@
         "name"
     ],
     "userpoolClientGenerateSecret": false,
-    "userpoolClientRefreshTokenValidity": "30",
+    "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
         "email"
     ],
@@ -46,7 +46,7 @@
             "Arn"
         ]
     },
-    "useDefault": "manual",
+    "useDefault": "defaultSocial",
     "usernameAttributes": [
         "email"
     ],
@@ -70,12 +70,15 @@
             ]
         }
     ],
-    "thirdPartyAuth": true,
     "userPoolGroups": false,
     "adminQueries": false,
-    "hostedUI": false,
+    "hostedUI": true,
     "authTriggerConnections": "[\n  {\n    \"triggerType\": \"PreSignUp\",\n    \"lambdaFunctionName\": \"headsupguys9716c6d8PreSignup\"\n  }\n]",
-    "authProviders": [
-        "accounts.google.com"
-    ]
+    "hostedUIDomainName": "headsupguys8658aeb1-8658aeb1",
+    "authProvidersUserPool": [
+        "Google"
+    ],
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"username\":\"sub\"}}]",
+    "authProviders": [],
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/signup?GoogleFlow=true/\"],\"LogoutURLs\":[\"http://localhost:3000/\"]}"
 }

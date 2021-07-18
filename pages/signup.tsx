@@ -34,18 +34,47 @@ const Signup: React.FC = () => {
     });
     const [canContinue, setCanContinue] = useState(false);
 
-    async function signup(event) {
-        event.preventDefault();
-    }
+    // Get the QUERY URL HERE
+    console.log(router.query);
 
-    const validateEmail = () => {
+    const userExist = async (email) => {
+        return await Auth.signIn(email.toLowerCase(), "123")
+            .then((res) => {
+                return false;
+            })
+            .catch((error) => {
+                const code = error.code;
+                switch (code) {
+                    case "UserNotFoundException":
+                        return false;
+                    case "NotAuthorizedException":
+                        return true;
+                    case "PasswordResetRequiredException":
+                        return true;
+                    default:
+                        return false;
+                }
+            });
+    };
+
+    const validateEmail = async () => {
         if (email == "") {
             // don't set as error state if it's currently empty
             setEmailInvalid({ isInvalid: false, reason: "" });
             setCanContinue(false);
         } else if (isEmail(email)) {
-            setEmailInvalid({ isInvalid: false, reason: "" });
-            setCanContinue(true);
+            //Check if account already exists
+            var emailExists = await userExist(email);
+            if (emailExists) {
+                setEmailInvalid({
+                    isInvalid: true,
+                    reason: "Account already exists with this email",
+                });
+                setCanContinue(false);
+            } else {
+                setEmailInvalid({ isInvalid: false, reason: "" });
+                setCanContinue(true);
+            }
         } else {
             setEmailInvalid({
                 isInvalid: true,
@@ -53,8 +82,6 @@ const Signup: React.FC = () => {
             });
             setCanContinue(false);
         }
-
-        // add another check for account in use later
     };
 
     const validateName = () => {
@@ -72,18 +99,29 @@ const Signup: React.FC = () => {
             setPasswordInvalid({ isInvalid: false, reason: "" });
             setCanContinue(false);
         } else if (password.length < 8) {
-            // add actual validations here later
             setPasswordInvalid({
                 isInvalid: true,
                 reason: "Password is too short",
             });
             setCanContinue(false);
         } else {
-            setPasswordInvalid({
-                isInvalid: false,
-                reason: "",
-            });
-            setCanContinue(true);
+            var pattern = new RegExp(
+                "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-+_!@#$%^&*.,?]).+$",
+            );
+
+            if (pattern.test(password)) {
+                setPasswordInvalid({
+                    isInvalid: false,
+                    reason: "",
+                });
+                setCanContinue(true);
+            } else {
+                setPasswordInvalid({
+                    isInvalid: true,
+                    reason: "Password does not contain a special character, capital letter, lowecase, and digit.",
+                });
+                setCanContinue(false);
+            }
         }
     };
 
@@ -97,7 +135,10 @@ const Signup: React.FC = () => {
 
     const signupEmailStage = (
         <>
-            <AuthButton text="Continue with Google (placeholder)" />
+            <AuthButton
+                text={"Sign Up with Google"}
+                onClick={() => Auth.federatedSignIn({ provider: "Google" })}
+            ></AuthButton>
             <Text m={5}>OR</Text>
             <TextInput
                 name="email"

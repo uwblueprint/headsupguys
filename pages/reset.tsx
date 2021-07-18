@@ -26,11 +26,41 @@ const ResetPassword: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [confirmationCode, setConfirmationCode] = useState("");
     const [canContinue, setCanContinue] = useState(false);
+    const [message, setMessage] = useState(null);
 
-    const validateEmail = () => {
+    const userExist = async (email) => {
+        return await Auth.signIn(email.toLowerCase(), "123")
+            .then((res) => {
+                return false;
+            })
+            .catch((error) => {
+                const code = error.code;
+                switch (code) {
+                    case "UserNotFoundException":
+                        return false;
+                    case "NotAuthorizedException":
+                        return true;
+                    case "PasswordResetRequiredException":
+                        return true;
+                    default:
+                        return true;
+                }
+            });
+    };
+
+    const validateEmail = async () => {
         if (isEmail(email)) {
-            setEmailInvalid({ isInvalid: false, reason: "" });
-            setCanContinue(true);
+            var emailExists = await userExist(email);
+            if (!emailExists) {
+                setEmailInvalid({
+                    isInvalid: true,
+                    reason: "Invalid email- no account associated with this email",
+                });
+                setCanContinue(false);
+            } else {
+                setEmailInvalid({ isInvalid: false, reason: "" });
+                setCanContinue(true);
+            }
         } else {
             setEmailInvalid({
                 isInvalid: true,
@@ -41,15 +71,41 @@ const ResetPassword: React.FC = () => {
     };
 
     const validatePassword = () => {
-        //TODO: update password validation requirements
-        if (newPassword.length > 7) {
+        if (newPassword == "") {
+            // don't set as error state if it's currently empty
             setPasswordRequirements({ isInvalid: false, reason: "" });
-        } else {
+            setCanContinue(false);
+        } else if (newPassword.length < 8) {
             setPasswordRequirements({
                 isInvalid: true,
-                reason: "Password does not meet requirements",
+                reason: "Password is too short, password must be 8 characters",
             });
             setCanContinue(false);
+        } else {
+            var pattern = new RegExp(
+                "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-+_!@#$%^&*.,?]).+$",
+            );
+
+            if (pattern.test(newPassword)) {
+                setPasswordRequirements({
+                    isInvalid: false,
+                    reason: "",
+                });
+                if (
+                    newPassword == confirmPassword &&
+                    confirmationCode.length > 0
+                )
+                    setCanContinue(true);
+                else {
+                    setCanContinue(false);
+                }
+            } else {
+                setPasswordRequirements({
+                    isInvalid: true,
+                    reason: "Password must contain a special character, capital letter, lowecase letter and number.",
+                });
+                setCanContinue(false);
+            }
         }
     };
 
@@ -113,9 +169,17 @@ const ResetPassword: React.FC = () => {
                 placeholder="Confirmation Code"
                 value={confirmationCode}
                 isRequired
-                onChange={(event) =>
-                    setConfirmationCode(event.currentTarget.value)
-                }
+                onChange={(event) => {
+                    setConfirmationCode(event.currentTarget.value);
+                    if (
+                        confirmPassword == newPassword &&
+                        confirmationCode.length > 0
+                    ) {
+                        setCanContinue(true);
+                    } else {
+                        setCanContinue(false);
+                    }
+                }}
             />
             {/* Check to see if password meets requirements */}
             <PasswordInput
@@ -150,11 +214,13 @@ const ResetPassword: React.FC = () => {
                         });
                         setCanContinue(false);
                     } else {
-                        setPasswordInvalid({
-                            isInvalid: false,
-                            reason: "",
-                        });
-                        setCanContinue(true);
+                        if (confirmationCode.length > 0) {
+                            setPasswordInvalid({
+                                isInvalid: false,
+                                reason: "",
+                            });
+                            setCanContinue(true);
+                        }
                     }
                 }}
                 mb={5}
@@ -175,7 +241,7 @@ const ResetPassword: React.FC = () => {
                             console.log(data);
                             incrementStage();
                         })
-                        .catch((err) => console.log(err));
+                        .catch((err) => setMessage(err.message));
                 }}
                 isDisabled={!canContinue}
             />
@@ -264,6 +330,12 @@ const ResetPassword: React.FC = () => {
                 </Heading>
                 {stages[currStage].component}
             </Box>
+            {message ? (
+                <Text textAlign="center" color="red">
+                    {" "}
+                    {message}{" "}
+                </Text>
+            ) : null}
         </Flex>
     );
 };

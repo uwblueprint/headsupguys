@@ -6,6 +6,7 @@ import {
     Text,
     Button,
     useDisclosure,
+    Spacer,
 } from "@chakra-ui/react";
 
 import { ToolCard, Modal } from "@components";
@@ -21,8 +22,21 @@ const ToolsPage: React.FC = () => {
     const publishConfirmation = `Are you sure you want to delete ${selectedTool}? Your tool will be available to the public!`;
     const deleteConfirmation = `Are you sure you want to publish ${selectedTool}? This is a permanent action that cannot be undone.`;
 
+    const [selectedTab, setSelectedTab] = useState("draft");
+
     // TODO: Need to update this to calculate relative date
     const date = new Date();
+
+    const filterTools = () => {
+        const filteredTools = toolsList.filter((t) => {
+            return t["status"] === selectedTab;
+        });
+        setToolsArray(filteredTools);
+    };
+
+    useEffect(() => {
+        filterTools();
+    }, [selectedTab]);
 
     const onLinkModule = () => {
         console.log("hello");
@@ -41,7 +55,7 @@ const ToolsPage: React.FC = () => {
     };
 
     useEffect(() => {
-        setToolsArray(toolsList);
+        filterTools();
     }, []);
 
     return (
@@ -69,25 +83,44 @@ const ToolsPage: React.FC = () => {
                     <Text mr={2} fontWeight="bold" fontSize="4xl">
                         Tools
                     </Text>
-                    <Flex wrap={"wrap"} ml={"auto"}>
-                        <Button
-                            _hover={{ bg: "#F3F3F3" }}
-                            _active={{
-                                transform: "scale(0.95)",
-                            }}
-                            // onClick={() => {}}
-                            minWidth={"90"}
-                            colorScheme="white"
-                            variant="outline"
-                        >
-                            Create Tool
-                        </Button>
-                    </Flex>
+                    <Spacer />
+                    <Button
+                        _hover={{ bg: "#F3F3F3" }}
+                        _active={{
+                            transform: "scale(0.95)",
+                        }}
+                        // onClick={() => {}}
+                        minWidth={"90"}
+                        colorScheme="white"
+                        variant="outline"
+                    >
+                        Create Tool
+                    </Button>
+                </Flex>
+                <Flex mb={10} wrap={"wrap"} justify={"left"} width={"full"}>
+                    <Button
+                        variant="link"
+                        mr={"20px"}
+                        _active={{ textDecoration: "underline", color: "#000" }}
+                        onClick={() => setSelectedTab("draft")}
+                        isActive={selectedTab === "draft"}
+                    >
+                        Drafts
+                    </Button>
+                    <Button
+                        variant="link"
+                        _active={{ textDecoration: "underline", color: "#000" }}
+                        onClick={() => setSelectedTab("published")}
+                        isActive={selectedTab === "published"}
+                    >
+                        Published
+                    </Button>
                 </Flex>
                 <Stack>
-                    {toolsArray.map((tool) => {
+                    {toolsArray.map((tool, idx) => {
                         return (
                             <ToolCard
+                                key={idx}
                                 title={tool["title"]}
                                 creators={tool["createdBy"]}
                                 updated={date}

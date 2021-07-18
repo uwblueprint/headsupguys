@@ -19,7 +19,7 @@ const ToolsPage: React.FC = () => {
     // Modal can be of "publish" or "delete" mode
     const [modalMode, setModalMode] = useState("");
     const publishConfirmation = `Are you sure you want to delete ${selectedTool}? Your tool will be available to the public!`;
-    const deleteConfirmation = `Are you sure you want to delete ${selectedTool}? This is a permanent action that cannot be undone.`;
+    const deleteConfirmation = `Are you sure you want to publish ${selectedTool}? This is a permanent action that cannot be undone.`;
 
     // TODO: Need to update this to calculate relative date
     const date = new Date();
@@ -50,14 +50,26 @@ const ToolsPage: React.FC = () => {
                 isOpen={isOpen}
                 onCancel={onClose}
                 onConfirm={onClose}
-                header={`Delete ${selectedTool}`}
+                header={
+                    modalMode === "publish"
+                        ? `Publish ${selectedTool}`
+                        : `Delete ${selectedTool}`
+                }
                 bodyText={
                     modalMode === "publish"
                         ? publishConfirmation
                         : deleteConfirmation
                 }
-                confirmText="Delete"
-                confirmButtonColor="red"
+                confirmText={
+                    modalMode === "publish"
+                        ? `Publish`
+                        : `Delete`
+                }
+                confirmButtonColor={
+                    modalMode === "publish"
+                        ? `black`
+                        : `red`
+                }
                 size="lg"
             />
             <Flex direction="column" minH="100vh" pl="48px" pr="48px">

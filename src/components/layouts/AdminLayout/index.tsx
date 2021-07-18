@@ -3,7 +3,7 @@ import { Box, Grid } from "@chakra-ui/react";
 
 import { Navbar, NAVBAR_WIDTH } from "@components/Navbar";
 
-export const Layout: React.FC = ({ children }) => {
+export const AdminLayout: React.FC = ({ children }) => {
     return (
         <Grid
             templateColumns={`${NAVBAR_WIDTH} 1fr`}
@@ -14,7 +14,7 @@ export const Layout: React.FC = ({ children }) => {
                 {/** Navbar width is set manually to keep the position fixed */}
                 <Navbar />
             </Box>
-            <Box w="100%" h="100%">
+            <Box w="100%" h="100%" p={12}>
                 {children}
             </Box>
         </Grid>

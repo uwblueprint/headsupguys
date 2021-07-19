@@ -3,6 +3,8 @@ export { Logo } from "./logo";
 export { Main } from "./main";
 export { Button } from "./button";
 export { Cards } from "./cards";
+export { ToolHomePage } from "./toolHomePage";
+export { SelfCheckQuestionCard } from "./toolSelfCheck";
 export { Footer } from "./footer";
 export { Layout } from "./Layout";
 export { Modal } from "./modal";

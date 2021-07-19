@@ -19,8 +19,8 @@ const ToolsPage: React.FC = () => {
     const [selectedTool, setSelectedTool] = useState("");
     // Modal can be of "publish" or "delete" mode
     const [modalMode, setModalMode] = useState("");
-    const publishConfirmation = `Are you sure you want to delete ${selectedTool}? Your tool will be available to the public!`;
-    const deleteConfirmation = `Are you sure you want to publish ${selectedTool}? This is a permanent action that cannot be undone.`;
+    const publishConfirmation = `Are you sure you want to publish ${selectedTool}? Your tool will be available to the public!`;
+    const deleteConfirmation = `Are you sure you want to delete ${selectedTool}? This is a permanent action that cannot be undone.`;
 
     const [selectedTab, setSelectedTab] = useState("draft");
 

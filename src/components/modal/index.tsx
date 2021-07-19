@@ -20,7 +20,8 @@ export interface ModalProps {
     cancelText?: string;
     confirmText?: string;
     alignButtonsRight?: boolean;
-    confirmButtonColorScheme?: string;
+    confirmButtonColor?: string;
+    size?: string; // "xs", "sm", "md", "lg", "xl", "full"
 }
 
 // to control modals:
@@ -36,20 +37,20 @@ export const Modal: React.FC<ModalProps> = (props) => {
         cancelText = "Cancel",
         confirmText = "Confirm",
         alignButtonsRight = true,
-        confirmButtonColorScheme,
-        ...rest
+        confirmButtonColor = "black",
+        size = "md",
     } = props;
 
     return (
         <>
             <ChakraModal
+                size={size}
                 isCentered
                 onClose={onCancel}
                 isOpen={isOpen}
-                {...rest}
             >
                 <ModalOverlay />
-                <ModalContent p="8">
+                <ModalContent padding="8">
                     <ModalHeader fontSize="36" fontFamily="Geogrotesque Bold">
                         {header}
                     </ModalHeader>
@@ -60,20 +61,14 @@ export const Modal: React.FC<ModalProps> = (props) => {
                     <ModalFooter>
                         <Button
                             mr="8"
-                            variant="outlineBlack"
+                            variant="outline"
+                            borderColor="black"
                             onClick={onCancel}
                         >
                             {cancelText}
                         </Button>
                         {!alignButtonsRight && <Spacer />}
-                        {/* variant="solid" to apply colorScheme */}
-                        <Button
-                            variant={
-                                confirmButtonColorScheme ? "solid" : "default"
-                            }
-                            colorScheme={confirmButtonColorScheme}
-                            onClick={onConfirm}
-                        >
+                        <Button bg={confirmButtonColor} onClick={onConfirm}>
                             {confirmText}
                         </Button>
                     </ModalFooter>

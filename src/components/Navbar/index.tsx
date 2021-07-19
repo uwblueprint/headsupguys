@@ -30,14 +30,14 @@ const Navbar: React.FC = () => {
             left="0"
             top="0"
         >
-            <NavItem to="/" mb={8}>
+            <NavItem to="/admin" mb={8}>
                 HeadsUpGuys
             </NavItem>
             <VStack spacing={2} align="flex-start">
-                <NavItem to="/admin/tools">Tools</NavItem>
-                <NavItem to="/admin/modules">Modules</NavItem>
-                <NavItem to="/admin/insights">Insights</NavItem>
-                <NavItem to="/admin/settings">Settings</NavItem>
+                <NavItem to="/admin/dashboard/tools">Tools</NavItem>
+                <NavItem to="/admin/dashboard/modules">Modules</NavItem>
+                <NavItem to="/admin/dashboard/insights">Insights</NavItem>
+                <NavItem to="/admin/dashboard/settings">Settings</NavItem>
             </VStack>
             <Spacer />
         </Flex>

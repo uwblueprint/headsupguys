@@ -13,8 +13,8 @@ import {
     CloseButton,
     Button,
     ButtonGroup,
-    VStack,
     Stack,
+    HStack,
     IconButton,
     Select,
     Textarea,
@@ -30,16 +30,40 @@ import {
 
 import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 
+//Interface Props
+export interface SelfCheckQuestionCardProps {
+    alphanumeric: boolean;
+    type: string;
+    options: string[][];
+    question: string;
+    questionId: string;
+    questionIndex: number;
+    selfCheckQuestionSize: number;
+    onAddOption: () => void;
+    onRemoveOption: () => void;
+    onChangeAlphanumeric: () => void;
+    onChangeQuestionInput: () => void;
+    onChangeOptionInput: () => void;
+    onChangeQuestionType: () => void;
+    onMoveDownQuestion: () => void;
+    onRemoveQuestion: () => void;
+    onMoveUpQuestion: () => void;
+    onAddQuestion: () => void;
+    onChangeSliderBounds: () => void;
+}
+
 //Self check question card component
-export const SelfCheckQuestionCard: React.FC = ({
-    type,
-    item,
-    options,
-    onAddOption,
+export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
     alphanumeric,
+    type,
+    options,
+    question,
+    questionId,
+    questionIndex,
+    selfCheckQuestionSize,
+    onAddOption,
     onRemoveOption,
     onChangeAlphanumeric,
-    selfCheckQuestionSize,
     onChangeQuestionInput,
     onChangeOptionInput,
     onChangeQuestionType,
@@ -47,13 +71,7 @@ export const SelfCheckQuestionCard: React.FC = ({
     onRemoveQuestion,
     onMoveUpQuestion,
     onAddQuestion,
-    sliderLowerBound,
-    sliderUpperBound,
-    onChangeSliderLowerBound,
-    onChangeSliderUpperBound,
-    questionIndex,
-    questionId,
-    question,
+    onChangeSliderBounds,
 }) => {
     //Keeps track of the modal state for the delete question button
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -81,8 +99,8 @@ export const SelfCheckQuestionCard: React.FC = ({
         },
     ];
 
-    const changeAlphanumeric = (e, optionOrValue) => {
-        onChangeAlphanumeric(questionId, e, optionOrValue);
+    const changeAlphanumeric = (e) => {
+        onChangeAlphanumeric(questionId, e);
     };
     const changeQuestionInput = (e) => {
         onChangeQuestionInput(questionId, e.target.value);
@@ -91,16 +109,33 @@ export const SelfCheckQuestionCard: React.FC = ({
         onChangeOptionInput(questionId, index, e.target.value, optionOrValue);
     };
     const questionType = (e) => {
-        onChangeQuestionType(questionId, e.target.value);
+        onChangeQuestionType(
+            questionId,
+            e.target.value,
+            sliderLowerBound,
+            sliderUpperBound,
+        );
     };
+    const [sliderLowerBound, setSliderLowerBound] = useState(1);
+    const [sliderUpperBound, setSliderUpperBound] = useState(options.length);
 
     const changeSliderLowerBound = (e) => {
-        console.log(e.target.value);
-        onChangeSliderLowerBound(questionId, e.target.value);
+        onChangeSliderBounds(
+            questionId,
+            e.target.value,
+            sliderUpperBound,
+            sliderLowerBound,
+        );
+        setSliderLowerBound(e.target.value);
     };
     const changeSliderUpperBound = (e) => {
-        console.log(e.target.value);
-        onChangeSliderUpperBound(questionId, e.target.value);
+        onChangeSliderBounds(
+            questionId,
+            e.target.value,
+            sliderUpperBound,
+            sliderLowerBound,
+        );
+        setSliderUpperBound(e.target.value);
     };
 
     return (
@@ -184,191 +219,233 @@ export const SelfCheckQuestionCard: React.FC = ({
                     </Flex>
                 </Flex>
 
-                <Flex>
+                <Flex
+                    alignContent="left"
+                    alignItems={"left"}
+                    align={"left"}
+                    justify={"left"}
+                    justifyContent={"left"}
+                >
                     {type == "multiple_choice" && (
-                        <Flex width={"full"}>
-                            <VStack>
-                            <Stack mr={0} minWidth={"50%"} spacing={3}>
-                                <Flex
-                                    width={"full"}
-                                    justify={"right"}
-                                    wrap={"wrap"}
-                                >
-                                    <Heading
-                                        ml={"3"}
-                                        mb={"2"}
-                                        fontSize={"20"}
-                                        fontWeight="bold"
+                        <>
+                            <Flex width={"full"}>
+                                <Stack mr={0} minWidth={"50%"} spacing={3}>
+                                    <Flex
+                                        width={"full"}
+                                        justify={"right"}
+                                        wrap={"wrap"}
                                     >
-                                        User Facing Options
-                                    </Heading>
-                                </Flex>
-                                {(options ?? []).map((option, index) => (
-                                    <InputGroup
-                                        key={`Multiple Choice: ${
-                                            questionId + index
-                                        }=${option.value}`}
-                                    >
-                                        <InputLeftElement
-                                            pointerEvents="none"
-                                            children={
-                                                <Circle
-                                                    size="15px"
-                                                    color="white"
-                                                    borderWidth="2px"
-                                                    borderColor="black"
-                                                ></Circle>
-                                            }
-                                        />
-                                        <Input
-                                            onChange={(e) =>
-                                                changeOptionInput(
-                                                    e,
-                                                    index,
-                                                    "option",
-                                                )
-                                            }
-                                            value={options[index][0]}
-                                            variant="flushed"
-                                            placeholder={`Option ${index + 1}`}
-                                            mr={"6"}
-                                            isTruncated
-                                        />
-                                        <InputRightElement width="4.5rem">
-                                            <CloseButton
-                                                name={questionId}
-                                                onClick={() =>
-                                                    onRemoveOption(
-                                                        questionId,
-                                                        index,
-                                                    )
+                                        <Heading
+                                            mb={"2"}
+                                            ml={"3"}
+                                            fontSize={"20"}
+                                            fontWeight="bold"
+                                        >
+                                            User Facing Options
+                                        </Heading>
+                                    </Flex>
+                                    {(options ?? []).map((option, index) => (
+                                        <InputGroup
+                                            key={`Multiple Choice: ${
+                                                questionId + index
+                                            }=${option.value}`}
+                                        >
+                                            <InputLeftElement
+                                                pointerEvents="none"
+                                                children={
+                                                    <Circle
+                                                        size="15px"
+                                                        color="white"
+                                                        borderWidth="2px"
+                                                        borderColor="black"
+                                                    ></Circle>
                                                 }
                                             />
-                                        </InputRightElement>
-                                    </InputGroup>
-                                ))}
-                                <Button
-                                    maxWidth={"120"}
-                                    variant="ghost"
-                                    onClick={() =>
-                                        onAddOption(questionId, "bottom")
-                                    }
-                                >
-                                    +Add Option
-                                </Button>
-                            </Stack>
-                            <Stack minWidth={"50%"} spacing={3}>
-                                <Flex
-                                    width={"full"}
-                                    justify={"right"}
-                                    wrap={"wrap"}
-                                >
-                                    <Heading fontSize={"20"} fontWeight="bold">
-                                        Corresponding Values
-                                    </Heading>
-                                    <Spacer></Spacer>
-                                    <ButtonGroup
-                                        ml={"1"}
-                                        mr={"5"}
-                                        size="sm"
-                                        isAttached
-                                        variant="outline"
-                                    >
-                                        <Button
-                                            value={alphanumeric[1]}
-                                            onClick={() =>
-                                                changeAlphanumeric(
-                                                    true,
-                                                    "value",
-                                                )
-                                            }
-                                            _hover={{
-                                                bg: alphanumeric[1]
-                                                    ? "black"
-                                                    : "white",
-                                            }}
-                                            color={
-                                                alphanumeric[1]
-                                                    ? "white"
-                                                    : "black"
-                                            }
-                                            background={
-                                                alphanumeric[1]
-                                                    ? "black"
-                                                    : "white"
-                                            }
-                                        >
-                                            Aa
-                                        </Button>
-                                        <Button
-                                            value={alphanumeric[1]}
-                                            onClick={() =>
-                                                changeAlphanumeric(
-                                                    false,
-                                                    "value",
-                                                )
-                                            }
-                                            _hover={{
-                                                bg: alphanumeric[1]
-                                                    ? "white"
-                                                    : "black",
-                                            }}
-                                            color={
-                                                alphanumeric[1]
-                                                    ? "black"
-                                                    : "white"
-                                            }
-                                            background={
-                                                alphanumeric[1]
-                                                    ? "white"
-                                                    : "black"
-                                            }
-                                        >
-                                            123
-                                        </Button>
-                                    </ButtonGroup>
-                                </Flex>
-                                {(options ?? []).map((option, index) => (
-                                    <InputGroup
-                                        key={`Corresponding Value: ${
-                                            questionId + index
-                                        }=${option.value}`}
-                                    >
-                                        <Input
-                                            onChange={(e) =>
-                                                changeOptionInput(
-                                                    e,
-                                                    index,
-                                                    "value",
-                                                )
-                                            }
-                                            value={options[index][1]}
-                                            variant="flushed"
-                                            placeholder={`Value ${index + 1}`}
-                                            mr={6}
-                                            isTruncated
-                                        />
-                                        <InputRightElement width="4.5rem">
-                                            <CloseButton
-                                                name={questionId}
-                                                onClick={() =>
-                                                    onRemoveOption(
-                                                        questionId,
+                                            <Input
+                                                onChange={(e) =>
+                                                    changeOptionInput(
+                                                        e,
                                                         index,
+                                                        "option",
                                                     )
                                                 }
+                                                value={options[index][0]}
+                                                variant="flushed"
+                                                placeholder={`Option ${
+                                                    index + 1
+                                                }`}
+                                                mr={"6"}
+                                                isTruncated
                                             />
-                                        </InputRightElement>
-                                    </InputGroup>
-                                ))}
-                            </Stack>
-                        </Flex>
+                                            <InputRightElement width="4.5rem">
+                                                <CloseButton
+                                                    name={questionId}
+                                                    onClick={() => {
+                                                        onRemoveOption(
+                                                            questionId,
+                                                            index,
+                                                            sliderUpperBound,
+                                                        );
+                                                        setSliderUpperBound(
+                                                            sliderUpperBound -
+                                                                1,
+                                                        );
+                                                        console.log(
+                                                            sliderUpperBound,
+                                                        );
+                                                    }}
+                                                />
+                                            </InputRightElement>
+                                        </InputGroup>
+                                    ))}
+                                    <Button
+                                        maxWidth={"120"}
+                                        variant="ghost"
+                                        onClick={() => {
+                                            onAddOption(questionId, "bottom");
+                                            setSliderUpperBound(options.length);
+                                            console.log(sliderUpperBound);
+                                        }}
+                                    >
+                                        +Add Option
+                                    </Button>
+                                </Stack>
+                                <Stack minWidth={"50%"} spacing={3}>
+                                    <Flex
+                                        width={"full"}
+                                        justify={"right"}
+                                        wrap={"wrap"}
+                                    >
+                                        <Heading
+                                            fontSize={"20"}
+                                            fontWeight="bold"
+                                        >
+                                            Corresponding Values
+                                        </Heading>
+                                        <Spacer></Spacer>
+                                        <ButtonGroup
+                                            ml={"1"}
+                                            mr={"5"}
+                                            size="sm"
+                                            isAttached
+                                            variant="outline"
+                                        >
+                                            <Button
+                                                value={alphanumeric}
+                                                onClick={() =>
+                                                    changeAlphanumeric(true)
+                                                }
+                                                _hover={{
+                                                    bg: alphanumeric
+                                                        ? "black"
+                                                        : "white",
+                                                }}
+                                                color={
+                                                    alphanumeric
+                                                        ? "white"
+                                                        : "black"
+                                                }
+                                                background={
+                                                    alphanumeric
+                                                        ? "black"
+                                                        : "white"
+                                                }
+                                            >
+                                                Aa
+                                            </Button>
+                                            <Button
+                                                value={alphanumeric}
+                                                onClick={() =>
+                                                    changeAlphanumeric(false)
+                                                }
+                                                _hover={{
+                                                    bg: alphanumeric
+                                                        ? "white"
+                                                        : "black",
+                                                }}
+                                                color={
+                                                    alphanumeric
+                                                        ? "black"
+                                                        : "white"
+                                                }
+                                                background={
+                                                    alphanumeric
+                                                        ? "white"
+                                                        : "black"
+                                                }
+                                            >
+                                                123
+                                            </Button>
+                                        </ButtonGroup>
+                                    </Flex>
+                                    {(options ?? []).map((option, index) => (
+                                        <InputGroup
+                                            key={`Corresponding Value: ${
+                                                questionId + index
+                                            }=${option.value}`}
+                                        >
+                                            <Input
+                                                onChange={(e) =>
+                                                    changeOptionInput(
+                                                        e,
+                                                        index,
+                                                        "value",
+                                                    )
+                                                }
+                                                value={options[index][1]}
+                                                variant="flushed"
+                                                placeholder={`Value ${
+                                                    index + 1
+                                                }`}
+                                                mr={6}
+                                                isTruncated
+                                            />
+                                            <InputRightElement width="4.5rem">
+                                                <CloseButton
+                                                    name={questionId}
+                                                    onClick={() => {
+                                                        onRemoveOption(
+                                                            questionId,
+                                                            index,
+                                                            sliderUpperBound,
+                                                        );
+                                                        setSliderUpperBound(
+                                                            options.length,
+                                                        );
+                                                        console.log(
+                                                            sliderUpperBound,
+                                                        );
+                                                    }}
+                                                />
+                                            </InputRightElement>
+                                        </InputGroup>
+                                    ))}
+                                </Stack>
+                            </Flex>
+                            <Stack>Cool</Stack>
+                        </>
                     )}
                     {type == "multi_select" && (
-                        <Flex width={"full"}>
-                            <Stack minWidth={"50%"} spacing={3}>
-                                <Flex width={"full"} wrap={"wrap"}>
+                        <Flex
+                            width={"full"}
+                            justifyContent={"left"}
+                            justify={"left"}
+                            justifySelf={"right"}
+                            alignItems={"flex-start"}
+                            alignContent={"flex-start"}
+                        >
+                            <Stack
+                                minWidth={"50%"}
+                                alignContent={"flex-start"}
+                                spacing={3}
+                            >
+                                <Flex
+                                    width={"full"}
+                                    justify={"right"}
+                                    wrap={"wrap"}
+                                >
                                     <Heading
+                                        mb={"2"}
                                         ml={"3"}
                                         fontSize={20}
                                         fontWeight="bold"
@@ -410,12 +487,19 @@ export const SelfCheckQuestionCard: React.FC = ({
                                         <InputRightElement width="4.5rem">
                                             <CloseButton
                                                 name={questionId}
-                                                onClick={() =>
+                                                onClick={() => {
                                                     onRemoveOption(
                                                         questionId,
                                                         index,
-                                                    )
-                                                }
+                                                        sliderUpperBound,
+                                                    );
+                                                    setSliderUpperBound(
+                                                        options.length,
+                                                    );
+                                                    console.log(
+                                                        sliderUpperBound,
+                                                    );
+                                                }}
                                             />
                                         </InputRightElement>
                                     </InputGroup>
@@ -423,9 +507,11 @@ export const SelfCheckQuestionCard: React.FC = ({
                                 <Button
                                     maxWidth={"120"}
                                     variant="ghost"
-                                    onClick={() =>
-                                        onAddOption(questionId, "bottom")
-                                    }
+                                    onClick={() => {
+                                        onAddOption(questionId, "bottom");
+                                        setSliderUpperBound(options.length);
+                                        console.log(sliderUpperBound);
+                                    }}
                                 >
                                     +Add Option
                                 </Button>
@@ -448,53 +534,39 @@ export const SelfCheckQuestionCard: React.FC = ({
                                         variant="outline"
                                     >
                                         <Button
-                                            value={alphanumeric[1]}
+                                            value={alphanumeric}
                                             onClick={() =>
-                                                changeAlphanumeric(
-                                                    true,
-                                                    "value",
-                                                )
+                                                changeAlphanumeric(true)
                                             }
                                             _hover={{
-                                                bg: alphanumeric[1]
+                                                bg: alphanumeric
                                                     ? "black"
                                                     : "white",
                                             }}
                                             color={
-                                                alphanumeric[1]
-                                                    ? "white"
-                                                    : "black"
+                                                alphanumeric ? "white" : "black"
                                             }
                                             background={
-                                                alphanumeric[1]
-                                                    ? "black"
-                                                    : "white"
+                                                alphanumeric ? "black" : "white"
                                             }
                                         >
                                             Aa
                                         </Button>
                                         <Button
-                                            value={alphanumeric[1]}
+                                            value={alphanumeric}
                                             onClick={() =>
-                                                changeAlphanumeric(
-                                                    false,
-                                                    "value",
-                                                )
+                                                changeAlphanumeric(false)
                                             }
                                             _hover={{
-                                                bg: alphanumeric[1]
+                                                bg: alphanumeric
                                                     ? "white"
                                                     : "black",
                                             }}
                                             color={
-                                                alphanumeric[1]
-                                                    ? "black"
-                                                    : "white"
+                                                alphanumeric ? "black" : "white"
                                             }
                                             background={
-                                                alphanumeric[1]
-                                                    ? "white"
-                                                    : "black"
+                                                alphanumeric ? "white" : "black"
                                             }
                                         >
                                             123
@@ -524,12 +596,19 @@ export const SelfCheckQuestionCard: React.FC = ({
                                         <InputRightElement width="4.5rem">
                                             <CloseButton
                                                 name={questionId}
-                                                onClick={() =>
+                                                onClick={() => {
                                                     onRemoveOption(
                                                         questionId,
                                                         index,
-                                                    )
-                                                }
+                                                        sliderUpperBound,
+                                                    );
+                                                    setSliderUpperBound(
+                                                        options.length,
+                                                    );
+                                                    console.log(
+                                                        sliderUpperBound,
+                                                    );
+                                                }}
                                             />
                                         </InputRightElement>
                                     </InputGroup>
@@ -538,37 +617,118 @@ export const SelfCheckQuestionCard: React.FC = ({
                         </Flex>
                     )}
                     {type == "short_answer" && (
-                        <Textarea
-                            height={"10"}
-                            maxHeight={"300"}
-                            resize={"vertical"}
-                            mr={"3"}
-                            disabled
-                            placeholder={"What the user sees!"}
-                            onChange={(e) => changeOptionInput(e, 0, "option")}
-                            value={""}
-                        />
+                        <HStack width={"full"} alignItems={"start"}>
+                            <Textarea
+                                height={"10"}
+                                maxHeight={"300"}
+                                resize={"vertical"}
+                                mr={"3"}
+                                disabled
+                                placeholder={
+                                    alphanumeric
+                                        ? "User can input all characters"
+                                        : "User can input only numbers"
+                                }
+                                value={""}
+                            />
+                            <ButtonGroup
+                                ml={"1"}
+                                mb={"auto"}
+                                mr={"5"}
+                                size="sm"
+                                isAttached
+                                variant="outline"
+                            >
+                                <Button
+                                    value={alphanumeric}
+                                    onClick={() => changeAlphanumeric(true)}
+                                    _hover={{
+                                        bg: alphanumeric ? "black" : "white",
+                                    }}
+                                    color={alphanumeric ? "white" : "black"}
+                                    background={
+                                        alphanumeric ? "black" : "white"
+                                    }
+                                >
+                                    Aa
+                                </Button>
+                                <Button
+                                    value={alphanumeric}
+                                    onClick={() => changeAlphanumeric(false)}
+                                    _hover={{
+                                        bg: alphanumeric ? "white" : "black",
+                                    }}
+                                    color={alphanumeric ? "black" : "white"}
+                                    background={
+                                        alphanumeric ? "white" : "black"
+                                    }
+                                >
+                                    123
+                                </Button>
+                            </ButtonGroup>
+                        </HStack>
                     )}
                     {type == "long_answer" && (
-                        <Textarea
-                            height={"10"}
-                            maxHeight={"300"}
-                            resize={"vertical"}
-                            mr={"3"}
-                            disabled
-                            placeholder={"What the user sees!"}
-                            onChange={(e) => changeOptionInput(e, 0, "option")}
-                            value={""}
-                        />
+                        <HStack width={"full"} alignItems={"start"}>
+                            <Textarea
+                                height={"10"}
+                                maxHeight={"300"}
+                                resize={"vertical"}
+                                mr={"3"}
+                                disabled
+                                placeholder={
+                                    alphanumeric
+                                        ? "User can input all characters"
+                                        : "User can input only numbers"
+                                }
+                                value={""}
+                            />
+                            <ButtonGroup
+                                ml={"1"}
+                                mb={"auto"}
+                                mr={"5"}
+                                size="sm"
+                                isAttached
+                                variant="outline"
+                            >
+                                <Button
+                                    value={alphanumeric}
+                                    onClick={() => changeAlphanumeric(true)}
+                                    _hover={{
+                                        bg: alphanumeric ? "black" : "white",
+                                    }}
+                                    color={alphanumeric ? "white" : "black"}
+                                    background={
+                                        alphanumeric ? "black" : "white"
+                                    }
+                                >
+                                    Aa
+                                </Button>
+                                <Button
+                                    value={alphanumeric}
+                                    onClick={() => changeAlphanumeric(false)}
+                                    _hover={{
+                                        bg: alphanumeric ? "white" : "black",
+                                    }}
+                                    color={alphanumeric ? "black" : "white"}
+                                    background={
+                                        alphanumeric ? "white" : "black"
+                                    }
+                                >
+                                    123
+                                </Button>
+                            </ButtonGroup>
+                        </HStack>
                     )}
                     {type == "slider" && (
-                        <Stack width={"50%"} ml={10}>
+                        <Stack width={"50%"} alignItems="left" ml={10}>
                             <Flex alignItems="center" direction="row">
                                 <Select
                                     minWidth={"50"}
                                     variant="flushed"
                                     onChange={(e) => {
                                         changeSliderLowerBound(e);
+                                        setSliderUpperBound(options.length);
                                     }}
                                     value={sliderLowerBound}
                                     mr={10}
@@ -582,8 +742,15 @@ export const SelfCheckQuestionCard: React.FC = ({
                                     variant="flushed"
                                     ml={"10"}
                                     mr={"6"}
-                                    onChange={(e) => changeSliderUpperBound(e)}
-                                    value={sliderUpperBound}
+                                    onChange={(e) => {
+                                        changeSliderUpperBound(e);
+                                        setSliderUpperBound(options.length);
+                                    }}
+                                    value={
+                                        sliderLowerBound == 0
+                                            ? options.length - 1
+                                            : options.length
+                                    }
                                 >
                                     <option value={2}>2</option>
                                     <option value={3}>3</option>
@@ -599,9 +766,9 @@ export const SelfCheckQuestionCard: React.FC = ({
                             <Stack>
                                 {(options ?? []).map((option, index) => (
                                     <Flex
-                                        key={`Slider: ${
-                                            questionId + index
-                                        }=${option}`}
+                                        key={`Slider: ${questionId + index}=${
+                                            option.value
+                                        }`}
                                     >
                                         {sliderLowerBound == 0 && (
                                             <Heading
@@ -633,9 +800,7 @@ export const SelfCheckQuestionCard: React.FC = ({
                                             }
                                             value={options[index][0]}
                                             variant="flushed"
-                                            placeholder="Label (Optional)"
-                                            width={"full"}
-                                            pl={"2"}
+                                            placeholder={"Label (Optional)"}
                                             mr={"6"}
                                             isTruncated
                                         />
@@ -683,7 +848,7 @@ export const SelfCheckQuestionCard: React.FC = ({
                                 Cancel
                             </Button>
                             <Button
-                                onClick={() => onRemoveQuestion(item._id)}
+                                onClick={() => onRemoveQuestion(questionId)}
                                 w={"100"}
                                 colorScheme="red"
                             >

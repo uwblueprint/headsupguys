@@ -28,18 +28,27 @@ const Home: React.FC = () => {
                 ["", ""],
                 ["", ""],
             ],
-            alphanumericInput: [true, true],
+            alphanumericInput: true,
             questionNumber: 1,
         },
     ]);
     const [count, setCount] = useState(1);
-    const [sliderLowerBound, setSliderLowerBound] = useState(1);
-    const [sliderUpperBound, setSliderUpperBound] = useState(3);
+
     const newSliderRange = [];
-    const changeQuestionType = (id, target) => {
+    const changeQuestionType = (
+        id,
+        target,
+        sliderLowerBound,
+        sliderUpperBound,
+    ) => {
         const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].type = target;
-
+        if (target == "slider") {
+            console.log(sliderLowerBound, sliderUpperBound);
+            if (sliderUpperBound < 3) {
+                changeSliderBounds(id, 3, sliderUpperBound);
+            }
+        }
         setQuestionList(newList);
     };
     const changeQuestionInput = (id, target) => {
@@ -47,12 +56,10 @@ const Home: React.FC = () => {
         newList[newList.findIndex((e) => e._id === id)].question = target;
         setQuestionList(newList);
     };
-    const changeAlphanumeric = (id, target, optionOrValue) => {
+    const changeAlphanumeric = (id, target) => {
         const newList = questionList.slice(0);
-        const changeIndex = optionOrValue == "option" ? 0 : 1;
-        newList[newList.findIndex((e) => e._id === id)].alphanumericInput[
-            changeIndex
-        ] = target;
+        newList[newList.findIndex((e) => e._id === id)].alphanumericInput =
+            target;
         setQuestionList(newList);
     };
     const changeOptionInput = (id, index, target, optionOrValue) => {
@@ -88,44 +95,22 @@ const Home: React.FC = () => {
         setQuestionList(newList);
     };
 
-    const changeSliderLowerBound = (id, target) => {
-        console.log(sliderUpperBound - target);
+    const changeSliderBounds = (id, target, sliderUpperBound) => {
         if (target == 0) {
             addOneOption(id, "top");
-        } else {
+        } else if (target == 1) {
             removeOneOption(id, 0);
-        }
-        setSliderLowerBound(target);
-    };
-
-    const changeSliderUpperBound = (id, target) => {
-        console.log(target, sliderUpperBound);
-        const newList = questionList.slice(0);
-        newList[newList.findIndex((e) => e._id === id)].options.splice(
-            target,
-            1,
-        );
-
-        if (target > sliderUpperBound) {
-            console.log(target - sliderUpperBound);
-            for (let i = 0; i < target - sliderUpperBound; i++) console.log(i);
-            addOneOption(id, "bottom");
-        } else {
-            console.log(target - sliderUpperBound);
-            for (
-                let i = sliderLowerBound;
-                i <= -(target - sliderUpperBound);
-                i++
-            ) {
-                console.log(i);1
-                newList[newList.findIndex((e) => e._id === id)].options.pop();
+        } else if (target - sliderUpperBound > 0) {
+            for (let i = 0; i < target - sliderUpperBound; i++) {
+                addOneOption(id, "bottom");
             }
-            setQuestionList(newList);
+        } else if (target - sliderUpperBound < 0) {
+            for (let j = 0; j > target - sliderUpperBound; j--) {
+                removeOneOption(id, -1);
+            }
+        } else {
+            console.log(target, sliderUpperBound);
         }
-        console.log(
-            questionList[questionList.findIndex((e) => e._id === id)].options,
-        );
-        setSliderUpperBound(target);
     };
     const moveQuesitonDown = (index) => {
         const newList = questionList.slice(0);
@@ -152,7 +137,7 @@ const Home: React.FC = () => {
                 ["", ""],
                 ["", ""],
             ],
-            alphanumericInput: [true, true],
+            alphanumericInput: true,
             questionNumber: count,
         };
         const newList = questionList.slice(0);
@@ -276,7 +261,6 @@ const Home: React.FC = () => {
                         question={item.question}
                         options={item.options}
                         key={index + item._id}
-                        item={item}
                         onChangeAlphanumeric={changeAlphanumeric}
                         onRemoveQuestion={removeOneQuestion}
                         onAddQuestion={addOneQuestion}
@@ -286,10 +270,7 @@ const Home: React.FC = () => {
                         onChangeOptionInput={changeOptionInput}
                         onRemoveOption={removeOneOption}
                         onAddOption={addOneOption}
-                        sliderLowerBound={sliderLowerBound}
-                        sliderUpperBound={sliderUpperBound}
-                        onChangeSliderUpperBound={changeSliderUpperBound}
-                        onChangeSliderLowerBound={changeSliderLowerBound}
+                        onChangeSliderBounds={changeSliderBounds}
                         onChangeQuestionType={changeQuestionType}
                     />
                 ))}

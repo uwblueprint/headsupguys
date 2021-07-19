@@ -1,9 +1,6 @@
 const Button = {
-    // The styles all button have in common
     baseStyle: {},
-    // Two sizes: sm and md
     sizes: {},
-    // Two variants: outline and solid
     variants: {
         default: {
             bg: "background.dark",
@@ -25,11 +22,6 @@ const Button = {
             _active: { bg: "brand.lime" },
         },
     },
-        outline: {
-            colorScheme: "black",
-        },
-    },
-    // The default size and variant values
     defaultProps: {
         variant: "default",
     },

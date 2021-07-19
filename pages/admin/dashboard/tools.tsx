@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 import {
     Stack,
-    Center,
     Flex,
     Text,
     Button,
     useDisclosure,
     Spacer,
 } from "@chakra-ui/react";
-
-import { ToolCard, Modal } from "@components";
+import { ToolCard, Modal, AdminLayout } from "@components";
 import toolsList from "data/tools";
+import { Page } from "types/Page";
 
-const ToolsPage: React.FC = () => {
+const ToolsPage: Page = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [toolsArray, setToolsArray] = useState([]);
 
@@ -59,7 +58,7 @@ const ToolsPage: React.FC = () => {
     }, []);
 
     return (
-        <Center>
+        <Stack spacing={8}>
             <Modal
                 isOpen={isOpen}
                 onCancel={onClose}
@@ -78,8 +77,8 @@ const ToolsPage: React.FC = () => {
                 confirmButtonColor={modalMode === "publish" ? `black` : `red`}
                 size="lg"
             />
-            <Flex direction="column" minH="100vh" pl="48px" pr="48px">
-                <Flex mt={10} wrap={"wrap"} justify={"left"} width={"full"}>
+            <Flex direction="column" minH="100vh">
+                <Flex wrap={"wrap"} justify={"left"} width={"full"}>
                     <Text mr={2} fontWeight="bold" fontSize="4xl">
                         Tools
                     </Text>
@@ -134,8 +133,9 @@ const ToolsPage: React.FC = () => {
                     })}
                 </Stack>
             </Flex>
-        </Center>
+        </Stack>
     );
 };
 
+ToolsPage.layout = AdminLayout;
 export default ToolsPage;

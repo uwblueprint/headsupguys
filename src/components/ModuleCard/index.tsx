@@ -6,20 +6,18 @@ import {
     Spacer,
     Text,
     Icon,
-    Box,
-    HStack,
-    VStack,
     Stack,
 } from "@chakra-ui/react";
 import { IoTrash } from "react-icons/io5";
 import { formatDaysAgo } from "src/utils/datetime/formatDaysAgo";
 
 export const ModuleCard: React.FC<{
+    title: string;
     tool?: string;
     lastUpdated?: Date;
     author?: string;
 }> = (props) => {
-    const { tool, lastUpdated, author } = props;
+    const { tool, lastUpdated, author, title } = props;
     return (
         <Flex
             direction="column"
@@ -30,7 +28,7 @@ export const ModuleCard: React.FC<{
             p={8}
         >
             <Flex mb={4} direction="row" alignItems="center">
-                <Heading size="lg">Module Title</Heading>
+                <Heading size="lg">{title}</Heading>
                 <Spacer />
                 <Icon as={IoTrash} w={8} h={8}></Icon>
             </Flex>
@@ -42,7 +40,7 @@ export const ModuleCard: React.FC<{
                     </Text>
                 ) : null}
                 <Text mb={0} textTransform="capitalize">
-                    Last Updated: {formatDaysAgo(lastUpdated)}
+                    Last Updated: {lastUpdated && formatDaysAgo(lastUpdated)}
                 </Text>
                 <Text>Created By: {author} </Text>
             </Stack>{" "}

@@ -1,6 +1,5 @@
 import React from "react";
 import { Flex, Heading, VStack, Spacer, Link } from "@chakra-ui/react";
-
 import NextLink from "next/link";
 const NAVBAR_WIDTH = "280px";
 

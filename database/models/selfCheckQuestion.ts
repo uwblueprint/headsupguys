@@ -43,4 +43,4 @@ const SelfCheckQuestion =
     models.SelfCheckQuestion ||
     model("SelfCheckQuestion", SelfCheckQuestionSchema, "self_check_questions");
 
-export { SelfCheckQuestion };
+export { SelfCheckQuestion, QuestionType };

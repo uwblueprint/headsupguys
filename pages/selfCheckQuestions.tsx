@@ -33,11 +33,9 @@ const Home: React.FC = () => {
         },
     ]);
     const [count, setCount] = useState(1);
+    const [sliderLowerBound, setSliderLowerBound] = useState(1);
+    const [sliderUpperBound, setSliderUpperBound] = useState(3);
     const newSliderRange = [];
-    for (let i = 1; i <= 3; i++) {
-        newSliderRange.push(i);
-    }
-    const [sliderRange, setSliderRange] = useState(newSliderRange);
     const changeQuestionType = (id, target) => {
         const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].type = target;
@@ -65,38 +63,69 @@ const Home: React.FC = () => {
         ] = target;
         setQuestionList(newList);
     };
-    const addOneOption = (id) => {
+    const addOneOption = (id, target) => {
         const newList = questionList.slice(0);
-        newList[newList.findIndex((e) => e._id === id)].options = [
-            ...newList[newList.findIndex((e) => e._id === id)].options,
-            ["", ""],
-        ];
+        if (target == "bottom") {
+            newList[newList.findIndex((e) => e._id === id)].options = [
+                ...newList[newList.findIndex((e) => e._id === id)].options,
+                ["", ""],
+            ];
+        } else {
+            newList[newList.findIndex((e) => e._id === id)].options = [
+                ["", ""],
+                ...newList[newList.findIndex((e) => e._id === id)].options,
+            ];
+        }
         setQuestionList(newList);
     };
 
-    const removeOneOption = (id, index) => {
+    const removeOneOption = (id, target) => {
         const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].options.splice(
-            index,
+            target,
             1,
         );
         setQuestionList(newList);
     };
-    const changeSliderRange = (id, lowerBound, upperBound) => {
-        const optionList = [];
-        const newList = questionList.slice(0);
-        lowerBound = parseInt(lowerBound);
-        upperBound = parseInt(upperBound);
-        const newSliderRange = [];
 
-        for (let i = lowerBound; i <= upperBound; i++) {
-            optionList.push("");
-            newSliderRange.push("");
+    const changeSliderLowerBound = (id, target) => {
+        console.log(sliderUpperBound - target);
+        if (target == 0) {
+            addOneOption(id, "top");
+        } else {
+            removeOneOption(id, 0);
         }
+        setSliderLowerBound(target);
+    };
 
-        newList[newList.findIndex((e) => e._id === id)].options = optionList;
-        setSliderRange(newSliderRange);
-        setQuestionList(newList);
+    const changeSliderUpperBound = (id, target) => {
+        console.log(target, sliderUpperBound);
+        const newList = questionList.slice(0);
+        newList[newList.findIndex((e) => e._id === id)].options.splice(
+            target,
+            1,
+        );
+
+        if (target > sliderUpperBound) {
+            console.log(target - sliderUpperBound);
+            for (let i = 0; i < target - sliderUpperBound; i++) console.log(i);
+            addOneOption(id, "bottom");
+        } else {
+            console.log(target - sliderUpperBound);
+            for (
+                let i = sliderLowerBound;
+                i <= -(target - sliderUpperBound);
+                i++
+            ) {
+                console.log(i);1
+                newList[newList.findIndex((e) => e._id === id)].options.pop();
+            }
+            setQuestionList(newList);
+        }
+        console.log(
+            questionList[questionList.findIndex((e) => e._id === id)].options,
+        );
+        setSliderUpperBound(target);
     };
     const moveQuesitonDown = (index) => {
         const newList = questionList.slice(0);
@@ -241,7 +270,6 @@ const Home: React.FC = () => {
                     <SelfCheckQuestionCard
                         questionId={item._id}
                         questionIndex={index}
-                        sliderRange={sliderRange}
                         selfCheckQuestionSize={selfCheckQuestionSize}
                         type={item.type}
                         alphanumeric={item.alphanumericInput}
@@ -258,7 +286,10 @@ const Home: React.FC = () => {
                         onChangeOptionInput={changeOptionInput}
                         onRemoveOption={removeOneOption}
                         onAddOption={addOneOption}
-                        onChangeSliderRange={changeSliderRange}
+                        sliderLowerBound={sliderLowerBound}
+                        sliderUpperBound={sliderUpperBound}
+                        onChangeSliderUpperBound={changeSliderUpperBound}
+                        onChangeSliderLowerBound={changeSliderLowerBound}
                         onChangeQuestionType={changeQuestionType}
                     />
                 ))}

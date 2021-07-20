@@ -82,12 +82,18 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                     hasArrow
                                     placement="top"
                                 >
-                                    <Button colorScheme="blackAlpha">
+                                    <Button
+                                        colorScheme="blackAlpha"
+                                        onClick={onPublish}
+                                    >
                                         Publish Tool
                                     </Button>
                                 </Tooltip>
                             ) : (
-                                <Button colorScheme="blackAlpha">
+                                <Button
+                                    colorScheme="blackAlpha"
+                                    onClick={onPublish}
+                                >
                                     {published
                                         ? "Unpublish Tool"
                                         : "Publish Tool"}
@@ -98,6 +104,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                     aria-label="Delete tool"
                                     variant="ghost"
                                     icon={<DeleteIcon />}
+                                    onClick={onDelete}
                                 />
                             )}
                         </Flex>

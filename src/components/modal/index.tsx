@@ -43,13 +43,13 @@ export const Modal: React.FC<ModalProps> = (props) => {
     return (
         <>
             <ChakraModal
+                size={size}
                 isCentered
                 onClose={onCancel}
                 isOpen={isOpen}
-                {...rest}
             >
                 <ModalOverlay />
-                <ModalContent p="8">
+                <ModalContent padding="8">
                     <ModalHeader fontSize="36" fontFamily="Geogrotesque Bold">
                         {header}
                     </ModalHeader>

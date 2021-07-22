@@ -70,6 +70,13 @@ const ResetPassword: React.FC = () => {
         }
     };
 
+    const isPasswordValid = (password) => {
+        var pattern = new RegExp(
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-+_!@#$%^&*.,?]).+$",
+        );
+        return pattern.test(password);
+    };
+
     const validatePassword = () => {
         if (newPassword == "") {
             // don't set as error state if it's currently empty
@@ -82,11 +89,7 @@ const ResetPassword: React.FC = () => {
             });
             setCanContinue(false);
         } else {
-            var pattern = new RegExp(
-                "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-+_!@#$%^&*.,?]).+$",
-            );
-
-            if (pattern.test(newPassword)) {
+            if (isPasswordValid(newPassword)) {
                 setPasswordRequirements({
                     isInvalid: false,
                     reason: "",
@@ -171,7 +174,10 @@ const ResetPassword: React.FC = () => {
                 isRequired
                 onChange={(event) => {
                     setConfirmationCode(event.currentTarget.value);
+                }}
+                onBlur={() => {
                     if (
+                        isPasswordValid(newPassword) &&
                         confirmPassword == newPassword &&
                         confirmationCode.length > 0
                     ) {

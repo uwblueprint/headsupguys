@@ -17,7 +17,7 @@ const post = async (
 
     //If the module contains a tool id...
     if (req.body.toolID) {
-        //If said tool id is present but invalid (not and object ID, return and error)
+        //If said tool id is present but invalid (not an object ID, return and error)
         const tool = await Tool.findById(req.body.toolID).catch((err) =>
             res.status(400).send(err),
         );

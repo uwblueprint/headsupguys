@@ -3,6 +3,7 @@ import { Flex, Box, Heading, Text, Link } from "@chakra-ui/react";
 import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Auth } from "aws-amplify";
+import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 
 import { TextInput, PasswordInput, AuthButton } from "@components";
 
@@ -21,13 +22,13 @@ const Login: React.FC = () => {
     const [canContinue, setCanContinue] = useState(false);
 
     const userExist = async (email) => {
+        
         return await Auth.signIn(email.toLowerCase(), "123")
             .then((res) => {
                 return false;
             })
             .catch((error) => {
-                const code = error.code;
-                switch (code) {
+                switch ((error.code)) {
                     case "UserNotFoundException":
                         return false;
                     case "NotAuthorizedException":
@@ -80,7 +81,7 @@ const Login: React.FC = () => {
         <>
             <AuthButton
                 text={"Login with Google"}
-                onClick={() => Auth.federatedSignIn({ provider: "Google" })}
+                onClick={() => Auth.federatedSignIn({provider: "Google"})}
             ></AuthButton>
 
             <Text m={5}>OR</Text>
@@ -104,7 +105,7 @@ const Login: React.FC = () => {
         <>
             <AuthButton
                 text={"Login with Google"}
-                onClick={() => Auth.federatedSignIn({ provider: "Google" })}
+                onClick={() => Auth.federatedSignIn({provider: CognitoHostedUIIdentityProvider.Google})}
             ></AuthButton>
             <PasswordInput
                 fontFamily="Geogrotesque"

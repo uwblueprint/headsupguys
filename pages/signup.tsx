@@ -312,7 +312,9 @@ const Signup: React.FC = () => {
                     setCanContinue(true);
                     setCurrStage(currStage + 1); // jump to next stage
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.log("nothing")
+            }
         } else {
             // go to "Get Started" link
             router.push("/"); // temporary link back to "/"

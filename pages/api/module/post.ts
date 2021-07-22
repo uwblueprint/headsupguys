@@ -10,7 +10,7 @@ const post = async (
 ): Promise<void> => {
     if (!req.body.title)
         return res
-            .status(404)
+            .status(400)
             .send({ error: "Please provide your module with a title." });
     const module = new Module({
         title: req.body.title,
@@ -20,12 +20,12 @@ const post = async (
         editing: req.body.editing,
     });
     if (module.toolID) {
-        const tool = await Tool.findById(module.toolID).exec();
+        const tool = await Tool.findById(module.toolID);
         if (tool) {
             tool.moduleID = module.id;
             await tool.save();
         } else {
-            return res.status(404).send({
+            return res.status(400).send({
                 error: "Invalid toolID.",
             });
         }

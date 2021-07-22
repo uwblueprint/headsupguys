@@ -7,7 +7,7 @@ const del = async (
     res: NextApiResponse<ErrorResponse>,
 ): Promise<void> => {
     const { id } = req.query;
-    const module = await Module.findByIdAndDelete(id).exec();
+    const module = await Module.findByIdAndDelete(id);
 
     if (!module)
         return res

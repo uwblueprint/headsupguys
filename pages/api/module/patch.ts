@@ -7,7 +7,7 @@ const patch = async (
     res: NextApiResponse<ModuleInterface | ErrorResponse>,
 ): Promise<void> => {
     const { id } = req.query;
-    const module = await Module.findById(id).exec();
+    const module = await Module.findById(id);
 
     if (!module)
         return res

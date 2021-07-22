@@ -7,10 +7,10 @@ const get = async (
     res: NextApiResponse<ModuleInterface | ErrorResponse>,
 ): Promise<void> => {
     const { id } = req.query;
-    const module = await Module.findById(id).exec();
+    const module = await Module.findById(id);
     if (!module)
         return res
-            .status(404)
+            .status(400)
             .send({ error: "The module with the given ID was not found." });
 
     res.status(200).json(module);

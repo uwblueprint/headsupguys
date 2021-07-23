@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     SimpleGrid,
     Box,
@@ -104,7 +104,11 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                             hasArrow
                                             placement="top"
                                         >
-                                            <Button isDisabled _hover="none">
+                                            <Button
+                                                isDisabled
+                                                _hover="none"
+                                                onClick={onPublish}
+                                            >
                                                 Publish Tool
                                             </Button>
                                         </Tooltip>

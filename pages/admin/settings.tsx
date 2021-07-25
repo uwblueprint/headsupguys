@@ -28,7 +28,7 @@ const SettingsPage: React.FC = () => {
         useTable({ columns, data });
 
     const table = (
-        <table {...getTableProps()} style={{ border: "solid 1px blue" }}>
+        <table {...getTableProps()}>
             <thead>
                 {headerGroups.map((headerGroup) => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
@@ -36,10 +36,10 @@ const SettingsPage: React.FC = () => {
                             <th
                                 {...column.getHeaderProps()}
                                 style={{
-                                    borderBottom: "solid 3px red",
-                                    background: "aliceblue",
-                                    color: "black",
-                                    fontWeight: "bold",
+                                    borderBottom: "solid 3px gainsboro",
+                                    textAlign: "left",
+                                    paddingBottom: "10px",
+                                    fontFamily: "Geogrotesque Bold",
                                 }}
                             >
                                 {column.render("Header")}
@@ -48,7 +48,12 @@ const SettingsPage: React.FC = () => {
                     </tr>
                 ))}
             </thead>
-            <tbody {...getTableBodyProps()}>
+            <tbody
+                {...getTableBodyProps()}
+                style={{
+                    borderBottom: "solid 2px gainsboro",
+                }}
+            >
                 {rows.map((row) => {
                     prepareRow(row);
                     return (
@@ -58,9 +63,7 @@ const SettingsPage: React.FC = () => {
                                     <td
                                         {...cell.getCellProps()}
                                         style={{
-                                            padding: "10px",
-                                            border: "solid 1px gray",
-                                            background: "papayawhip",
+                                            padding: "10px 0px",
                                         }}
                                     >
                                         {cell.render("Cell")}
@@ -79,7 +82,7 @@ const SettingsPage: React.FC = () => {
             <Text fontWeight="bold" fontSize="4xl" color="brand.green">
                 Settings
             </Text>
-            <Flex>
+            <Flex marginBottom="8">
                 <Text>User Management</Text>
                 <Spacer />
                 <Button minWidth="140">Add User</Button>

@@ -43,10 +43,10 @@ export const Modal: React.FC<ModalProps> = (props) => {
     return (
         <>
             <ChakraModal
-                size={size}
                 isCentered
                 onClose={onCancel}
                 isOpen={isOpen}
+                {...rest}
             >
                 <ModalOverlay />
                 <ModalContent padding="8">

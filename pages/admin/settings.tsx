@@ -1,14 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { Flex, Text, Button, useDisclosure, Spacer } from "@chakra-ui/react";
+import React from "react";
+import { Flex, Text, Button, Spacer, Image } from "@chakra-ui/react";
 import { useTable } from "react-table";
-import { Modal } from "@components";
 import adminUsers from "data/adminUsers";
 
 const SettingsPage: React.FC = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const data = React.useMemo(() => adminUsers, []);
     const columns = React.useMemo(
         () => [
+            {
+                Header: "EDIT",
+                accessor: "[row identifier to be passed to button]",
+                Cell: ({ value }) => (
+                    <Image
+                        src="/icons/edit.svg"
+                        width="4"
+                        height="4"
+                        marginLeft="2"
+                        onClick={() => console.log(value)} // TODO value is undefined
+                    />
+                ),
+            },
             {
                 Header: "USER NAME",
                 accessor: "name", // accessor is the "key" in the data
@@ -20,6 +31,19 @@ const SettingsPage: React.FC = () => {
             {
                 Header: "USER ROLE",
                 accessor: "role",
+            },
+            {
+                Header: "DELETE",
+                accessor: "blah",
+                Cell: ({ value }) => (
+                    <Image
+                        src="/icons/delete.svg"
+                        width="4"
+                        height="4"
+                        marginLeft="4"
+                        onClick={() => console.log(value)}
+                    />
+                ),
             },
         ],
         [],

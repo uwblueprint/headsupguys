@@ -10,13 +10,15 @@ const SettingsPage: React.FC = () => {
             {
                 Header: "EDIT",
                 accessor: "[row identifier to be passed to button]",
-                Cell: ({ value }) => (
+                Cell: ({ row }) => (
                     <Image
                         src="/icons/edit.svg"
                         width="4"
                         height="4"
                         marginLeft="2"
-                        onClick={() => console.log(value)} // TODO value is undefined
+                        onClick={() =>
+                            console.log(`edit row with id: ${row.id}`)
+                        }
                     />
                 ),
             },
@@ -35,13 +37,15 @@ const SettingsPage: React.FC = () => {
             {
                 Header: "DELETE",
                 accessor: "blah",
-                Cell: ({ value }) => (
+                Cell: ({ row }) => (
                     <Image
                         src="/icons/delete.svg"
                         width="4"
                         height="4"
                         marginLeft="4"
-                        onClick={() => console.log(value)}
+                        onClick={() =>
+                            console.log(`delete row with id: ${row.id}`)
+                        }
                     />
                 ),
             },

@@ -298,7 +298,7 @@ const Signup: React.FC = () => {
             try {
                 if (!fromGoogle) {
                     // Create new user with Cognito (if not going through google flow)
-                    const newUser = await Auth.signUp({
+                    await Auth.signUp({
                         username: email,
                         password: password,
                         attributes: {
@@ -313,7 +313,7 @@ const Signup: React.FC = () => {
                     setCurrStage(currStage + 1); // jump to next stage
                 }
             } catch (e) {
-                console.log("nothing")
+                // console.log("nothing");
             }
         } else {
             // go to "Get Started" link

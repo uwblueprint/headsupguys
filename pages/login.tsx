@@ -22,13 +22,12 @@ const Login: React.FC = () => {
     const [canContinue, setCanContinue] = useState(false);
 
     const userExist = async (email) => {
-        
         return await Auth.signIn(email.toLowerCase(), "123")
             .then((res) => {
                 return false;
             })
             .catch((error) => {
-                switch ((error.code)) {
+                switch (error.code) {
                     case "UserNotFoundException":
                         return false;
                     case "NotAuthorizedException":
@@ -43,7 +42,7 @@ const Login: React.FC = () => {
 
     const validateEmail = async () => {
         if (isEmail(email)) {
-            var emailExists = await userExist(email);
+            const emailExists = await userExist(email);
             if (!emailExists) {
                 setEmailInvalid({
                     isInvalid: true,
@@ -81,7 +80,7 @@ const Login: React.FC = () => {
         <>
             <AuthButton
                 text={"Login with Google"}
-                onClick={() => Auth.federatedSignIn({provider: "Google"})}
+                onClick={() => Auth.federatedSignIn({ provider: "Google" })}
             ></AuthButton>
 
             <Text m={5}>OR</Text>
@@ -105,7 +104,11 @@ const Login: React.FC = () => {
         <>
             <AuthButton
                 text={"Login with Google"}
-                onClick={() => Auth.federatedSignIn({provider: CognitoHostedUIIdentityProvider.Google})}
+                onClick={() =>
+                    Auth.federatedSignIn({
+                        provider: CognitoHostedUIIdentityProvider.Google,
+                    })
+                }
             ></AuthButton>
             <PasswordInput
                 fontFamily="Geogrotesque"

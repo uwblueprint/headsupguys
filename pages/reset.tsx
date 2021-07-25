@@ -50,7 +50,7 @@ const ResetPassword: React.FC = () => {
 
     const validateEmail = async () => {
         if (isEmail(email)) {
-            var emailExists = await userExist(email);
+            const emailExists = await userExist(email);
             if (!emailExists) {
                 setEmailInvalid({
                     isInvalid: true,
@@ -71,7 +71,7 @@ const ResetPassword: React.FC = () => {
     };
 
     const isPasswordValid = (password) => {
-        var pattern = new RegExp(
+        const pattern = new RegExp(
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-+_!@#$%^&*.,?]).+$",
         );
         return pattern.test(password);

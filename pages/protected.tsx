@@ -29,7 +29,7 @@ const Protected: React.FC<ProtectedProps> = ({ username }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     const { Auth } = withSSRContext({ req });
     try {
-        const user = await Auth.currentAuthenticatedUser(); // api call to aws
+        const user = await Auth.currentAuthenticatedUser(); // retrieve user session
         return {
             props: {
                 authenticated: true,

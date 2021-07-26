@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Flex, Box, Heading, Text, Icon } from "@chakra-ui/react";
 import isEmail from "validator/lib/isEmail";
-import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { ChevronLeftIcon, WarningIcon } from "@chakra-ui/icons";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import {
     TextInput,
@@ -75,7 +75,7 @@ const Signup: React.FC = () => {
             setEmailInvalid({ isInvalid: false, reason: "" });
             setCanContinue(false);
         } else if (isEmail(email)) {
-            //Check if account already exists
+            // Check if account already exists
             const emailExists = await userExist(email);
             if (emailExists) {
                 setEmailInvalid({
@@ -287,24 +287,41 @@ const Signup: React.FC = () => {
             ),
             buttonText: "Get started",
         },
+        {
+            component: (
+                <Box mt={24}>
+                    <WarningIcon w={24} h={24} color="red.500" mb={3} />
+                    <Heading>Uh oh! There seems to be a problem</Heading>
+                </Box>
+            ),
+            buttonText: "Try Again",
+        },
     ];
 
     const incrementStage = async () => {
-        if (currStage < stages.length - 2) {
+        if (currStage < stages.length - 3) {
+            // before Terms Agreement
             setCanContinue(false);
             stages[currStage + 1].validation();
             setCurrStage(currStage + 1);
-        } else if (currStage == stages.length - 2) {
+        } else if (currStage == stages.length - 3) {
+            // Terms Agreement stage
             try {
                 if (!fromGoogle) {
                     // Create new user with Cognito (if not going through google flow)
-                    await Auth.signUp({
-                        username: email,
-                        password: password,
-                        attributes: {
-                            name: name,
-                        },
-                    });
+                    try {
+                        await Auth.signUp({
+                            username: email,
+                            password: password,
+                            attributes: {
+                                name: name,
+                            },
+                        });
+                        await Auth.signIn(email, password); // immediately sign in the user
+                    } catch (err) {
+                        console.log("signup failed", err);
+                        setCurrStage(stages.length - 1); // push to error stage
+                    }
                 }
                 if (termsAgreement.participateSurvey) {
                     router.push("/demographic"); // jump to demographic survey
@@ -315,9 +332,13 @@ const Signup: React.FC = () => {
             } catch (e) {
                 // console.log("nothing");
             }
-        } else {
-            // go to "Get Started" link
-            router.push("/"); // temporary link back to "/"
+        } else if (currStage == stages.length - 2) {
+            // Get Started stage
+            router.push("/protected"); // temporary link back to protected page
+        } else if (currStage == stages.length - 1) {
+            // Error state
+            setCurrStage(2); // push back to password stage
+            setCanContinue(true);
         }
     };
 
@@ -352,7 +373,7 @@ const Signup: React.FC = () => {
             {currStage < stages.length - 1 && (
                 <ProgressDots
                     m={5}
-                    numStages={stages.length - 1}
+                    numStages={stages.length - 2}
                     currStage={currStage}
                 />
             )}

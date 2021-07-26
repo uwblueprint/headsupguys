@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { Flex, Box, Heading, Text, Link } from "@chakra-ui/react";
 import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
@@ -8,6 +9,7 @@ import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 import { TextInput, PasswordInput, AuthButton } from "@components";
 
 const Login: React.FC = () => {
+    const router = useRouter();
     const [currStage, setCurrStage] = useState(0);
     const [email, setEmail] = useState("");
     const [emailInvalid, setEmailInvalid] = useState({
@@ -67,7 +69,7 @@ const Login: React.FC = () => {
         try {
             setPasswordInvalid({ isInvalid: false, reason: "" });
             await Auth.signIn(email, password);
-            incrementStage();
+            router.push("/protected");
         } catch (e) {
             setPasswordInvalid({
                 isInvalid: true,
@@ -135,14 +137,6 @@ const Login: React.FC = () => {
             title: "Log In",
             component: loginPasswordStage,
             buttonText: "Continue",
-        },
-        {
-            title: "Protected Route", // will need to change this
-            component: (
-                <Box>
-                    <Text>You are now logged in!</Text>
-                </Box>
-            ),
         },
     ];
 

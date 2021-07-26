@@ -4,7 +4,6 @@ import { Flex, Box, Heading, Text, Link } from "@chakra-ui/react";
 import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Auth } from "aws-amplify";
-import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 
 import { TextInput, PasswordInput, AuthButton } from "@components";
 
@@ -106,11 +105,7 @@ const Login: React.FC = () => {
         <>
             <AuthButton
                 text={"Login with Google"}
-                onClick={() =>
-                    Auth.federatedSignIn({
-                        provider: CognitoHostedUIIdentityProvider.Google,
-                    })
-                }
+                onClick={() => Auth.federatedSignIn({ provider: "Google" })}
             ></AuthButton>
             <PasswordInput
                 fontFamily="Geogrotesque"
@@ -123,7 +118,7 @@ const Login: React.FC = () => {
                     setPassword(event.currentTarget.value);
                 }}
             />
-            <Link href="/signup">Forgot Password?</Link>
+            <Link href="/reset">Forgot Password?</Link>
         </>
     );
 

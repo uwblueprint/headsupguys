@@ -1,10 +1,18 @@
 import React, { FunctionComponent } from "react";
 import { Box, useTheme } from "@chakra-ui/react";
-
+import { Auth } from "aws-amplify";
 import { AuthButton } from "@components";
 
 interface Props {
     title?: string;
+}
+
+async function signOut() {
+    try {
+        await Auth.signOut();
+    } catch (error) {
+        console.log("error signing out: ", error);
+    }
 }
 
 export const Main: FunctionComponent<Props> = (props: Props) => {
@@ -15,11 +23,7 @@ export const Main: FunctionComponent<Props> = (props: Props) => {
             <p style={{ fontSize: theme.fontSizes["lg"] }}>
                 {props.title || `The frontend boilerplate with superpowers!`}
             </p>
-            <AuthButton>
-                <a href="https://pankod.github.io/superplate/" target="_blank">
-                    Docs
-                </a>
-            </AuthButton>
+            <AuthButton text="Log out" onClick={signOut}></AuthButton>
         </Box>
     );
 };

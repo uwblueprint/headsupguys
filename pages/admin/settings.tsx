@@ -1,24 +1,45 @@
 import React from "react";
-import { Flex, Text, Button, Spacer, Image } from "@chakra-ui/react";
+import {
+    Flex,
+    Text,
+    Button,
+    Spacer,
+    Image,
+    useDisclosure,
+} from "@chakra-ui/react";
 import { useTable } from "react-table";
 import adminUsers from "data/adminUsers";
+import { Modal } from "@components/modal";
 
 const SettingsPage: React.FC = () => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const onAddClick = () => {
+        onOpen();
+    };
+
+    const onEditClick = (index: number) => {
+        console.log(`edit row with index: ${index}`);
+        onOpen();
+    };
+
+    const onDeleteClick = (index: number) => {
+        console.log(`delete row with index: ${index}`);
+        onOpen();
+    };
+
     const data = React.useMemo(() => adminUsers, []);
     const columns = React.useMemo(
         () => [
             {
                 Header: "EDIT",
-                accessor: "[row identifier to be passed to button]",
                 Cell: ({ row }) => (
                     <Image
                         src="/icons/edit.svg"
                         width="4"
                         height="4"
                         marginLeft="2"
-                        onClick={() =>
-                            console.log(`edit row with id: ${row.id}`)
-                        }
+                        onClick={() => onEditClick(row.index)}
                     />
                 ),
             },
@@ -36,16 +57,13 @@ const SettingsPage: React.FC = () => {
             },
             {
                 Header: "DELETE",
-                accessor: "blah",
                 Cell: ({ row }) => (
                     <Image
                         src="/icons/delete.svg"
                         width="4"
                         height="4"
                         marginLeft="4"
-                        onClick={() =>
-                            console.log(`delete row with id: ${row.id}`)
-                        }
+                        onClick={() => onDeleteClick(row.index)}
                     />
                 ),
             },
@@ -107,13 +125,24 @@ const SettingsPage: React.FC = () => {
 
     return (
         <Flex direction="column" padding="16">
+            <Modal
+                header="TEST"
+                isOpen={isOpen}
+                onConfirm={() => {
+                    console.log("CONFIRM");
+                    onClose();
+                }}
+                onCancel={onClose}
+            ></Modal>
             <Text fontWeight="bold" fontSize="4xl" color="brand.green">
                 Settings
             </Text>
             <Flex marginBottom="8">
                 <Text>User Management</Text>
                 <Spacer />
-                <Button minWidth="140">Add User</Button>
+                <Button minWidth="140" onClick={onAddClick}>
+                    Add User
+                </Button>
             </Flex>
             {table}
         </Flex>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Flex,
     Text,
@@ -11,20 +11,31 @@ import { useTable } from "react-table";
 import adminUsers from "data/adminUsers";
 import { Modal } from "@components/modal";
 
+enum ModalType {
+    ADD = "add",
+    EDIT = "edit",
+    DELETE = "delete",
+}
+
 const SettingsPage: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [modalType, setModalType] = useState(ModalType.ADD);
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
     const onAddClick = () => {
+        setModalType(ModalType.ADD);
         onOpen();
     };
 
     const onEditClick = (index: number) => {
-        console.log(`edit row with index: ${index}`);
+        setModalType(ModalType.EDIT);
+        setSelectedIndex(index);
         onOpen();
     };
 
     const onDeleteClick = (index: number) => {
-        console.log(`delete row with index: ${index}`);
+        setModalType(ModalType.DELETE);
+        setSelectedIndex(index);
         onOpen();
     };
 
@@ -123,17 +134,52 @@ const SettingsPage: React.FC = () => {
         </table>
     );
 
+    const generateModal = (type: ModalType) => {
+        switch (type) {
+            case ModalType.ADD:
+                return (
+                    <Modal
+                        header="Add Admin"
+                        isOpen={isOpen}
+                        onConfirm={() => {
+                            onClose();
+                        }}
+                        onCancel={onClose}
+                    ></Modal>
+                );
+                break;
+            case ModalType.EDIT:
+                return (
+                    <Modal
+                        header="Edit User"
+                        isOpen={isOpen}
+                        onConfirm={() => {
+                            onClose();
+                        }}
+                        onCancel={onClose}
+                    ></Modal>
+                );
+                break;
+            case ModalType.DELETE:
+                return (
+                    <Modal
+                        header={`Delete ${data[selectedIndex].name}`}
+                        isOpen={isOpen}
+                        onConfirm={() => {
+                            onClose();
+                        }}
+                        onCancel={onClose}
+                    ></Modal>
+                );
+                break;
+            default:
+                break;
+        }
+    };
+
     return (
         <Flex direction="column" padding="16">
-            <Modal
-                header="TEST"
-                isOpen={isOpen}
-                onConfirm={() => {
-                    console.log("CONFIRM");
-                    onClose();
-                }}
-                onCancel={onClose}
-            ></Modal>
+            {generateModal(modalType)}
             <Text fontWeight="bold" fontSize="4xl" color="brand.green">
                 Settings
             </Text>

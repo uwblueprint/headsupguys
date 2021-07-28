@@ -134,6 +134,10 @@ const SettingsPage: React.FC = () => {
         </table>
     );
 
+    const commonModalProps = {
+        size: "xl",
+    };
+
     const generateModal = (type: ModalType) => {
         switch (type) {
             case ModalType.ADD:
@@ -145,6 +149,7 @@ const SettingsPage: React.FC = () => {
                             onClose();
                         }}
                         onCancel={onClose}
+                        {...commonModalProps}
                     ></Modal>
                 );
                 break;
@@ -157,6 +162,7 @@ const SettingsPage: React.FC = () => {
                             onClose();
                         }}
                         onCancel={onClose}
+                        {...commonModalProps}
                     ></Modal>
                 );
                 break;
@@ -169,6 +175,8 @@ const SettingsPage: React.FC = () => {
                             onClose();
                         }}
                         onCancel={onClose}
+                        confirmButtonColorScheme="red"
+                        {...commonModalProps}
                     ></Modal>
                 );
                 break;

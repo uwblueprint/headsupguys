@@ -152,7 +152,6 @@ const SettingsPage: React.FC = () => {
                         {...commonModalProps}
                     ></Modal>
                 );
-                break;
             case ModalType.EDIT:
                 return (
                     <Modal
@@ -165,7 +164,6 @@ const SettingsPage: React.FC = () => {
                         {...commonModalProps}
                     ></Modal>
                 );
-                break;
             case ModalType.DELETE:
                 return (
                     <Modal
@@ -179,7 +177,6 @@ const SettingsPage: React.FC = () => {
                         {...commonModalProps}
                     ></Modal>
                 );
-                break;
             default:
                 break;
         }

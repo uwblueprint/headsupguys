@@ -1,22 +1,22 @@
 const adminUsers = [
     {
-        name: "Admin Name",
-        email: "admin@gmail.com",
+        name: "Demeter Maxine",
+        email: "admin1@gmail.com",
         role: "ADMIN",
     },
     {
-        name: "Admin Name",
-        email: "admin@gmail.com",
+        name: "Palmira Breana",
+        email: "admin2@gmail.com",
         role: "ADMIN",
     },
     {
-        name: "Admin Name",
-        email: "admin@gmail.com",
+        name: "Amal Miran",
+        email: "admin3@gmail.com",
         role: "SUPER ADMIN",
     },
     {
-        name: "Admin Name",
-        email: "admin@gmail.com",
+        name: "Olympia Tola",
+        email: "admin4@gmail.com",
         role: "ADMIN",
     },
 ];

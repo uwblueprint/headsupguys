@@ -2,10 +2,10 @@ import { Modal, ModalProps } from "@components/modal";
 import React from "react";
 
 const AddModal: React.FC<ModalProps> = (props) => {
-    const { ...rest } = props;
+    const modalProps = { size: "xl", ...props };
 
     return (
-        <Modal header="Add Admin" size="xl" {...rest}>
+        <Modal header="Add Admin" {...modalProps}>
             {props.children}
         </Modal>
     );

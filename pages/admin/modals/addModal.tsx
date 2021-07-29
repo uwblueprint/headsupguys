@@ -1,13 +1,7 @@
-import { Modal } from "@components/modal";
+import { Modal, ModalProps } from "@components/modal";
 import React from "react";
 
-export interface AddModalProps {
-    isOpen: boolean;
-    onCancel: () => void;
-    onConfirm: () => void;
-}
-
-const AddModal: React.FC<AddModalProps> = (props) => {
+const AddModal: React.FC<ModalProps> = (props) => {
     const { isOpen, onCancel, onConfirm, ...rest } = props;
 
     return (
@@ -17,6 +11,7 @@ const AddModal: React.FC<AddModalProps> = (props) => {
             onConfirm={onConfirm}
             onCancel={onCancel}
             size="xl"
+            {...rest}
         >
             {props.children}
         </Modal>

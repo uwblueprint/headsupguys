@@ -15,7 +15,7 @@ export interface ModalProps {
     isOpen: boolean;
     onCancel: () => void;
     onConfirm: () => void;
-    header: string;
+    header?: string;
     bodyText?: string;
     cancelText?: string;
     confirmText?: string;

@@ -44,9 +44,11 @@ export const Modal: React.FC<ModalProps> = (props) => {
         <ChakraModal isCentered onClose={onCancel} isOpen={isOpen} {...rest}>
             <ModalOverlay />
             <ModalContent padding="8">
-                <ModalHeader fontSize="36" fontFamily="Geogrotesque Bold">
-                    {header}
-                </ModalHeader>
+                {header && (
+                    <ModalHeader fontSize="36" fontFamily="Geogrotesque Bold">
+                        {header}
+                    </ModalHeader>
+                )}
                 <ModalBody>
                     {bodyText && <Text fontSize="lg">{bodyText}</Text>}
                     {props.children}

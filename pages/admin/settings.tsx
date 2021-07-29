@@ -196,6 +196,7 @@ const SettingsPage: React.FC = () => {
                         onClose();
                     }}
                     onCancel={onClose}
+                    header={`Delete ${data[selectedIndex].name}`}
                 >
                     {deleteModalContent}
                 </DeleteModal>

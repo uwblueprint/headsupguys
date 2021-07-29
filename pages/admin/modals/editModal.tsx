@@ -1,18 +1,18 @@
 import { Modal } from "@components/modal";
 import React from "react";
 
-export interface AddModalProps {
+export interface EditModalProps {
     isOpen: boolean;
     onCancel: () => void;
     onConfirm: () => void;
 }
 
-const AddModal: React.FC<AddModalProps> = (props) => {
+const EditModal: React.FC<EditModalProps> = (props) => {
     const { isOpen, onCancel, onConfirm, ...rest } = props;
 
     return (
         <Modal
-            header="Add Admin"
+            header="Edit User"
             isOpen={isOpen}
             onConfirm={onConfirm}
             onCancel={onCancel}
@@ -23,4 +23,4 @@ const AddModal: React.FC<AddModalProps> = (props) => {
     );
 };
 
-export default AddModal;
+export default EditModal;

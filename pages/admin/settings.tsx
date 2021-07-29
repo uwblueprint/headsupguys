@@ -14,6 +14,7 @@ import { Modal } from "@components/modal";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { TextInput } from "@components/textInput";
 import AddModal from "./modals/addModal";
+import EditModal from "./modals/editModal";
 
 enum ModalType {
     ADD = "add",
@@ -137,11 +138,15 @@ const SettingsPage: React.FC = () => {
         </table>
     );
 
-    const commonModalProps = {
-        size: "xl",
-    };
-
     const addModalContent = (
+        <TextInput
+            name="email"
+            label="Email"
+            errorMessage="This email already"
+        ></TextInput>
+    );
+
+    const editModalContent = (
         <TextInput
             name="email"
             label="Email"
@@ -151,18 +156,6 @@ const SettingsPage: React.FC = () => {
 
     const generateModal = (type: ModalType) => {
         switch (type) {
-            case ModalType.EDIT:
-                return (
-                    <Modal
-                        header="Edit User"
-                        isOpen={isOpen}
-                        onConfirm={() => {
-                            onClose();
-                        }}
-                        onCancel={onClose}
-                        {...commonModalProps}
-                    ></Modal>
-                );
             case ModalType.DELETE:
                 return (
                     <Modal
@@ -173,7 +166,6 @@ const SettingsPage: React.FC = () => {
                         }}
                         onCancel={onClose}
                         confirmButtonColorScheme="red"
-                        {...commonModalProps}
                     ></Modal>
                 );
             default:
@@ -194,6 +186,17 @@ const SettingsPage: React.FC = () => {
                 >
                     {addModalContent}
                 </AddModal>
+            )}
+            {modalType == ModalType.EDIT && (
+                <EditModal
+                    isOpen={isOpen}
+                    onConfirm={() => {
+                        onClose();
+                    }}
+                    onCancel={onClose}
+                >
+                    {editModalContent}
+                </EditModal>
             )}
             <Text fontWeight="bold" fontSize="4xl" color="brand.green">
                 Settings

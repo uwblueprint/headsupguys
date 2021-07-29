@@ -15,6 +15,7 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { TextInput } from "@components/textInput";
 import AddModal from "./modals/addModal";
 import EditModal from "./modals/editModal";
+import DeleteModal from "./modals/deleteModal";
 
 enum ModalType {
     ADD = "add",
@@ -154,28 +155,16 @@ const SettingsPage: React.FC = () => {
         ></TextInput>
     );
 
-    const generateModal = (type: ModalType) => {
-        switch (type) {
-            case ModalType.DELETE:
-                return (
-                    <Modal
-                        header={`Delete ${data[selectedIndex].name}`}
-                        isOpen={isOpen}
-                        onConfirm={() => {
-                            onClose();
-                        }}
-                        onCancel={onClose}
-                        confirmButtonColorScheme="red"
-                    ></Modal>
-                );
-            default:
-                break;
-        }
-    };
+    const deleteModalContent = (
+        <TextInput
+            name="email"
+            label="Email"
+            errorMessage="This email already"
+        ></TextInput>
+    );
 
     return (
         <Flex direction="column" padding="16">
-            {generateModal(modalType)}
             {modalType == ModalType.ADD && (
                 <AddModal
                     isOpen={isOpen}
@@ -191,12 +180,25 @@ const SettingsPage: React.FC = () => {
                 <EditModal
                     isOpen={isOpen}
                     onConfirm={() => {
+                        console.log(`edited index ${selectedIndex}`);
                         onClose();
                     }}
                     onCancel={onClose}
                 >
                     {editModalContent}
                 </EditModal>
+            )}
+            {modalType == ModalType.DELETE && (
+                <DeleteModal
+                    isOpen={isOpen}
+                    onConfirm={() => {
+                        console.log(`deleted index ${selectedIndex}`);
+                        onClose();
+                    }}
+                    onCancel={onClose}
+                >
+                    {deleteModalContent}
+                </DeleteModal>
             )}
             <Text fontWeight="bold" fontSize="4xl" color="brand.green">
                 Settings

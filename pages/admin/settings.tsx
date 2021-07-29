@@ -13,6 +13,7 @@ import { Modal } from "@components/modal";
 
 import { DeleteIcon } from "@chakra-ui/icons";
 import { TextInput } from "@components/textInput";
+import AddModal from "./modals/addModal";
 
 enum ModalType {
     ADD = "add",
@@ -150,20 +151,6 @@ const SettingsPage: React.FC = () => {
 
     const generateModal = (type: ModalType) => {
         switch (type) {
-            case ModalType.ADD:
-                return (
-                    <Modal
-                        header="Add Admin"
-                        isOpen={isOpen}
-                        onConfirm={() => {
-                            onClose();
-                        }}
-                        onCancel={onClose}
-                        {...commonModalProps}
-                    >
-                        {addModalContent}
-                    </Modal>
-                );
             case ModalType.EDIT:
                 return (
                     <Modal
@@ -197,6 +184,17 @@ const SettingsPage: React.FC = () => {
     return (
         <Flex direction="column" padding="16">
             {generateModal(modalType)}
+            {modalType == ModalType.ADD && (
+                <AddModal
+                    isOpen={isOpen}
+                    onConfirm={() => {
+                        onClose();
+                    }}
+                    onCancel={onClose}
+                >
+                    {addModalContent}
+                </AddModal>
+            )}
             <Text fontWeight="bold" fontSize="4xl" color="brand.green">
                 Settings
             </Text>

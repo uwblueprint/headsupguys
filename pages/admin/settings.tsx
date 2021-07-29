@@ -9,8 +9,6 @@ import {
 } from "@chakra-ui/react";
 import { useTable } from "react-table";
 import adminUsers from "data/adminUsers";
-import { Modal } from "@components/modal";
-
 import { DeleteIcon } from "@chakra-ui/icons";
 import { TextInput } from "@components/textInput";
 import AddModal from "./modals/addModal";

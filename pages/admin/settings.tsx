@@ -11,6 +11,9 @@ import { useTable } from "react-table";
 import adminUsers from "data/adminUsers";
 import { Modal } from "@components/modal";
 
+import { DeleteIcon } from "@chakra-ui/icons";
+import { TextInput } from "@components/textInput";
+
 enum ModalType {
     ADD = "add",
     EDIT = "edit",
@@ -69,8 +72,7 @@ const SettingsPage: React.FC = () => {
             {
                 Header: "DELETE",
                 Cell: ({ row }) => (
-                    <Image
-                        src="/icons/delete.svg"
+                    <DeleteIcon
                         width="4"
                         height="4"
                         marginLeft="4"
@@ -138,6 +140,14 @@ const SettingsPage: React.FC = () => {
         size: "xl",
     };
 
+    const addModalContent = (
+        <TextInput
+            name="email"
+            label="Email"
+            errorMessage="This email already"
+        ></TextInput>
+    );
+
     const generateModal = (type: ModalType) => {
         switch (type) {
             case ModalType.ADD:
@@ -150,7 +160,9 @@ const SettingsPage: React.FC = () => {
                         }}
                         onCancel={onClose}
                         {...commonModalProps}
-                    ></Modal>
+                    >
+                        {addModalContent}
+                    </Modal>
                 );
             case ModalType.EDIT:
                 return (

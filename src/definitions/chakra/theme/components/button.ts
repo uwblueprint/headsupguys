@@ -21,6 +21,11 @@ const Button = {
             color: "white",
             _active: { bg: "brand.lime" },
         },
+        module: {
+            bg: "brand.lime",
+            color: "black",
+            borderRadius: 0,
+        }
     },
     defaultProps: {
         variant: "default",

@@ -8,17 +8,19 @@ import { DropDown } from "@components/dropDown";
 export interface AddModalProps extends ModalProps {
     setEmail: (value: string) => void;
     setRole: (value: RoleType) => void;
+    emailError: string;
 }
 
 const AddModal: React.FC<AddModalProps> = (props) => {
-    const { setEmail, setRole } = props;
+    const { setEmail, setRole, emailError } = props;
     return (
         <Modal size="xl" header="Add Admin" {...props}>
             <Flex>
                 <TextInput
                     name="email"
                     label="Email"
-                    errorMessage="This email already has an admin account"
+                    isInvalid={emailError != ""}
+                    errorMessage={emailError}
                     onChange={(e) => setEmail(e.target.value)}
                     isRequired={true}
                 ></TextInput>

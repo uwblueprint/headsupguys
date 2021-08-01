@@ -31,11 +31,15 @@ const SettingsPage: React.FC = () => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [email, setEmail] = useState("");
     const [role, setRole] = useState(RoleType.ADMIN);
+    const [emailError, setEmailError] = useState("");
+    const [roleError, setRoleError] = useState("");
 
     const onAddClick = () => {
         setModalType(ModalType.ADD);
         setEmail("");
         setRole(RoleType.ADMIN);
+        setEmailError("");
+        setRoleError("");
         onOpen();
     };
 
@@ -44,6 +48,8 @@ const SettingsPage: React.FC = () => {
         setSelectedIndex(index);
         setEmail(data[index].email);
         setRole(data[index].role as RoleType);
+        setEmailError("");
+        setRoleError("");
         onOpen();
     };
 
@@ -153,6 +159,10 @@ const SettingsPage: React.FC = () => {
                 <AddModal
                     isOpen={isOpen}
                     onConfirm={() => {
+                        if (!email) {
+                            setEmailError("Please enter an email.");
+                            return;
+                        }
                         console.log(
                             `add admin with email: ${email}, role: ${role}`,
                         );
@@ -161,14 +171,19 @@ const SettingsPage: React.FC = () => {
                     onCancel={onClose}
                     setEmail={setEmail}
                     setRole={setRole}
+                    emailError={emailError}
                 />
             )}
             {modalType == ModalType.EDIT && (
                 <EditModal
                     isOpen={isOpen}
                     onConfirm={() => {
+                        if (!email) {
+                            setEmailError("Please enter an email.");
+                            return;
+                        }
                         console.log(
-                            `edit admin with email: ${email}, role: ${role}`,
+                            `edit ${data[selectedIndex].name} with email: ${email}, role: ${role}`,
                         );
                         onClose();
                     }}
@@ -177,13 +192,15 @@ const SettingsPage: React.FC = () => {
                     setRole={setRole}
                     currentEmail={email}
                     currentRole={role}
+                    emailError={emailError}
+                    roleError={roleError}
                 />
             )}
             {modalType == ModalType.DELETE && (
                 <DeleteModal
                     isOpen={isOpen}
                     onConfirm={() => {
-                        console.log(`deleted index ${selectedIndex}`);
+                        console.log(`delete ${data[selectedIndex].name}`);
                         onClose();
                     }}
                     onCancel={onClose}

@@ -10,10 +10,19 @@ export interface EditModalProps extends ModalProps {
     setRole: (value: RoleType) => void;
     currentEmail: string;
     currentRole: RoleType;
+    emailError: string;
+    roleError: string;
 }
 
 const EditModal: React.FC<EditModalProps> = (props) => {
-    const { setEmail, setRole, currentEmail, currentRole } = props;
+    const {
+        setEmail,
+        setRole,
+        currentEmail,
+        currentRole,
+        emailError,
+        roleError,
+    } = props;
 
     console.log(currentRole);
 
@@ -24,7 +33,8 @@ const EditModal: React.FC<EditModalProps> = (props) => {
                     name="email"
                     label="Email"
                     defaultValue={currentEmail}
-                    errorMessage="This email already has an admin account"
+                    isInvalid={emailError != ""}
+                    errorMessage={emailError}
                     onChange={(e) => setEmail(e.target.value)}
                     isRequired={true}
                 ></TextInput>
@@ -35,7 +45,8 @@ const EditModal: React.FC<EditModalProps> = (props) => {
                     placeholder={
                         currentRole == RoleType.ADMIN ? "Admin" : "Super Admin"
                     }
-                    errorMessage="As the only super admin, you cannot alter your role."
+                    isInvalid={roleError != ""}
+                    errorMessage={roleError}
                     onChange={(e) => setRole(e.target.value as RoleType)}
                     isRequired={true}
                 >

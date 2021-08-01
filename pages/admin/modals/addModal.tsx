@@ -26,7 +26,6 @@ const AddModal: React.FC<AddModalProps> = (props) => {
                 <DropDown
                     name="role"
                     label="Role"
-                    errorMessage="INSERT ERROR MESSAGE HERE"
                     onChange={(e) => setRole(e.target.value as RoleType)}
                     isRequired={true}
                 >

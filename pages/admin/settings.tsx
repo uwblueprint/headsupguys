@@ -26,14 +26,15 @@ export enum RoleType { // ensure these values are the ones in the data
 }
 
 const SettingsPage: React.FC = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [modalType, setModalType] = useState(ModalType.ADD);
+    const { isOpen, onOpen, onClose } = useDisclosure(); // controls all 3 modals
+    const [modalType, setModalType] = useState(ModalType.ADD); // determines which modal is shown when isOpen is true
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [email, setEmail] = useState("");
     const [role, setRole] = useState(RoleType.ADMIN);
     const [emailError, setEmailError] = useState("");
     const [roleError, setRoleError] = useState("");
 
+    // many states are used by multiple modals and must be set before showing a modal
     const onAddClick = () => {
         setModalType(ModalType.ADD);
         setEmail("");
@@ -59,6 +60,7 @@ const SettingsPage: React.FC = () => {
         onOpen();
     };
 
+    // TODO fetch real data
     const data = React.useMemo(() => adminUsers, []);
     const columns = React.useMemo(
         () => [
@@ -166,6 +168,7 @@ const SettingsPage: React.FC = () => {
                         console.log(
                             `add admin with email: ${email}, role: ${role}`,
                         );
+                        // TODO make request to back end
                         onClose();
                     }}
                     onCancel={onClose}
@@ -185,6 +188,7 @@ const SettingsPage: React.FC = () => {
                         console.log(
                             `edit ${data[selectedIndex].name} with email: ${email}, role: ${role}`,
                         );
+                        // TODO make request to back end
                         onClose();
                     }}
                     onCancel={onClose}
@@ -201,6 +205,7 @@ const SettingsPage: React.FC = () => {
                     isOpen={isOpen}
                     onConfirm={() => {
                         console.log(`delete ${data[selectedIndex].name}`);
+                        // TODO make request to back end
                         onClose();
                     }}
                     onCancel={onClose}

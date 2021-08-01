@@ -24,8 +24,6 @@ const EditModal: React.FC<EditModalProps> = (props) => {
         roleError,
     } = props;
 
-    console.log(currentRole);
-
     return (
         <Modal size="xl" header="Edit User" {...props}>
             <Flex>

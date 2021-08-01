@@ -13,6 +13,7 @@ export interface AddModalProps extends ModalProps {
 
 const AddModal: React.FC<AddModalProps> = (props) => {
     const { setEmail, setRole, emailError } = props;
+
     return (
         <Modal size="xl" header="Add Admin" {...props}>
             <Flex>

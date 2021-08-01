@@ -153,14 +153,6 @@ const SettingsPage: React.FC = () => {
         ></TextInput>
     );
 
-    const deleteModalContent = (
-        <TextInput
-            name="email"
-            label="Email"
-            errorMessage="This email already"
-        ></TextInput>
-    );
-
     return (
         <Flex direction="column" padding="16">
             {modalType == ModalType.ADD && (
@@ -194,10 +186,8 @@ const SettingsPage: React.FC = () => {
                         onClose();
                     }}
                     onCancel={onClose}
-                    header={`Delete ${data[selectedIndex].name}`}
-                >
-                    {deleteModalContent}
-                </DeleteModal>
+                    name={data[selectedIndex].name}
+                />
             )}
             <Text fontWeight="bold" fontSize="4xl" color="brand.green">
                 Settings

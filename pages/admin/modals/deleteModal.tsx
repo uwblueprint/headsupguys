@@ -1,11 +1,21 @@
 import { Modal, ModalProps } from "@components/modal";
 import React from "react";
 
-const DeleteModal: React.FC<ModalProps> = (props) => {
-    const modalProps = { size: "xl", ...props };
+export interface DeleteModalProps extends ModalProps {
+    name: string;
+}
+
+const DeleteModal: React.FC<DeleteModalProps> = (props) => {
+    const { name } = props;
 
     return (
-        <Modal confirmButtonColorScheme="red" {...modalProps}>
+        <Modal
+            size="xl"
+            header={`Delete ${name}`}
+            bodyText={`Are you sure you want to delete ${name}? This action cannot be undone.`}
+            confirmButtonColorScheme="red"
+            {...props}
+        >
             {props.children}
         </Modal>
     );

@@ -21,19 +21,30 @@ enum ModalType {
     DELETE = "delete",
 }
 
+export enum RoleType {
+    ADMIN = "admin",
+    SUPER_ADMIN = "super",
+}
+
 const SettingsPage: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [modalType, setModalType] = useState(ModalType.ADD);
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [email, setEmail] = useState("");
+    const [role, setRole] = useState(RoleType.ADMIN);
 
     const onAddClick = () => {
         setModalType(ModalType.ADD);
+        setEmail("");
+        setRole(RoleType.ADMIN);
         onOpen();
     };
 
     const onEditClick = (index: number) => {
         setModalType(ModalType.EDIT);
         setSelectedIndex(index);
+        setEmail(data[index].email);
+        setRole(data[index].role as RoleType);
         onOpen();
     };
 
@@ -137,14 +148,6 @@ const SettingsPage: React.FC = () => {
         </table>
     );
 
-    const addModalContent = (
-        <TextInput
-            name="email"
-            label="Email"
-            errorMessage="This email already"
-        ></TextInput>
-    );
-
     const editModalContent = (
         <TextInput
             name="email"
@@ -159,12 +162,15 @@ const SettingsPage: React.FC = () => {
                 <AddModal
                     isOpen={isOpen}
                     onConfirm={() => {
+                        console.log(
+                            `add admin with email: ${email}, role: ${role}`,
+                        );
                         onClose();
                     }}
                     onCancel={onClose}
-                >
-                    {addModalContent}
-                </AddModal>
+                    setEmail={setEmail}
+                    setRole={setRole}
+                />
             )}
             {modalType == ModalType.EDIT && (
                 <EditModal

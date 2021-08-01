@@ -10,7 +10,6 @@ import {
 import { useTable } from "react-table";
 import adminUsers from "data/adminUsers";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { TextInput } from "@components/textInput";
 import AddModal from "./modals/addModal";
 import EditModal from "./modals/editModal";
 import DeleteModal from "./modals/deleteModal";
@@ -21,7 +20,7 @@ enum ModalType {
     DELETE = "delete",
 }
 
-export enum RoleType {
+export enum RoleType { // ensure these values are the ones in the data
     ADMIN = "ADMIN",
     SUPER_ADMIN = "SUPER ADMIN",
 }

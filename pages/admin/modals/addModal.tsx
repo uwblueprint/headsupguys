@@ -2,6 +2,8 @@ import { Modal, ModalProps } from "@components/modal";
 import React from "react";
 import { TextInput } from "@components/textInput";
 import { RoleType } from "../settings";
+import { Box, Flex } from "@chakra-ui/react";
+import { DropDown } from "@components/dropDown";
 
 export interface AddModalProps extends ModalProps {
     setEmail: (value: string) => void;
@@ -12,20 +14,26 @@ const AddModal: React.FC<AddModalProps> = (props) => {
     const { setEmail, setRole } = props;
     return (
         <Modal size="xl" header="Add Admin" {...props}>
-            <TextInput
-                name="email"
-                label="Email"
-                errorMessage="This email already has an admin account"
-                onChange={(e) => setEmail(e.target.value)}
-                isRequired={true}
-            ></TextInput>
-            <TextInput
-                name="role"
-                label="Role"
-                errorMessage="INSERT ERROR MESSAGE HERE"
-                onChange={(e) => setRole(e.target.value as RoleType)}
-                isRequired={true}
-            ></TextInput>
+            <Flex>
+                <TextInput
+                    name="email"
+                    label="Email"
+                    errorMessage="This email already has an admin account"
+                    onChange={(e) => setEmail(e.target.value)}
+                    isRequired={true}
+                ></TextInput>
+                <Box width={8} />
+                <DropDown
+                    name="role"
+                    label="Role"
+                    errorMessage="INSERT ERROR MESSAGE HERE"
+                    onChange={(e) => setRole(e.target.value as RoleType)}
+                    isRequired={true}
+                >
+                    <option value={RoleType.ADMIN}>Admin</option>
+                    <option value={RoleType.SUPER_ADMIN}>Super Admin</option>
+                </DropDown>
+            </Flex>
         </Modal>
     );
 };

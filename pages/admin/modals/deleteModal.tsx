@@ -15,9 +15,7 @@ const DeleteModal: React.FC<DeleteModalProps> = (props) => {
             bodyText={`Are you sure you want to delete ${name}? This action cannot be undone.`}
             confirmButtonColorScheme="red"
             {...props}
-        >
-            {props.children}
-        </Modal>
+        />
     );
 };
 

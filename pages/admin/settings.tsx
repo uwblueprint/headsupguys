@@ -22,8 +22,8 @@ enum ModalType {
 }
 
 export enum RoleType {
-    ADMIN = "admin",
-    SUPER_ADMIN = "super",
+    ADMIN = "ADMIN",
+    SUPER_ADMIN = "SUPER ADMIN",
 }
 
 const SettingsPage: React.FC = () => {
@@ -148,14 +148,6 @@ const SettingsPage: React.FC = () => {
         </table>
     );
 
-    const editModalContent = (
-        <TextInput
-            name="email"
-            label="Email"
-            errorMessage="This email already"
-        ></TextInput>
-    );
-
     return (
         <Flex direction="column" padding="16">
             {modalType == ModalType.ADD && (
@@ -176,13 +168,17 @@ const SettingsPage: React.FC = () => {
                 <EditModal
                     isOpen={isOpen}
                     onConfirm={() => {
-                        console.log(`edited index ${selectedIndex}`);
+                        console.log(
+                            `edit admin with email: ${email}, role: ${role}`,
+                        );
                         onClose();
                     }}
                     onCancel={onClose}
-                >
-                    {editModalContent}
-                </EditModal>
+                    setEmail={setEmail}
+                    setRole={setRole}
+                    currentEmail={email}
+                    currentRole={role}
+                />
             )}
             {modalType == ModalType.DELETE && (
                 <DeleteModal

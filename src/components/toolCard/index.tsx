@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     SimpleGrid,
     Box,
@@ -9,11 +9,11 @@ import {
     TagLeftIcon,
     TagLabel,
     Flex,
-    Button,
     IconButton,
     Tooltip,
 } from "@chakra-ui/react";
 import { CheckIcon, DeleteIcon, StarIcon } from "@chakra-ui/icons";
+import { Button } from "..";
 
 export interface ToolCardProps extends InputProps {
     title: string;
@@ -23,7 +23,9 @@ export interface ToolCardProps extends InputProps {
     published: boolean;
     image?: string;
     onLinkModule(event: any): any;
+    onUnlinkModule(event: any): any;
     onPublish(event: any): any;
+    onUnpublish(event: any): any;
     onDelete(event: any): any;
 }
 
@@ -35,10 +37,11 @@ export const ToolCard: React.FC<ToolCardProps> = ({
     published,
     image,
     onLinkModule,
+    onUnlinkModule,
     onPublish,
+    onUnpublish,
     onDelete,
 }) => {
-    console.log(creators);
     const creatorsText = creators.map((name, i) =>
         i == creators.length - 1 ? name : name + ", ",
     );
@@ -54,9 +57,6 @@ export const ToolCard: React.FC<ToolCardProps> = ({
             border: "1px solid #000",
             width: "850px",
         },
-        moduleTag: {
-            backgroundColor: "#86FC2F",
-        },
     };
 
     return (
@@ -70,49 +70,68 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                             {"  "}
                             {published && <StarIcon boxSize="0.75em" />}
                         </Heading>
-                        <Flex justify="space-around" w="60%">
-                            {!published && (
-                                <Button variant="outline" borderColor="black">
-                                    {module ? "Unlink" : "Link Module"}
-                                </Button>
-                            )}
-                            {!published && !module ? (
-                                <Tooltip
-                                    label="Link a module to publish your tool!"
-                                    hasArrow
-                                    placement="top"
-                                >
-                                    <Button
-                                        colorScheme="blackAlpha"
-                                        onClick={onPublish}
-                                    >
-                                        Publish Tool
-                                    </Button>
-                                </Tooltip>
-                            ) : (
-                                <Button
-                                    colorScheme="blackAlpha"
-                                    onClick={onPublish}
-                                >
-                                    {published
-                                        ? "Unpublish Tool"
-                                        : "Publish Tool"}
-                                </Button>
-                            )}
-                            {!published && (
+                        {published ? (
+                            <Button variant="default" onClick={onUnpublish}>
+                                Unpublish Tool
+                            </Button>
+                        ) : (
+                            <Flex justify="space-between" w="58%">
+                                {module ? (
+                                    <>
+                                        <Button
+                                            variant="outlineBlack"
+                                            onClick={onUnlinkModule}
+                                        >
+                                            Unlink Module
+                                        </Button>
+                                        <Button
+                                            variant="default"
+                                            onClick={onPublish}
+                                        >
+                                            Publish Tool
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Button
+                                            variant="outlineBlack"
+                                            onClick={onLinkModule}
+                                        >
+                                            Link Module
+                                        </Button>
+                                        <Tooltip
+                                            label="Link a module to publish your tool!"
+                                            hasArrow
+                                            placement="top"
+                                        >
+                                            <Button
+                                                isDisabled
+                                                _hover="none"
+                                                onClick={onPublish}
+                                            >
+                                                Publish Tool
+                                            </Button>
+                                        </Tooltip>
+                                    </>
+                                )}
                                 <IconButton
                                     aria-label="Delete tool"
                                     variant="ghost"
                                     icon={<DeleteIcon />}
                                     onClick={onDelete}
                                 />
-                            )}
-                        </Flex>
+                            </Flex>
+                        )}
                     </Flex>
                     <br />
                     <Text fontSize={16}>Created By: {creatorsText}</Text>
                     {module && (
-                        <Tag borderRadius="full" __css={styles.moduleTag}>
+                        <Tag
+                            bg="brand.lime"
+                            color="black"
+                            borderRadius="full"
+                            variant="solid"
+                        >
                             <TagLeftIcon boxSize="12px" as={CheckIcon} />
                             <TagLabel>
                                 {published

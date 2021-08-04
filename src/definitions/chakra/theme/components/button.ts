@@ -21,9 +21,14 @@ const Button = {
             color: "white",
             _active: { bg: "brand.lime" },
         },
-        module: {
+        moduleGreen: {
             bg: "brand.lime",
             color: "black",
+            borderRadius: 0,
+        },
+        moduleBlack: {
+            bg: "black",
+            color: "white",
             borderRadius: 0,
         }
     },

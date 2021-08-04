@@ -40,7 +40,8 @@ const ToolsPage: React.FC = () => {
 
             setToolsArray(filteredTools);
         } catch (err) {
-            console.log("error");
+            console.log(err);
+            //TODO: update error handling
         }
     };
 

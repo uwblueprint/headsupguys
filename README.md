@@ -145,3 +145,24 @@ GitHub Actions makes it easy to automate all your software workflows, now with w
 MIT
 
 This project was generated with [Superplate](https://github.com/pankod/superplate).
+
+## Authentication Setup for Cognito/Amplify
+
+1. Install the [Amplify CLI](https://docs.amplify.aws/cli/start/install#option-1-watch-the-video-guide)
+    - No need to configure the CLI- only need it installed
+2. Once the Amplify CLI is installed run `amplify pull --appId <ASK TEAM LEAD FOR APPID> --envName dev` to pull the Cognito backend setup locally, this will make sure Amplify is connecting to the correct user pool
+    - Select `AWS access keys` for authentication method
+    - accessKeyId: `<ASK TEAM LEAD>`
+    - secretAccessKey: `<ASK TEAM LEAD>`
+    - region: `ca-central-1`
+    - Should see the following message: `Amplify AppID found: XXXXXXXX. Amplify App name is: headsupguys Backend environment dev found in Amplify Console app: headsupguys`
+    - Choose your default editor (after this step most of the defaults should be good)
+    - type of app building: `javascript`
+    - framework: `react`
+    - source directory path: `src`
+    - distribution directory path: `build`
+    - Build Command: `npm run-script build`
+    - Start Command: `npm run-script start`
+    - Do you plan on modifying this backend? `Y`
+3. Run the `amplify pull` command
+4. Verify your installation: Under the `src` directory you should see `aws-exports.js` and you should see an `amplify` directory

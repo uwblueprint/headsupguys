@@ -32,7 +32,7 @@ const Home: React.FC = () => {
             questionNumber: 1,
         },
     ]);
-    const [count, setCount] = useState(1);
+    const [count, setCount] = useState(2);
 
     const newSliderRange = [];
     const changeQuestionType = (

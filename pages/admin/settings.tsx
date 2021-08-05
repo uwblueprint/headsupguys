@@ -1,18 +1,10 @@
 import React, { useState } from "react";
-import {
-    Flex,
-    Text,
-    Button,
-    Spacer,
-    Image,
-    useDisclosure,
-} from "@chakra-ui/react";
-import { useTable } from "react-table";
+import { Flex, Text, Button, Spacer, useDisclosure } from "@chakra-ui/react";
 import adminUsers from "data/adminUsers";
-import { DeleteIcon } from "@chakra-ui/icons";
 import AddModal from "./modals/addModal";
 import EditModal from "./modals/editModal";
 import DeleteModal from "./modals/deleteModal";
+import SettingsTable from "@components/tables/SettingsTable";
 
 enum ModalType {
     ADD = "add",
@@ -47,8 +39,8 @@ const SettingsPage: React.FC = () => {
     const onEditClick = (index: number) => {
         setModalType(ModalType.EDIT);
         setSelectedIndex(index);
-        setEmail(data[index].email);
-        setRole(data[index].role as RoleType);
+        setEmail(adminUserData[index].email);
+        setRole(adminUserData[index].role as RoleType);
         setEmailError("");
         setRoleError("");
         onOpen();
@@ -61,99 +53,7 @@ const SettingsPage: React.FC = () => {
     };
 
     // TODO fetch real data
-    const data = React.useMemo(() => adminUsers, []);
-    const columns = React.useMemo(
-        () => [
-            {
-                Header: "EDIT",
-                Cell: ({ row }) => (
-                    <Image
-                        src="/icons/edit.svg"
-                        width="4"
-                        height="4"
-                        marginLeft="2"
-                        onClick={() => onEditClick(row.index)}
-                    />
-                ),
-            },
-            {
-                Header: "USER NAME",
-                accessor: "name", // accessor is the "key" in the data
-            },
-            {
-                Header: "USER EMAIL",
-                accessor: "email",
-            },
-            {
-                Header: "USER ROLE",
-                accessor: "role",
-            },
-            {
-                Header: "DELETE",
-                Cell: ({ row }) => (
-                    <DeleteIcon
-                        width="4"
-                        height="4"
-                        marginLeft="4"
-                        onClick={() => onDeleteClick(row.index)}
-                    />
-                ),
-            },
-        ],
-        [],
-    );
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        useTable({ columns, data });
-
-    const table = (
-        <table {...getTableProps()}>
-            <thead>
-                {headerGroups.map((headerGroup) => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column) => (
-                            <th
-                                {...column.getHeaderProps()}
-                                style={{
-                                    borderBottom: "solid 3px gainsboro",
-                                    textAlign: "left",
-                                    paddingBottom: "10px",
-                                    fontFamily: "Geogrotesque Bold",
-                                }}
-                            >
-                                {column.render("Header")}
-                            </th>
-                        ))}
-                    </tr>
-                ))}
-            </thead>
-            <tbody
-                {...getTableBodyProps()}
-                style={{
-                    borderBottom: "solid 2px gainsboro",
-                }}
-            >
-                {rows.map((row) => {
-                    prepareRow(row);
-                    return (
-                        <tr {...row.getRowProps()}>
-                            {row.cells.map((cell) => {
-                                return (
-                                    <td
-                                        {...cell.getCellProps()}
-                                        style={{
-                                            padding: "10px 0px",
-                                        }}
-                                    >
-                                        {cell.render("Cell")}
-                                    </td>
-                                );
-                            })}
-                        </tr>
-                    );
-                })}
-            </tbody>
-        </table>
-    );
+    const adminUserData = React.useMemo(() => adminUsers, []);
 
     return (
         <Flex direction="column" padding="16">
@@ -186,7 +86,7 @@ const SettingsPage: React.FC = () => {
                             return;
                         }
                         console.log(
-                            `edit ${data[selectedIndex].name} with email: ${email}, role: ${role}`,
+                            `edit ${adminUserData[selectedIndex].name} with email: ${email}, role: ${role}`,
                         );
                         // TODO make request to back end
                         onClose();
@@ -204,12 +104,14 @@ const SettingsPage: React.FC = () => {
                 <DeleteModal
                     isOpen={isOpen}
                     onConfirm={() => {
-                        console.log(`delete ${data[selectedIndex].name}`);
+                        console.log(
+                            `delete ${adminUserData[selectedIndex].name}`,
+                        );
                         // TODO make request to back end
                         onClose();
                     }}
                     onCancel={onClose}
-                    name={data[selectedIndex].name}
+                    name={adminUserData[selectedIndex].name}
                 />
             )}
             <Text fontWeight="bold" fontSize="4xl" color="brand.green">
@@ -222,7 +124,11 @@ const SettingsPage: React.FC = () => {
                     Add User
                 </Button>
             </Flex>
-            {table}
+            <SettingsTable
+                data={adminUserData}
+                onEditClick={onEditClick}
+                onDeleteClick={onDeleteClick}
+            />
         </Flex>
     );
 };

@@ -5,6 +5,7 @@ import AddModal from "./modals/addModal";
 import EditModal from "./modals/editModal";
 import DeleteModal from "./modals/deleteModal";
 import SettingsTable from "@components/tables/SettingsTable";
+import isEmail from "validator/lib/isEmail";
 
 enum ModalType {
     ADD = "add",
@@ -52,6 +53,17 @@ const SettingsPage: React.FC = () => {
         onOpen();
     };
 
+    const checkEmailValidity = (email: string): boolean => {
+        if (!email) {
+            setEmailError("Please enter an email.");
+            return false;
+        } else if (!isEmail(email)) {
+            setEmailError("Please enter a valid email.");
+            return false;
+        }
+        return true;
+    };
+
     // TODO fetch real data
     const adminUserData = React.useMemo(() => adminUsers, []);
 
@@ -61,10 +73,7 @@ const SettingsPage: React.FC = () => {
                 <AddModal
                     isOpen={isOpen}
                     onConfirm={() => {
-                        if (!email) {
-                            setEmailError("Please enter an email.");
-                            return;
-                        }
+                        if (!checkEmailValidity(email)) return;
                         console.log(
                             `add admin with email: ${email}, role: ${role}`,
                         );
@@ -81,10 +90,7 @@ const SettingsPage: React.FC = () => {
                 <EditModal
                     isOpen={isOpen}
                     onConfirm={() => {
-                        if (!email) {
-                            setEmailError("Please enter an email.");
-                            return;
-                        }
+                        if (!checkEmailValidity(email)) return;
                         console.log(
                             `edit ${adminUserData[selectedIndex].name} with email: ${email}, role: ${role}`,
                         );

@@ -4,14 +4,14 @@ HeadsUpGuys platform - Module Builder & Dashboard for interactive resource slide
 
 ## Developers!
 
-Adil Kapadia
-Chinemerem Chigbo
-Christine Ng
-Daniel Yu 🥑
-Nim Wijetunga  
-Stephanie Xu
-Tony Zhao
-Yash Gajaria
+Adil Kapadia  
+Chinemerem Chigbo  
+Christine Ng  
+Daniel Yu 🥑  
+Nim Wijetunga    
+Stephanie Xu  
+Tony Zhao  
+Yash Gajaria  
 
 ## Getting Started
 

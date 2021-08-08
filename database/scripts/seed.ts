@@ -11,6 +11,7 @@ const COMPONENT_COUNT = 60;
 const SLIDE_COUNT = 20;
 const MODULE_COUNT = 5;
 const TOOL_COUNT = 4;
+const USER_COUNT = 5;
 
 const QUESTIONS_PER_GROUP = Math.floor(QUESTION_COUNT / GROUP_COUNT);
 const COMPONENTS_PER_SLIDE = Math.floor(COMPONENT_COUNT / SLIDE_COUNT);
@@ -33,6 +34,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         const slideCollection = db.collection("slides");
         const moduleCollection = db.collection("modules");
         const toolCollection = db.collection("tools");
+        const userCollection = db.collection("users");
 
         if (process.argv[2] != "--init") {
             // destroy previous data
@@ -43,6 +45,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
                 slideCollection.drop(),
                 moduleCollection.drop(),
                 toolCollection.drop(),
+                userCollection.drop(),
             ]);
         }
 
@@ -70,6 +73,8 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         const moduleIDs = modules.ops.map((x) => x._id);
 
         await toolCollection.insertMany(mockTools(moduleIDs, groupIDs));
+
+        await userCollection.insertMany(mockUsers());
 
         console.log("Successfully completed seeding");
         client.close();
@@ -205,4 +210,20 @@ function mockTools(moduleIDs, groupIDs) {
         });
     }
     return tools;
+}
+
+function mockUsers() {
+    const userTypes = ["USER", "ADMIN", "SUPER_ADMIN"];
+    const users = [];
+
+    for (let i = 0; i < USER_COUNT; i++) {
+        users.push({
+            email: faker.internet.email(),
+            name: faker.name.findName(),
+            role: userTypes[i % userTypes.length],
+            waiverSigned: i == 0,
+            demographicInfo: {},
+        });
+    }
+    return users;
 }

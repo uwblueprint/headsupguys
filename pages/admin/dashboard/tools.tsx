@@ -8,7 +8,7 @@ import {
     useDisclosure,
     Spacer,
 } from "@chakra-ui/react";
-import axios from "axios"; // axios
+import axios from "axios";
 
 import { ToolCard, Modal } from "@components";
 

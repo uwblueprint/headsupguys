@@ -37,23 +37,14 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
     const mobile = { width: 442, height: 697 };
     const desktop = { width: 955, height: 697 };
 
-    const styles = {
-        previewScreen: {
-            border: "1px solid #000",
-        },
-        contentBox: {
-            overflow: "auto",
-        },
-    };
-
     return (
         <>
             {variant == "mobile" ? (
                 <Box
                     w={mobile.width}
                     h={mobile.height}
-                    p="28px"
-                    __css={styles.previewScreen}
+                    p="20px"
+                    border="1px solid #000"
                 >
                     <Box w="100%" h="5%">
                         {progressValue && (
@@ -64,73 +55,69 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                             />
                         )}
                     </Box>
-                    <Box
-                        w="100%"
-                        h={print || save ? "75%" : "85%"}
-                        __css={styles.contentBox}
-                    >
-                        {props.children}
-                    </Box>
-                    <Box w="100%" h={print || save ? "20%" : "10%"}>
-                        {print && save ? (
-                            <Flex justify="space-between" py={2}>
-                                <Button
-                                    variant="moduleBlack"
-                                    w="184px"
-                                    h="55px"
-                                >
-                                    {printButton}
-                                </Button>
-                                <Button
-                                    variant="moduleBlack"
-                                    w="184px"
-                                    h="55px"
-                                >
-                                    {saveButton}
-                                </Button>
-                            </Flex>
-                        ) : (
-                            <>
-                                {print && (
+                    <Box w="100%" h="95%" overflow="auto">
+                        <Box minHeight="77%">{props.children}</Box>
+                        <Box w="100%">
+                            {print && save ? (
+                                <Flex justify="space-between" py={2}>
                                     <Button
                                         variant="moduleBlack"
-                                        w="100%"
+                                        w="184px"
                                         h="55px"
-                                        my={2}
                                     >
                                         {printButton}
                                     </Button>
-                                )}
-                                {save && (
                                     <Button
                                         variant="moduleBlack"
-                                        w="100%"
+                                        w="184px"
                                         h="55px"
-                                        my={2}
                                     >
                                         {saveButton}
                                     </Button>
-                                )}
-                            </>
-                        )}
-                        <Flex justify="space-between" py={2}>
-                            <Button
-                                variant="moduleGreen"
-                                w="184px"
-                                h="55px"
-                                disabled={!previous}
-                            >
-                                {prevButton}
-                            </Button>
-                            <Button
-                                variant="moduleGreen"
-                                w="184px"
-                                h="55px"
-                                disabled={!next}
-                            >
-                                {nextButton}
-                            </Button>
-                        </Flex>
+                                </Flex>
+                            ) : (
+                                <>
+                                    {print && (
+                                        <Button
+                                            variant="moduleBlack"
+                                            w="100%"
+                                            h="55px"
+                                            my={2}
+                                        >
+                                            {printButton}
+                                        </Button>
+                                    )}
+                                    {save && (
+                                        <Button
+                                            variant="moduleBlack"
+                                            w="100%"
+                                            h="55px"
+                                            my={2}
+                                        >
+                                            {saveButton}
+                                        </Button>
+                                    )}
+                                </>
+                            )}
+                            <Flex justify="space-between" py={2}>
+                                <Button
+                                    variant="moduleGreen"
+                                    w="184px"
+                                    h="55px"
+                                    disabled={!previous}
+                                >
+                                    {prevButton}
+                                </Button>
+                                <Button
+                                    variant="moduleGreen"
+                                    w="184px"
+                                    h="55px"
+                                    disabled={!next}
+                                >
+                                    {nextButton}
+                                </Button>
+                            </Flex>
+                        </Box>
                     </Box>
                 </Box>
             ) : (
@@ -138,7 +125,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                     w={desktop.width}
                     h={desktop.height}
                     p="28px"
-                    __css={styles.previewScreen}
+                    border="1px solid #000"
                 >
                     <Box w="100%" h="5%">
                         {progressValue && (
@@ -149,50 +136,50 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                             />
                         )}
                     </Box>
-                    <Box w="100%" h="85%" __css={styles.contentBox}>
-                        {props.children}
-                    </Box>
-                    <Box w="100%" h="10%">
-                        <Flex justify="center" py={2}>
-                            <Button
-                                variant="moduleGreen"
-                                w="184px"
-                                h="55px"
-                                mx={2}
-                                disabled={!previous}
-                            >
-                                {prevButton}
-                            </Button>
-                            {print && (
+                    <Box w="100%" h="95%" overflow="auto">
+                        <Box minHeight="88%">{props.children}</Box>
+                        <Box w="100%" h="10%">
+                            <Flex justify="center" py={2}>
                                 <Button
-                                    variant="moduleBlack"
+                                    variant="moduleGreen"
                                     w="184px"
                                     h="55px"
                                     mx={2}
+                                    disabled={!previous}
                                 >
-                                    {printButton}
+                                    {prevButton}
                                 </Button>
-                            )}
-                            {save && (
+                                {print && (
+                                    <Button
+                                        variant="moduleBlack"
+                                        w="184px"
+                                        h="55px"
+                                        mx={2}
+                                    >
+                                        {printButton}
+                                    </Button>
+                                )}
+                                {save && (
+                                    <Button
+                                        variant="moduleBlack"
+                                        w="184px"
+                                        h="55px"
+                                        mx={2}
+                                    >
+                                        {saveButton}
+                                    </Button>
+                                )}
                                 <Button
-                                    variant="moduleBlack"
+                                    variant="moduleGreen"
                                     w="184px"
                                     h="55px"
                                     mx={2}
+                                    disabled={!next}
                                 >
-                                    {saveButton}
+                                    {nextButton}
                                 </Button>
-                            )}
-                            <Button
-                                variant="moduleGreen"
-                                w="184px"
-                                h="55px"
-                                mx={2}
-                                disabled={!next}
-                            >
-                                {nextButton}
-                            </Button>
-                        </Flex>
+                            </Flex>
+                        </Box>
                     </Box>
                 </Box>
             )}

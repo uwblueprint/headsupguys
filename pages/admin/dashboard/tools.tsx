@@ -8,9 +8,9 @@ import {
     useDisclosure,
     Spacer,
 } from "@chakra-ui/react";
+import axios from "axios";
 
 import { ToolCard, Modal } from "@components";
-import toolsList from "data/tools";
 
 const ToolsPage: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -27,11 +27,22 @@ const ToolsPage: React.FC = () => {
     // TODO: Need to update this to calculate relative date
     const date = new Date();
 
-    const filterTools = () => {
-        const filteredTools = toolsList.filter((t) => {
-            return t["status"] === selectedTab;
-        });
-        setToolsArray(filteredTools);
+    const filterTools = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: "/api/tool",
+            });
+
+            const filteredTools = response.data.filter((t) => {
+                return t["status"] === selectedTab;
+            });
+
+            setToolsArray(filteredTools);
+        } catch (err) {
+            console.log(err);
+            //TODO: update error handling
+        }
     };
 
     useEffect(() => {

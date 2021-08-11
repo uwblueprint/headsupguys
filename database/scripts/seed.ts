@@ -202,6 +202,7 @@ function mockTools(moduleIDs, groupIDs) {
             relatedToolsIDs,
             status: statusTypes[i % statusTypes.length],
             editing: i == 1,
+            createdBy: ["John Doe"],
         });
     }
     return tools;

@@ -31,7 +31,7 @@ const ToolsPage: React.FC = () => {
         try {
             const response = await axios({
                 method: "GET",
-                url: "/api/tool/getAll",
+                url: "/api/tool",
             });
 
             const filteredTools = response.data.filter((t) => {

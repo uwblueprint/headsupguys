@@ -6,7 +6,7 @@ import getAll from "./getAll";
 const index = async (req: NextApiRequest, res: NextApiResponse) => {
     switch (req.method) {
         case "GET":
-            await getAll(req, res);
+            await getAll(res);
             break;
         case "POST":
             await post(req, res);

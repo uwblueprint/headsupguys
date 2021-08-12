@@ -10,7 +10,6 @@ import {
 import axios from "axios";
 
 import { ToolCard, Modal, AdminLayout } from "@components";
-import toolsList from "data/tools";
 import { Page } from "types/Page";
 
 const ToolsPage: Page = () => {
@@ -18,12 +17,14 @@ const ToolsPage: Page = () => {
     const [toolsArray, setToolsArray] = useState([]);
 
     const [selectedTool, setSelectedTool] = useState("");
+    const [selectedToolId, setSelectedToolId] = useState("");
     // Modal can be of "publish" or "delete" mode
     const [modalMode, setModalMode] = useState("");
     const publishConfirmation = `Are you sure you want to publish ${selectedTool}? Your tool will be available to the public!`;
     const deleteConfirmation = `Are you sure you want to delete ${selectedTool}? This is a permanent action that cannot be undone.`;
 
     const [selectedTab, setSelectedTab] = useState("draft");
+    const [refresh, setRefresh] = useState(false);
 
     // TODO: Need to update this to calculate relative date
     const date = new Date();
@@ -48,7 +49,7 @@ const ToolsPage: Page = () => {
 
     useEffect(() => {
         filterTools();
-    }, [selectedTab]);
+    }, [selectedTab, refresh]);
 
     const onLinkModule = () => {
         console.log("hello");
@@ -60,10 +61,20 @@ const ToolsPage: Page = () => {
         onOpen();
     };
 
-    const onDelete = (toolName) => {
+    const onDelete = (toolName, id) => {
         setModalMode("delete");
         setSelectedTool(toolName);
+        setSelectedToolId(id);
         onOpen();
+    };
+
+    const deleteTool = async () => {
+        const res = await axios({
+            method: "PUT",
+            url: `/api/tool/deleteOne?id=${selectedToolId}`,
+        });
+        setRefresh(!refresh);
+        onClose();
     };
 
     useEffect(() => {
@@ -75,7 +86,9 @@ const ToolsPage: Page = () => {
             <Modal
                 isOpen={isOpen}
                 onCancel={onClose}
-                onConfirm={onClose}
+                onConfirm={() => {
+                    deleteTool();
+                }}
                 header={
                     modalMode === "publish"
                         ? `Publish ${selectedTool}`
@@ -140,7 +153,9 @@ const ToolsPage: Page = () => {
                                 published={tool["status"] === "published"}
                                 onLinkModule={onLinkModule}
                                 onPublish={() => onPublish(tool["title"])}
-                                onDelete={() => onDelete(tool["title"])}
+                                onDelete={() =>
+                                    onDelete(tool["title"], tool["_id"])
+                                }
                             />
                         );
                     })}

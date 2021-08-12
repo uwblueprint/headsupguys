@@ -213,7 +213,7 @@ function mockTools(moduleIDs, groupIDs) {
 }
 
 function mockUsers() {
-    const userTypes = ["USER", "ADMIN", "SUPER_ADMIN"];
+    const userTypes = ["USER", "ADMIN", "SUPER ADMIN"];
     const users = [];
 
     for (let i = 0; i < USER_COUNT; i++) {

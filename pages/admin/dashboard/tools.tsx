@@ -8,7 +8,7 @@ import {
     useDisclosure,
     Spacer,
 } from "@chakra-ui/react";
-import axios from "axios"; // axios
+import axios from "axios";
 
 import { ToolCard, Modal } from "@components";
 
@@ -31,7 +31,7 @@ const ToolsPage: React.FC = () => {
         try {
             const response = await axios({
                 method: "GET",
-                url: "/api/tool/getAll",
+                url: "/api/tool",
             });
 
             const filteredTools = response.data.filter((t) => {
@@ -40,7 +40,8 @@ const ToolsPage: React.FC = () => {
 
             setToolsArray(filteredTools);
         } catch (err) {
-            console.log("error");
+            console.log(err);
+            //TODO: update error handling
         }
     };
 

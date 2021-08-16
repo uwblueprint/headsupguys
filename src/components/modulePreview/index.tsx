@@ -27,7 +27,6 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
         variant,
         saveText,
         printText,
-        ...rest
     } = props;
     const prevButton = prevText ? prevText : "PREV";
     const nextButton = nextText ? nextText : "NEXT";

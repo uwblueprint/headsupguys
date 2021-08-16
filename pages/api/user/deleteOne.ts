@@ -8,8 +8,7 @@ const deleteOne = async (
 ): Promise<void> => {
     const { id } = req.query;
 
-    const allUsers = await User.find({});
-    const superAdmins = allUsers.filter((u) => u.role == Role.SUPER_ADMIN);
+    const superAdmins = await User.find({ role: Role.SUPER_ADMIN });
 
     if (superAdmins.length == 1 && superAdmins[0]._id == id) {
         res.status(405).json({ error: "Cannot delete the only Super Admin" });

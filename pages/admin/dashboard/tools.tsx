@@ -74,8 +74,9 @@ const ToolsPage: Page = () => {
                         : deleteConfirmation
                 }
                 confirmText={modalMode === "publish" ? `Publish` : `Delete`}
-                confirmButtonColor={modalMode === "publish" ? `black` : `red`}
-                size="lg"
+                confirmButtonColorScheme={
+                    modalMode === "publish" ? `black` : `red`
+                }
             />
             <Flex direction="column" minH="100vh">
                 <Flex wrap={"wrap"} justify={"left"} width={"full"}>
@@ -127,6 +128,12 @@ const ToolsPage: Page = () => {
                                 published={tool["status"] === "published"}
                                 onLinkModule={onLinkModule}
                                 onPublish={() => onPublish(tool["title"])}
+                                onUnlinkModule={() => {
+                                    console.log("unlink");
+                                }}
+                                onUnpublish={() => {
+                                    console.log("unpub");
+                                }}
                                 onDelete={() => onDelete(tool["title"])}
                             />
                         );

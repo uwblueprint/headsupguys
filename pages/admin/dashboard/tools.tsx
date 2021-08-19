@@ -8,8 +8,8 @@ import {
     Spacer,
 } from "@chakra-ui/react";
 import { ToolCard, Modal, AdminLayout } from "@components";
-import toolsList from "data/tools";
 import { Page } from "types/Page";
+import axios from "axios";
 
 const ToolsPage: Page = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -26,11 +26,22 @@ const ToolsPage: Page = () => {
     // TODO: Need to update this to calculate relative date
     const date = new Date();
 
-    const filterTools = () => {
-        const filteredTools = toolsList.filter((t) => {
-            return t["status"] === selectedTab;
-        });
-        setToolsArray(filteredTools);
+    const filterTools = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: "/api/tool",
+            });
+
+            const filteredTools = response.data.filter((t) => {
+                return t["status"] === selectedTab;
+            });
+
+            setToolsArray(filteredTools);
+        } catch (err) {
+            console.log(err);
+            //TODO: update error handling
+        }
     };
 
     useEffect(() => {

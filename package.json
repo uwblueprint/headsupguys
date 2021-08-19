@@ -21,8 +21,9 @@
         "@emotion/styled": "^11.0.0",
         "@types/jest": "^26.0.23",
         "@types/mongodb": "^3.6.16",
-        "faker": "^5.5.3",
         "add": "^2.0.6",
+        "axios": "^0.21.1",
+        "faker": "^5.5.3",
         "framer-motion": "^3.2.1",
         "mongodb": "^3.6.9",
         "mongoose": "^5.12.12",
@@ -32,6 +33,7 @@
         "react": "17.0.2",
         "react-dom": "17.0.2",
         "react-icons": "^4.2.0",
+        "react-table": "^7.7.0",
         "swr": "^0.4.0",
         "validator": "^13.6.0",
         "yarn": "^1.22.10"

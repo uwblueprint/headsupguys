@@ -16,6 +16,7 @@ export interface ToolInterface {
     relatedToolsIDs: [Schema.Types.ObjectId];
     status: StatusType;
     editing: boolean;
+    createdBy: string[];
 }
 
 const ToolSchema = new Schema<ToolInterface>(
@@ -43,6 +44,7 @@ const ToolSchema = new Schema<ToolInterface>(
             default: StatusType.DRAFT,
         },
         editing: Boolean,
+        createdBy: [String],
     },
     {
         timestamps: true,

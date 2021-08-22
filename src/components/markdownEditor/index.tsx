@@ -149,6 +149,8 @@ const leftAlignCommand: ICommand = {
     },
 };
 
+commands.image.shortcuts = "ctrl+shift+i"; // update shortcut for image to not collide with italics
+
 interface MarkdownEditorProps {
     value: string;
     setValue: (e) => void;

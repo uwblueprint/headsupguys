@@ -14,6 +14,7 @@ import {
     Button,
 } from "@chakra-ui/react";
 import { SelfCheckQuestionCard, ToolHomePage } from "@components";
+import axios from "axios";
 
 //Self Check Questions React functional component
 const Home: React.FC = () => {
@@ -186,6 +187,19 @@ const Home: React.FC = () => {
 
     const selfCheckQuestionSize = questionList.length;
 
+    const callDb = async (questions) => {
+        try {
+            const response = await axios({
+                method: "POST",
+                url: "/api/self-check",
+                data: questions,
+            });
+            console.log(response);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Flex direction="column" minH="100vh">
@@ -221,6 +235,7 @@ const Home: React.FC = () => {
                             //rather than just logging it in the console
                             onClick={() => {
                                 alert("Check the console for the object");
+                                callDb(questionList);
                                 console.log(questionList);
                             }}
                         >

@@ -28,6 +28,7 @@ const UserSchema = new Schema<UserInterface>(
         },
         role: {
             type: Role,
+            required: true,
             default: Role.USER,
         },
         waiverSigned: {
@@ -36,7 +37,7 @@ const UserSchema = new Schema<UserInterface>(
         },
         demographicInfo: {
             type: Schema.Types.Mixed,
-            required: null,
+            default: null,
         },
     },
     {

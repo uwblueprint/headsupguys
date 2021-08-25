@@ -24,6 +24,14 @@ const overrides = {
     fonts,
 };
 
-const theme = extendTheme(overrides);
-
-export default theme;
+const adminOverrides = {
+    ...styles,
+    components: {
+        Button,
+    },
+    colors,
+    fontSizes,
+};
+const defaultTheme = extendTheme(overrides);
+const adminTheme = extendTheme(adminOverrides);
+export { defaultTheme, adminTheme };

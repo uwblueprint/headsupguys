@@ -60,7 +60,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
     };
 
     return (
-        <SimpleGrid columns={2} px={5} py={5} __css={styles.card}>
+        <SimpleGrid w="100%" columns={2} px={5} py={5} __css={styles.card}>
             <Flex>
                 <Box bg="lightgrey" w="25%" h="157px" />
                 <Box px={10} w="75%">

@@ -55,13 +55,13 @@ const Modules: React.FC = () => {
             </Flex>
             <SimpleGrid minChildWidth="20rem" spacing={10}>
                 {modules.map(
-                    ({ moduleId, title, toolID, lastUpdated, createdBy }) => (
+                    ({ moduleId, title, tool, lastUpdated, author }) => (
                         <ModuleCard
                             key={moduleId}
                             title={title}
-                            tool={toolID}
-                            // lastUpdated={ObjectId(moduleId).getTimestamp()}
-                            author={createdBy}
+                            tool={tool}
+                            lastUpdated={lastUpdated}
+                            author={author}
                         />
                     ),
                 )}

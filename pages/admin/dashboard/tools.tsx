@@ -7,10 +7,9 @@ import {
     useDisclosure,
     Spacer,
 } from "@chakra-ui/react";
-import axios from "axios";
-
 import { ToolCard, Modal, AdminLayout } from "@components";
 import { Page } from "types/Page";
+import axios from "axios";
 
 const ToolsPage: Page = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -100,8 +99,9 @@ const ToolsPage: Page = () => {
                         : deleteConfirmation
                 }
                 confirmText={modalMode === "publish" ? `Publish` : `Delete`}
-                confirmButtonColor={modalMode === "publish" ? `black` : `red`}
-                size="lg"
+                confirmButtonColorScheme={
+                    modalMode === "publish" ? `black` : `red`
+                }
             />
             <Flex direction="column" minH="100vh">
                 <Flex wrap={"wrap"} justify={"left"} width={"full"}>
@@ -153,9 +153,13 @@ const ToolsPage: Page = () => {
                                 published={tool["status"] === "published"}
                                 onLinkModule={onLinkModule}
                                 onPublish={() => onPublish(tool["title"])}
-                                onDelete={() =>
-                                    onDelete(tool["title"], tool["_id"])
-                                }
+                                onUnlinkModule={() => {
+                                    console.log("unlink");
+                                }}
+                                onUnpublish={() => {
+                                    console.log("unpub");
+                                }}
+                                onDelete={() => onDelete(tool["title"])}
                             />
                         );
                     })}

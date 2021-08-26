@@ -43,7 +43,7 @@ export const ModuleCard: React.FC<{
                     Last Updated: {lastUpdated && formatDaysAgo(lastUpdated)}
                 </Text>
                 <Text>Created By: {author} </Text>
-            </Stack>{" "}
+            </Stack>
             <Button mt={4} w="100%">
                 Link to A Tool
             </Button>

@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 import {
     Stack,
-    Center,
     Flex,
     Text,
     Button,
     useDisclosure,
     Spacer,
 } from "@chakra-ui/react";
+import { ToolCard, Modal, AdminLayout } from "@components";
+import { Page } from "types/Page";
+import axios from "axios";
 
-import { ToolCard, Modal } from "@components";
-import toolsList from "data/tools";
-
-const ToolsPage: React.FC = () => {
+const ToolsPage: Page = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [toolsArray, setToolsArray] = useState([]);
 
@@ -27,11 +26,22 @@ const ToolsPage: React.FC = () => {
     // TODO: Need to update this to calculate relative date
     const date = new Date();
 
-    const filterTools = () => {
-        const filteredTools = toolsList.filter((t) => {
-            return t["status"] === selectedTab;
-        });
-        setToolsArray(filteredTools);
+    const filterTools = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: "/api/tool",
+            });
+
+            const filteredTools = response.data.filter((t) => {
+                return t["status"] === selectedTab;
+            });
+
+            setToolsArray(filteredTools);
+        } catch (err) {
+            console.log(err);
+            //TODO: update error handling
+        }
     };
 
     useEffect(() => {
@@ -59,7 +69,7 @@ const ToolsPage: React.FC = () => {
     }, []);
 
     return (
-        <Center>
+        <Stack spacing={8}>
             <Modal
                 isOpen={isOpen}
                 onCancel={onClose}
@@ -78,10 +88,9 @@ const ToolsPage: React.FC = () => {
                 confirmButtonColorScheme={
                     modalMode === "publish" ? `black` : `red`
                 }
-                size="lg"
             />
-            <Flex direction="column" minH="100vh" pl="48px" pr="48px">
-                <Flex mt={10} wrap={"wrap"} justify={"left"} width={"full"}>
+            <Flex direction="column" minH="100vh">
+                <Flex wrap={"wrap"} justify={"left"} width={"full"}>
                     <Text mr={2} fontWeight="bold" fontSize="4xl">
                         Tools
                     </Text>
@@ -130,14 +139,21 @@ const ToolsPage: React.FC = () => {
                                 published={tool["status"] === "published"}
                                 onLinkModule={onLinkModule}
                                 onPublish={() => onPublish(tool["title"])}
+                                onUnlinkModule={() => {
+                                    console.log("unlink");
+                                }}
+                                onUnpublish={() => {
+                                    console.log("unpub");
+                                }}
                                 onDelete={() => onDelete(tool["title"])}
                             />
                         );
                     })}
                 </Stack>
             </Flex>
-        </Center>
+        </Stack>
     );
 };
 
+ToolsPage.layout = AdminLayout;
 export default ToolsPage;

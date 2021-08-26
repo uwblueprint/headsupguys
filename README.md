@@ -4,7 +4,14 @@ HeadsUpGuys platform - Module Builder & Dashboard for interactive resource slide
 
 ## Developers!
 
-Daniel Yu 🥑
+Adil Kapadia  
+Chinemerem Chigbo  
+Christine Ng  
+Daniel Yu 🥑  
+Nim Wijetunga    
+Stephanie Xu  
+Tony Zhao  
+Yash Gajaria  
 
 ## Getting Started
 
@@ -21,6 +28,8 @@ yarn dev
 Open localhost:3000 on your browser to see the result!
 
 ## General Architecture
+
+[Repo Visualization](https://octo-repo-visualization.vercel.app/?repo=uwblueprint%2Fheadsupguys) 👀
 
 1. [NodeJS](https://nodejs.org/en/) application powered by the [Next.JS](https://nextjs.org/) with TypeScript
    framework.

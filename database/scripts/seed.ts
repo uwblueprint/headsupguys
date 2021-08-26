@@ -65,9 +65,9 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         const slideIDs = slides.ops.map((x) => x._id);
 
         // need to generate toolIDs beforehand to avoid a circular dependency
-        const toolIDs = []
+        const toolIDs = [];
         for (let i = 0; i < TOOL_COUNT; i++) {
-            toolIDs[i] = ObjectId()
+            toolIDs[i] = ObjectId();
         }
 
         const modules = await moduleCollection.insertMany(
@@ -75,7 +75,9 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         );
         const moduleIDs = modules.ops.map((x) => x._id);
 
-        await toolCollection.insertMany(mockTools(moduleIDs, groupIDs, toolIDs));
+        await toolCollection.insertMany(
+            mockTools(moduleIDs, groupIDs, toolIDs),
+        );
 
         console.log("Successfully completed seeding");
         client.close();

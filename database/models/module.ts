@@ -17,8 +17,7 @@ export interface ModuleInterface {
 
     status: StatusType;
     editing: boolean;
-    createdBy: string[],
-
+    createdBy: string[];
 }
 
 const ModuleSchema = new Schema<ModuleInterface>(

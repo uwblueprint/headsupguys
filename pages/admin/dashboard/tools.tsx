@@ -75,7 +75,9 @@ const ToolsPage: React.FC = () => {
                         : deleteConfirmation
                 }
                 confirmText={modalMode === "publish" ? `Publish` : `Delete`}
-                confirmButtonColor={modalMode === "publish" ? `black` : `red`}
+                confirmButtonColorScheme={
+                    modalMode === "publish" ? `black` : `red`
+                }
                 size="lg"
             />
             <Flex direction="column" minH="100vh" pl="48px" pr="48px">

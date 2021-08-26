@@ -159,7 +159,9 @@ const ToolsPage: Page = () => {
                                 onUnpublish={() => {
                                     console.log("unpub");
                                 }}
-                                onDelete={() => onDelete(tool["title"])}
+                                onDelete={() =>
+                                    onDelete(tool["title"], tool["_id"])
+                                }
                             />
                         );
                     })}

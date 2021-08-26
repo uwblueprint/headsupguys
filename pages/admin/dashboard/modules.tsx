@@ -13,7 +13,7 @@ import { ModuleCard } from "@components/ModuleCard";
 import { Page } from "types/Page";
 import { AdminLayout } from "@components";
 
-const Modules: React.FC = () => {
+const ModulesPage: Page = () => {
     const [modules, setModules] = useState([]);
 
     async function getModules() {
@@ -55,13 +55,13 @@ const Modules: React.FC = () => {
             </Flex>
             <SimpleGrid minChildWidth="20rem" spacing={10}>
                 {modules.map(
-                    ({ moduleId, title, tool, lastUpdated, author }) => (
+                    ({ moduleId, title, toolID, lastUpdated, createdBy }) => (
                         <ModuleCard
                             key={moduleId}
                             title={title}
-                            tool={tool}
+                            tool={toolID}
                             lastUpdated={lastUpdated}
-                            author={author}
+                            author={createdBy}
                         />
                     ),
                 )}
@@ -70,6 +70,6 @@ const Modules: React.FC = () => {
     );
 };
 
-Modules.layout = AdminLayout;
+ModulesPage.layout = AdminLayout;
 
-export default Modules;
+export default ModulesPage;

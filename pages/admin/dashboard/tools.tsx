@@ -86,7 +86,7 @@ const ToolsPage: Page = () => {
                 }
                 confirmText={modalMode === "publish" ? `Publish` : `Delete`}
                 confirmButtonColorScheme={
-                    modalMode === "publish" ? `black` : `red`
+                    modalMode === "publish" ? `black` : `blue`
                 }
             />
             <Flex direction="column" minH="100vh">

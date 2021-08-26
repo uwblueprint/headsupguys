@@ -21,6 +21,7 @@ export interface ModalProps {
     confirmText?: string;
     alignButtonsRight?: boolean;
     confirmButtonColorScheme?: string;
+    size?: string;
 }
 
 // to control modals:

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
-import { Slide, SlideInterface } from "../models/slide";
+import { Module } from "../../../database/models/module";
+import { Slide, SlideInterface } from "../../../database/models/slide";
 
 const patch = async (
     req: NextApiRequest,
@@ -14,13 +15,9 @@ const patch = async (
             .status(404)
             .send({ error: "The slide with the given ID was not found." });
 
-    for (const key in req.body) {
-        if (slide[key] && slide[key] !== req.body[key])
-            slide[key] = req.body[key];
-    }
-
-    await slide.save();
-    res.status(200).send(slide);
+    await Module.findByIdAndUpdate(id, req.body, { new: true })
+        .then((tool) => res.status(200).json(tool))
+        .catch((err) => res.status(500).send(err));
 };
 
 export { patch };

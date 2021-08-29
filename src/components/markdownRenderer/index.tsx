@@ -9,7 +9,6 @@ interface MarkdownRendererProps {
 export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
     return (
         <>
-            {props.children.split("\n").join(",")}
             <ReactMarkdown
                 components={{
                     strong: ({ node, className, children, ...rest }) => (
@@ -22,13 +21,13 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
                                 node.position?.start.line - 1
                             ][node.position?.start.column - 2] === "$" ? (
                                 <>
-                                    <ReactPlayer controls url={rest.href} />
+                                    <div>
+                                        <ReactPlayer controls url={rest.href} />
+                                    </div>
                                 </>
                             ) : (
                                 <a href={rest.href}>{children}</a>
                             )}
-
-                            {JSON.stringify(node)}
                         </>
                     ),
                 }}

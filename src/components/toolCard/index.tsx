@@ -106,7 +106,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                         >
                                             <Button
                                                 isDisabled
-                                                _hover="none"
+                                                _hover={{pointerEvents: "none"}}
                                                 onClick={onPublish}
                                             >
                                                 Publish Tool

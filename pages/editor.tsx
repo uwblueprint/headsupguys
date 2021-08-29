@@ -1,26 +1,19 @@
 import React, { useState } from "react";
 import { Spacer, Flex } from "@chakra-ui/react";
 
-import {
-    Header,
-    Main,
-    Footer,
-    MarkdownEditor,
-    MarkdownRenderer,
-} from "@components";
+import { MarkdownEditor, MarkdownRenderer } from "@components";
 
 const Home: React.FC = () => {
     const [editorText, setEditorText] = useState("Hello world!"); // stores inputted markdown
     return (
         <Flex direction="column" minH="100vh">
-            <Header />
-            <Main title="Text editor testing page" />
             <div className="container">
                 <MarkdownEditor value={editorText} setValue={setEditorText} />
             </div>
+            {JSON.stringify(editorText)}
             <MarkdownRenderer>{editorText}</MarkdownRenderer>
             <Spacer />
-            <Footer />
+            {/* <Footer /> */}
         </Flex>
     );
 };

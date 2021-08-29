@@ -1,0 +1,27 @@
+.markdown h1 {
+    font-size: 48px;
+    color: black;
+    text-decoration: underline;
+    text-decoration-thickness: 30px;
+    text-decoration-color: #7cf952;
+}
+
+.markdown h2 {
+    font-size: 32px;
+    color: black;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: #7cf952;
+}
+
+.markdown h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: black;
+}
+
+.markdown p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: gray;
+}

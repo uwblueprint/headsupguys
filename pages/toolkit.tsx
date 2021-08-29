@@ -61,8 +61,8 @@ const ToolkitLandingPage: React.FC = () => {
                     fontSize={32}
                     textDecoration="underline"
                     textDecorationColor="brand.lime"
-                    textDecorationThickness={2}
-                    textUnderlineOffset={6}
+                    textDecorationThickness="2"
+                    textUnderlineOffset="6"
                 >
                     TOOLS
                 </Heading>

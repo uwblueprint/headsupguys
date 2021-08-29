@@ -7,8 +7,8 @@ import {
     InputProps,
     Image,
     Progress,
+    Button,
 } from "@chakra-ui/react";
-import { Button } from "..";
 
 export interface UserToolCardProps extends InputProps {
     title: string;

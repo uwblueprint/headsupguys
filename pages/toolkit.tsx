@@ -51,7 +51,7 @@ const ToolkitLandingPage: React.FC = () => {
             <AspectRatio maxW="100%" maxH={290} ratio={1}>
                 <iframe
                     title="Toolkit"
-                    src="https://www.youtube.com/embed/QhBnZ6NPOY0"
+                    src="https://www.youtube.com/embed/NAav2ouuLRE"
                     allowFullScreen
                 />
             </AspectRatio>

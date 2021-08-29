@@ -30,8 +30,8 @@ export const UserToolCard: React.FC<UserToolCardProps> = ({
     const styles = {
         card: {
             border: "1px solid #000",
-            width: "360px",
-            height: "360px",
+            maxWidth: "310px",
+            maxHeight: "350px",
             borderRadius: 4,
         },
     };
@@ -57,7 +57,7 @@ export const UserToolCard: React.FC<UserToolCardProps> = ({
                 )}
             </Box>
             <Box alignContent="space-between" py={2}>
-                <Box px={4} py={5}>
+                <Box p={4} textAlign="left">
                     <Heading fontSize={16} fontWeight="700">
                         {title}
                     </Heading>

@@ -68,8 +68,8 @@ const ToolsPage: Page = () => {
     };
 
     const deleteTool = async () => {
-        const res = await axios({
-            method: "PUT",
+        await axios({
+            method: "DELETE",
             url: `/api/tool/deleteOne?id=${selectedToolId}`,
         });
         setRefresh(!refresh);

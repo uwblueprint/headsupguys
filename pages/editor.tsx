@@ -13,7 +13,6 @@ const Home: React.FC = () => {
             {JSON.stringify(editorText)}
             <MarkdownRenderer>{editorText}</MarkdownRenderer>
             <Spacer />
-            {/* <Footer /> */}
         </Flex>
     );
 };

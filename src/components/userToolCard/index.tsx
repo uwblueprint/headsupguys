@@ -40,11 +40,13 @@ export const UserToolCard: React.FC<UserToolCardProps> = ({
         <SimpleGrid __css={styles.card}>
             <Box bg="lightgrey" borderRadius="4px 4px 0 0" h="123px">
                 {progressValue && progressValue > 0 && (
-                    <Progress
-                        colorScheme="green"
-                        size="lg"
-                        value={progressValue}
-                    />
+                    <Box h="17px" backgroundColor="black">
+                        <Box
+                            w={`${progressValue}%`}
+                            h="100%"
+                            backgroundColor="brand.lime"
+                        ></Box>
+                    </Box>
                 )}
                 {image && (
                     <Image

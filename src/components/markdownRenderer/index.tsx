@@ -8,22 +8,6 @@ interface MarkdownRendererProps {
     children: string;
 }
 
-const removePrependedDollars = (text: string) => {
-    let newString = "";
-    let found = false;
-    for (let i = 0; i < text.length; i++) {
-        if (text[i] === "#" || found) {
-            newString += text[i];
-        } else if (text[i] !== "$" || found) {
-            newString += text[i];
-            found = true;
-        } else {
-            newString += "` `";
-        }
-    }
-    return newString;
-};
-
 export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
     return (
         <>
@@ -31,11 +15,6 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
                 <>
                     {line === "" ? (
                         <div style={{ height: 15 }}></div>
-                    ) : line[0] === "$" ? (
-                        <BaseRenderer
-                            parentString={props.children}
-                            content={removePrependedDollars(line)}
-                        />
                     ) : (
                         <BaseRenderer
                             parentString={props.children}

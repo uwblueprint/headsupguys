@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import ReactDOMServer from "react-dom/server";
 import React from "react";
 import style from "./markdown-renderer.module.css";
 import ReactPlayer from "react-player";
@@ -30,6 +31,18 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
                             )}
                         </>
                     ),
+                    p: ({ node, className, children, ...rest }) => {
+                        return (
+                            <>
+                                {children.map((child) =>
+                                    typeof child === "string" &&
+                                    child[child.length - 1] === "$"
+                                        ? child.replace("$", "")
+                                        : child,
+                                )}
+                            </>
+                        );
+                    },
                 }}
                 className={style.markdown}
             >

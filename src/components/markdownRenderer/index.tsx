@@ -19,7 +19,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
                 {splitText.map((space, i) => (
                     <>{i > 0 && <pre>{"  "}</pre>}</>
                 ))}
-                {newText}
+                <MarkdownRenderer>{newText}</MarkdownRenderer>
             </div>
         );
     };
@@ -49,7 +49,6 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
                     ),
                     p: ({ node, className, children, ...rest }) => {
                         return (
-                            <div className="paragraph">
                             <div>
                                 {children.map(
                                     (child) =>

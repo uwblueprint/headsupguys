@@ -14,7 +14,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
             {props.children.split("\n").map((line) => (
                 <>
                     {line === "" ? (
-                        <div style={{ height: 15 }}></div>
+                        <div className="newline" />
                     ) : (
                         <BaseRenderer
                             parentString={props.children}
@@ -31,15 +31,12 @@ const BaseRenderer: React.FC<{ parentString: string; content: string }> = ({
     parentString,
     content,
 }) => (
-    <div style={{ display: "flex", flexDirection: "row" }}>
+    <div className="md-row">
         <ReactMarkdown
             components={{
                 a: ({ node, className, children, ...rest }) => (
                     <>
-                        {node.position?.start.offset > 0 &&
-                        parentString.split("\n")[node.position?.start.line - 1][
-                            node.position?.start.column - 2
-                        ] === "$" ? (
+                        {content.includes("$[") ? (
                             <>
                                 <div>
                                     <ReactPlayer controls url={rest.href} />
@@ -53,7 +50,7 @@ const BaseRenderer: React.FC<{ parentString: string; content: string }> = ({
             }}
             className={style.markdown}
         >
-            {content}
+            {content.replace("$[", "[")}
         </ReactMarkdown>
     </div>
 );

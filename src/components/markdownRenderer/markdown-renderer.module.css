@@ -87,6 +87,15 @@
     display: inline;
 }
 
+.markdown .newline {
+    height: 15px;
+}
+
+.markdown .md-row {
+    display: flex;
+    flex-direction: row;
+}
+
 .markdown div {
     white-space: pre-wrap;
 }

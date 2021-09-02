@@ -17,7 +17,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
         return (
             <div style={{ display: "flex", flexDirection: "row" }}>
                 {splitText.map((space, i) => (
-                    <>{i > 0 && <pre className="paragraph">{"  "}</pre>}</>
+                    <>{i > 0 && <pre>{"  "}</pre>}</>
                 ))}
                 {newText}
             </div>
@@ -50,23 +50,31 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
                     p: ({ node, className, children, ...rest }) => {
                         return (
                             <div className="paragraph">
-                                {children.map((child) =>
-                                    typeof child === "string"
-                                        ? child[child.length - 1] === "$"
-                                            ? child.replace("$", "")
-                                            : child[0] === "$" ||
-                                              child.includes("\n$")
-                                            ? child
-                                                  .split("\n")
-                                                  .map((el) =>
-                                                      el.includes("$")
-                                                          ? replacePrependedDollars(
-                                                                el,
-                                                            )
-                                                          : el,
-                                                  )
-                                            : child
-                                        : child,
+                            <div>
+                                {children.map(
+                                    (child) =>
+                                        typeof child === "string" ? (
+                                            child[child.length - 1] === "$" ? (
+                                                child.replace("$", "") //removes $ before video link
+                                            ) : child[0] === "$" ||
+                                              child.includes("\n$") ? ( //checking for initial indentation
+                                                child
+                                                    .split("\n")
+                                                    .map((el) =>
+                                                        el.includes("$")
+                                                            ? replacePrependedDollars(
+                                                                  el,
+                                                              )
+                                                            : el,
+                                                    )
+                                            ) : (
+                                                <ReactMarkdown>
+                                                    {child}
+                                                </ReactMarkdown>
+                                            ) //no indentation needed for string
+                                        ) : (
+                                            child
+                                        ), //not a string
                                 )}
                             </div>
                         );

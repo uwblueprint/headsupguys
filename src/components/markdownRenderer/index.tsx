@@ -50,9 +50,6 @@ const BaseRenderer: React.FC<{ parentString: string; content: string }> = ({
                         )}
                     </>
                 ),
-                pre: ({ node, className, children, ...rest }) => (
-                    <pre>{"    "}</pre>
-                ),
             }}
             className={style.markdown}
         >

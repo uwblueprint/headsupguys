@@ -7,7 +7,23 @@ import ReactPlayer from "react-player";
 interface MarkdownRendererProps {
     children: string;
 }
+
 export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
+    const replacePrependedDollars = (text: string) => {
+        const splitText = text.split("$");
+        let newText = (splitText[0] + "\n" + splitText.slice(1).join(""))
+            .replaceAll(/\$/g, "")
+            .replace("\n", "");
+        return (
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                {splitText.map((space, i) => (
+                    <>{i > 0 && <pre className="paragraph">{"  "}</pre>}</>
+                ))}
+                {newText}
+            </div>
+        );
+    };
+
     return (
         <>
             <ReactMarkdown
@@ -33,14 +49,26 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
                     ),
                     p: ({ node, className, children, ...rest }) => {
                         return (
-                            <>
+                            <div className="paragraph">
                                 {children.map((child) =>
-                                    typeof child === "string" &&
-                                    child[child.length - 1] === "$"
-                                        ? child.replace("$", "")
+                                    typeof child === "string"
+                                        ? child[child.length - 1] === "$"
+                                            ? child.replace("$", "")
+                                            : child[0] === "$" ||
+                                              child.includes("\n$")
+                                            ? child
+                                                  .split("\n")
+                                                  .map((el) =>
+                                                      el.includes("$")
+                                                          ? replacePrependedDollars(
+                                                                el,
+                                                            )
+                                                          : el,
+                                                  )
+                                            : child
                                         : child,
                                 )}
-                            </>
+                            </div>
                         );
                     },
                 }}

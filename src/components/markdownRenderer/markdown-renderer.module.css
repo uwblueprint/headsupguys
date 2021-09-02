@@ -44,6 +44,16 @@
     color: gray;
 }
 
+.markdown pre {
+    font: inherit;
+}
+
+.markdown code {
+    white-space: pre;
+    text-decoration: none !important;
+    text-decoration-color: white;
+}
+
 .markdown ul {
     font-family: Arial, Helvetica, sans-serif;
     margin-left: 30px;
@@ -65,4 +75,18 @@
     border-left: 1px solid gray;
     margin: 5px;
     padding: 5px;
+}
+.markdown div {
+    display: flex;
+    flex-direction: row;
+}
+.markdown strong {
+    display: inline;
+}
+.markdown em {
+    display: inline;
+}
+
+.markdown div {
+    white-space: pre-wrap;
 }

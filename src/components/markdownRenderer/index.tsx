@@ -1,5 +1,4 @@
 import ReactMarkdown from "react-markdown";
-import ReactDOMServer from "react-dom/server";
 import React from "react";
 import style from "./markdown-renderer.module.css";
 import ReactPlayer from "react-player";
@@ -16,10 +15,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
                     {line === "" ? (
                         <div className="newline" />
                     ) : (
-                        <BaseRenderer
-                            parentString={props.children}
-                            content={line}
-                        />
+                        <BaseRenderer content={line} />
                     )}
                 </>
             ))}
@@ -27,10 +23,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
     );
 };
 
-const BaseRenderer: React.FC<{ parentString: string; content: string }> = ({
-    parentString,
-    content,
-}) => (
+const BaseRenderer: React.FC<{ content: string }> = ({ content }) => (
     <div className="md-row">
         <ReactMarkdown
             components={{
@@ -48,9 +41,10 @@ const BaseRenderer: React.FC<{ parentString: string; content: string }> = ({
                     </>
                 ),
             }}
-            className={style.markdown}
+            className={style.markdown + " right"}
         >
             {content.replace("$[", "[")}
         </ReactMarkdown>
+        {content}
     </div>
 );

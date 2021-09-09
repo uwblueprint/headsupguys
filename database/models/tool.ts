@@ -16,6 +16,7 @@ export interface ToolInterface {
     relatedToolsIDs: [Schema.Types.ObjectId];
     status: StatusType;
     editing: boolean;
+    createdBy: string[];
 }
 
 const ToolSchema = new Schema<ToolInterface>(
@@ -26,7 +27,7 @@ const ToolSchema = new Schema<ToolInterface>(
         },
         video: String,
         description: String,
-        moduleID: { type: Schema.Types.ObjectId, ref: "Module" },
+        moduleID: { type: Schema.Types.ObjectId, ref: "Module", default: null },
         resources: [{ title: String, description: String, url: String }],
         selfCheckGroupID: {
             type: Schema.Types.ObjectId,
@@ -43,6 +44,7 @@ const ToolSchema = new Schema<ToolInterface>(
             default: StatusType.DRAFT,
         },
         editing: Boolean,
+        createdBy: [String],
     },
     {
         timestamps: true,

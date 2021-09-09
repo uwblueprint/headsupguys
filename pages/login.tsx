@@ -6,6 +6,10 @@ import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Auth } from "aws-amplify";
 
 import { TextInput, PasswordInput, AuthButton } from "@components";
+import {
+    validateEmailHelper,
+    validatePasswordHelper,
+} from "src/utils/auth/authHelpers";
 
 const Login: React.FC = () => {
     const router = useRouter();
@@ -42,25 +46,28 @@ const Login: React.FC = () => {
     };
 
     const validateEmail = async () => {
-        if (isEmail(email)) {
-            const emailExists = await userExist(email);
-            if (!emailExists) {
-                setEmailInvalid({
-                    isInvalid: true,
-                    reason: "Invalid email- no account associated with this email",
-                });
-                setCanContinue(false);
-            } else {
-                setEmailInvalid({ isInvalid: false, reason: "" });
-                setCanContinue(true);
-            }
-        } else {
+        const validateEmailRes = await validateEmailHelper(email);
+        if (!validateEmailRes.isValidFormat) {
+            setCanContinue(false);
             setEmailInvalid({
                 isInvalid: true,
-                reason: "Not a valid HeadsUpGuys email!",
+                reason: "Not a valid email format",
             });
-            setCanContinue(false);
+            return;
         }
+        if (!validateEmailRes.accountExists) {
+            setCanContinue(false);
+            setEmailInvalid({
+                isInvalid: true,
+                reason: "No account associated with this email",
+            });
+            return;
+        }
+        setCanContinue(true);
+        setEmailInvalid({
+            isInvalid: false,
+            reason: "",
+        });
     };
 
     async function logIn(event) {

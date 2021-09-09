@@ -12,6 +12,10 @@ import {
     ProgressDots,
 } from "@components";
 import { Auth } from "aws-amplify";
+import {
+    validateEmailHelper,
+    validatePasswordHelper,
+} from "src/utils/auth/authHelpers";
 
 const Signup: React.FC = () => {
     const router = useRouter();
@@ -49,51 +53,29 @@ const Signup: React.FC = () => {
         }
     }, [router.isReady]);
 
-    const userExist = async (email) => {
-        return await Auth.signIn(email.toLowerCase(), "123")
-            .then((res) => {
-                return false;
-            })
-            .catch((error) => {
-                const code = error.code;
-                switch (code) {
-                    case "UserNotFoundException":
-                        return false;
-                    case "NotAuthorizedException":
-                        return true;
-                    case "PasswordResetRequiredException":
-                        return true;
-                    default:
-                        return false;
-                }
-            });
-    };
-
     const validateEmail = async () => {
-        if (email == "") {
-            // don't set as error state if it's currently empty
-            setEmailInvalid({ isInvalid: false, reason: "" });
+        const validateEmailRes = await validateEmailHelper(email);
+        if (!validateEmailRes.isValidFormat) {
             setCanContinue(false);
-        } else if (isEmail(email)) {
-            // Check if account already exists
-            const emailExists = await userExist(email);
-            if (emailExists) {
-                setEmailInvalid({
-                    isInvalid: true,
-                    reason: "Account already exists with this email",
-                });
-                setCanContinue(false);
-            } else {
-                setEmailInvalid({ isInvalid: false, reason: "" });
-                setCanContinue(true);
-            }
-        } else {
             setEmailInvalid({
                 isInvalid: true,
                 reason: "Not a valid email format",
             });
-            setCanContinue(false);
+            return;
         }
+        if (validateEmailRes.accountExists) {
+            setCanContinue(false);
+            setEmailInvalid({
+                isInvalid: true,
+                reason: "Account already exists with this email",
+            });
+            return;
+        }
+        setCanContinue(true);
+        setEmailInvalid({
+            isInvalid: false,
+            reason: "",
+        });
     };
 
     const validateName = () => {
@@ -105,6 +87,8 @@ const Signup: React.FC = () => {
     };
 
     const validatePassword = () => {
+        const validatePasswordRes = validatePasswordHelper(password);
+
         if (password == "") {
             // don't set as error state if it's currently empty
             setPasswordInvalid({ isInvalid: false, reason: "" });

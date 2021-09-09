@@ -18,10 +18,8 @@ interface ProtectedProps {
 const Protected: React.FC<ProtectedProps> = ({ username }) => {
     return (
         <Flex direction="column" minH="100vh">
-            <Header />
-            <Main title={`This is a protected route with user ${username}`} />
+            <h5>This is a protected route with user {username}</h5>
             <Spacer />
-            <Footer />
         </Flex>
     );
 };

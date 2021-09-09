@@ -20,27 +20,24 @@ const userExist = async (email) => {
         });
 };
 
-const validateEmail = async (email) => {
+const validateEmailHelper = async (email) => {
     if (isEmail(email)) {
         const emailExists = await userExist(email);
         if (!emailExists) {
             return {
-                isInvalid: true,
-                reason: "Invalid email- no account associated with this email",
-                canContinue: false,
+                isValidFormat: true,
+                accountExists: false,
             };
         } else {
             return {
-                isInvalid: false,
-                reason: "",
-                canContinue: true,
+                isValidFormat: true,
+                accountExists: true,
             };
         }
     } else {
         return {
-            isInvalid: true,
-            reason: "Invalid email",
-            canContinue: false,
+            isValidFormat: false,
+            accountExists: false,
         };
     }
 };
@@ -52,7 +49,7 @@ const isPasswordValid = (password) => {
     return pattern.test(password);
 };
 
-const validatePassword = (newPassword) => {
+const validatePasswordHelper = (newPassword) => {
     if (newPassword == "") {
         // don't set as error state if it's currently empty
         return { isInvalid: false, reason: "", canContinue: false };
@@ -77,4 +74,4 @@ const validatePassword = (newPassword) => {
     }
 };
 
-export { userExist, validateEmail, validatePassword };
+export { userExist, validateEmailHelper, validatePasswordHelper };

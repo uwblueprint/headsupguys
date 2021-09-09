@@ -9,13 +9,12 @@
       "UnauthRoleName": "amplify-headsupguys-dev-211912-unauthRole",
       "StackName": "amplify-headsupguys-dev-211912",
       "StackId": "arn:aws:cloudformation:ca-central-1:115745698650:stack/amplify-headsupguys-dev-211912/85ec9f50-df8a-11eb-84d4-06575e0f2f78",
-      "AmplifyAppId": "d1u33y46xg7v0p"
+      "AmplifyAppId": "d1u33y46xg7v0p",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-headsupguys-dev-211912-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "headsupguys9716c6d8": {
-          "googleClientId": "1056539824258-o157g074gefnbkt93nbblgmn9o92tfa1.apps.googleusercontent.com"
-        }
+        "headsupguys9716c6d8": {}
       },
       "function": {
         "headsupguys9716c6d8PreSignup": {

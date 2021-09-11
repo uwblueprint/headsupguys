@@ -9,8 +9,6 @@ import { withSSRContext } from "aws-amplify";
 import { Spacer, Flex } from "@chakra-ui/react";
 // import { Auth } from from "aws-amplify" // if you wanted to call Auth on client-side
 
-import { Header, Main, Footer } from "@components";
-
 interface ProtectedProps {
     username?: string;
 }

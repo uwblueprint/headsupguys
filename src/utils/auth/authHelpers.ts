@@ -3,7 +3,7 @@ import isEmail from "validator/lib/isEmail";
 
 const userExist = async (email) => {
     return await Auth.signIn(email.toLowerCase(), "123")
-        .then((res) => {
+        .then(() => {
             return false;
         })
         .catch((error) => {
@@ -53,7 +53,7 @@ const validatePasswordHelper = (newPassword) => {
     if (newPassword == "") {
         // don't set as error state if it's currently empty
         return { isInvalid: false, reason: "", canContinue: false };
-    } 
+    }
     if (newPassword.length < 8) {
         return {
             isInvalid: true,

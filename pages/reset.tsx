@@ -207,7 +207,7 @@ const ResetPassword: React.FC = () => {
                         confirmationCode,
                         newPassword,
                     )
-                        .then((data) => {
+                        .then(() => {
                             setMessage(null);
                             incrementStage();
                         })

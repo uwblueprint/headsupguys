@@ -61,7 +61,7 @@ const ModulesPage: Page = () => {
                             title={title}
                             tool={toolID}
                             lastUpdated={lastUpdated}
-                            author={createdBy}
+                            author={createdBy.join(", ")}
                         />
                     ),
                 )}

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Flex, Box, Heading, Text, Center } from "@chakra-ui/react";
-import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/react";
 import { Auth } from "aws-amplify";
@@ -22,35 +21,11 @@ const ResetPassword: React.FC = () => {
         isInvalid: false,
         reason: "",
     });
-    const [passwordInvalid, setPasswordInvalid] = useState({
-        isInvalid: false,
-        reason: "",
-    });
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [confirmationCode, setConfirmationCode] = useState("");
     const [canContinue, setCanContinue] = useState(false);
     const [message, setMessage] = useState(null);
-
-    const userExist = async (email) => {
-        return await Auth.signIn(email.toLowerCase(), "123")
-            .then((res) => {
-                return false;
-            })
-            .catch((error) => {
-                const code = error.code;
-                switch (code) {
-                    case "UserNotFoundException":
-                        return false;
-                    case "NotAuthorizedException":
-                        return true;
-                    case "PasswordResetRequiredException":
-                        return true;
-                    default:
-                        return true;
-                }
-            });
-    };
 
     const validateEmail = async () => {
         const validateEmailRes = await validateEmailHelper(email);
@@ -85,38 +60,37 @@ const ResetPassword: React.FC = () => {
     };
 
     const validatePassword = () => {
-        if (newPassword == "") {
-            // don't set as error state if it's currently empty
-            setPasswordRequirements({ isInvalid: false, reason: "" });
-            setCanContinue(false);
-        } else if (newPassword.length < 8) {
+        const validatePasswordRes = validatePasswordHelper(newPassword);
+
+        if (!validatePasswordRes.canContinue) {
+            setPasswordRequirements({
+                isInvalid: validatePasswordRes.isInvalid,
+                reason: validatePasswordRes.reason,
+            });
+            setCanContinue(validatePasswordRes.canContinue);
+            return;
+        }
+        if (newPassword != confirmPassword) {
             setPasswordRequirements({
                 isInvalid: true,
-                reason: "Password is too short, password must be 8 characters",
+                reason: "Passwords must match",
             });
             setCanContinue(false);
-        } else {
-            if (isPasswordValid(newPassword)) {
-                setPasswordRequirements({
-                    isInvalid: false,
-                    reason: "",
-                });
-                if (
-                    newPassword == confirmPassword &&
-                    confirmationCode.length > 0
-                )
-                    setCanContinue(true);
-                else {
-                    setCanContinue(false);
-                }
-            } else {
-                setPasswordRequirements({
-                    isInvalid: true,
-                    reason: "Password must contain a special character, capital letter, lowecase letter and number.",
-                });
-                setCanContinue(false);
-            }
+            return;
         }
+        if (confirmationCode.length == 0) {
+            setPasswordRequirements({
+                isInvalid: true,
+                reason: "Please enter confirmation code",
+            });
+            setCanContinue(false);
+            return;
+        }
+        setPasswordRequirements({
+            isInvalid: false,
+            reason: "",
+        });
+        setCanContinue(true);
     };
 
     const incrementStage = () => {
@@ -213,29 +187,12 @@ const ResetPassword: React.FC = () => {
                 name="password"
                 label="Re-Enter your Password"
                 placeholder="Password"
-                isInvalid={passwordInvalid.isInvalid}
-                errorMessage={passwordInvalid.reason}
+                isInvalid={passwordRequirements.isInvalid}
                 isRequired
                 onChange={(event) => {
                     setConfirmPassword(event.currentTarget.value);
                 }}
-                onBlur={() => {
-                    if (confirmPassword != newPassword) {
-                        setPasswordInvalid({
-                            isInvalid: true,
-                            reason: "Passwords do not match",
-                        });
-                        setCanContinue(false);
-                    } else {
-                        if (confirmationCode.length > 0) {
-                            setPasswordInvalid({
-                                isInvalid: false,
-                                reason: "",
-                            });
-                            setCanContinue(true);
-                        }
-                    }
-                }}
+                onBlur={validatePassword}
                 mb={5}
             />
             <Text textAlign="left">

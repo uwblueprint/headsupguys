@@ -53,25 +53,26 @@ const validatePasswordHelper = (newPassword) => {
     if (newPassword == "") {
         // don't set as error state if it's currently empty
         return { isInvalid: false, reason: "", canContinue: false };
-    } else if (newPassword.length < 8) {
+    } 
+    if (newPassword.length < 8) {
         return {
             isInvalid: true,
             reason: "Password is too short, password must be 8 characters",
             canContinue: false,
         };
-    } else if (isPasswordValid(newPassword)) {
-        return {
-            isInvalid: false,
-            reason: "",
-            canContinue: false,
-        };
-    } else {
+    }
+    if (!isPasswordValid(newPassword)) {
         return {
             isInvalid: true,
             reason: "Password must contain a special character, capital letter, lowecase letter and number.",
             canContinue: false,
         };
     }
+    return {
+        isInvalid: false,
+        reason: "",
+        canContinue: true,
+    };
 };
 
 export { userExist, validateEmailHelper, validatePasswordHelper };

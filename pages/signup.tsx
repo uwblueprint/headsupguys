@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Flex, Box, Heading, Text, Icon } from "@chakra-ui/react";
-import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon, WarningIcon } from "@chakra-ui/icons";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import {
@@ -16,6 +15,7 @@ import {
     validateEmailHelper,
     validatePasswordHelper,
 } from "src/utils/auth/authHelpers";
+import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 
 const Signup: React.FC = () => {
     const router = useRouter();
@@ -88,36 +88,11 @@ const Signup: React.FC = () => {
 
     const validatePassword = () => {
         const validatePasswordRes = validatePasswordHelper(password);
-
-        if (password == "") {
-            // don't set as error state if it's currently empty
-            setPasswordInvalid({ isInvalid: false, reason: "" });
-            setCanContinue(false);
-        } else if (password.length < 8) {
-            setPasswordInvalid({
-                isInvalid: true,
-                reason: "Password is too short",
-            });
-            setCanContinue(false);
-        } else {
-            const pattern = new RegExp(
-                "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-+_!@#$%^&*.,?]).+$",
-            );
-
-            if (pattern.test(password)) {
-                setPasswordInvalid({
-                    isInvalid: false,
-                    reason: "",
-                });
-                setCanContinue(true);
-            } else {
-                setPasswordInvalid({
-                    isInvalid: true,
-                    reason: "Password must contain a digit, special character, uppercase and lowercase letter.",
-                });
-                setCanContinue(false);
-            }
-        }
+        setPasswordInvalid({
+            isInvalid: validatePasswordRes.isInvalid,
+            reason: validatePasswordRes.reason,
+        });
+        setCanContinue(validatePasswordRes.canContinue);
     };
 
     const validateTermsAgreement = (agreements = termsAgreement) => {
@@ -132,7 +107,11 @@ const Signup: React.FC = () => {
         <>
             <AuthButton
                 text={"Sign Up with Google"}
-                onClick={() => Auth.federatedSignIn({ provider: "Google" })}
+                onClick={() =>
+                    Auth.federatedSignIn({
+                        provider: CognitoHostedUIIdentityProvider.Google,
+                    })
+                }
             ></AuthButton>
             <Text m={5}>OR</Text>
             <TextInput

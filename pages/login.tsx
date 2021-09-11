@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Flex, Box, Heading, Text, Link } from "@chakra-ui/react";
-import isEmail from "validator/lib/isEmail";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Auth } from "aws-amplify";
 
 import { TextInput, PasswordInput, AuthButton } from "@components";
-import {
-    validateEmailHelper,
-    validatePasswordHelper,
-} from "src/utils/auth/authHelpers";
+import { validateEmailHelper } from "src/utils/auth/authHelpers";
+import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 
 const Login: React.FC = () => {
     const router = useRouter();
@@ -25,25 +22,6 @@ const Login: React.FC = () => {
         reason: "",
     });
     const [canContinue, setCanContinue] = useState(false);
-
-    const userExist = async (email) => {
-        return await Auth.signIn(email.toLowerCase(), "123")
-            .then((res) => {
-                return false;
-            })
-            .catch((error) => {
-                switch (error.code) {
-                    case "UserNotFoundException":
-                        return false;
-                    case "NotAuthorizedException":
-                        return true;
-                    case "PasswordResetRequiredException":
-                        return true;
-                    default:
-                        return false;
-                }
-            });
-    };
 
     const validateEmail = async () => {
         const validateEmailRes = await validateEmailHelper(email);
@@ -88,7 +66,11 @@ const Login: React.FC = () => {
         <>
             <AuthButton
                 text={"Login with Google"}
-                onClick={() => Auth.federatedSignIn({ provider: "Google" })}
+                onClick={() =>
+                    Auth.federatedSignIn({
+                        provider: CognitoHostedUIIdentityProvider.Google,
+                    })
+                }
             ></AuthButton>
 
             <Text m={5}>OR</Text>
@@ -112,7 +94,11 @@ const Login: React.FC = () => {
         <>
             <AuthButton
                 text={"Login with Google"}
-                onClick={() => Auth.federatedSignIn({ provider: "Google" })}
+                onClick={() =>
+                    Auth.federatedSignIn({
+                        provider: CognitoHostedUIIdentityProvider.Google,
+                    })
+                }
             ></AuthButton>
             <PasswordInput
                 fontFamily="Geogrotesque"

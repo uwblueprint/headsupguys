@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
-    Flex,
-    Center,
+    VStack,
     FormControl,
     FormLabel,
     Wrap,
@@ -69,18 +68,17 @@ export const ToolHomePage: React.FC = ({
                         isTruncated
                     />
                 </FormControl>
-
                 <FormControl id="first-name" isRequired ml={"5"}>
-                    <FormLabel type={"url"} fontSize={20} fontWeight={"bold"}>
-                        Video Link
+                    <FormLabel fontSize={20} fontWeight={"bold"}>
+                        Select Tool Type
                     </FormLabel>
-                    <Input
-                        width={"full"}
-                        size={"lg"}
-                        isRequired
-                        placeholder="URL"
-                        isTruncated
-                    />
+                    <Select placeholder={"Select option"} size={"lg"}>
+                        <option>Type 1</option>
+                        <option>Type 2</option>
+                        <option>Type 3</option>
+                        <option>Type 4</option>
+                        <option>Type 5</option>
+                    </Select>
                 </FormControl>
             </WrapItem>
             <WrapItem width={"full"}>
@@ -103,7 +101,7 @@ export const ToolHomePage: React.FC = ({
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Link Module
                     </FormLabel>
-                    <Select placeholder={"Select option"}>
+                    <Select placeholder={"Select option"} size={"lg"}>
                         <option>Module 1</option>
                         <option>Module 2</option>
                         <option>Module 3</option>
@@ -111,53 +109,71 @@ export const ToolHomePage: React.FC = ({
                         <option>Module 5</option>
                     </Select>
                 </FormControl>
+                <FormControl id="first-name" isRequired ml={"5"}>
+                    <FormLabel fontSize={20} fontWeight={"bold"}>
+                        Video Link
+                    </FormLabel>
+                    <Input
+                        width={"full"}
+                        size={"lg"}
+                        isRequired
+                        onChange={(e) =>
+                            onChangeTitleInput(toolId, e.target.value)
+                        }
+                        value={title}
+                        placeholder="URL"
+                        isTruncated
+                    />
+                </FormControl>
             </WrapItem>
             <WrapItem width={"full"}>
-                <FormControl id="first-name" isRequired>
+                <FormControl id="first-name" alignSelf={"right"}>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
-                        Additional Resource
+                        Related Resources
                     </FormLabel>
-                    <HStack>
-                        <Button variant="outline" p={"20"}>
-                            <Circle
-                                borderColor={"#E5E5E5"}
-                                borderWidth={"2px"}
-                                size={"7"}
-                            >
-                                <AddIcon color={"#E5E5E5"} />
-                            </Circle>
+                    <VStack spacing="24px">
+                        <Button colorScheme="teal" variant="link">
+                            + Add Link
                         </Button>
-
-                        {additionalResources.map((item, index) => (
-                            <Box
-                                ml={"50"}
-                                maxW={"400"}
-                                borderWidth="1px"
-                                borderRadius="lg"
-                                overflow="hidden"
-                            >
-                                <Heading
-                                    p={5}
-                                    mb={"40"}
-                                    height={"80%"}
-                                    fontSize={"20"}
-                                >{`Additional Resource Title ${
-                                    index + 1
-                                }`}</Heading>
-                                <Box d="flex" alignItems="baseline">
-                                    <Button
-                                        width={"full"}
-                                        p={"6"}
-                                        bg={"#E5E5E5"}
-                                        color={"black"}
-                                        _hover={{ background: "grey" }}
-                                    >
-                                        Delete
-                                    </Button>
-                                </Box>
-                            </Box>
-                        ))}
-                    </HStack>
+                        <Button colorScheme="teal" variant="link">
+                            + Add Link
+                        </Button>
+                        <Button colorScheme="teal" variant="link">
+                            + Add Link
+                        </Button>
+                    </VStack>
+                </FormControl>
+                <FormControl id="first-name" ml={"5"}>
+                    <FormLabel fontSize={20} fontWeight={"bold"}>
+                        Related Stories
+                    </FormLabel>
+                    <Input
+                        width={"full"}
+                        size={"lg"}
+                        isRequired
+                        onChange={(e) =>
+                            onChangeTitleInput(toolId, e.target.value)
+                        }
+                        value={title}
+                        placeholder="URL"
+                        isTruncated
+                    />
+                </FormControl>
+                <FormControl id="first-name" ml={"5"}>
+                    <FormLabel fontSize={20} fontWeight={"bold"}>
+                        External Resources
+                    </FormLabel>
+                    <Input
+                        width={"full"}
+                        size={"lg"}
+                        isRequired
+                        onChange={(e) =>
+                            onChangeTitleInput(toolId, e.target.value)
+                        }
+                        value={title}
+                        placeholder="URL"
+                        isTruncated
+                    />
                 </FormControl>
             </WrapItem>
             <WrapItem width={"full"}>

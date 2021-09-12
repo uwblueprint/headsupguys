@@ -47,11 +47,13 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                 >
                     <Box w="100%" h="5%">
                         {progressValue && (
-                            <Progress
-                                colorScheme="green"
-                                size="lg"
-                                value={progressValue}
-                            />
+                            <Box h="17px" backgroundColor="black">
+                                <Box
+                                    w={`${progressValue}%`}
+                                    h="100%"
+                                    backgroundColor="brand.lime"
+                                ></Box>
+                            </Box>
                         )}
                     </Box>
                     <Box w="100%" h="95%" overflow="auto">

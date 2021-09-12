@@ -54,7 +54,8 @@ export const ToolHomePage: React.FC = ({
                 <FormControl isRequired>
                     <FormLabel fontSize={20}>Thumbnail</FormLabel>
                     <Input
-                        padding={"1"}
+                        size={"lg"}
+                        padding={"2"}
                         width={"50%"}
                         type="file"
                         id="photo"

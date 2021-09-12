@@ -14,12 +14,9 @@ import {
 export const ToolHomePage: React.FC = ({
     toolId,
     title,
-    videoLink,
+    video,
     description,
-    onChangeTitleInput,
-    onChangeToolType,
-    onChangeVideoLinkInput,
-    onChangeDescriptionInput,
+    onChangeInput,
 }) => {
     return (
         <Wrap spacing="30px">
@@ -33,7 +30,7 @@ export const ToolHomePage: React.FC = ({
                         size={"lg"}
                         isRequired
                         onChange={(e) =>
-                            onChangeTitleInput(toolId, e.target.value)
+                            onChangeInput(toolId, e.target.value, "title")
                         }
                         value={title}
                         placeholder="Title"
@@ -80,7 +77,7 @@ export const ToolHomePage: React.FC = ({
                         size={"lg"}
                         isRequired
                         onChange={(e) =>
-                            onChangeDescriptionInput(toolId, e.target.value)
+                            onChangeInput(toolId, e.target.value, "description")
                         }
                         value={description}
                         placeholder="Description"
@@ -110,9 +107,9 @@ export const ToolHomePage: React.FC = ({
                         size={"lg"}
                         isRequired
                         onChange={(e) =>
-                            onChangeVideoLinkInput(toolId, e.target.value)
+                            onChangeInput(toolId, e.target.value, "video")
                         }
-                        value={videoLink}
+                        value={video}
                         placeholder="URL"
                         isTruncated
                     />

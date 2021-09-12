@@ -37,30 +37,12 @@ const Home: React.FC = () => {
             target;
         setToolList(newTool);
     };
-
-    const changeTitleInput = (id, target) => {
+    const changeInput = (id, target, type) => {
         const newTool = toolList.slice(0);
-        newTool[newTool.findIndex((e) => e._id === id)].title = target;
+        newTool[newTool.findIndex((e) => e._id === id)][type] = target;
         setToolList(newTool);
     };
 
-    const changeVideoLinkInput = (id, target) => {
-        const newTool = toolList.slice(0);
-        newTool[newTool.findIndex((e) => e._id === id)].video = target;
-        setToolList(newTool);
-    };
-    const changeDescriptionInput = (id, target) => {
-        const newTool = toolList.slice(0);
-        newTool[newTool.findIndex((e) => e._id === id)].description = target;
-        setToolList(newTool);
-    };
-
-    const removeAdditionalResource = (id, target) => {
-        const newTool = toolList.slice(0);
-        newTool[newTool.findIndex((e) => e._id === id)].additionalResources =
-            target;
-        setToolList(newTool);
-    };
 
     //self check card
     const [questionList, setQuestionList] = useState([
@@ -284,16 +266,11 @@ const Home: React.FC = () => {
                         {toolList.map((item, index) => (
                             <ToolHomePage
                                 title={item.title}
-                                videoLink={item.video}
+                                video={item.video}
                                 description={item.description}
                                 toolId={item._id}
                                 additionalResources={item.additionalResources}
-                                onChangeTitleInput={changeTitleInput}
-                                onChangeToolType={changeToolType}
-                                onChangeVideoLinkInput={changeVideoLinkInput}
-                                onChangeDescriptionInput={
-                                    changeDescriptionInput
-                                }
+                                onChangeInput={changeInput}
                             ></ToolHomePage>
                         ))}
                     </>

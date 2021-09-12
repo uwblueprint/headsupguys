@@ -5,6 +5,7 @@ import {
     FormLabel,
     Wrap,
     WrapItem,
+    Flex,
     Box,
     Heading,
     Circle,
@@ -83,6 +84,19 @@ export const ToolHomePage: React.FC = ({
             </WrapItem>
             <WrapItem width={"full"}>
                 <FormControl id="first-name" isRequired>
+                    <FormLabel fontSize={20}>Thumbnail</FormLabel>
+                    <Button
+                        variant="outline"
+                        width={"50%"}
+                        mb={"3"}
+                        colorScheme="blue"
+                    >
+                        + Add Link
+                    </Button>
+                </FormControl>
+            </WrapItem>
+            <WrapItem width={"full"}>
+                <FormControl id="first-name" isRequired>
                     <FormLabel fontSize={20}>
                         <b> Description </b>
                         <>(max 500 characters)</>
@@ -131,49 +145,67 @@ export const ToolHomePage: React.FC = ({
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Related Resources
                     </FormLabel>
-                    <VStack spacing="24px">
-                        <Button colorScheme="teal" variant="link">
-                            + Add Link
-                        </Button>
-                        <Button colorScheme="teal" variant="link">
-                            + Add Link
-                        </Button>
-                        <Button colorScheme="teal" variant="link">
-                            + Add Link
-                        </Button>
-                    </VStack>
+                    <Wrap>
+                        <WrapItem width={"full"}>
+                            <Button variant="link" mb={"3"} colorScheme="blue">
+                                + Add Link
+                            </Button>
+                        </WrapItem>
+                        <WrapItem width={"full"}>
+                            <Button variant="link" mb={"3"} colorScheme="blue">
+                                + Add Link
+                            </Button>
+                        </WrapItem>
+                        <WrapItem width={"full"}>
+                            <Button variant="link" mb={"3"} colorScheme="blue">
+                                + Add Link
+                            </Button>
+                        </WrapItem>
+                    </Wrap>
                 </FormControl>
                 <FormControl id="first-name" ml={"5"}>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Related Stories
                     </FormLabel>
-                    <Input
-                        width={"full"}
-                        size={"lg"}
-                        isRequired
-                        onChange={(e) =>
-                            onChangeTitleInput(toolId, e.target.value)
-                        }
-                        value={title}
-                        placeholder="URL"
-                        isTruncated
-                    />
+                    <Wrap>
+                        <WrapItem width={"full"}>
+                            <Button variant="link" mb={"3"} colorScheme="blue">
+                                + Add Link
+                            </Button>
+                        </WrapItem>
+                        <WrapItem width={"full"}>
+                            <Button variant="link" mb={"3"} colorScheme="blue">
+                                + Add Link
+                            </Button>
+                        </WrapItem>
+                        <WrapItem width={"full"}>
+                            <Button variant="link" mb={"3"} colorScheme="blue">
+                                + Add Link
+                            </Button>
+                        </WrapItem>
+                    </Wrap>
                 </FormControl>
                 <FormControl id="first-name" ml={"5"}>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         External Resources
                     </FormLabel>
-                    <Input
-                        width={"full"}
-                        size={"lg"}
-                        isRequired
-                        onChange={(e) =>
-                            onChangeTitleInput(toolId, e.target.value)
-                        }
-                        value={title}
-                        placeholder="URL"
-                        isTruncated
-                    />
+                    <Wrap>
+                        <WrapItem width={"full"}>
+                            <Button variant="link" mb={"3"} color="#3182CE">
+                                + Add Link
+                            </Button>
+                        </WrapItem>
+                        <WrapItem width={"full"}>
+                            <Button variant="link" mb={"3"} color="#3182CE">
+                                + Add Link
+                            </Button>
+                        </WrapItem>
+                        <WrapItem width={"full"}>
+                            <Button variant="link" mb={"3"} color="#3182CE">
+                                + Add Link
+                            </Button>
+                        </WrapItem>
+                    </Wrap>
                 </FormControl>
             </WrapItem>
             <WrapItem width={"full"}>

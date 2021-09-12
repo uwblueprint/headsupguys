@@ -237,7 +237,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                 <Stack mr={0} minWidth={"50%"} spacing={3}>
                                     <Flex
                                         width={"full"}
-                                        justify={"right"}
+                                        justify={"left"}
                                         wrap={"wrap"}
                                     >
                                         <Heading

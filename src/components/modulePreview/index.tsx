@@ -1,6 +1,5 @@
 import React from "react";
-import { Box, Flex, Progress } from "@chakra-ui/react";
-import { Button } from "..";
+import { Box, Flex, Progress, Button } from "@chakra-ui/react";
 
 export interface ModulePreviewProps {
     previous: boolean;

@@ -53,14 +53,14 @@ export const ToolHomePage: React.FC = ({
             <WrapItem width={"full"}>
                 <FormControl isRequired>
                     <FormLabel fontSize={20}>Thumbnail</FormLabel>
-                    <Button
-                        variant="outline"
+                    <Input
+                        padding={"1"}
                         width={"50%"}
-                        mb={"3"}
-                        colorScheme="blue"
-                    >
-                        Upload Image
-                    </Button>
+                        type="file"
+                        id="photo"
+                        name="photo"
+                        accept="image/*"
+                    ></Input>
                 </FormControl>
             </WrapItem>
             <WrapItem width={"full"}>

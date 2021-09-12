@@ -30,6 +30,14 @@ const Home: React.FC = () => {
         },
     ]);
     //
+
+    const changeToolType = (id, target) => {
+        const newTool = toolList.slice(0);
+        newTool[newTool.findIndex((e) => e._id === id)].recommendedTools =
+            target;
+        setToolList(newTool);
+    };
+
     const changeTitleInput = (id, target) => {
         const newTool = toolList.slice(0);
         newTool[newTool.findIndex((e) => e._id === id)].title = target;
@@ -38,13 +46,19 @@ const Home: React.FC = () => {
 
     const changeVideoLinkInput = (id, target) => {
         const newTool = toolList.slice(0);
-        newTool[newTool.findIndex((e) => e._id === id)].title = target;
+        newTool[newTool.findIndex((e) => e._id === id)].video = target;
+        setToolList(newTool);
+    };
+    const changeDescriptionInput = (id, target) => {
+        const newTool = toolList.slice(0);
+        newTool[newTool.findIndex((e) => e._id === id)].description = target;
         setToolList(newTool);
     };
 
     const removeAdditionalResource = (id, target) => {
         const newTool = toolList.slice(0);
-        newTool[newTool.findIndex((e) => e._id === id)].title = target;
+        newTool[newTool.findIndex((e) => e._id === id)].additionalResources =
+            target;
         setToolList(newTool);
     };
 
@@ -189,11 +203,25 @@ const Home: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Flex direction="column" minH="100vh">
-            <Flex mt={10} wrap={"wrap"} justify={"left"} width={"full"}>
+            <Flex mt={5} wrap={"wrap"} justify={"left"} width={"full"}>
                 <Flex width={"full"}>
-                    <Text ml={10} mr={2} fontWeight="bold" fontSize="4xl">
+                    <Text ml={10} mr={10} fontWeight="bold" fontSize="4xl">
                         Create a Tool
                     </Text>
+                    <Button
+                        _hover={{ bg: "#121310" }}
+                        _active={{
+                            transform: "scale(0.95)",
+                        }}
+                        mr={"5"}
+                        mt={"2"}
+                        minWidth={"90"}
+                        color="white"
+                        background="black"
+                        variant="outline"
+                    >
+                        Publish
+                    </Button>
                     <Flex wrap={"wrap"} ml={"auto"} mr={10}>
                         <Button
                             _hover={{ bg: "#F3F3F3" }}
@@ -201,6 +229,7 @@ const Home: React.FC = () => {
                                 transform: "scale(0.95)",
                             }}
                             mr={"5"}
+                            mt={"2"}
                             onClick={onOpen}
                             minWidth={"90"}
                             colorScheme="white"
@@ -214,6 +243,7 @@ const Home: React.FC = () => {
                                 transform: "scale(0.95)",
                             }}
                             minWidth={"90"}
+                            mt={"2"}
                             color="white"
                             background="black"
                             variant="outline"
@@ -255,10 +285,15 @@ const Home: React.FC = () => {
                             <ToolHomePage
                                 title={item.title}
                                 videoLink={item.video}
+                                description={item.description}
                                 toolId={item._id}
                                 additionalResources={item.additionalResources}
                                 onChangeTitleInput={changeTitleInput}
+                                onChangeToolType={changeToolType}
                                 onChangeVideoLinkInput={changeVideoLinkInput}
+                                onChangeDescriptionInput={
+                                    changeDescriptionInput
+                                }
                             ></ToolHomePage>
                         ))}
                     </>

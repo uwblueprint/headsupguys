@@ -15,13 +15,16 @@ export const ToolHomePage: React.FC = ({
     toolId,
     title,
     videoLink,
+    description,
     onChangeTitleInput,
+    onChangeToolType,
     onChangeVideoLinkInput,
+    onChangeDescriptionInput,
 }) => {
     return (
         <Wrap spacing="30px">
             <WrapItem width={"full"}>
-                <FormControl isRequired>
+                <FormControl isRequired mr={"5"}>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Title
                     </FormLabel>
@@ -37,7 +40,7 @@ export const ToolHomePage: React.FC = ({
                         isTruncated
                     />
                 </FormControl>
-                <FormControl isRequired ml={"5"}>
+                <FormControl isRequired>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Select Tool Type
                     </FormLabel>
@@ -50,13 +53,15 @@ export const ToolHomePage: React.FC = ({
                     </Select>
                 </FormControl>
             </WrapItem>
-            <WrapItem width={"full"}>
+            <WrapItem width={"full"} left={"0"}>
                 <FormControl isRequired>
-                    <FormLabel fontSize={20}>Thumbnail</FormLabel>
+                    <FormLabel fontSize={20} fontWeight={"bold"}>
+                        Thumbnail
+                    </FormLabel>
                     <Input
                         size={"lg"}
                         padding={"2"}
-                        width={"50%"}
+                        left={"0"}
                         type="file"
                         id="photo"
                         name="photo"
@@ -74,13 +79,17 @@ export const ToolHomePage: React.FC = ({
                         width={"full"}
                         size={"lg"}
                         isRequired
+                        onChange={(e) =>
+                            onChangeDescriptionInput(toolId, e.target.value)
+                        }
+                        value={description}
                         placeholder="Description"
                         isTruncated
                     />
                 </FormControl>
             </WrapItem>
             <WrapItem width={"full"}>
-                <FormControl isRequired>
+                <FormControl isRequired mr={"5"}>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Link Module
                     </FormLabel>
@@ -92,7 +101,7 @@ export const ToolHomePage: React.FC = ({
                         <option>Module 5</option>
                     </Select>
                 </FormControl>
-                <FormControl isRequired ml={"5"}>
+                <FormControl isRequired>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Video Link
                     </FormLabel>
@@ -100,13 +109,17 @@ export const ToolHomePage: React.FC = ({
                         width={"full"}
                         size={"lg"}
                         isRequired
+                        onChange={(e) =>
+                            onChangeVideoLinkInput(toolId, e.target.value)
+                        }
+                        value={videoLink}
                         placeholder="URL"
                         isTruncated
                     />
                 </FormControl>
             </WrapItem>
             <WrapItem width={"full"}>
-                <FormControl alignSelf={"right"}>
+                <FormControl alignSelf={"right"} mr={"5"}>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Related Resources
                     </FormLabel>
@@ -128,8 +141,8 @@ export const ToolHomePage: React.FC = ({
                         </WrapItem>
                     </Wrap>
                 </FormControl>
-                <FormControl ml={"5"}>
-                    <FormLabel fontSize={20} fontWeight={"bold"}>
+                <FormControl>
+                    <FormLabel fontSize={20} fontWeight={"bold"} mr={"5"}>
                         Related Stories
                     </FormLabel>
                     <Wrap>
@@ -150,7 +163,7 @@ export const ToolHomePage: React.FC = ({
                         </WrapItem>
                     </Wrap>
                 </FormControl>
-                <FormControl ml={"5"}>
+                <FormControl>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         External Resources
                     </FormLabel>
@@ -173,7 +186,7 @@ export const ToolHomePage: React.FC = ({
                     </Wrap>
                 </FormControl>
             </WrapItem>
-            <WrapItem width={"full"}>
+            <WrapItem width={"50%"}>
                 <FormControl isRequired>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Select Recommended Tools

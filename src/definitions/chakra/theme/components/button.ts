@@ -32,7 +32,7 @@ const Button = {
             color: "white",
             borderRadius: 0,
             textTransform: "uppercase",
-        }
+        },
     },
     defaultProps: {
         variant: "default",

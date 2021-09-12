@@ -91,7 +91,7 @@ export const ToolHomePage: React.FC = ({
                         mb={"3"}
                         colorScheme="blue"
                     >
-                        + Add Link
+                        Upload Image
                     </Button>
                 </FormControl>
             </WrapItem>

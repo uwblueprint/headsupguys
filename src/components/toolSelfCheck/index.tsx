@@ -409,9 +409,13 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                 }
                                                 value={options[index][1]}
                                                 variant="flushed"
-                                                placeholder={`Value ${
-                                                    index + 1
-                                                }`}
+                                                placeholder={
+                                                    alphanumeric
+                                                        ? `Value ${
+                                                              index + 1
+                                                          }`
+                                                        : `Numeric Value ${index + 1}`
+                                                }
                                                 mr={6}
                                                 isTruncated
                                             />
@@ -615,7 +619,13 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                             }
                                             variant="flushed"
                                             value={options[index][1]}
-                                            placeholder={`Value ${index + 1}`}
+                                            placeholder={
+                                                alphanumeric
+                                                    ? `Value ${
+                                                          index + 1
+                                                      }`
+                                                    : `Numeric Value ${index + 1}`
+                                            }
                                             mr={"6"}
                                             isTruncated
                                         />

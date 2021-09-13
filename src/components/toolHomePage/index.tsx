@@ -6,8 +6,18 @@ import {
     WrapItem,
     Input,
     Button,
+    Grid,
+    Box,
     Select,
     Textarea,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    ModalCloseButton,
+    useDisclosure,
 } from "@chakra-ui/react";
 
 const recommendedToolsList = ["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"];
@@ -17,7 +27,6 @@ export const ToolHomePage: React.FC = ({
     toolId,
     title,
     type,
-    thumbnail,
     video,
     description,
     linkedModule,
@@ -28,6 +37,7 @@ export const ToolHomePage: React.FC = ({
     onChangeInput,
     onChangeThumbnail,
 }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Wrap spacing="30px">
             <WrapItem width={"full"}>
@@ -148,13 +158,13 @@ export const ToolHomePage: React.FC = ({
                     />
                 </FormControl>
             </WrapItem>
-            <WrapItem width={"full"}>
-                <FormControl alignSelf={"right"} mr={"5"}>
+            <Grid templateColumns="repeat(3, 1fr)" width={"full"} gap={6}>
+                <Box>
                     <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
                         Related Resources
                     </FormLabel>
                     <Wrap>
-                        {(relatedResources ?? []).map((choice, index) => (
+                        {(externalResources ?? []).map((choice, index) => (
                             <WrapItem width={"full"}>
                                 <Button
                                     variant="link"
@@ -162,26 +172,21 @@ export const ToolHomePage: React.FC = ({
                                     colorScheme="blue"
                                 >
                                     {`${
-                                        relatedResources[index] != ""
-                                            ? relatedResources[index]
+                                        externalResources[index] != ""
+                                            ? externalResources[index]
                                             : "+ Add Link"
                                     }`}
                                 </Button>
                             </WrapItem>
                         ))}
                     </Wrap>
-                </FormControl>
-                <FormControl>
-                    <FormLabel
-                        fontSize={20}
-                        fontWeight={"bold"}
-                        mr={"5"}
-                        mb={"5"}
-                    >
+                </Box>
+                <Box>
+                    <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
                         Related Stories
                     </FormLabel>
                     <Wrap>
-                        {(relatedStories ?? []).map((choice, index) => (
+                        {(externalResources ?? []).map((choice, index) => (
                             <WrapItem width={"full"}>
                                 <Button
                                     variant="link"
@@ -189,16 +194,16 @@ export const ToolHomePage: React.FC = ({
                                     colorScheme="blue"
                                 >
                                     {`${
-                                        relatedStories[index] != ""
-                                            ? relatedStories[index]
+                                        externalResources[index] != ""
+                                            ? externalResources[index]
                                             : "+ Add Link"
                                     }`}
                                 </Button>
                             </WrapItem>
                         ))}
                     </Wrap>
-                </FormControl>
-                <FormControl>
+                </Box>
+                <Box>
                     <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
                         External Resources
                     </FormLabel>
@@ -219,8 +224,8 @@ export const ToolHomePage: React.FC = ({
                             </WrapItem>
                         ))}
                     </Wrap>
-                </FormControl>
-            </WrapItem>
+                </Box>
+            </Grid>
             <WrapItem width={"50%"}>
                 <FormControl isRequired>
                     <FormLabel fontSize={20} fontWeight={"bold"}>

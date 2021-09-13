@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import {
     Text,
+    Flex,
+    SimpleGrid,
+    Button,
     Modal,
     ModalBody,
     ModalContent,
@@ -9,16 +12,14 @@ import {
     ModalFooter,
     ModalCloseButton,
     useDisclosure,
-    Flex,
-    SimpleGrid,
-    Button,
+    useToast,
 } from "@chakra-ui/react";
 import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 
 //Self Check Questions React functional component
 const Home: React.FC = () => {
     //self check tool
-    const [toolList, setToolList] = useState([
+    const defaultTool = [
         {
             _id: "50e642d7e4a1ae34207a92a0",
             title: "",
@@ -32,10 +33,12 @@ const Home: React.FC = () => {
             externalResources: ["", "", ""],
             recommendedTools: ["", "", ""],
         },
-    ]);
+    ];
+    const [toolList, setToolList] = useState(defaultTool);
     //
 
     const changeInput = (id, target, type, index = null) => {
+        console.log(id, target, type, index);
         const newTool = toolList.slice(0);
         if (index != null) {
             newTool[newTool.findIndex((e) => e._id === id)][type][index] =
@@ -48,38 +51,41 @@ const Home: React.FC = () => {
 
     const thumbnailValidation = (id, target) => {
         const newTool = toolList.slice(0);
-        const fileType = target.split(".").pop().toLower();
-        const allowedFileTypes = ["jpg", "jpeg", "png","gif"];
+        const fileType = target.split(".").pop().toLowerCase();
+        const allowedFileTypes = ["jpg", "jpeg", "png", "gif"];
         if (allowedFileTypes.includes(fileType)) {
             newTool[newTool.findIndex((e) => e._id === id)].thumbnail = target;
             setToolList(newTool);
+            toast({
+                title: "Success",
+                description: "Your thumbnail has been uploaded",
+                status: "success",
+                position: "bottom-left",
+                duration: 5000,
+                isClosable: true,
+            });
         } else {
-            alert("Invalid file type");
-            document.getElementById("thumbnail").value = "";
+            if (target != "") {
+                toast({
+                    title: "Invalid file type",
+                    description: "Please upload a jpg or png",
+                    status: "error",
+                    position: "bottom-left",
+                    duration: 5000,
+                    isClosable: true,
+                });
+                document.getElementById("thumbnail").value = "";
+            }
         }
     };
 
     const clearToolHomePage = () => {
-        const newTool = [
-            {
-                _id: "50e642d7e4a1ae34207a92a0",
-                title: "",
-                type: "",
-                thumbnail: "",
-                video: "",
-                description: "",
-                linkedModule: "",
-                relatedResources: ["", "", ""],
-                relatedStories: ["", "", ""],
-                externalResources: ["", "", ""],
-                recommendedTools: ["", "", ""],
-            },
-        ];
+        const newTool = defaultTool;
         setToolList(newTool);
     };
 
     //self check card
-    const [questionList, setQuestionList] = useState([
+    const defaultQuestions = [
         {
             _id: "60e642d7e4a1ae34207a92a0",
             type: "multiple_choice",
@@ -92,7 +98,8 @@ const Home: React.FC = () => {
             alphanumericInput: true,
             questionNumber: 1,
         },
-    ]);
+    ];
+    const [questionList, setQuestionList] = useState(defaultQuestions);
     const [count, setCount] = useState(1);
     const [page, setPage] = useState("home");
 
@@ -123,7 +130,7 @@ const Home: React.FC = () => {
             newList[newList.findIndex((e) => e._id === id)].options;
         if (!target) {
             for (let i = 0; i < newOptions.length; i++) {
-                newOptions[i][1] = "";
+                newOptions[i][1] = newOptions[i][1].replace(/[^\d]+/g, "");
             }
         }
         newList[newList.findIndex((e) => e._id === id)].alphanumericInput =
@@ -218,6 +225,7 @@ const Home: React.FC = () => {
     const selfCheckQuestionSize = questionList.length;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const toast = useToast();
     return (
         <Flex direction="column" minH="100vh">
             <Modal
@@ -306,7 +314,15 @@ const Home: React.FC = () => {
                             //TODO: Send this output to the database
                             //rather than just logging it in the console
                             onClick={() => {
-                                alert("Check the console for the objects");
+                                toast({
+                                    title: "Save Successful",
+                                    description:
+                                        "Check the console for the objects",
+                                    status: "success",
+                                    position: "bottom-left",
+                                    duration: 5000,
+                                    isClosable: true,
+                                });
                                 console.log("Tool Home Page:", toolList);
                                 console.log(
                                     "Self Check Questions:",

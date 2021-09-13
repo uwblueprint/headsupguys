@@ -226,6 +226,121 @@ export const ToolHomePage: React.FC = ({
                     </Wrap>
                 </Box>
             </Grid>
+            <WrapItem width={"full"}>
+                <FormControl alignSelf={"right"} mr={"5"}>
+                    <Wrap>
+                        {(relatedResources ?? []).map((choice, index) => (
+                            <WrapItem width={"full"}>
+                                <Button
+                                    variant="link"
+                                    mb={"3"}
+                                    colorScheme="blue"
+                                    onClick={onOpen}
+                                    value={index}
+                                    isTruncated
+                                >
+                                    {`${
+                                        relatedResources[index] != ""
+                                            ? relatedResources[index]
+                                            : "+ Add Link"
+                                    }`}
+                                </Button>
+                                <Modal
+                                    blockScrollOnMount={false}
+                                    isOpen={isOpen}
+                                    onClose={onClose}
+                                    motionPreset="slideInBottom"
+                                >
+                                    <ModalOverlay />
+                                    <ModalContent p={"5"}>
+                                        <ModalHeader
+                                            fontWeight={"bold"}
+                                            fontSize={30}
+                                        >
+                                            Add Link
+                                        </ModalHeader>
+                                        <ModalCloseButton />
+                                        <ModalBody>
+                                            <FormControl isRequired>
+                                                <FormLabel
+                                                    fontSize={20}
+                                                    fontWeight={"bold"}
+                                                >
+                                                    Text
+                                                </FormLabel>
+                                                <Input
+                                                    width={"full"}
+                                                    size={"lg"}
+                                                    id={"linkText" + index}
+                                                    placeholder="Text Here"
+                                                    onChange={(e) => {
+                                                        document.getElementById(
+                                                            "linkText" + index,
+                                                        ).value =
+                                                            e.target.value;
+                                                        console.log(
+                                                            choice,
+                                                            index,
+                                                        );
+                                                    }}
+                                                    isTruncated
+                                                />
+                                            </FormControl>
+                                            <FormControl isRequired>
+                                                <FormLabel
+                                                    fontSize={20}
+                                                    fontWeight={"bold"}
+                                                    mt={10}
+                                                >
+                                                    Link
+                                                </FormLabel>
+                                                <Input
+                                                    mb={10}
+                                                    width={"full"}
+                                                    size={"lg"}
+                                                    id={"linkLink" + index}
+                                                    placeholder="Link"
+                                                    isTruncated
+                                                />
+                                            </FormControl>
+                                        </ModalBody>
+                                        <ModalFooter>
+                                            <Button
+                                                variant="outline"
+                                                colorScheme="black"
+                                                mr={"3"}
+                                                w={100}
+                                                onClick={onClose}
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Button
+                                                onClick={() =>
+                                                    onChangeInput(
+                                                        toolId,
+                                                        document.getElementById(
+                                                            "linkText" + index,
+                                                        ).value,
+                                                        "relatedResources",
+                                                        0,
+                                                    )
+                                                }
+                                                w={100}
+                                                background="black"
+                                                _active={{
+                                                    transform: "scale(0.95)",
+                                                }}
+                                            >
+                                                Save
+                                            </Button>
+                                        </ModalFooter>
+                                    </ModalContent>
+                                </Modal>
+                            </WrapItem>
+                        ))}
+                    </Wrap>
+                </FormControl>
+            </WrapItem>
             <WrapItem width={"50%"}>
                 <FormControl isRequired>
                     <FormLabel fontSize={20} fontWeight={"bold"}>

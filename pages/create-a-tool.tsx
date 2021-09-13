@@ -35,13 +35,9 @@ const Home: React.FC = () => {
     ]);
     //
 
-    const changeInput = (id, target, type, index) => {
+    const changeInput = (id, target, type, index = null) => {
         const newTool = toolList.slice(0);
-        if (index) {
-            console.log(
-                newTool[newTool.findIndex((e) => e._id === id)][type],
-                index,
-            );
+        if (index != null) {
             newTool[newTool.findIndex((e) => e._id === id)][type][index] =
                 target;
         } else {
@@ -49,6 +45,7 @@ const Home: React.FC = () => {
         }
         setToolList(newTool);
     };
+
     const clearToolHomePage = () => {
         const newTool = [
             {

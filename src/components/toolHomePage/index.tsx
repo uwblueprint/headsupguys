@@ -225,57 +225,37 @@ export const ToolHomePage: React.FC = ({
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Select Recommended Tools
                     </FormLabel>
-                    <Select
-                        placeholder={"Select option"}
-                        mb={"3"}
-                        value={recommendedTools[0]}
-                        onChange={(e) =>
-                            onChangeInput(
-                                toolId,
-                                e.target.value,
-                                "recommendedTools",
-                                0,
-                            )
-                        }
-                    >
-                        {(recommendedToolsList ?? []).map((choice, index) => (
-                            <option value={choice}>{choice}</option>
-                        ))}
-                    </Select>
-                    <Select
-                        placeholder={"Select option"}
-                        mb={"3"}
-                        value={recommendedTools[1]}
-                        onChange={(e) =>
-                            onChangeInput(
-                                toolId,
-                                e.target.value,
-                                "recommendedTools",
-                                1,
-                            )
-                        }
-                    >
-                        {(recommendedToolsList ?? []).map((choice, index) => (
-                            <option value={choice}>{choice}</option>
-                        ))}
-                    </Select>
-                    <Select
-                        placeholder={"Select option"}
-                        mb={"3"}
-                        value={recommendedTools[2]}
-                        onChange={(e) =>
-                            onChangeInput(
-                                toolId,
-                                e.target.value,
-                                "recommendedTools",
-                                2,
-                            )
-                        }
-                    >
-                        {(recommendedToolsList ?? []).map((choice, index) => (
-                            <option value={choice}>{choice}</option>
-                        ))}
-                    </Select>
+                    {(recommendedTools ?? []).map((choice, index) => (
+                        <Select
+                            placeholder={"Select option"}
+                            mb={"3"}
+                            value={recommendedTools[index]}
+                            onChange={(e) =>
+                                onChangeInput(
+                                    toolId,
+                                    e.target.value,
+                                    "recommendedTools",
+                                    index,
+                                )
+                            }
+                        >
+                            {(
+                                recommendedToolsList.filter((item) => {
+                                    return !recommendedTools
+                                        .filter((item) => {
+                                            return (
+                                                recommendedTools.indexOf(
+                                                    item,
+                                                ) != index
+                                            );
+                                        })
+                                        .includes(item);
+                                }) ?? []
+                            ).map((choice, index) => (
+                                <option value={choice}>{choice}</option>
+                            ))}
+                        </Select>
+                    ))}
                 </FormControl>
             </WrapItem>
         </Wrap>

@@ -77,8 +77,8 @@ export const ToolHomePage: React.FC = ({
                         padding={"2"}
                         left={"0"}
                         type="file"
-                        id="photo"
-                        name="photo"
+                        id="thumbnail"
+                        name="thumbnail"
                         accept="image/*"
                         onChange={(e) =>
                             onChangeThumbnail(toolId, e.target.value)
@@ -154,21 +154,21 @@ export const ToolHomePage: React.FC = ({
                         Related Resources
                     </FormLabel>
                     <Wrap>
-                        <WrapItem width={"full"}>
-                            <Button variant="link" mb={"3"} colorScheme="blue">
-                                + Add Link
-                            </Button>
-                        </WrapItem>
-                        <WrapItem width={"full"}>
-                            <Button variant="link" mb={"3"} colorScheme="blue">
-                                + Add Link
-                            </Button>
-                        </WrapItem>
-                        <WrapItem width={"full"}>
-                            <Button variant="link" mb={"3"} colorScheme="blue">
-                                + Add Link
-                            </Button>
-                        </WrapItem>
+                        {(relatedResources ?? []).map((choice, index) => (
+                            <WrapItem width={"full"}>
+                                <Button
+                                    variant="link"
+                                    mb={"3"}
+                                    colorScheme="blue"
+                                >
+                                    {`${
+                                        relatedResources[index] != ""
+                                            ? relatedResources[index]
+                                            : "+ Add Link"
+                                    }`}
+                                </Button>
+                            </WrapItem>
+                        ))}
                     </Wrap>
                 </FormControl>
                 <FormControl>
@@ -181,21 +181,21 @@ export const ToolHomePage: React.FC = ({
                         Related Stories
                     </FormLabel>
                     <Wrap>
-                        <WrapItem width={"full"}>
-                            <Button variant="link" mb={"3"} colorScheme="blue">
-                                + Add Link
-                            </Button>
-                        </WrapItem>
-                        <WrapItem width={"full"}>
-                            <Button variant="link" mb={"3"} colorScheme="blue">
-                                + Add Link
-                            </Button>
-                        </WrapItem>
-                        <WrapItem width={"full"}>
-                            <Button variant="link" mb={"3"} colorScheme="blue">
-                                + Add Link
-                            </Button>
-                        </WrapItem>
+                        {(relatedStories ?? []).map((choice, index) => (
+                            <WrapItem width={"full"}>
+                                <Button
+                                    variant="link"
+                                    mb={"3"}
+                                    colorScheme="blue"
+                                >
+                                    {`${
+                                        relatedStories[index] != ""
+                                            ? relatedStories[index]
+                                            : "+ Add Link"
+                                    }`}
+                                </Button>
+                            </WrapItem>
+                        ))}
                     </Wrap>
                 </FormControl>
                 <FormControl>
@@ -203,21 +203,21 @@ export const ToolHomePage: React.FC = ({
                         External Resources
                     </FormLabel>
                     <Wrap>
-                        <WrapItem width={"full"}>
-                            <Button variant="link" mb={"3"} color="#3182CE">
-                                + Add Link
-                            </Button>
-                        </WrapItem>
-                        <WrapItem width={"full"}>
-                            <Button variant="link" mb={"3"} color="#3182CE">
-                                + Add Link
-                            </Button>
-                        </WrapItem>
-                        <WrapItem width={"full"}>
-                            <Button variant="link" mb={"3"} color="#3182CE">
-                                + Add Link
-                            </Button>
-                        </WrapItem>
+                        {(externalResources ?? []).map((choice, index) => (
+                            <WrapItem width={"full"}>
+                                <Button
+                                    variant="link"
+                                    mb={"3"}
+                                    colorScheme="blue"
+                                >
+                                    {`${
+                                        externalResources[index] != ""
+                                            ? externalResources[index]
+                                            : "+ Add Link"
+                                    }`}
+                                </Button>
+                            </WrapItem>
+                        ))}
                     </Wrap>
                 </FormControl>
             </WrapItem>

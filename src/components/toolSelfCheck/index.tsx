@@ -50,8 +50,7 @@ export interface SelfCheckQuestionCardProps {
     onChangeAlphanumeric: (id: string, target: boolean) => void;
     onAddQuestion: (index: string) => void;
     onRemoveQuestion: (id: string) => void;
-    onMoveUpQuestion: (index: string) => void;
-    onMoveDownQuestion: (index: string) => void;
+    onMoveQuestion: (index: string, direction: int) => void;
     onChangeQuestionInput: (id: string, target: string) => void;
     onChangeQuestionType: (
         id: string,
@@ -81,8 +80,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
     onChangeAlphanumeric,
     onAddQuestion,
     onRemoveQuestion,
-    onMoveUpQuestion,
-    onMoveDownQuestion,
+    onMoveQuestion,
     onChangeQuestionInput,
     onChangeQuestionType,
     onChangeSliderBounds,
@@ -176,7 +174,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                 )
                             }
                         >
-                            {optionList.map((choice, index) => (
+                            {(optionList ?? []).map((choice, index) => (
                                 <option
                                     key={`Question Type: ${
                                         questionId + index
@@ -190,7 +188,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
 
                         {questionIndex != 0 && (
                             <IconButton
-                                onClick={() => onMoveUpQuestion(questionIndex)}
+                                onClick={() => onMoveQuestion(questionIndex, 1)}
                                 ml={
                                     questionIndex + 1 == selfCheckQuestionSize
                                         ? "10"
@@ -211,7 +209,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                             selfCheckQuestionSize > 1 && (
                                 <IconButton
                                     onClick={() =>
-                                        onMoveDownQuestion(questionIndex)
+                                        onMoveQuestion(questionIndex, -1)
                                     }
                                     ml={questionIndex == 0 ? "10" : "2"}
                                     mr={"5"}
@@ -400,14 +398,14 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                     onChangeOptionInput(
                                                         questionId,
                                                         index,
-                                                        e.target.value,
+                                                        alphanumeric
+                                                            ? e.target.value
+                                                            : e.target.value.replace(
+                                                                  /[^\d]+/g,
+                                                                  "",
+                                                              ),
                                                         "value",
                                                     )
-                                                }
-                                                type={
-                                                    alphanumeric
-                                                        ? "default"
-                                                        : "number"
                                                 }
                                                 value={options[index][1]}
                                                 variant="flushed"
@@ -457,7 +455,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                             >
                                 <Flex
                                     width={"full"}
-                                    justify={"right"}
+                                    justify={"left"}
                                     wrap={"wrap"}
                                 >
                                     <Heading
@@ -606,7 +604,12 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                 onChangeOptionInput(
                                                     questionId,
                                                     index,
-                                                    e.target.value,
+                                                    alphanumeric
+                                                        ? e.target.value
+                                                        : e.target.value.replace(
+                                                              /[^\d]+/g,
+                                                              "",
+                                                          ),
                                                     "value",
                                                 )
                                             }
@@ -648,8 +651,8 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                 disabled
                                 placeholder={
                                     alphanumeric
-                                        ? "User can input all characters"
-                                        : "User can input only numbers"
+                                        ? "Short answer text"
+                                        : "Short answer numbers"
                                 }
                                 value={""}
                             />
@@ -704,8 +707,8 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                 disabled
                                 placeholder={
                                     alphanumeric
-                                        ? "User can input all characters"
-                                        : "User can input only numbers"
+                                        ? "Long answer text"
+                                        : "Long answer numbers"
                                 }
                                 value={""}
                             />

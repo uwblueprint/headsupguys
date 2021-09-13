@@ -10,12 +10,21 @@ import {
     Textarea,
 } from "@chakra-ui/react";
 
+const recommendedToolsList = ["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"];
+
 //Self check question card component
 export const ToolHomePage: React.FC = ({
     toolId,
     title,
+    type,
+    thumbnail,
     video,
     description,
+    linkedModule,
+    relatedResources,
+    relatedStories,
+    externalResources,
+    recommendedTools,
     onChangeInput,
 }) => {
     return (
@@ -41,7 +50,14 @@ export const ToolHomePage: React.FC = ({
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Select Tool Type
                     </FormLabel>
-                    <Select placeholder={"Select option"} size={"lg"}>
+                    <Select
+                        placeholder={"Select option"}
+                        size={"lg"}
+                        value={type}
+                        onChange={(e) =>
+                            onChangeInput(toolId, e.target.value, "type")
+                        }
+                    >
                         <option>Type 1</option>
                         <option>Type 2</option>
                         <option>Type 3</option>
@@ -63,6 +79,9 @@ export const ToolHomePage: React.FC = ({
                         id="photo"
                         name="photo"
                         accept="image/*"
+                        onChange={(e) =>
+                            onChangeInput(toolId, e.target.value, "thumbnail")
+                        }
                     ></Input>
                 </FormControl>
             </WrapItem>
@@ -73,6 +92,7 @@ export const ToolHomePage: React.FC = ({
                         <>(max 500 characters)</>
                     </FormLabel>
                     <Textarea
+                        maxLength={500}
                         width={"full"}
                         size={"lg"}
                         isRequired
@@ -81,7 +101,6 @@ export const ToolHomePage: React.FC = ({
                         }
                         value={description}
                         placeholder="Description"
-                        isTruncated
                     />
                 </FormControl>
             </WrapItem>
@@ -90,7 +109,18 @@ export const ToolHomePage: React.FC = ({
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Link Module
                     </FormLabel>
-                    <Select placeholder={"Select option"} size={"lg"}>
+                    <Select
+                        placeholder={"Select option"}
+                        size={"lg"}
+                        value={linkedModule}
+                        onChange={(e) =>
+                            onChangeInput(
+                                toolId,
+                                e.target.value,
+                                "linkedModule",
+                            )
+                        }
+                    >
                         <option>Module 1</option>
                         <option>Module 2</option>
                         <option>Module 3</option>
@@ -103,7 +133,9 @@ export const ToolHomePage: React.FC = ({
                         Video Link
                     </FormLabel>
                     <Input
+                        type="url"
                         width={"full"}
+                        _valid={{ outline: "red" }}
                         size={"lg"}
                         isRequired
                         onChange={(e) =>
@@ -117,7 +149,7 @@ export const ToolHomePage: React.FC = ({
             </WrapItem>
             <WrapItem width={"full"}>
                 <FormControl alignSelf={"right"} mr={"5"}>
-                    <FormLabel fontSize={20} fontWeight={"bold"}>
+                    <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
                         Related Resources
                     </FormLabel>
                     <Wrap>
@@ -139,7 +171,12 @@ export const ToolHomePage: React.FC = ({
                     </Wrap>
                 </FormControl>
                 <FormControl>
-                    <FormLabel fontSize={20} fontWeight={"bold"} mr={"5"}>
+                    <FormLabel
+                        fontSize={20}
+                        fontWeight={"bold"}
+                        mr={"5"}
+                        mb={"5"}
+                    >
                         Related Stories
                     </FormLabel>
                     <Wrap>
@@ -161,7 +198,7 @@ export const ToolHomePage: React.FC = ({
                     </Wrap>
                 </FormControl>
                 <FormControl>
-                    <FormLabel fontSize={20} fontWeight={"bold"}>
+                    <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
                         External Resources
                     </FormLabel>
                     <Wrap>
@@ -188,26 +225,56 @@ export const ToolHomePage: React.FC = ({
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Select Recommended Tools
                     </FormLabel>
-                    <Select placeholder={"Select option"} mb={"3"}>
-                        <option>Tool 1</option>
-                        <option>Tool 2</option>
-                        <option>Tool 3</option>
-                        <option>Tool 4</option>
-                        <option>Tool 5</option>
+                    <Select
+                        placeholder={"Select option"}
+                        mb={"3"}
+                        value={recommendedTools[0]}
+                        onChange={(e) =>
+                            onChangeInput(
+                                toolId,
+                                e.target.value,
+                                "recommendedTools",
+                                0,
+                            )
+                        }
+                    >
+                        {(recommendedToolsList ?? []).map((choice, index) => (
+                            <option value={choice}>{choice}</option>
+                        ))}
                     </Select>
-                    <Select placeholder={"Select option"} mb={"3"}>
-                        <option>Tool 1</option>
-                        <option>Tool 2</option>
-                        <option>Tool 3</option>
-                        <option>Tool 4</option>
-                        <option>Tool 5</option>
+                    <Select
+                        placeholder={"Select option"}
+                        mb={"3"}
+                        value={recommendedTools[1]}
+                        onChange={(e) =>
+                            onChangeInput(
+                                toolId,
+                                e.target.value,
+                                "recommendedTools",
+                                1,
+                            )
+                        }
+                    >
+                        {(recommendedToolsList ?? []).map((choice, index) => (
+                            <option value={choice}>{choice}</option>
+                        ))}
                     </Select>
-                    <Select placeholder={"Select option"} mb={"3"}>
-                        <option>Tool 1</option>
-                        <option>Tool 2</option>
-                        <option>Tool 3</option>
-                        <option>Tool 4</option>
-                        <option>Tool 5</option>
+                    <Select
+                        placeholder={"Select option"}
+                        mb={"3"}
+                        value={recommendedTools[2]}
+                        onChange={(e) =>
+                            onChangeInput(
+                                toolId,
+                                e.target.value,
+                                "recommendedTools",
+                                2,
+                            )
+                        }
+                    >
+                        {(recommendedToolsList ?? []).map((choice, index) => (
+                            <option value={choice}>{choice}</option>
+                        ))}
                     </Select>
                 </FormControl>
             </WrapItem>

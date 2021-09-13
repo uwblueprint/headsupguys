@@ -22,27 +22,51 @@ const Home: React.FC = () => {
         {
             _id: "50e642d7e4a1ae34207a92a0",
             title: "",
+            type: "",
+            thumbnail: "",
             video: "",
             description: "",
             linkedModule: "",
-            additionalResources: ["", ""],
+            relatedResources: ["", "", ""],
+            relatedStories: ["", "", ""],
+            externalResources: ["", "", ""],
             recommendedTools: ["", "", ""],
         },
     ]);
     //
 
-    const changeToolType = (id, target) => {
+    const changeInput = (id, target, type, index) => {
         const newTool = toolList.slice(0);
-        newTool[newTool.findIndex((e) => e._id === id)].recommendedTools =
-            target;
+        if (index) {
+            console.log(
+                newTool[newTool.findIndex((e) => e._id === id)][type],
+                index,
+            );
+            newTool[newTool.findIndex((e) => e._id === id)][type][index] =
+                target;
+        } else {
+            newTool[newTool.findIndex((e) => e._id === id)][type] = target;
+        }
         setToolList(newTool);
     };
-    const changeInput = (id, target, type) => {
-        const newTool = toolList.slice(0);
-        newTool[newTool.findIndex((e) => e._id === id)][type] = target;
+    const clearToolHomePage = () => {
+        const newTool = [
+            {
+                _id: "50e642d7e4a1ae34207a92a0",
+                title: "",
+                type: "",
+                thumbnail: "",
+                video: "",
+                description: "",
+                linkedModule: "",
+                relatedResources: ["", "", ""],
+                relatedStories: ["", "", ""],
+                externalResources: ["", "", ""],
+                recommendedTools: ["", "", ""],
+            },
+        ];
         setToolList(newTool);
     };
-
 
     //self check card
     const [questionList, setQuestionList] = useState([
@@ -85,6 +109,13 @@ const Home: React.FC = () => {
     };
     const changeAlphanumeric = (id, target) => {
         const newList = questionList.slice(0);
+        const newOptions =
+            newList[newList.findIndex((e) => e._id === id)].options;
+        if (!target) {
+            for (let i = 0; i < newOptions.length; i++) {
+                newOptions[i][1] = "";
+            }
+        }
         newList[newList.findIndex((e) => e._id === id)].alphanumericInput =
             target;
         setQuestionList(newList);
@@ -92,6 +123,7 @@ const Home: React.FC = () => {
     const changeOptionInput = (id, index, target, optionOrValue) => {
         const newList = questionList.slice(0);
         const changeIndex = optionOrValue == "option" ? 0 : 1;
+        // console.log(index, changeIndex, optionOrValue);
         newList[newList.findIndex((e) => e._id === id)].options[index][
             changeIndex
         ] = target;
@@ -139,18 +171,11 @@ const Home: React.FC = () => {
             console.log(target, sliderUpperBound);
         }
     };
-    const moveQuesitonDown = (index) => {
+    const moveQuesiton = (index, direction) => {
         const newList = questionList.slice(0);
         const tempQuestion = newList[index];
-        newList[index] = newList[index + 1];
-        newList[index + 1] = tempQuestion;
-        setQuestionList(newList);
-    };
-    const moveQuesitonUp = (index) => {
-        const newList = questionList.slice(0);
-        const tempQuestion = newList[index];
-        newList[index] = newList[index - 1];
-        newList[index - 1] = tempQuestion;
+        newList[index] = newList[index - direction];
+        newList[index - direction] = tempQuestion;
         setQuestionList(newList);
     };
 
@@ -185,6 +210,45 @@ const Home: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Flex direction="column" minH="100vh">
+            <Modal
+                blockScrollOnMount={false}
+                isOpen={isOpen}
+                onClose={onClose}
+                motionPreset="slideInBottom"
+            >
+                <ModalOverlay />
+                <ModalContent p={"5"}>
+                    <ModalHeader>Delete Tool </ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        Are you sure you want to discard this tool? This is a
+                        permanent action that cannot be undone.
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            variant="outline"
+                            colorScheme="black"
+                            mr={3}
+                            w={100}
+                            onClick={onClose}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                onClose();
+                                clearToolHomePage();
+                                removeAllQuestions();
+                            }}
+                            w={100}
+                            background="red.600"
+                            _hover={{ background: "red.700" }}
+                        >
+                            Discard
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
             <Flex mt={5} wrap={"wrap"} justify={"left"} width={"full"}>
                 <Flex width={"full"}>
                     <Text ml={10} mr={10} fontWeight="bold" fontSize="4xl">
@@ -232,8 +296,12 @@ const Home: React.FC = () => {
                             //TODO: Send this output to the database
                             //rather than just logging it in the console
                             onClick={() => {
-                                alert("Check the console for the object");
-                                console.log(questionList);
+                                alert("Check the console for the objects");
+                                console.log("Tool Home Page:", toolList);
+                                console.log(
+                                    "Self Check Questions:",
+                                    questionList,
+                                );
                             }}
                         >
                             Save
@@ -265,11 +333,17 @@ const Home: React.FC = () => {
                     <>
                         {toolList.map((item, index) => (
                             <ToolHomePage
+                                toolId={item._id}
                                 title={item.title}
+                                type={item.type}
+                                thumbnail={item.thumbnail}
                                 video={item.video}
                                 description={item.description}
-                                toolId={item._id}
-                                additionalResources={item.additionalResources}
+                                linkedModule={item.linkedModule}
+                                relatedResources={item.relatedResources}
+                                relatedStories={item.relatedStories}
+                                externalResources={item.externalResources}
+                                recommendedTools={item.recommendedTools}
                                 onChangeInput={changeInput}
                             ></ToolHomePage>
                         ))}
@@ -278,44 +352,6 @@ const Home: React.FC = () => {
             </SimpleGrid>
             {page == "self check" && (
                 <>
-                    <Modal
-                        blockScrollOnMount={false}
-                        isOpen={isOpen}
-                        onClose={onClose}
-                        motionPreset="slideInBottom"
-                    >
-                        <ModalOverlay />
-                        <ModalContent p={"5"}>
-                            <ModalHeader>Delete Tool </ModalHeader>
-                            <ModalCloseButton />
-                            <ModalBody>
-                                Are you sure you want to discard this tool? This
-                                is a permanent action that cannot be undone.
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button
-                                    variant="outline"
-                                    colorScheme="black"
-                                    mr={3}
-                                    w={100}
-                                    onClick={onClose}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    onClick={() => {
-                                        onClose();
-                                        removeAllQuestions();
-                                    }}
-                                    w={100}
-                                    background="red.600"
-                                    _hover={{ background: "red.700" }}
-                                >
-                                    Discard
-                                </Button>
-                            </ModalFooter>
-                        </ModalContent>
-                    </Modal>
                     <SimpleGrid columns={1} spacing={0} px={10}>
                         <Button
                             onClick={() => addOneQuestion(-1)}
@@ -346,8 +382,7 @@ const Home: React.FC = () => {
                                 onChangeAlphanumeric={changeAlphanumeric}
                                 onAddQuestion={addOneQuestion}
                                 onRemoveQuestion={removeOneQuestion}
-                                onMoveUpQuestion={moveQuesitonUp}
-                                onMoveDownQuestion={moveQuesitonDown}
+                                onMoveQuestion={moveQuesiton}
                                 onChangeQuestionInput={changeQuestionInput}
                                 onChangeQuestionType={changeQuestionType}
                                 onChangeSliderBounds={changeSliderBounds}

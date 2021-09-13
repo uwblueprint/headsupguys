@@ -26,6 +26,7 @@ export const ToolHomePage: React.FC = ({
     externalResources,
     recommendedTools,
     onChangeInput,
+    onChangeThumbnail,
 }) => {
     return (
         <Wrap spacing="30px">
@@ -80,7 +81,7 @@ export const ToolHomePage: React.FC = ({
                         name="photo"
                         accept="image/*"
                         onChange={(e) =>
-                            onChangeInput(toolId, e.target.value, "thumbnail")
+                            onChangeThumbnail(toolId, e.target.value)
                         }
                     ></Input>
                 </FormControl>

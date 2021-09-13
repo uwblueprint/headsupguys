@@ -46,6 +46,19 @@ const Home: React.FC = () => {
         setToolList(newTool);
     };
 
+    const thumbnailValidation = (id, target) => {
+        const newTool = toolList.slice(0);
+        const fileType = target.split(".").pop();
+        const allowedFileTypes = ["jpg", "jpeg", "png"];
+        if (allowedFileTypes.includes(fileType)) {
+            newTool[newTool.findIndex((e) => e._id === id)].thumbnail = target;
+            setToolList(newTool);
+        } else {
+            alert("Invalid file type");
+            document.getElementById("photo").value = "";
+        }
+    };
+
     const clearToolHomePage = () => {
         const newTool = [
             {
@@ -342,6 +355,7 @@ const Home: React.FC = () => {
                                 externalResources={item.externalResources}
                                 recommendedTools={item.recommendedTools}
                                 onChangeInput={changeInput}
+                                onChangeThumbnail={thumbnailValidation}
                             ></ToolHomePage>
                         ))}
                     </>

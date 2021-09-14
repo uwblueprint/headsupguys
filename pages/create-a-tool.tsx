@@ -28,9 +28,21 @@ const Home: React.FC = () => {
             video: "",
             description: "",
             linkedModule: "",
-            relatedResources: ["", "", ""],
-            relatedStories: ["", "", ""],
-            externalResources: ["", "", ""],
+            relatedResources: [
+                ["", ""],
+                ["", ""],
+                ["", ""],
+            ],
+            relatedStories: [
+                ["", ""],
+                ["", ""],
+                ["", ""],
+            ],
+            externalResources: [
+                ["", ""],
+                ["", ""],
+                ["", ""],
+            ],
             recommendedTools: ["", "", ""],
         },
     ];
@@ -41,11 +53,17 @@ const Home: React.FC = () => {
 
     //
 
-    const changeInput = (id, target, type, index = null) => {
-        console.log(id, target, type, index);
+    const changeInput = (id, target, type, index1 = null, index2 = null) => {
         const newTool = toolList.slice(0);
-        if (index != null) {
-            newTool[newTool.findIndex((e) => e._id === id)][type][index] =
+        console.log(target, type, index1, index2, [
+            newTool.findIndex((e) => e._id === id),
+        ]);
+        if (index2 != null) {
+            newTool[newTool.findIndex((e) => e._id === id)][type][index1][
+                index2
+            ] = target;
+        } else if (index1 != null) {
+            newTool[newTool.findIndex((e) => e._id === id)][type][index1] =
                 target;
         } else {
             newTool[newTool.findIndex((e) => e._id === id)][type] = target;

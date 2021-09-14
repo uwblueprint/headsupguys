@@ -168,7 +168,7 @@ export const ToolHomePage: React.FC = ({
                     />
                 </FormControl>
             </WrapItem>
-            <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+            <Grid templateColumns="repeat(3, 1fr)" gap={6} width={"full"}>
                 {(relatedLinks ?? []).map((link, idx) => (
                     <GridItem minWidth={0}>
                         <Wrap>
@@ -188,15 +188,18 @@ export const ToolHomePage: React.FC = ({
                                             isTruncated
                                             _hover={{ cursor: "pointer" }}
                                             onClick={() => {
-                                                console.log(link);
+                                                console.log(
+                                                    "link 2,0",
+                                                    link[2][index],
+                                                );
                                                 setCurrentRelatedLink(link);
                                                 setModalIndex(index);
                                                 setOpenModal(true);
                                             }}
                                         >
                                             {`${
-                                                link[2][index] != ""
-                                                    ? link[2][index]
+                                                link[2][index][0] != ""
+                                                    ? link[2][index][0]
                                                     : "+ Add Link"
                                             }`}
                                         </Text>
@@ -231,6 +234,13 @@ export const ToolHomePage: React.FC = ({
                                                             idx
                                                         }
                                                         placeholder="Text Here"
+                                                        defaultValue={
+                                                            currentRelatedLink
+                                                                ? currentRelatedLink[2][
+                                                                      modalIndex
+                                                                  ][0] ?? ""
+                                                                : ""
+                                                        }
                                                         isTruncated
                                                     />
                                                 </FormControl>
@@ -246,8 +256,19 @@ export const ToolHomePage: React.FC = ({
                                                         mb={10}
                                                         width={"full"}
                                                         size={"lg"}
-                                                        id={"linkLink"}
+                                                        id={
+                                                            "linkLink" +
+                                                            index +
+                                                            idx
+                                                        }
                                                         placeholder="Link"
+                                                        defaultValue={
+                                                            currentRelatedLink
+                                                                ? currentRelatedLink[2][
+                                                                      modalIndex
+                                                                  ][1] ?? ""
+                                                                : ""
+                                                        }
                                                         isTruncated
                                                     />
                                                 </FormControl>
@@ -266,10 +287,6 @@ export const ToolHomePage: React.FC = ({
                                                 </Button>
                                                 <Button
                                                     onClick={() => {
-                                                        console.log(
-                                                            index,
-                                                            link[1],
-                                                        );
                                                         setOpenModal(false);
                                                         onChangeInput(
                                                             toolId,
@@ -280,6 +297,18 @@ export const ToolHomePage: React.FC = ({
                                                             ).value,
                                                             currentRelatedLink[1],
                                                             modalIndex,
+                                                            0,
+                                                        );
+                                                        onChangeInput(
+                                                            toolId,
+                                                            document.getElementById(
+                                                                "linkLink" +
+                                                                    index +
+                                                                    idx,
+                                                            ).value,
+                                                            currentRelatedLink[1],
+                                                            modalIndex,
+                                                            1,
                                                         );
                                                     }}
                                                     w={100}

@@ -10,7 +10,6 @@ import {
     ModalOverlay,
     ModalHeader,
     ModalFooter,
-    ModalCloseButton,
     useDisclosure,
     useToast,
 } from "@chakra-ui/react";
@@ -272,7 +271,6 @@ const Home: React.FC = () => {
                 <ModalOverlay />
                 <ModalContent p={"5"}>
                     <ModalHeader>Delete Tool </ModalHeader>
-                    <ModalCloseButton />
                     <ModalBody>
                         Are you sure you want to discard this tool? This is a
                         permanent action that cannot be undone.

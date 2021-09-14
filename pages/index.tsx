@@ -1,7 +1,7 @@
 import React from "react";
-import { Spacer, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 
-import { Header, Main, Cards, Footer, ToolCard } from "@components";
+import { ToolCard } from "@components";
 
 const Home: React.FC = () => {
     const creators = ["Christine Ng", "Heads Up Guys"];

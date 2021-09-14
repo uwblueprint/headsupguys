@@ -9,8 +9,6 @@ import {
     Grid,
     Text,
     GridItem,
-    Box,
-    Link,
     Select,
     Textarea,
     Modal,
@@ -19,8 +17,6 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
-    ModalCloseButton,
-    useDisclosure,
 } from "@chakra-ui/react";
 
 const recommendedToolsList = ["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"];
@@ -360,7 +356,7 @@ export const ToolHomePage: React.FC = ({
                                         })
                                         .includes(item);
                                 }) ?? []
-                            ).map((choice, index) => (
+                            ).map((choice) => (
                                 <option value={choice}>{choice}</option>
                             ))}
                         </Select>

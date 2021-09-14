@@ -7,6 +7,8 @@ import {
     Input,
     Button,
     Grid,
+    Text,
+    GridItem,
     Box,
     Link,
     Select,
@@ -38,8 +40,8 @@ export const ToolHomePage: React.FC = ({
     onChangeInput,
     onChangeThumbnail,
 }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const [openModal, setOpenModal] = useState(false);
+    const [modalIndex, setModalIndex] = useState();
     return (
         <Wrap spacing="30px">
             <WrapItem width={"full"}>
@@ -160,90 +162,35 @@ export const ToolHomePage: React.FC = ({
                     />
                 </FormControl>
             </WrapItem>
-            <Grid templateColumns="repeat(3, 1fr)" width={"full"} gap={6}>
-                <Box>
-                    <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
-                        Related Resources
-                    </FormLabel>
+            <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+                <GridItem minWidth={0}>
                     <Wrap>
+                        <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
+                            Related Resources
+                        </FormLabel>
                         {(relatedResources ?? []).map((choice, index) => (
-                            <WrapItem width={"full"}>
-                                <Link
-                                    mb={"3"}
-                                    color="blue.400"
-                                    isTruncated
-                                    maxWidth={150}
-                                >
-                                    {`${
-                                        relatedResources[index] != ""
-                                            ? relatedResources[index]
-                                            : "+ Add Link"
-                                    }`}
-                                </Link>
-                            </WrapItem>
-                        ))}
-                    </Wrap>
-                </Box>
-                <Box>
-                    <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
-                        Related Stories
-                    </FormLabel>
-                    <Wrap>
-                        {(relatedStories ?? []).map((choice, index) => (
-                            <WrapItem width={"full"}>
-                                <Link mb={"3"} color="blue.400" isTruncated>
-                                    {`${
-                                        relatedStories[index] != ""
-                                            ? relatedStories[index]
-                                            : "+ Add Link"
-                                    }`}
-                                </Link>
-                            </WrapItem>
-                        ))}
-                    </Wrap>
-                </Box>
-                <Box>
-                    <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
-                        External Resources
-                    </FormLabel>
-                    <Wrap>
-                        {(externalResources ?? []).map((choice, index) => (
-                            <WrapItem width={"full"}>
-                                <Link mb={"3"} color="blue.400" isTruncated>
-                                    {`${
-                                        externalResources[index] != ""
-                                            ? externalResources[index]
-                                            : "+ Add Link"
-                                    }`}
-                                </Link>
-                            </WrapItem>
-                        ))}
-                    </Wrap>
-                </Box>
-            </Grid>
-            <WrapItem width={"full"}>
-                <FormControl alignSelf={"right"} mr={"5"}>
-                    <Wrap>
-                        {(relatedResources ?? []).map((choice, index) => (
-                            <WrapItem width={"full"}>
-                                <Button
-                                    variant="link"
-                                    mb={"3"}
-                                    colorScheme="blue"
-                                    onClick={onOpen}
-                                    value={index}
-                                    isTruncated
-                                >
-                                    {`${
-                                        relatedResources[index] != ""
-                                            ? relatedResources[index]
-                                            : "+ Add Link"
-                                    }`}
-                                </Button>
+                            <>
+                                <WrapItem width={"full"}>
+                                    <Text
+                                        mb={"3"}
+                                        color="blue.400"
+                                        isTruncated
+                                        _hover={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                            setModalIndex(index);
+                                            setOpenModal(true);
+                                        }}
+                                    >
+                                        {`${
+                                            relatedResources[index] != ""
+                                                ? relatedResources[index]
+                                                : "+ Add Link"
+                                        }`}
+                                    </Text>
+                                </WrapItem>
                                 <Modal
                                     blockScrollOnMount={false}
-                                    isOpen={isOpen}
-                                    onClose={onClose}
+                                    isOpen={openModal}
                                     motionPreset="slideInBottom"
                                 >
                                     <ModalOverlay />
@@ -254,7 +201,6 @@ export const ToolHomePage: React.FC = ({
                                         >
                                             Add Link
                                         </ModalHeader>
-                                        <ModalCloseButton />
                                         <ModalBody>
                                             <FormControl isRequired>
                                                 <FormLabel
@@ -268,16 +214,6 @@ export const ToolHomePage: React.FC = ({
                                                     size={"lg"}
                                                     id={"linkText" + index}
                                                     placeholder="Text Here"
-                                                    onChange={(e) => {
-                                                        document.getElementById(
-                                                            "linkText" + index,
-                                                        ).value =
-                                                            e.target.value;
-                                                        console.log(
-                                                            choice,
-                                                            index,
-                                                        );
-                                                    }}
                                                     isTruncated
                                                 />
                                             </FormControl>
@@ -293,7 +229,7 @@ export const ToolHomePage: React.FC = ({
                                                     mb={10}
                                                     width={"full"}
                                                     size={"lg"}
-                                                    id={"linkLink" + index}
+                                                    id={"linkLink"}
                                                     placeholder="Link"
                                                     isTruncated
                                                 />
@@ -305,21 +241,25 @@ export const ToolHomePage: React.FC = ({
                                                 colorScheme="black"
                                                 mr={"3"}
                                                 w={100}
-                                                onClick={onClose}
+                                                onClick={() =>
+                                                    setOpenModal(false)
+                                                }
                                             >
                                                 Cancel
                                             </Button>
                                             <Button
-                                                onClick={() =>
+                                                onClick={() => {
+                                                    console.log(index);
+                                                    setOpenModal(false);
                                                     onChangeInput(
                                                         toolId,
                                                         document.getElementById(
                                                             "linkText" + index,
                                                         ).value,
                                                         "relatedResources",
-                                                        0,
-                                                    )
-                                                }
+                                                        modalIndex,
+                                                    );
+                                                }}
                                                 w={100}
                                                 background="black"
                                                 _active={{
@@ -331,11 +271,57 @@ export const ToolHomePage: React.FC = ({
                                         </ModalFooter>
                                     </ModalContent>
                                 </Modal>
+                            </>
+                        ))}
+                    </Wrap>
+                </GridItem>
+                <GridItem minWidth={0}>
+                    <Wrap>
+                        <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
+                            Related Stories
+                        </FormLabel>
+                        {(relatedStories ?? []).map((choice, index) => (
+                            <WrapItem width={"full"}>
+                                <Text
+                                    mb={"3"}
+                                    color="blue.400"
+                                    isTruncated
+                                    _hover={{ cursor: "pointer" }}
+                                >
+                                    {`${
+                                        relatedStories[index] != ""
+                                            ? relatedStories[index]
+                                            : "+ Add Link"
+                                    }`}
+                                </Text>
                             </WrapItem>
                         ))}
                     </Wrap>
-                </FormControl>
-            </WrapItem>
+                </GridItem>
+                <GridItem minWidth={0}>
+                    <Wrap>
+                        <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
+                            External Resources
+                        </FormLabel>
+                        {(externalResources ?? []).map((choice, index) => (
+                            <WrapItem width={"full"}>
+                                <Text
+                                    mb={"3"}
+                                    color="blue.400"
+                                    isTruncated
+                                    _hover={{ cursor: "pointer" }}
+                                >
+                                    {`${
+                                        externalResources[index] != ""
+                                            ? externalResources[index]
+                                            : "+ Add Link"
+                                    }`}
+                                </Text>
+                            </WrapItem>
+                        ))}
+                    </Wrap>
+                </GridItem>
+            </Grid>
             <WrapItem width={"50%"}>
                 <FormControl isRequired>
                     <FormLabel fontSize={20} fontWeight={"bold"}>

@@ -35,6 +35,10 @@ const Home: React.FC = () => {
         },
     ];
     const [toolList, setToolList] = useState(defaultTool);
+    const [lastSavedTool, setLastSavedTool] = useState(
+        JSON.parse(JSON.stringify(defaultTool)),
+    );
+
     //
 
     const changeInput = (id, target, type, index = null) => {
@@ -100,6 +104,10 @@ const Home: React.FC = () => {
         },
     ];
     const [questionList, setQuestionList] = useState(defaultQuestions);
+    const [lastSavedQuestions, setLastSavedQuestions] = useState(
+        JSON.parse(JSON.stringify(defaultQuestions)),
+    );
+
     const [count, setCount] = useState(1);
     const [page, setPage] = useState("home");
 
@@ -140,7 +148,6 @@ const Home: React.FC = () => {
     const changeOptionInput = (id, index, target, optionOrValue) => {
         const newList = questionList.slice(0);
         const changeIndex = optionOrValue == "option" ? 0 : 1;
-        // console.log(index, changeIndex, optionOrValue);
         newList[newList.findIndex((e) => e._id === id)].options[index][
             changeIndex
         ] = target;
@@ -220,6 +227,16 @@ const Home: React.FC = () => {
     };
     const removeAllQuestions = () => {
         setQuestionList([]);
+    };
+
+    const checkEquality = (x, y) => {
+        const equal = Object.keys,
+            tx = typeof x,
+            ty = typeof y;
+        return x && y && tx === "object" && tx === ty
+            ? equal(x).length === equal(y).length &&
+                  equal(x).every((key) => checkEquality(x[key], y[key]))
+            : x === y;
     };
 
     const selfCheckQuestionSize = questionList.length;
@@ -332,6 +349,17 @@ const Home: React.FC = () => {
                             color="white"
                             background="black"
                             variant="outline"
+                            disabled={
+                                (JSON.stringify(questionList) ==
+                                    JSON.stringify(lastSavedQuestions) &&
+                                    JSON.stringify(toolList) ==
+                                        JSON.stringify(lastSavedTool)) ||
+                                ((JSON.stringify(questionList) ==
+                                    JSON.stringify(defaultQuestions) ||
+                                    JSON.stringify(questionList) == "[]") &&
+                                    JSON.stringify(toolList) ==
+                                        JSON.stringify(defaultTool))
+                            }
                             //TODO: Send this output to the database
                             //rather than just logging it in the console
                             onClick={() => {
@@ -348,6 +376,12 @@ const Home: React.FC = () => {
                                 console.log(
                                     "Self Check Questions:",
                                     questionList,
+                                );
+                                setLastSavedTool(
+                                    JSON.parse(JSON.stringify(toolList)),
+                                );
+                                setLastSavedQuestions(
+                                    JSON.parse(JSON.stringify(questionList)),
                                 );
                             }}
                         >

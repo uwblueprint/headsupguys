@@ -8,6 +8,7 @@ import {
     Button,
     Grid,
     Box,
+    Link,
     Select,
     Textarea,
     Modal,
@@ -38,6 +39,7 @@ export const ToolHomePage: React.FC = ({
     onChangeThumbnail,
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [openModal, setOpenModal] = useState(false);
     return (
         <Wrap spacing="30px">
             <WrapItem width={"full"}>
@@ -166,17 +168,18 @@ export const ToolHomePage: React.FC = ({
                     <Wrap>
                         {(relatedResources ?? []).map((choice, index) => (
                             <WrapItem width={"full"}>
-                                <Button
-                                    variant="link"
+                                <Link
                                     mb={"3"}
-                                    colorScheme="blue"
+                                    color="blue.400"
+                                    isTruncated
+                                    maxWidth={150}
                                 >
                                     {`${
                                         relatedResources[index] != ""
                                             ? relatedResources[index]
                                             : "+ Add Link"
                                     }`}
-                                </Button>
+                                </Link>
                             </WrapItem>
                         ))}
                     </Wrap>
@@ -188,17 +191,13 @@ export const ToolHomePage: React.FC = ({
                     <Wrap>
                         {(relatedStories ?? []).map((choice, index) => (
                             <WrapItem width={"full"}>
-                                <Button
-                                    variant="link"
-                                    mb={"3"}
-                                    colorScheme="blue"
-                                >
+                                <Link mb={"3"} color="blue.400" isTruncated>
                                     {`${
                                         relatedStories[index] != ""
                                             ? relatedStories[index]
                                             : "+ Add Link"
                                     }`}
-                                </Button>
+                                </Link>
                             </WrapItem>
                         ))}
                     </Wrap>
@@ -210,17 +209,13 @@ export const ToolHomePage: React.FC = ({
                     <Wrap>
                         {(externalResources ?? []).map((choice, index) => (
                             <WrapItem width={"full"}>
-                                <Button
-                                    variant="link"
-                                    mb={"3"}
-                                    colorScheme="blue"
-                                >
+                                <Link mb={"3"} color="blue.400" isTruncated>
                                     {`${
                                         externalResources[index] != ""
                                             ? externalResources[index]
                                             : "+ Add Link"
                                     }`}
-                                </Button>
+                                </Link>
                             </WrapItem>
                         ))}
                     </Wrap>

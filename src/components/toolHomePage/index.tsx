@@ -42,6 +42,12 @@ export const ToolHomePage: React.FC = ({
 }) => {
     const [openModal, setOpenModal] = useState(false);
     const [modalIndex, setModalIndex] = useState();
+    const relatedLinks = [
+        ["Related Resources", "relatedResources", relatedResources],
+        ["Related Stories", "relatedStories", relatedStories],
+        ["External Resources", "externalResources", externalResources],
+    ];
+    const [currentRelatedLink, setCurrentRelatedLink] = useState();
     return (
         <Wrap spacing="30px">
             <WrapItem width={"full"}>
@@ -163,164 +169,136 @@ export const ToolHomePage: React.FC = ({
                 </FormControl>
             </WrapItem>
             <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-                <GridItem minWidth={0}>
-                    <Wrap>
-                        <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
-                            Related Resources
-                        </FormLabel>
-                        {(relatedResources ?? []).map((choice, index) => (
-                            <>
-                                <WrapItem width={"full"}>
-                                    <Text
-                                        mb={"3"}
-                                        color="blue.400"
-                                        isTruncated
-                                        _hover={{ cursor: "pointer" }}
-                                        onClick={() => {
-                                            setModalIndex(index);
-                                            setOpenModal(true);
-                                        }}
-                                    >
-                                        {`${
-                                            relatedResources[index] != ""
-                                                ? relatedResources[index]
-                                                : "+ Add Link"
-                                        }`}
-                                    </Text>
-                                </WrapItem>
-                                <Modal
-                                    blockScrollOnMount={false}
-                                    isOpen={openModal}
-                                    motionPreset="slideInBottom"
-                                >
-                                    <ModalOverlay />
-                                    <ModalContent p={"5"}>
-                                        <ModalHeader
-                                            fontWeight={"bold"}
-                                            fontSize={30}
+                {(relatedLinks ?? []).map((link, idx) => (
+                    <GridItem minWidth={0}>
+                        <Wrap>
+                            <FormLabel
+                                fontSize={20}
+                                fontWeight={"bold"}
+                                mb={"5"}
+                            >
+                                {link[0]}
+                            </FormLabel>
+                            {(relatedResources ?? []).map((choice, index) => (
+                                <>
+                                    <WrapItem width={"full"}>
+                                        <Text
+                                            mb={"3"}
+                                            color="blue.400"
+                                            isTruncated
+                                            _hover={{ cursor: "pointer" }}
+                                            onClick={() => {
+                                                console.log(link);
+                                                setCurrentRelatedLink(link);
+                                                setModalIndex(index);
+                                                setOpenModal(true);
+                                            }}
                                         >
-                                            Add Link
-                                        </ModalHeader>
-                                        <ModalBody>
-                                            <FormControl isRequired>
-                                                <FormLabel
-                                                    fontSize={20}
-                                                    fontWeight={"bold"}
-                                                >
-                                                    Text
-                                                </FormLabel>
-                                                <Input
-                                                    width={"full"}
-                                                    size={"lg"}
-                                                    id={"linkText" + index}
-                                                    placeholder="Text Here"
-                                                    isTruncated
-                                                />
-                                            </FormControl>
-                                            <FormControl isRequired>
-                                                <FormLabel
-                                                    fontSize={20}
-                                                    fontWeight={"bold"}
-                                                    mt={10}
-                                                >
-                                                    Link
-                                                </FormLabel>
-                                                <Input
-                                                    mb={10}
-                                                    width={"full"}
-                                                    size={"lg"}
-                                                    id={"linkLink"}
-                                                    placeholder="Link"
-                                                    isTruncated
-                                                />
-                                            </FormControl>
-                                        </ModalBody>
-                                        <ModalFooter>
-                                            <Button
-                                                variant="outline"
-                                                colorScheme="black"
-                                                mr={"3"}
-                                                w={100}
-                                                onClick={() =>
-                                                    setOpenModal(false)
-                                                }
+                                            {`${
+                                                link[2][index] != ""
+                                                    ? link[2][index]
+                                                    : "+ Add Link"
+                                            }`}
+                                        </Text>
+                                    </WrapItem>
+                                    <Modal
+                                        blockScrollOnMount={false}
+                                        isOpen={openModal}
+                                        motionPreset="slideInBottom"
+                                    >
+                                        <ModalOverlay />
+                                        <ModalContent p={"5"}>
+                                            <ModalHeader
+                                                fontWeight={"bold"}
+                                                fontSize={30}
                                             >
-                                                Cancel
-                                            </Button>
-                                            <Button
-                                                onClick={() => {
-                                                    console.log(index);
-                                                    setOpenModal(false);
-                                                    onChangeInput(
-                                                        toolId,
-                                                        document.getElementById(
-                                                            "linkText" + index,
-                                                        ).value,
-                                                        "relatedResources",
-                                                        modalIndex,
-                                                    );
-                                                }}
-                                                w={100}
-                                                background="black"
-                                                _active={{
-                                                    transform: "scale(0.95)",
-                                                }}
-                                            >
-                                                Save
-                                            </Button>
-                                        </ModalFooter>
-                                    </ModalContent>
-                                </Modal>
-                            </>
-                        ))}
-                    </Wrap>
-                </GridItem>
-                <GridItem minWidth={0}>
-                    <Wrap>
-                        <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
-                            Related Stories
-                        </FormLabel>
-                        {(relatedStories ?? []).map((choice, index) => (
-                            <WrapItem width={"full"}>
-                                <Text
-                                    mb={"3"}
-                                    color="blue.400"
-                                    isTruncated
-                                    _hover={{ cursor: "pointer" }}
-                                >
-                                    {`${
-                                        relatedStories[index] != ""
-                                            ? relatedStories[index]
-                                            : "+ Add Link"
-                                    }`}
-                                </Text>
-                            </WrapItem>
-                        ))}
-                    </Wrap>
-                </GridItem>
-                <GridItem minWidth={0}>
-                    <Wrap>
-                        <FormLabel fontSize={20} fontWeight={"bold"} mb={"5"}>
-                            External Resources
-                        </FormLabel>
-                        {(externalResources ?? []).map((choice, index) => (
-                            <WrapItem width={"full"}>
-                                <Text
-                                    mb={"3"}
-                                    color="blue.400"
-                                    isTruncated
-                                    _hover={{ cursor: "pointer" }}
-                                >
-                                    {`${
-                                        externalResources[index] != ""
-                                            ? externalResources[index]
-                                            : "+ Add Link"
-                                    }`}
-                                </Text>
-                            </WrapItem>
-                        ))}
-                    </Wrap>
-                </GridItem>
+                                                Add Link
+                                            </ModalHeader>
+                                            <ModalBody>
+                                                <FormControl isRequired>
+                                                    <FormLabel
+                                                        fontSize={20}
+                                                        fontWeight={"bold"}
+                                                    >
+                                                        Text
+                                                    </FormLabel>
+                                                    <Input
+                                                        width={"full"}
+                                                        size={"lg"}
+                                                        id={
+                                                            "linkText" +
+                                                            index +
+                                                            idx
+                                                        }
+                                                        placeholder="Text Here"
+                                                        isTruncated
+                                                    />
+                                                </FormControl>
+                                                <FormControl isRequired>
+                                                    <FormLabel
+                                                        fontSize={20}
+                                                        fontWeight={"bold"}
+                                                        mt={10}
+                                                    >
+                                                        Link
+                                                    </FormLabel>
+                                                    <Input
+                                                        mb={10}
+                                                        width={"full"}
+                                                        size={"lg"}
+                                                        id={"linkLink"}
+                                                        placeholder="Link"
+                                                        isTruncated
+                                                    />
+                                                </FormControl>
+                                            </ModalBody>
+                                            <ModalFooter>
+                                                <Button
+                                                    variant="outline"
+                                                    colorScheme="black"
+                                                    mr={"3"}
+                                                    w={100}
+                                                    onClick={() =>
+                                                        setOpenModal(false)
+                                                    }
+                                                >
+                                                    Cancel
+                                                </Button>
+                                                <Button
+                                                    onClick={() => {
+                                                        console.log(
+                                                            index,
+                                                            link[1],
+                                                        );
+                                                        setOpenModal(false);
+                                                        onChangeInput(
+                                                            toolId,
+                                                            document.getElementById(
+                                                                "linkText" +
+                                                                    index +
+                                                                    idx,
+                                                            ).value,
+                                                            currentRelatedLink[1],
+                                                            modalIndex,
+                                                        );
+                                                    }}
+                                                    w={100}
+                                                    background="black"
+                                                    _active={{
+                                                        transform:
+                                                            "scale(0.95)",
+                                                    }}
+                                                >
+                                                    Save
+                                                </Button>
+                                            </ModalFooter>
+                                        </ModalContent>
+                                    </Modal>
+                                </>
+                            ))}
+                        </Wrap>
+                    </GridItem>
+                ))}
             </Grid>
             <WrapItem width={"50%"}>
                 <FormControl isRequired>

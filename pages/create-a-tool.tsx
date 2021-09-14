@@ -52,7 +52,7 @@ const Home: React.FC = () => {
     const thumbnailValidation = (id, target) => {
         const newTool = toolList.slice(0);
         const fileType = target.split(".").pop().toLowerCase();
-        const allowedFileTypes = ["jpg", "jpeg", "png", "gif"];
+        const allowedFileTypes = ["jpg", "jpeg", "png", "gif", "bmp", "gif"];
         if (allowedFileTypes.includes(fileType)) {
             newTool[newTool.findIndex((e) => e._id === id)].thumbnail = target;
             setToolList(newTool);
@@ -68,7 +68,7 @@ const Home: React.FC = () => {
             if (target != "") {
                 toast({
                     title: "Invalid file type",
-                    description: "Please upload a jpg or png",
+                    description: "Please upload a jpg, jpeg, bmp, gif, or png",
                     status: "error",
                     position: "bottom-left",
                     duration: 5000,
@@ -257,6 +257,15 @@ const Home: React.FC = () => {
                                 onClose();
                                 clearToolHomePage();
                                 removeAllQuestions();
+                                toast({
+                                    title: "Deletion Successful",
+                                    description:
+                                        "Your tool data has been succesfully deleted",
+                                    status: "success",
+                                    position: "bottom-left",
+                                    duration: 5000,
+                                    isClosable: true,
+                                });
                             }}
                             w={100}
                             background="red.600"
@@ -273,7 +282,7 @@ const Home: React.FC = () => {
                         Create a Tool
                     </Text>
                     <Button
-                        _hover={{ bg: "#121310" }}
+                        _hover={{ bg: "#222222" }}
                         _active={{
                             transform: "scale(0.95)",
                         }}
@@ -283,12 +292,24 @@ const Home: React.FC = () => {
                         color="white"
                         background="black"
                         variant="outline"
+                        isDisabled={false}
+                        onClick={() => {
+                            toast({
+                                title: "Publication Successful",
+                                description:
+                                    "Your tool has been succesfully published",
+                                status: "success",
+                                position: "bottom-left",
+                                duration: 5000,
+                                isClosable: true,
+                            });
+                        }}
                     >
                         Publish
                     </Button>
                     <Flex wrap={"wrap"} ml={"auto"} mr={10}>
                         <Button
-                            _hover={{ bg: "#F3F3F3" }}
+                            _hover={{ bg: "gray.100" }}
                             _active={{
                                 transform: "scale(0.95)",
                             }}
@@ -302,7 +323,7 @@ const Home: React.FC = () => {
                             Discard
                         </Button>
                         <Button
-                            _hover={{ bg: "#121310" }}
+                            _hover={{ bg: "#222222" }}
                             _active={{
                                 transform: "scale(0.95)",
                             }}

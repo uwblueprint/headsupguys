@@ -164,7 +164,7 @@ export const ToolHomePage: React.FC = ({
                         Related Resources
                     </FormLabel>
                     <Wrap>
-                        {(externalResources ?? []).map((choice, index) => (
+                        {(relatedResources ?? []).map((choice, index) => (
                             <WrapItem width={"full"}>
                                 <Button
                                     variant="link"
@@ -172,8 +172,8 @@ export const ToolHomePage: React.FC = ({
                                     colorScheme="blue"
                                 >
                                     {`${
-                                        externalResources[index] != ""
-                                            ? externalResources[index]
+                                        relatedResources[index] != ""
+                                            ? relatedResources[index]
                                             : "+ Add Link"
                                     }`}
                                 </Button>
@@ -186,7 +186,7 @@ export const ToolHomePage: React.FC = ({
                         Related Stories
                     </FormLabel>
                     <Wrap>
-                        {(externalResources ?? []).map((choice, index) => (
+                        {(relatedStories ?? []).map((choice, index) => (
                             <WrapItem width={"full"}>
                                 <Button
                                     variant="link"
@@ -194,8 +194,8 @@ export const ToolHomePage: React.FC = ({
                                     colorScheme="blue"
                                 >
                                     {`${
-                                        externalResources[index] != ""
-                                            ? externalResources[index]
+                                        relatedStories[index] != ""
+                                            ? relatedStories[index]
                                             : "+ Add Link"
                                     }`}
                                 </Button>

@@ -1,10 +1,6 @@
-export { Header } from "./header";
-export { Logo } from "./logo";
 export { Main } from "./main";
-export { Button } from "./button";
 export { ToolHomePage } from "./toolHomePage";
 export { SelfCheckQuestionCard } from "./toolSelfCheck";
-export { Footer } from "./footer";
 export { AdminLayout } from "./layouts/AdminLayout";
 export { BuilderLayout } from "./layouts/BuilderLayout";
 export { PublicLayout } from "./layouts/PublicLayout";

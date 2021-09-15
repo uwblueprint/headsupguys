@@ -4,7 +4,6 @@ import { ErrorResponse } from "types/ErrorResponse";
 import { Module } from "../../../database/models/module";
 import { Slide } from "../../../database/models/slide";
 
-
 const del = async (
     req: NextApiRequest,
     res: NextApiResponse<ErrorResponse>,

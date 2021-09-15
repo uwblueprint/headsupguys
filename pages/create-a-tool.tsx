@@ -73,7 +73,7 @@ const Home: React.FC = () => {
     const thumbnailValidation = (id, target) => {
         const newTool = toolList.slice(0);
         const fileType = target.split(".").pop().toLowerCase();
-        const allowedFileTypes = ["jpg", "jpeg", "png", "gif", "bmp", "gif"];
+        const allowedFileTypes = ["jpg", "jpeg", "png", "gif"];
         if (allowedFileTypes.includes(fileType)) {
             newTool[newTool.findIndex((e) => e._id === id)].thumbnail = target;
             setToolList(newTool);
@@ -89,7 +89,7 @@ const Home: React.FC = () => {
             if (target != "") {
                 toast({
                     title: "Invalid file type",
-                    description: "Please upload a jpg, jpeg, bmp, gif, or png",
+                    description: "Please upload a jpg, png, or gif",
                     status: "error",
                     position: "bottom-left",
                     duration: 5000,

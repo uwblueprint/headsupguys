@@ -18,8 +18,30 @@ import {
     ModalBody,
     ModalFooter,
 } from "@chakra-ui/react";
+import { NumericTypes } from "mongoose";
 
 const recommendedToolsList = ["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"];
+
+export interface SelfCheckQuestionCardProps {
+    toolId: string;
+    title: string;
+    type: string;
+    video: string;
+    description: string;
+    linkedModule: string;
+    relatedResources: string[][];
+    relatedStories: string[][];
+    externalResources: string[][];
+    recommendedTools: string[];
+    onChangeInput: (
+        id: string,
+        target: string,
+        type: string,
+        index1?: number,
+        index2?: number,
+    ) => void;
+    onChangeThumbnail: (id: string, target: string) => void;
+}
 
 //Self check question card component
 export const ToolHomePage: React.FC = ({
@@ -184,10 +206,6 @@ export const ToolHomePage: React.FC = ({
                                             isTruncated
                                             _hover={{ cursor: "pointer" }}
                                             onClick={() => {
-                                                console.log(
-                                                    "link 2,0",
-                                                    link[2][index],
-                                                );
                                                 setCurrentRelatedLink(link);
                                                 setModalIndex(index);
                                                 setOpenModal(true);

@@ -411,10 +411,10 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                 variant="flushed"
                                                 placeholder={
                                                     alphanumeric
-                                                        ? `Value ${
+                                                        ? `Value ${index + 1}`
+                                                        : `Numeric Value ${
                                                               index + 1
                                                           }`
-                                                        : `Numeric Value ${index + 1}`
                                                 }
                                                 mr={6}
                                                 isTruncated
@@ -621,10 +621,10 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                             value={options[index][1]}
                                             placeholder={
                                                 alphanumeric
-                                                    ? `Value ${
+                                                    ? `Value ${index + 1}`
+                                                    : `Numeric Value ${
                                                           index + 1
                                                       }`
-                                                    : `Numeric Value ${index + 1}`
                                             }
                                             mr={"6"}
                                             isTruncated

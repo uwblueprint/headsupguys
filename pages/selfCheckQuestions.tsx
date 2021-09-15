@@ -14,7 +14,7 @@ import {
     SimpleGrid,
     Button,
 } from "@chakra-ui/react";
-import { SelfCheckQuestionCard } from "@components";
+import { Header, SelfCheckQuestionCard, Footer } from "@components";
 
 //Self Check Questions React functional component
 const Home: React.FC = () => {
@@ -95,12 +95,7 @@ const Home: React.FC = () => {
         setQuestionList(newList);
     };
 
-    const changeSliderBounds = (
-        id,
-        target,
-        sliderUpperBound,
-        sliderLowerBound?,
-    ) => {
+    const changeSliderBounds = (id, target, sliderUpperBound) => {
         if (target == 0) {
             addOneOption(id, "top");
         } else if (target == 1) {
@@ -163,6 +158,8 @@ const Home: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Flex direction="column" minH="100vh">
+            <Header />
+
             <Flex mt={10} wrap={"wrap"} justify={"left"} width={"full"}>
                 <Text ml={10} mr={2} fontWeight="bold" fontSize="4xl">
                     Create a Tool
@@ -279,6 +276,7 @@ const Home: React.FC = () => {
                 ))}
             </SimpleGrid>
             <Spacer />
+            <Footer />
         </Flex>
     );
 };

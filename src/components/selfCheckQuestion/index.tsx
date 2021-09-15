@@ -34,37 +34,22 @@ import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 export interface SelfCheckQuestionCardProps {
     alphanumeric: boolean;
     type: string;
-    options: string[][] | { label: string; value: string }[];
+    options: string[][];
     question: string;
     questionId: string;
     questionIndex: number;
     selfCheckQuestionSize: number;
-    onAddOption: (id: string, target) => void;
-    onRemoveOption: (id: string, target) => void;
-    onChangeAlphanumeric: (id: string, target) => void;
-    onChangeQuestionInput: (id: string, target) => void;
-    onChangeOptionInput: (
-        id: string,
-        index: number,
-        target,
-        optionOrValue: string,
-    ) => void;
-    onChangeQuestionType: (
-        id: string,
-        target,
-        sliderLowerBound: number,
-        sliderUpperBound: number,
-    ) => void;
-    onMoveDownQuestion: (index: number) => void;
-    onRemoveQuestion: (id: string) => void;
-    onMoveUpQuestion: (index: number) => void;
-    onAddQuestion: (index: number) => void;
-    onChangeSliderBounds: (
-        id: string,
-        target,
-        sliderUpperBound: number,
-        sliderLowerBound?: number,
-    ) => void;
+    onAddOption: () => void;
+    onRemoveOption: () => void;
+    onChangeAlphanumeric: () => void;
+    onChangeQuestionInput: () => void;
+    onChangeOptionInput: () => void;
+    onChangeQuestionType: () => void;
+    onMoveDownQuestion: () => void;
+    onRemoveQuestion: () => void;
+    onMoveUpQuestion: () => void;
+    onAddQuestion: () => void;
+    onChangeSliderBounds: () => void;
 }
 
 //Self check question card component
@@ -206,7 +191,6 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
 
                         {questionIndex != 0 && (
                             <IconButton
-                                aria-label="Move Question Up"
                                 onClick={() => onMoveUpQuestion(questionIndex)}
                                 ml={
                                     questionIndex + 1 == selfCheckQuestionSize
@@ -224,7 +208,6 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                         {questionIndex != selfCheckQuestionSize - 1 &&
                             selfCheckQuestionSize > 1 && (
                                 <IconButton
-                                    aria-label="Move Question Down"
                                     onClick={() =>
                                         onMoveDownQuestion(questionIndex)
                                     }
@@ -301,6 +284,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                         onRemoveOption(
                                                             questionId,
                                                             index,
+                                                            sliderUpperBound,
                                                         );
                                                         setSliderUpperBound(
                                                             sliderUpperBound -
@@ -347,7 +331,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                             variant="outline"
                                         >
                                             <Button
-                                                // value={alphanumeric}
+                                                value={alphanumeric}
                                                 onClick={() =>
                                                     changeAlphanumeric(true)
                                                 }
@@ -370,7 +354,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                 Aa
                                             </Button>
                                             <Button
-                                                // value={alphanumeric}
+                                                value={alphanumeric}
                                                 onClick={() =>
                                                     changeAlphanumeric(false)
                                                 }
@@ -423,6 +407,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                         onRemoveOption(
                                                             questionId,
                                                             index,
+                                                            sliderUpperBound,
                                                         );
                                                         setSliderUpperBound(
                                                             options.length,
@@ -506,6 +491,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                     onRemoveOption(
                                                         questionId,
                                                         index,
+                                                        sliderUpperBound,
                                                     );
                                                     setSliderUpperBound(
                                                         options.length,
@@ -548,7 +534,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                         variant="outline"
                                     >
                                         <Button
-                                            // value={alphanumeric}
+                                            value={alphanumeric}
                                             onClick={() =>
                                                 changeAlphanumeric(true)
                                             }
@@ -567,7 +553,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                             Aa
                                         </Button>
                                         <Button
-                                            // value={alphanumeric}
+                                            value={alphanumeric}
                                             onClick={() =>
                                                 changeAlphanumeric(false)
                                             }
@@ -614,6 +600,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                     onRemoveOption(
                                                         questionId,
                                                         index,
+                                                        sliderUpperBound,
                                                     );
                                                     setSliderUpperBound(
                                                         options.length,
@@ -653,7 +640,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                 variant="outline"
                             >
                                 <Button
-                                    // value={alphanumeric}
+                                    value={alphanumeric}
                                     onClick={() => changeAlphanumeric(true)}
                                     _hover={{
                                         bg: alphanumeric ? "black" : "white",
@@ -666,7 +653,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                     Aa
                                 </Button>
                                 <Button
-                                    // value={alphanumeric}
+                                    value={alphanumeric}
                                     onClick={() => changeAlphanumeric(false)}
                                     _hover={{
                                         bg: alphanumeric ? "white" : "black",
@@ -705,7 +692,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                 variant="outline"
                             >
                                 <Button
-                                    // value={alphanumeric}
+                                    value={alphanumeric}
                                     onClick={() => changeAlphanumeric(true)}
                                     _hover={{
                                         bg: alphanumeric ? "black" : "white",
@@ -718,7 +705,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                     Aa
                                 </Button>
                                 <Button
-                                    // value={alphanumeric}
+                                    value={alphanumeric}
                                     onClick={() => changeAlphanumeric(false)}
                                     _hover={{
                                         bg: alphanumeric ? "white" : "black",
@@ -823,7 +810,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                         </Stack>
                     )}
                 </Flex>
-                <Flex direction={"row-reverse"} justify={"flex-end"}>
+                <Flex direction={"rowReverse"} justify={"flex-end"}>
                     <Button
                         onClick={onOpen}
                         py={"1"}

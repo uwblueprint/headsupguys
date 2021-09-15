@@ -50,7 +50,7 @@ export interface SelfCheckQuestionCardProps {
     onChangeAlphanumeric: (id: string, target: boolean) => void;
     onAddQuestion: (index: number) => void;
     onRemoveQuestion: (id: string) => void;
-    onMoveQuestion: (index: string, direction: int) => void;
+    onMoveQuestion: (index: number, direction: number) => void;
     onChangeQuestionInput: (id: string, target: string) => void;
     onChangeQuestionType: (
         id: string,
@@ -251,9 +251,11 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                     </Flex>
                                     {(options ?? []).map((option, index) => (
                                         <InputGroup
-                                            key={`Multiple Choice: ${
-                                                questionId + index
-                                            }=${option.value}`}
+                                            key={
+                                                "Multiple Choice:" +
+                                                questionId +
+                                                index
+                                            }
                                         >
                                             <InputLeftElement
                                                 pointerEvents="none"
@@ -336,7 +338,11 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                             variant="outline"
                                         >
                                             <Button
-                                                value={alphanumeric}
+                                                value={
+                                                    alphanumeric === true
+                                                        ? 1
+                                                        : 0
+                                                }
                                                 onClick={() =>
                                                     onChangeAlphanumeric(
                                                         questionId,
@@ -362,7 +368,11 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                 Aa
                                             </Button>
                                             <Button
-                                                value={alphanumeric}
+                                                value={
+                                                    alphanumeric === true
+                                                        ? 1
+                                                        : 0
+                                                }
                                                 onClick={() =>
                                                     onChangeAlphanumeric(
                                                         questionId,
@@ -391,9 +401,11 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                     </Flex>
                                     {(options ?? []).map((option, index) => (
                                         <InputGroup
-                                            key={`Corresponding Value: ${
-                                                questionId + index
-                                            }=${option.value}`}
+                                            key={
+                                                "Corresponding Value:" +
+                                                questionId +
+                                                index
+                                            }
                                         >
                                             <Input
                                                 onChange={(e) =>
@@ -475,9 +487,9 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                 </Flex>
                                 {(options ?? []).map((option, index) => (
                                     <InputGroup
-                                        key={`Multi Select: ${
-                                            questionId + index
-                                        }=${option.value}`}
+                                        key={
+                                            "Multi Select" + questionId + index
+                                        }
                                     >
                                         <InputLeftElement
                                             pointerEvents="none"
@@ -554,7 +566,9 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                         variant="outline"
                                     >
                                         <Button
-                                            value={alphanumeric}
+                                            value={
+                                                alphanumeric === true ? 1 : 0
+                                            }
                                             onClick={() =>
                                                 onChangeAlphanumeric(
                                                     questionId,
@@ -576,7 +590,9 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                             Aa
                                         </Button>
                                         <Button
-                                            value={alphanumeric}
+                                            value={
+                                                alphanumeric === true ? 1 : 0
+                                            }
                                             onClick={() =>
                                                 onChangeAlphanumeric(
                                                     questionId,
@@ -601,9 +617,9 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                 </Flex>
                                 {(options ?? []).map((option, index) => (
                                     <InputGroup
-                                        key={`Multi Select: ${
-                                            questionId + index
-                                        }=${option.value}`}
+                                        key={
+                                            "Multi Select" + questionId + index
+                                        }
                                     >
                                         <Input
                                             onChange={(e) =>
@@ -677,7 +693,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                 variant="outline"
                             >
                                 <Button
-                                    value={alphanumeric}
+                                    value={alphanumeric === true ? 1 : 0}
                                     onClick={() =>
                                         onChangeAlphanumeric(questionId, true)
                                     }
@@ -692,7 +708,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                     Aa
                                 </Button>
                                 <Button
-                                    value={alphanumeric}
+                                    value={alphanumeric === true ? 1 : 0}
                                     onClick={() =>
                                         onChangeAlphanumeric(questionId, false)
                                     }
@@ -733,7 +749,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                 variant="outline"
                             >
                                 <Button
-                                    value={alphanumeric}
+                                    value={alphanumeric === true ? 1 : 0}
                                     onClick={() =>
                                         onChangeAlphanumeric(questionId, true)
                                     }
@@ -748,7 +764,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                     Aa
                                 </Button>
                                 <Button
-                                    value={alphanumeric}
+                                    value={alphanumeric === true ? 1 : 0}
                                     onClick={() =>
                                         onChangeAlphanumeric(questionId, false)
                                     }
@@ -810,11 +826,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                             </Flex>
                             <Stack>
                                 {(options ?? []).map((option, index) => (
-                                    <Flex
-                                        key={`Slider: ${questionId + index}=${
-                                            option.value
-                                        }`}
-                                    >
+                                    <Flex key={"Slider" + questionId + index}>
                                         {sliderLowerBound == 0 && (
                                             <Heading
                                                 fontSize={"16"}

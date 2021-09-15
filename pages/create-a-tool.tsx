@@ -54,9 +54,6 @@ const Home: React.FC = () => {
 
     const changeInput = (id, target, type, index1 = null, index2 = null) => {
         const newTool = toolList.slice(0);
-        console.log(target, type, index1, index2, [
-            newTool.findIndex((e) => e._id === id),
-        ]);
         if (index2 != null) {
             newTool[newTool.findIndex((e) => e._id === id)][type][index1][
                 index2

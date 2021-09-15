@@ -20,15 +20,15 @@ import {
     ModalBody,
     ModalFooter,
 } from "@chakra-ui/react";
-import { NumericTypes } from "mongoose";
 
 const recommendedToolsList = ["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"];
 
-export interface SelfCheckQuestionCardProps {
+export interface ToolHomePageProps {
     toolId: string;
     title: string;
     type: string;
     video: string;
+    thumbnail: string;
     description: string;
     linkedModule: string;
     relatedResources: string[][];
@@ -45,7 +45,7 @@ export interface SelfCheckQuestionCardProps {
 }
 
 //Self check question card component
-export const ToolHomePage: React.FC = ({
+export const ToolHomePage: React.FC<ToolHomePageProps> = ({
     toolId,
     title,
     type,
@@ -204,13 +204,21 @@ export const ToolHomePage: React.FC = ({
                                 <>
                                     <WrapItem
                                         width={"full"}
-                                        key={link + choice + index + "wrapitem"}
+                                        key={
+                                            link.toString() +
+                                            choice.toString() +
+                                            index +
+                                            "wrapitem"
+                                        }
                                     >
                                         <Text
                                             color="blue.400"
                                             isTruncated
                                             key={
-                                                link + choice + index + "input"
+                                                link.toString() +
+                                                choice.toString() +
+                                                index +
+                                                "input"
                                             }
                                             _hover={{ cursor: "pointer" }}
                                             onClick={() => {
@@ -227,26 +235,32 @@ export const ToolHomePage: React.FC = ({
                                         </Text>
                                         <Spacer
                                             key={
-                                                link + choice + index + "spacer"
+                                                link.toString() +
+                                                choice.toString() +
+                                                index +
+                                                "spacer"
                                             }
                                         ></Spacer>
                                         <CloseButton
                                             key={
-                                                link + choice + index + "close"
+                                                link.toString() +
+                                                choice.toString() +
+                                                index +
+                                                "close"
                                             }
                                             mt={-1}
                                             onClick={() => {
                                                 onChangeInput(
                                                     toolId,
                                                     "",
-                                                    link[1],
+                                                    link[1].toString(),
                                                     index,
                                                     0,
                                                 );
                                                 onChangeInput(
                                                     toolId,
                                                     "",
-                                                    link[1],
+                                                    link[1].toString(),
                                                     index,
                                                     1,
                                                 );
@@ -258,19 +272,20 @@ export const ToolHomePage: React.FC = ({
                                             setOpenModal(false);
                                         }}
                                         closeOnOverlayClick={true}
-                                        key={link + choice + index + "modal"}
+                                        key={
+                                            link.toString() +
+                                            choice +
+                                            index +
+                                            "modal"
+                                        }
                                         blockScrollOnMount={false}
                                         isOpen={openModal}
                                         motionPreset="slideInBottom"
                                     >
                                         <ModalOverlay
-                                            onClick={() => {
-                                                console.log("close");
-                                                setOpenModal(false);
-                                            }}
                                             key={
-                                                link +
-                                                choice +
+                                                link.toString() +
+                                                choice.toString() +
                                                 index +
                                                 "modalOverlay"
                                             }
@@ -278,16 +293,16 @@ export const ToolHomePage: React.FC = ({
                                         <ModalContent
                                             p={"5"}
                                             key={
-                                                link +
-                                                choice +
+                                                link.toString() +
+                                                choice.toString() +
                                                 index +
                                                 "modalContent"
                                             }
                                         >
                                             <ModalHeader
                                                 key={
-                                                    link +
-                                                    choice +
+                                                    link.toString() +
+                                                    choice.toString() +
                                                     index +
                                                     "modalHeader"
                                                 }
@@ -298,8 +313,8 @@ export const ToolHomePage: React.FC = ({
                                             </ModalHeader>
                                             <ModalBody
                                                 key={
-                                                    link +
-                                                    choice +
+                                                    link.toString() +
+                                                    choice.toString() +
                                                     index +
                                                     "modalBody"
                                                 }
@@ -307,8 +322,8 @@ export const ToolHomePage: React.FC = ({
                                                 <FormControl
                                                     isRequired
                                                     key={
-                                                        link +
-                                                        choice +
+                                                        link.toString() +
+                                                        choice.toString() +
                                                         index +
                                                         "formControlText"
                                                     }
@@ -317,8 +332,8 @@ export const ToolHomePage: React.FC = ({
                                                         fontSize={20}
                                                         fontWeight={"bold"}
                                                         key={
-                                                            link +
-                                                            choice +
+                                                            link.toString() +
+                                                            choice.toString() +
                                                             index +
                                                             "formLabelText"
                                                         }
@@ -352,8 +367,8 @@ export const ToolHomePage: React.FC = ({
                                                 <FormControl
                                                     isRequired
                                                     key={
-                                                        link +
-                                                        choice +
+                                                        link.toString() +
+                                                        choice.toString() +
                                                         "formControlLink"
                                                     }
                                                 >
@@ -362,8 +377,8 @@ export const ToolHomePage: React.FC = ({
                                                         fontWeight={"bold"}
                                                         mt={10}
                                                         key={
-                                                            link +
-                                                            choice +
+                                                            link.toString() +
+                                                            choice.toString() +
                                                             "formLabelLink"
                                                         }
                                                     >
@@ -397,8 +412,8 @@ export const ToolHomePage: React.FC = ({
                                             </ModalBody>
                                             <ModalFooter
                                                 key={
-                                                    link +
-                                                    choice +
+                                                    link.toString() +
+                                                    choice.toString() +
                                                     "modalFooter"
                                                 }
                                             >
@@ -411,21 +426,29 @@ export const ToolHomePage: React.FC = ({
                                                         setOpenModal(false)
                                                     }
                                                     key={
-                                                        link + choice + "cancel"
+                                                        link.toString() +
+                                                        choice.toString() +
+                                                        "cancel"
                                                     }
                                                 >
                                                     Cancel
                                                 </Button>
                                                 <Button
-                                                    key={link + choice + "save"}
+                                                    key={
+                                                        link.toString() +
+                                                        choice +
+                                                        "save"
+                                                    }
                                                     onClick={() => {
                                                         setOpenModal(false);
                                                         onChangeInput(
                                                             toolId,
-                                                            document.getElementById(
-                                                                "linkText" +
-                                                                    index +
-                                                                    idx,
+                                                            (
+                                                                document.getElementById(
+                                                                    "linkText" +
+                                                                        index +
+                                                                        idx,
+                                                                ) as HTMLInputElement
                                                             ).value,
                                                             currentRelatedLink[1],
                                                             modalIndex,
@@ -433,10 +456,12 @@ export const ToolHomePage: React.FC = ({
                                                         );
                                                         onChangeInput(
                                                             toolId,
-                                                            document.getElementById(
-                                                                "linkLink" +
-                                                                    index +
-                                                                    idx,
+                                                            (
+                                                                document.getElementById(
+                                                                    "linkLink" +
+                                                                        index +
+                                                                        idx,
+                                                                ) as HTMLInputElement
                                                             ).value,
                                                             currentRelatedLink[1],
                                                             modalIndex,
@@ -468,7 +493,7 @@ export const ToolHomePage: React.FC = ({
                     </FormLabel>
                     {(recommendedTools ?? []).map((choice, index) => (
                         <Select
-                            key={choice + index + "option"}
+                            key={choice + index + "select option"}
                             placeholder={"Select option"}
                             mb={"3"}
                             value={recommendedTools[index]}

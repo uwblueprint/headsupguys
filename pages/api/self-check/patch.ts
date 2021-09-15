@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { SelfCheckGroup } from "../../../database/models/selfCheckGroup";
-import { SelfCheckQuestion } from "../../../database/models/selfCheckQuestion";
+import { SelfCheckGroup } from "database/models/selfCheckGroup";
+import { SelfCheckQuestion } from "database/models/selfCheckQuestion";
 
 const patchSelfCheckByID = async (
     req: NextApiRequest,

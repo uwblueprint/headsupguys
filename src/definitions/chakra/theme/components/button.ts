@@ -30,6 +30,18 @@ const Button = {
             color: "white",
             _active: { bg: "brand.lime" },
         },
+        moduleGreen: {
+            bg: "brand.lime",
+            color: "black",
+            borderRadius: 0,
+            textTransform: "uppercase",
+        },
+        moduleBlack: {
+            bg: "black",
+            color: "white",
+            borderRadius: 0,
+            textTransform: "uppercase",
+        },
     },
     defaultProps: {
         variant: "default",

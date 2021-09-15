@@ -40,7 +40,6 @@ export interface SelfCheckQuestionCardProps {
         index1?: number,
         index2?: number,
     ) => void;
-    onChangeThumbnail: (id: string, target: string) => void;
 }
 
 //Self check question card component
@@ -49,6 +48,7 @@ export const ToolHomePage: React.FC = ({
     title,
     type,
     video,
+    thumbnail,
     description,
     linkedModule,
     relatedResources,
@@ -56,7 +56,6 @@ export const ToolHomePage: React.FC = ({
     externalResources,
     recommendedTools,
     onChangeInput,
-    onChangeThumbnail,
 }) => {
     const [openModal, setOpenModal] = useState(false);
     const [modalIndex, setModalIndex] = useState();
@@ -111,16 +110,17 @@ export const ToolHomePage: React.FC = ({
                         Thumbnail
                     </FormLabel>
                     <Input
+                        type="url"
+                        width={"full"}
+                        _valid={{ outline: "red" }}
                         size={"lg"}
-                        padding={"2"}
-                        left={"0"}
-                        type="file"
-                        id="thumbnail"
-                        name="thumbnail"
-                        accept="image/*"
+                        isRequired
                         onChange={(e) =>
-                            onChangeThumbnail(toolId, e.target.value)
+                            onChangeInput(toolId, e.target.value, "thumbnail")
                         }
+                        value={thumbnail}
+                        placeholder="URL"
+                        isTruncated
                     ></Input>
                 </FormControl>
             </WrapItem>

@@ -70,36 +70,6 @@ const Home: React.FC = () => {
         setToolList(newTool);
     };
 
-    const thumbnailValidation = (id, target) => {
-        const newTool = toolList.slice(0);
-        const fileType = target.split(".").pop().toLowerCase();
-        const allowedFileTypes = ["jpg", "jpeg", "png", "gif"];
-        if (allowedFileTypes.includes(fileType)) {
-            newTool[newTool.findIndex((e) => e._id === id)].thumbnail = target;
-            setToolList(newTool);
-            toast({
-                title: "Success",
-                description: "Your thumbnail has been uploaded",
-                status: "success",
-                position: "bottom-left",
-                duration: 5000,
-                isClosable: true,
-            });
-        } else {
-            if (target != "") {
-                toast({
-                    title: "Invalid file type",
-                    description: "Please upload a jpg, png, or gif",
-                    status: "error",
-                    position: "bottom-left",
-                    duration: 5000,
-                    isClosable: true,
-                });
-                document.getElementById("thumbnail").value = "";
-            }
-        }
-    };
-
     const clearToolHomePage = () => {
         const newTool = defaultTool;
         setToolList(newTool);
@@ -244,16 +214,6 @@ const Home: React.FC = () => {
     };
     const removeAllQuestions = () => {
         setQuestionList([]);
-    };
-
-    const checkEquality = (x, y) => {
-        const equal = Object.keys,
-            tx = typeof x,
-            ty = typeof y;
-        return x && y && tx === "object" && tx === ty
-            ? equal(x).length === equal(y).length &&
-                  equal(x).every((key) => checkEquality(x[key], y[key]))
-            : x === y;
     };
 
     const selfCheckQuestionSize = questionList.length;
@@ -428,7 +388,7 @@ const Home: React.FC = () => {
             <SimpleGrid columns={1} spacing={0} px={10} py={10}>
                 {page == "home" && (
                     <>
-                        {toolList.map((item, index) => (
+                        {toolList.map((item) => (
                             <ToolHomePage
                                 toolId={item._id}
                                 title={item.title}
@@ -442,7 +402,6 @@ const Home: React.FC = () => {
                                 externalResources={item.externalResources}
                                 recommendedTools={item.recommendedTools}
                                 onChangeInput={changeInput}
-                                onChangeThumbnail={thumbnailValidation}
                             ></ToolHomePage>
                         ))}
                     </>

@@ -18,33 +18,32 @@ import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 //Self Check Questions React functional component
 const Home: React.FC = () => {
     //self check tool
-    const defaultTool = [
-        {
-            _id: "50e642d7e4a1ae34207a92a0",
-            title: "",
-            type: "",
-            thumbnail: "",
-            video: "",
-            description: "",
-            linkedModule: "",
-            relatedResources: [
-                ["", ""],
-                ["", ""],
-                ["", ""],
-            ],
-            relatedStories: [
-                ["", ""],
-                ["", ""],
-                ["", ""],
-            ],
-            externalResources: [
-                ["", ""],
-                ["", ""],
-                ["", ""],
-            ],
-            recommendedTools: ["", "", ""],
-        },
-    ];
+    const defaultTool = {
+        _id: "50e642d7e4a1ae34207a92a0",
+        title: "",
+        type: "",
+        thumbnail: "",
+        video: "",
+        description: "",
+        linkedModule: "",
+        relatedResources: [
+            ["", ""],
+            ["", ""],
+            ["", ""],
+        ],
+        relatedStories: [
+            ["", ""],
+            ["", ""],
+            ["", ""],
+        ],
+        externalResources: [
+            ["", ""],
+            ["", ""],
+            ["", ""],
+        ],
+        recommendedTools: ["", "", ""],
+    };
+
     const [toolList, setToolList] = useState(defaultTool);
     const [lastSavedTool, setLastSavedTool] = useState(
         JSON.parse(JSON.stringify(defaultTool)),
@@ -52,17 +51,14 @@ const Home: React.FC = () => {
 
     //
 
-    const changeInput = (id, target, type, index1 = null, index2 = null) => {
-        const newTool = toolList.slice(0);
+    const changeInput = (target, type, index1 = null, index2 = null) => {
+        const newTool = JSON.parse(JSON.stringify(toolList));
         if (index2 != null) {
-            newTool[newTool.findIndex((e) => e._id === id)][type][index1][
-                index2
-            ] = target;
+            newTool[type][index1][index2] = target;
         } else if (index1 != null) {
-            newTool[newTool.findIndex((e) => e._id === id)][type][index1] =
-                target;
+            newTool[type][index1] = target;
         } else {
-            newTool[newTool.findIndex((e) => e._id === id)][type] = target;
+            newTool[type] = target;
         }
         setToolList(newTool);
     };
@@ -212,6 +208,10 @@ const Home: React.FC = () => {
     const removeAllQuestions = () => {
         setQuestionList([]);
     };
+
+    // const checkRequired = (requiredList) => {
+    //     console.log(requiredList);
+    // };
 
     const selfCheckQuestionSize = questionList.length;
 
@@ -384,25 +384,21 @@ const Home: React.FC = () => {
             </Flex>
             <SimpleGrid columns={1} spacing={0} px={10} py={10}>
                 {page == "home" && (
-                    <>
-                        {toolList.map((item) => (
-                            <ToolHomePage
-                                key={item._id}
-                                toolId={item._id}
-                                title={item.title}
-                                type={item.type}
-                                thumbnail={item.thumbnail}
-                                video={item.video}
-                                description={item.description}
-                                linkedModule={item.linkedModule}
-                                relatedResources={item.relatedResources}
-                                relatedStories={item.relatedStories}
-                                externalResources={item.externalResources}
-                                recommendedTools={item.recommendedTools}
-                                onChangeInput={changeInput}
-                            ></ToolHomePage>
-                        ))}
-                    </>
+                    <ToolHomePage
+                        key={toolList._id}
+                        toolId={toolList._id}
+                        title={toolList.title}
+                        type={toolList.type}
+                        thumbnail={toolList.thumbnail}
+                        video={toolList.video}
+                        description={toolList.description}
+                        linkedModule={toolList.linkedModule}
+                        relatedResources={toolList.relatedResources}
+                        relatedStories={toolList.relatedStories}
+                        externalResources={toolList.externalResources}
+                        recommendedTools={toolList.recommendedTools}
+                        onChangeInput={changeInput}
+                    ></ToolHomePage>
                 )}
             </SimpleGrid>
             {page == "self check" && (

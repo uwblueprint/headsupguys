@@ -51,8 +51,6 @@ const Home: React.FC = () => {
         JSON.parse(JSON.stringify(defaultTool)),
     );
 
-    //
-
     const changeInput = (target, type, index1 = null, index2 = null) => {
         const newTool = JSON.parse(JSON.stringify(toolList));
         if (index2 != null) {
@@ -69,6 +67,14 @@ const Home: React.FC = () => {
         const newTool = defaultTool;
         setToolList(newTool);
     };
+
+    // const checkRequiredTool = (tool) => {
+    //     console.log("wooo!!", tool.length);
+    //     for (let i = 0; i < tool.length; i++) {
+    //         console.log(tool[i]);
+    //     }
+    //     return false;
+    // };
 
     //self check card
     const defaultQuestions = [
@@ -211,8 +217,9 @@ const Home: React.FC = () => {
         setQuestionList([]);
     };
 
-    // const checkRequired = (requiredList) => {
-    //     console.log(requiredList);
+    // const checkRequiredQuestions = () => {
+    //     console.log(object, questionsList);
+    //     return false;
     // };
 
     const selfCheckQuestionSize = questionList.length;
@@ -227,7 +234,7 @@ const Home: React.FC = () => {
                 onClose={onClose}
                 motionPreset="slideInBottom"
             >
-                <ModalOverlay />
+                <ModalOverlay opacity={"1"} color={"red"} />
                 <ModalContent p={"5"}>
                     <ModalHeader>Delete Tool </ModalHeader>
                     <ModalBody>
@@ -284,7 +291,7 @@ const Home: React.FC = () => {
                         color="white"
                         background="black"
                         variant="outline"
-                        isDisabled={false}
+                        // isDisabled={!checkRequiredTool(toolList)}
                         onClick={() => {
                             toast({
                                 title: "Publication Successful",

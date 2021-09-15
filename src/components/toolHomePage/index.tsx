@@ -212,19 +212,12 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                         </Text>
                                         <Spacer></Spacer>
                                         <CloseButton
-                                            mt={-1}
+                                            mt={"-5px"}
                                             onClick={() => {
                                                 onChangeInput(
-                                                    "",
-                                                    link[1].toString(),
-                                                    index,
-                                                    0,
-                                                );
-                                                onChangeInput(
-                                                    "",
-                                                    link[1].toString(),
-                                                    index,
-                                                    1,
+                                                    ["", ""],
+                                                    currentRelatedLink[1],
+                                                    modalIndex,
                                                 );
                                             }}
                                         />
@@ -238,7 +231,10 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                         isOpen={openModal}
                                         motionPreset="slideInBottom"
                                     >
-                                        <ModalOverlay />
+                                        <ModalOverlay
+                                            opacity={"1"}
+                                            color={"red"}
+                                        />
                                         <ModalContent p={"5"}>
                                             <ModalHeader
                                                 fontWeight={"bold"}
@@ -357,7 +353,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                 ))}
             </Grid>
             <WrapItem width={"50%"}>
-                <FormControl isRequired>
+                <FormControl>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Select Recommended Tools
                     </FormLabel>
@@ -387,18 +383,12 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                         })
                                         .includes(item);
                                 }) ?? []
-                            ).map((selection, idx) => (
+                            ).map((selection) => (
                                 <option
-                                    key={
-                                        choice +
-                                        selection +
-                                        index +
-                                        idx +
-                                        "option"
-                                    }
-                                    value={choice}
+                                    key={choice + selection}
+                                    value={selection}
                                 >
-                                    {choice}
+                                    {selection}
                                 </option>
                             ))}
                         </Select>

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { SelfCheckQuestion } from "../models/selfCheckQuestion";
+import { SelfCheckQuestion } from "../../../database/models/selfCheckQuestion";
 
 const getQuestionByID = async (
     req: NextApiRequest,

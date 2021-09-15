@@ -1,8 +1,9 @@
 import { Types } from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
-import { Module } from "../models/module";
-import { Slide } from "../models/slide";
+import { Module } from "../../../database/models/module";
+import { Slide } from "../../../database/models/slide";
+
 
 const del = async (
     req: NextApiRequest,

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
-import { Slide, SlideInterface } from "../models/slide";
+import { Slide, SlideInterface } from "../../../database/models/slide";
 
 const patch = async (
     req: NextApiRequest,

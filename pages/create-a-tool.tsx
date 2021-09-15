@@ -390,6 +390,7 @@ const Home: React.FC = () => {
                     <>
                         {toolList.map((item) => (
                             <ToolHomePage
+                                key={item._id}
                                 toolId={item._id}
                                 title={item.title}
                                 type={item.type}

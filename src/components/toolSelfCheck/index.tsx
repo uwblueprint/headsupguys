@@ -48,7 +48,7 @@ export interface SelfCheckQuestionCardProps {
         optionOrValue: string,
     ) => void;
     onChangeAlphanumeric: (id: string, target: boolean) => void;
-    onAddQuestion: (index: string) => void;
+    onAddQuestion: (index: number) => void;
     onRemoveQuestion: (id: string) => void;
     onMoveQuestion: (index: string, direction: int) => void;
     onChangeQuestionInput: (id: string, target: string) => void;
@@ -188,6 +188,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
 
                         {questionIndex != 0 && (
                             <IconButton
+                                aria-label={"Arrow Up"}
                                 onClick={() => onMoveQuestion(questionIndex, 1)}
                                 ml={
                                     questionIndex + 1 == selfCheckQuestionSize
@@ -208,6 +209,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                         {questionIndex != selfCheckQuestionSize - 1 &&
                             selfCheckQuestionSize > 1 && (
                                 <IconButton
+                                    aria-label={"Arrow Down"}
                                     onClick={() =>
                                         onMoveQuestion(questionIndex, -1)
                                     }
@@ -854,7 +856,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                         </Stack>
                     )}
                 </Flex>
-                <Flex direction={"rowReverse"} justify={"flex-end"}>
+                <Flex justify={"flex-end"}>
                     <Button
                         onClick={onOpen}
                         py={"1"}

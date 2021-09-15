@@ -11,6 +11,8 @@ import {
     GridItem,
     Select,
     Textarea,
+    CloseButton,
+    Spacer,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -58,13 +60,13 @@ export const ToolHomePage: React.FC = ({
     onChangeInput,
 }) => {
     const [openModal, setOpenModal] = useState(false);
-    const [modalIndex, setModalIndex] = useState();
+    const [modalIndex, setModalIndex] = useState(null);
     const relatedLinks = [
         ["Related Resources", "relatedResources", relatedResources],
         ["Related Stories", "relatedStories", relatedStories],
         ["External Resources", "externalResources", externalResources],
     ];
-    const [currentRelatedLink, setCurrentRelatedLink] = useState();
+    const [currentRelatedLink, setCurrentRelatedLink] = useState(null);
     return (
         <Wrap spacing="30px">
             <WrapItem width={"full"}>
@@ -188,22 +190,28 @@ export const ToolHomePage: React.FC = ({
             </WrapItem>
             <Grid templateColumns="repeat(3, 1fr)" gap={6} width={"full"}>
                 {(relatedLinks ?? []).map((link, idx) => (
-                    <GridItem minWidth={0}>
-                        <Wrap>
+                    <GridItem minWidth={0} key={link + "gridItem"}>
+                        <Wrap key={link + "wrap"}>
                             <FormLabel
                                 fontSize={20}
                                 fontWeight={"bold"}
                                 mb={"5"}
+                                key={link + "formLabel"}
                             >
                                 {link[0]}
                             </FormLabel>
-                            {(relatedResources ?? []).map((choice, index) => (
+                            {(link ?? []).map((choice, index) => (
                                 <>
-                                    <WrapItem width={"full"}>
+                                    <WrapItem
+                                        width={"full"}
+                                        key={link + choice + index + "wrapitem"}
+                                    >
                                         <Text
-                                            mb={"3"}
                                             color="blue.400"
                                             isTruncated
+                                            key={
+                                                link + choice + index + "input"
+                                            }
                                             _hover={{ cursor: "pointer" }}
                                             onClick={() => {
                                                 setCurrentRelatedLink(link);
@@ -217,25 +225,103 @@ export const ToolHomePage: React.FC = ({
                                                     : "+ Add Link"
                                             }`}
                                         </Text>
+                                        <Spacer
+                                            key={
+                                                link + choice + index + "spacer"
+                                            }
+                                        ></Spacer>
+                                        <CloseButton
+                                            key={
+                                                link + choice + index + "close"
+                                            }
+                                            mt={-1}
+                                            onClick={() => {
+                                                onChangeInput(
+                                                    toolId,
+                                                    "",
+                                                    link[1],
+                                                    index,
+                                                    0,
+                                                );
+                                                onChangeInput(
+                                                    toolId,
+                                                    "",
+                                                    link[1],
+                                                    index,
+                                                    1,
+                                                );
+                                            }}
+                                        />
                                     </WrapItem>
                                     <Modal
+                                        onClose={() => {
+                                            setOpenModal(false);
+                                        }}
+                                        closeOnOverlayClick={true}
+                                        key={link + choice + index + "modal"}
                                         blockScrollOnMount={false}
                                         isOpen={openModal}
                                         motionPreset="slideInBottom"
                                     >
-                                        <ModalOverlay />
-                                        <ModalContent p={"5"}>
+                                        <ModalOverlay
+                                            onClick={() => {
+                                                console.log("close");
+                                                setOpenModal(false);
+                                            }}
+                                            key={
+                                                link +
+                                                choice +
+                                                index +
+                                                "modalOverlay"
+                                            }
+                                        />
+                                        <ModalContent
+                                            p={"5"}
+                                            key={
+                                                link +
+                                                choice +
+                                                index +
+                                                "modalContent"
+                                            }
+                                        >
                                             <ModalHeader
+                                                key={
+                                                    link +
+                                                    choice +
+                                                    index +
+                                                    "modalHeader"
+                                                }
                                                 fontWeight={"bold"}
                                                 fontSize={30}
                                             >
                                                 Add Link
                                             </ModalHeader>
-                                            <ModalBody>
-                                                <FormControl isRequired>
+                                            <ModalBody
+                                                key={
+                                                    link +
+                                                    choice +
+                                                    index +
+                                                    "modalBody"
+                                                }
+                                            >
+                                                <FormControl
+                                                    isRequired
+                                                    key={
+                                                        link +
+                                                        choice +
+                                                        index +
+                                                        "formControlText"
+                                                    }
+                                                >
                                                     <FormLabel
                                                         fontSize={20}
                                                         fontWeight={"bold"}
+                                                        key={
+                                                            link +
+                                                            choice +
+                                                            index +
+                                                            "formLabelText"
+                                                        }
                                                     >
                                                         Text
                                                     </FormLabel>
@@ -243,6 +329,11 @@ export const ToolHomePage: React.FC = ({
                                                         width={"full"}
                                                         size={"lg"}
                                                         id={
+                                                            "linkText" +
+                                                            index +
+                                                            idx
+                                                        }
+                                                        key={
                                                             "linkText" +
                                                             index +
                                                             idx
@@ -258,11 +349,23 @@ export const ToolHomePage: React.FC = ({
                                                         isTruncated
                                                     />
                                                 </FormControl>
-                                                <FormControl isRequired>
+                                                <FormControl
+                                                    isRequired
+                                                    key={
+                                                        link +
+                                                        choice +
+                                                        "formControlLink"
+                                                    }
+                                                >
                                                     <FormLabel
                                                         fontSize={20}
                                                         fontWeight={"bold"}
                                                         mt={10}
+                                                        key={
+                                                            link +
+                                                            choice +
+                                                            "formLabelLink"
+                                                        }
                                                     >
                                                         Link
                                                     </FormLabel>
@@ -271,6 +374,11 @@ export const ToolHomePage: React.FC = ({
                                                         width={"full"}
                                                         size={"lg"}
                                                         id={
+                                                            "linkLink" +
+                                                            index +
+                                                            idx
+                                                        }
+                                                        key={
                                                             "linkLink" +
                                                             index +
                                                             idx
@@ -287,7 +395,13 @@ export const ToolHomePage: React.FC = ({
                                                     />
                                                 </FormControl>
                                             </ModalBody>
-                                            <ModalFooter>
+                                            <ModalFooter
+                                                key={
+                                                    link +
+                                                    choice +
+                                                    "modalFooter"
+                                                }
+                                            >
                                                 <Button
                                                     variant="outline"
                                                     colorScheme="black"
@@ -296,10 +410,14 @@ export const ToolHomePage: React.FC = ({
                                                     onClick={() =>
                                                         setOpenModal(false)
                                                     }
+                                                    key={
+                                                        link + choice + "cancel"
+                                                    }
                                                 >
                                                     Cancel
                                                 </Button>
                                                 <Button
+                                                    key={link + choice + "save"}
                                                     onClick={() => {
                                                         setOpenModal(false);
                                                         onChangeInput(
@@ -350,6 +468,7 @@ export const ToolHomePage: React.FC = ({
                     </FormLabel>
                     {(recommendedTools ?? []).map((choice, index) => (
                         <Select
+                            key={choice + index + "option"}
                             placeholder={"Select option"}
                             mb={"3"}
                             value={recommendedTools[index]}
@@ -374,8 +493,19 @@ export const ToolHomePage: React.FC = ({
                                         })
                                         .includes(item);
                                 }) ?? []
-                            ).map((choice) => (
-                                <option value={choice}>{choice}</option>
+                            ).map((selection, idx) => (
+                                <option
+                                    key={
+                                        choice +
+                                        selection +
+                                        index +
+                                        idx +
+                                        "option"
+                                    }
+                                    value={choice}
+                                >
+                                    {choice}
+                                </option>
                             ))}
                         </Select>
                     ))}

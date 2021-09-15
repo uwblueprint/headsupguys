@@ -44,7 +44,9 @@ const Home: React.FC = () => {
         recommendedTools: ["", "", ""],
     };
 
-    const [toolList, setToolList] = useState(defaultTool);
+    const [toolList, setToolList] = useState(
+        JSON.parse(JSON.stringify(defaultTool)),
+    );
     const [lastSavedTool, setLastSavedTool] = useState(
         JSON.parse(JSON.stringify(defaultTool)),
     );

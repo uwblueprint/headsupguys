@@ -7,6 +7,7 @@ import {
     Input,
     Button,
     Grid,
+    Box,
     Text,
     GridItem,
     Select,
@@ -22,7 +23,6 @@ import {
 } from "@chakra-ui/react";
 
 const recommendedToolsList = ["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"];
-
 export interface ToolHomePageProps {
     toolId: string;
     title: string;
@@ -36,7 +36,7 @@ export interface ToolHomePageProps {
     externalResources: string[][];
     recommendedTools: string[];
     onChangeInput: (
-        target: string,
+        target: string | string[],
         type: string,
         index1?: number,
         index2?: number,
@@ -189,8 +189,11 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                 {link[0]}
                             </FormLabel>
                             {(link ?? []).map((choice, index) => (
-                                <>
-                                    <WrapItem width={"full"}>
+                                <Box
+                                    width={"full"}
+                                    key={choice + link.toString()}
+                                >
+                                    <WrapItem>
                                         <Text
                                             color="blue.400"
                                             isTruncated
@@ -315,28 +318,24 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                                     onClick={() => {
                                                         setOpenModal(false);
                                                         onChangeInput(
-                                                            (
-                                                                document.getElementById(
-                                                                    "linkText" +
-                                                                        index +
-                                                                        idx,
-                                                                ) as HTMLInputElement
-                                                            ).value,
+                                                            [
+                                                                (
+                                                                    document.getElementById(
+                                                                        "linkText" +
+                                                                            index +
+                                                                            idx,
+                                                                    ) as HTMLInputElement
+                                                                ).value,
+                                                                (
+                                                                    document.getElementById(
+                                                                        "linkLink" +
+                                                                            index +
+                                                                            idx,
+                                                                    ) as HTMLInputElement
+                                                                ).value,
+                                                            ],
                                                             currentRelatedLink[1],
                                                             modalIndex,
-                                                            0,
-                                                        );
-                                                        onChangeInput(
-                                                            (
-                                                                document.getElementById(
-                                                                    "linkLink" +
-                                                                        index +
-                                                                        idx,
-                                                                ) as HTMLInputElement
-                                                            ).value,
-                                                            currentRelatedLink[1],
-                                                            modalIndex,
-                                                            1,
                                                         );
                                                     }}
                                                     w={100}
@@ -351,7 +350,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                             </ModalFooter>
                                         </ModalContent>
                                     </Modal>
-                                </>
+                                </Box>
                             ))}
                         </Wrap>
                     </GridItem>

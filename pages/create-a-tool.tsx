@@ -138,6 +138,7 @@ const Home: React.FC = () => {
         //Checks the self check question fields
         for (let k = 0; k < checkQuestion.length; k++) {
             if (checkQuestion[k].question == "") {
+                //Checks the question title to ensure it isn't blank
                 fieldsFilled = false;
                 (needed =
                     "Self Check Question " +
@@ -150,6 +151,7 @@ const Home: React.FC = () => {
                 checkQuestion[k].type == "multiple_choice" ||
                 checkQuestion[k].type == "multi_select"
             ) {
+                //checks multiple choice/multiselect fields to ensure they aren't blank
                 for (let l = 0; l < checkQuestion[k].options.length; l++) {
                     if (checkQuestion[k].options[l][0] == "") {
                         fieldsFilled = false;
@@ -174,7 +176,6 @@ const Home: React.FC = () => {
                 needed = "";
             }
         }
-
         setStillNeeded(needed);
         return fieldsFilled;
     };
@@ -198,23 +199,29 @@ const Home: React.FC = () => {
     const [lastSavedQuestions, setLastSavedQuestions] = useState(
         JSON.parse(JSON.stringify(defaultQuestions)),
     );
-
+    //keeps track of count of questions made so each question has a unique id
     const [count, setCount] = useState(2);
+    //For Switching between the tool home page and the tool self check questions page
     const [page, setPage] = useState("home");
 
     const changeQuestionType = (id, target) => {
         const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].type = target;
+        //If there are 3 questions or less, new questions are generated for the slider
         if (target == "slider") {
             for (
                 let i =
                     newList[newList.findIndex((e) => e._id === id)].options
                         .length;
-                i < 4;
+                i < 3;
                 i++
             ) {
                 addOneOption(id, "bottom");
             }
+            /*We use the second fiel in each option array to keep track of the slider
+            this is important because the slider can start at either 0  or 1 so the index
+            alone of each option does not give enough information as to what each slider value
+            should point to*/
             for (
                 let j = 0;
                 j <
@@ -240,6 +247,7 @@ const Home: React.FC = () => {
             newList[newList.findIndex((e) => e._id === id)].options;
         if (!target) {
             for (let i = 0; i < newOptions.length; i++) {
+                //Regex pattern to ensure that only numberix inputs are allowed
                 newOptions[i][1] = newOptions[i][1].replace(/[^\d]+/g, "");
             }
         }
@@ -258,6 +266,7 @@ const Home: React.FC = () => {
         setQuestionList(newList);
     };
     const addOneOption = (id, target) => {
+        //adds a new option to the question at the target location
         const newList = questionList.slice(0);
         if (target == "bottom") {
             if (
@@ -284,6 +293,7 @@ const Home: React.FC = () => {
                 ];
             }
         } else {
+            //If 0 is selected on the slider, the first option's value is set to 0
             newList[newList.findIndex((e) => e._id === id)].options = [
                 ["", "0"],
                 ...newList[newList.findIndex((e) => e._id === id)].options,
@@ -367,6 +377,11 @@ const Home: React.FC = () => {
     };
 
     const clearHiddenFilledFields = () => {
+        /* In order to improve user experience, option fields are not cleared
+        when the user switched uestion type, they are simply not displayed on the screen
+        this allows the user to go back to their previous question type and still retain al
+        their data. However, all of these options that can't be seen are presumably not needed
+        anymore when the user chooses to fully submit their tool. So they are all cleared*/
         const newList = questionList.slice(0);
         for (let i = 0; i < newList.length; i++) {
             if (
@@ -377,16 +392,13 @@ const Home: React.FC = () => {
                     newList[i].options[j] = ["", ""];
                 }
             }
-            if (newList[i].type == "slider") {
-                for (let k = 0; k < newList[i].options.length; k++) {
-                    newList[i].options[k][1] = "";
-                }
-            }
         }
         setQuestionList(newList);
     };
 
     const changeQuestionNumbers = (listOfQuestions) => {
+        /*ensures that the question number property
+        matches the seen question number on the form*/
         const newList = listOfQuestions;
         for (let i = 0; i < newList.length; i++) {
             newList[i].questionNumber = i + 1;
@@ -397,8 +409,9 @@ const Home: React.FC = () => {
     };
 
     const selfCheckQuestionSize = questionList.length;
-
+    //Controls the modal
     const { isOpen, onOpen, onClose } = useDisclosure();
+    //For cleaner popup notifications
     const toast = useToast();
     return (
         <Flex direction="column" minH="100vh">
@@ -455,6 +468,7 @@ const Home: React.FC = () => {
                         Create a Tool
                     </Text>
                     <Tooltip
+                        //Shows the users which fields remain when they hover over the submit button
                         maxWidth={"60"}
                         hasArrow
                         label={
@@ -526,6 +540,8 @@ const Home: React.FC = () => {
                             background="black"
                             variant="outline"
                             disabled={
+                                /*Save is disabled if the tool is equal
+                                to the last saved tool or the empty tool*/
                                 (JSON.stringify(questionList) ==
                                     JSON.stringify(lastSavedQuestions) &&
                                     JSON.stringify(toolList) ==

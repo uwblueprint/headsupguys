@@ -152,7 +152,6 @@ const Home: React.FC = () => {
                     }
                 }
             } else {
-                console.log("not multi");
                 needed = "";
             }
         }
@@ -306,8 +305,6 @@ const Home: React.FC = () => {
             for (let j = 0; j > target - upperBound; j--) {
                 removeOneOption(id, -1);
             }
-        } else {
-            console.log(target, upperBound);
         }
     };
     const moveQuesiton = (index, direction) => {

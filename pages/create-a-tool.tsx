@@ -19,7 +19,7 @@ import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 
 //Self Check Questions React functional component
 const Home: React.FC = () => {
-    //self check tool
+    //Self check tool object
     const defaultTool = {
         _id: "50e642d7e4a1ae34207a92a0",
         title: "",
@@ -45,21 +45,25 @@ const Home: React.FC = () => {
         ],
         recommendedTools: ["", "", ""],
     };
-
+    //Sets useState of tool to a copy of the default tool
     const [toolList, setToolList] = useState(
         JSON.parse(JSON.stringify(defaultTool)),
     );
+    //Remembers the last saved tool
     const [lastSavedTool, setLastSavedTool] = useState(
         JSON.parse(JSON.stringify(defaultTool)),
     );
-
+    //Hangles all changes of input to the tool page
     const changeInput = (target, type, index1 = null, index2 = null) => {
         const newTool = JSON.parse(JSON.stringify(toolList));
         if (index2 != null) {
+            //For fields with just a nested array of choices eg related resources
             newTool[type][index1][index2] = target;
         } else if (index1 != null) {
+            //For fields with an array of choices eg recommended tools
             newTool[type][index1] = target;
         } else {
+            //For fields with just single input boxes eg. title
             newTool[type] = target;
         }
         checkRequiredTool(newTool, questionList);
@@ -67,11 +71,16 @@ const Home: React.FC = () => {
     };
 
     const clearToolHomePage = () => {
+        //Sets the tool homepage back to the default (empty) object
         const newTool = defaultTool;
         setToolList(newTool);
     };
 
     const toolRequired = [
+        /*Specifies tools that are required in the first index of each array.
+        The second index specifies the beginning of the tooltip message shown
+        when hovering over the submit button to indicate which fields still need
+        to be filled by the user*/
         ["title", 'The Home Page "Title"'],
         ["type", 'The Home Page "Type"'],
         ["thumbnail", 'The Home Page "Thumbnail"'],
@@ -82,12 +91,18 @@ const Home: React.FC = () => {
         ["relatedStories", 'The Home Page "Related Stories'],
         ["externalResources", 'The Home Page "External Resources'],
     ];
+    //The stillneeded variable defaults to the title
     const [stillNeeded, setStillNeeded] = useState(toolRequired[0][1]);
     const checkRequiredTool = (checkTool, checkQuestion) => {
+        //Says if all fields are filled or not
         let fieldsFilled = true;
+        //Specifies the tool or question field that still needs to be filled
         let needed = "";
         for (let i = 0; i < toolRequired.length; i++) {
             if (typeof checkTool[toolRequired[i][0]] == "string") {
+                /*Checks if string is empty. Applies to all but the related
+                resources, related stories and external resources.
+                */
                 if (checkTool[toolRequired[i][0]] == "") {
                     fieldsFilled = false;
                     needed = toolRequired[i][1];
@@ -95,6 +110,9 @@ const Home: React.FC = () => {
                     return fieldsFilled;
                 }
             } else {
+                /*First checks the text, then the value properties of the
+                related resources, related stories and external resources fields.
+                */
                 for (let j = 0; j < checkTool[toolRequired[i][0]].length; j++) {
                     if (
                         checkTool[toolRequired[i][0]][j][0] == "" &&
@@ -117,6 +135,7 @@ const Home: React.FC = () => {
                 }
             }
         }
+        //Checks the self check question fields
         for (let k = 0; k < checkQuestion.length; k++) {
             if (checkQuestion[k].question == "") {
                 fieldsFilled = false;

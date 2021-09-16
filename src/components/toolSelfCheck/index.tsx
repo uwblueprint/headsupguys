@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
 import {
     Flex,
     Box,
@@ -52,17 +52,8 @@ export interface SelfCheckQuestionCardProps {
     onRemoveQuestion: (id: string) => void;
     onMoveQuestion: (index: number, direction: number) => void;
     onChangeQuestionInput: (id: string, target: string) => void;
-    onChangeQuestionType: (
-        id: string,
-        target: string,
-        sliderLowerBound: number,
-        sliderUpperBound: number,
-    ) => void;
-    onChangeSliderBounds: (
-        id: string,
-        target: number,
-        sliderUpperBound: number,
-    ) => void;
+    onChangeQuestionType: (id: string, target: string) => void;
+    onChangeSliderBounds: (id: string, target: string) => void;
 }
 
 //Self check question card component
@@ -111,18 +102,6 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
         },
     ];
 
-    const [sliderLowerBound, setSliderLowerBound] = useState(1);
-    const [sliderUpperBound, setSliderUpperBound] = useState(options.length);
-
-    const changeSliderLowerBound = (e) => {
-        onChangeSliderBounds(questionId, e.target.value, sliderUpperBound);
-        setSliderLowerBound(e.target.value);
-    };
-    const changeSliderUpperBound = (e) => {
-        onChangeSliderBounds(questionId, e.target.value, sliderUpperBound);
-        setSliderUpperBound(e.target.value);
-    };
-
     return (
         <Box overflowX="auto">
             <Box
@@ -166,12 +145,7 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                             minWidth={"165"}
                             mr={selfCheckQuestionSize == 1 ? "0" : "6"}
                             onChange={(e) =>
-                                onChangeQuestionType(
-                                    questionId,
-                                    e.target.value,
-                                    sliderLowerBound,
-                                    sliderUpperBound,
-                                )
+                                onChangeQuestionType(questionId, e.target.value)
                             }
                         >
                             {(optionList ?? []).map((choice, index) => (
@@ -293,13 +267,6 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                             questionId,
                                                             index,
                                                         );
-                                                        setSliderUpperBound(
-                                                            sliderUpperBound -
-                                                                1,
-                                                        );
-                                                        console.log(
-                                                            sliderUpperBound,
-                                                        );
                                                     }}
                                                 />
                                             </InputRightElement>
@@ -310,8 +277,6 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                         variant="ghost"
                                         onClick={() => {
                                             onAddOption(questionId, "bottom");
-                                            setSliderUpperBound(options.length);
-                                            console.log(sliderUpperBound);
                                         }}
                                     >
                                         +Add Option
@@ -441,12 +406,6 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                             questionId,
                                                             index,
                                                         );
-                                                        setSliderUpperBound(
-                                                            options.length,
-                                                        );
-                                                        console.log(
-                                                            sliderUpperBound,
-                                                        );
                                                     }}
                                                 />
                                             </InputRightElement>
@@ -525,12 +484,6 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                         questionId,
                                                         index,
                                                     );
-                                                    setSliderUpperBound(
-                                                        options.length,
-                                                    );
-                                                    console.log(
-                                                        sliderUpperBound,
-                                                    );
                                                 }}
                                             />
                                         </InputRightElement>
@@ -541,8 +494,6 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                     variant="ghost"
                                     onClick={() => {
                                         onAddOption(questionId, "bottom");
-                                        setSliderUpperBound(options.length);
-                                        console.log(sliderUpperBound);
                                     }}
                                 >
                                     +Add Option
@@ -654,12 +605,6 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                                     onRemoveOption(
                                                         questionId,
                                                         index,
-                                                    );
-                                                    setSliderUpperBound(
-                                                        options.length,
-                                                    );
-                                                    console.log(
-                                                        sliderUpperBound,
                                                     );
                                                 }}
                                             />
@@ -787,15 +732,17 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                 <Select
                                     minWidth={"50"}
                                     variant="flushed"
-                                    onChange={(e) => {
-                                        changeSliderLowerBound(e);
-                                        setSliderUpperBound(options.length);
-                                    }}
-                                    value={sliderLowerBound}
                                     mr={10}
+                                    onChange={(e) => {
+                                        onChangeSliderBounds(
+                                            questionId,
+                                            e.target.value,
+                                        );
+                                    }}
+                                    value={options[0][1]}
                                 >
-                                    <option value={0}>0</option>
-                                    <option value={1}>1</option>
+                                    <option value={"0"}>0</option>
+                                    <option value={"1"}>1</option>
                                 </Select>
                                 <h3>to</h3>
                                 <Select
@@ -804,49 +751,40 @@ export const SelfCheckQuestionCard: React.FC<SelfCheckQuestionCardProps> = ({
                                     ml={"10"}
                                     mr={"6"}
                                     onChange={(e) => {
-                                        changeSliderUpperBound(e);
-                                        setSliderUpperBound(options.length);
+                                        onChangeSliderBounds(
+                                            questionId,
+                                            e.target.value,
+                                        );
                                     }}
                                     value={
-                                        sliderLowerBound == 0
-                                            ? options.length - 1
-                                            : options.length
+                                        parseInt(options[0][1]) +
+                                        options.length -
+                                        1
                                     }
                                 >
-                                    <option value={2}>2</option>
-                                    <option value={3}>3</option>
-                                    <option value={4}>4</option>
-                                    <option value={5}>5</option>
-                                    <option value={6}>6</option>
-                                    <option value={7}>7</option>
-                                    <option value={8}>8</option>
-                                    <option value={9}>9</option>
-                                    <option value={10}>10</option>
+                                    <option value={"2"}>2</option>
+                                    <option value={"3"}>3</option>
+                                    <option value={"4"}>4</option>
+                                    <option value={"5"}>5</option>
+                                    <option value={"6"}>6</option>
+                                    <option value={"7"}>7</option>
+                                    <option value={"8"}>8</option>
+                                    <option value={"9"}>9</option>
+                                    <option value={"10"}>10</option>
                                 </Select>
                             </Flex>
                             <Stack>
                                 {(options ?? []).map((option, index) => (
                                     <Flex key={"Slider" + questionId + index}>
-                                        {sliderLowerBound == 0 && (
-                                            <Heading
-                                                fontSize={"16"}
-                                                fontWeight="500"
-                                                alignSelf="center"
-                                                mr={"2"}
-                                            >
-                                                {index}
-                                            </Heading>
-                                        )}
-                                        {sliderLowerBound != 0 && (
-                                            <Heading
-                                                fontSize={"16"}
-                                                fontWeight="500"
-                                                alignSelf="center"
-                                                mr={"2"}
-                                            >
-                                                {index + 1}
-                                            </Heading>
-                                        )}
+                                        <Heading
+                                            fontSize={"16"}
+                                            fontWeight="500"
+                                            alignSelf="center"
+                                            mr={"2"}
+                                        >
+                                            {option[1]}
+                                        </Heading>
+
                                         <Input
                                             onChange={(e) =>
                                                 onChangeOptionInput(

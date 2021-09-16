@@ -184,18 +184,27 @@ const Home: React.FC = () => {
     const [count, setCount] = useState(2);
     const [page, setPage] = useState("home");
 
-    const changeQuestionType = (
-        id,
-        target,
-        sliderLowerBound,
-        sliderUpperBound,
-    ) => {
+    const changeQuestionType = (id, target) => {
         const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].type = target;
         if (target == "slider") {
-            console.log(sliderLowerBound, sliderUpperBound);
-            if (sliderUpperBound < 3) {
-                changeSliderBounds(id, 3, sliderUpperBound);
+            for (
+                let i =
+                    newList[newList.findIndex((e) => e._id === id)].options
+                        .length;
+                i < 4;
+                i++
+            ) {
+                addOneOption(id, "bottom");
+            }
+            for (
+                let j = 0;
+                j <
+                newList[newList.findIndex((e) => e._id === id)].options.length;
+                j++
+            ) {
+                newList[newList.findIndex((e) => e._id === id)].options[j][1] =
+                    j.toString();
             }
         }
         setQuestionList(newList);
@@ -233,13 +242,32 @@ const Home: React.FC = () => {
     const addOneOption = (id, target) => {
         const newList = questionList.slice(0);
         if (target == "bottom") {
-            newList[newList.findIndex((e) => e._id === id)].options = [
-                ...newList[newList.findIndex((e) => e._id === id)].options,
-                ["", ""],
-            ];
+            if (
+                newList[newList.findIndex((e) => e._id === id)].type == "slider"
+            ) {
+                const lowerBound = parseInt(
+                    newList[newList.findIndex((e) => e._id === id)]
+                        .options[0][1],
+                );
+                const upperBound = String(
+                    lowerBound +
+                        newList[newList.findIndex((e) => e._id === id)].options
+                            .length,
+                );
+                1;
+                newList[newList.findIndex((e) => e._id === id)].options = [
+                    ...newList[newList.findIndex((e) => e._id === id)].options,
+                    ["", upperBound],
+                ];
+            } else {
+                newList[newList.findIndex((e) => e._id === id)].options = [
+                    ...newList[newList.findIndex((e) => e._id === id)].options,
+                    ["", ""],
+                ];
+            }
         } else {
             newList[newList.findIndex((e) => e._id === id)].options = [
-                ["", ""],
+                ["", "0"],
                 ...newList[newList.findIndex((e) => e._id === id)].options,
             ];
         }
@@ -257,21 +285,29 @@ const Home: React.FC = () => {
         setQuestionList(newList);
     };
 
-    const changeSliderBounds = (id, target, sliderUpperBound) => {
+    const changeSliderBounds = (id, target) => {
+        const newList = questionList.slice(0);
+        const lowerBound = parseInt(
+            newList[newList.findIndex((e) => e._id === id)].options[0][1],
+        );
+        const upperBound =
+            lowerBound +
+            newList[newList.findIndex((e) => e._id === id)].options.length -
+            1;
         if (target == 0) {
             addOneOption(id, "top");
         } else if (target == 1) {
             removeOneOption(id, 0);
-        } else if (target - sliderUpperBound > 0) {
-            for (let i = 0; i < target - sliderUpperBound; i++) {
+        } else if (target - upperBound > 0) {
+            for (let i = 0; i < target - upperBound; i++) {
                 addOneOption(id, "bottom");
             }
-        } else if (target - sliderUpperBound < 0) {
-            for (let j = 0; j > target - sliderUpperBound; j--) {
+        } else if (target - upperBound < 0) {
+            for (let j = 0; j > target - upperBound; j--) {
                 removeOneOption(id, -1);
             }
         } else {
-            console.log(target, sliderUpperBound);
+            console.log(target, upperBound);
         }
     };
     const moveQuesiton = (index, direction) => {

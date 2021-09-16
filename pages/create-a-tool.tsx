@@ -4,6 +4,8 @@ import {
     Flex,
     SimpleGrid,
     Button,
+    Box,
+    Tooltip,
     Modal,
     ModalBody,
     ModalContent,
@@ -60,6 +62,7 @@ const Home: React.FC = () => {
         } else {
             newTool[type] = target;
         }
+        checkRequiredTool(newTool, questionList);
         setToolList(newTool);
     };
 
@@ -68,13 +71,95 @@ const Home: React.FC = () => {
         setToolList(newTool);
     };
 
-    // const checkRequiredTool = (tool) => {
-    //     console.log("wooo!!", tool.length);
-    //     for (let i = 0; i < tool.length; i++) {
-    //         console.log(tool[i]);
-    //     }
-    //     return false;
-    // };
+    const toolRequired = [
+        ["title", 'The Home Page "Title"'],
+        ["type", 'The Home Page "Type"'],
+        ["thumbnail", 'The Home Page "Thumbnail"'],
+        ["description", 'The Home Page "Description"'],
+        ["linkedModule", 'The Home Page "Link Module"'],
+        ["video", 'The Home Page "Video"'],
+        ["relatedResources", 'The Home Page "Related Resources'],
+        ["relatedStories", 'The Home Page "Related Stories'],
+        ["externalResources", 'The Home Page "External Resources'],
+    ];
+    const [stillNeeded, setStillNeeded] = useState(toolRequired[0][1]);
+    const checkRequiredTool = (checkTool, checkQuestion) => {
+        let fieldsFilled = true;
+        let needed = "";
+        for (let i = 0; i < toolRequired.length; i++) {
+            if (typeof checkTool[toolRequired[i][0]] == "string") {
+                if (checkTool[toolRequired[i][0]] == "") {
+                    fieldsFilled = false;
+                    needed = toolRequired[i][1];
+                    setStillNeeded(needed);
+                    return fieldsFilled;
+                }
+            } else {
+                for (let j = 0; j < checkTool[toolRequired[i][0]].length; j++) {
+                    if (
+                        checkTool[toolRequired[i][0]][j][0] == "" &&
+                        checkTool[toolRequired[i][0]][j][1] != ""
+                    ) {
+                        fieldsFilled = false;
+                        needed = toolRequired[i][1] + ' Text"';
+                        setStillNeeded(needed);
+                        return fieldsFilled;
+                    }
+                    if (
+                        checkTool[toolRequired[i][0]][j][1] == "" &&
+                        checkTool[toolRequired[i][0]][j][0] != ""
+                    ) {
+                        fieldsFilled = false;
+                        needed = toolRequired[i][1] + ' Link"';
+                        setStillNeeded(needed);
+                        return fieldsFilled;
+                    }
+                }
+            }
+        }
+        for (let k = 0; k < checkQuestion.length; k++) {
+            if (checkQuestion[k].question == "") {
+                fieldsFilled = false;
+                (needed =
+                    "Self Check Question " +
+                    checkQuestion[k].questionNumber.toString() +
+                    '\'s "Title"'),
+                    setStillNeeded(needed);
+                return fieldsFilled;
+            }
+            if (
+                checkQuestion[k].type == "multiple_choice" ||
+                checkQuestion[k].type == "multi_select"
+            ) {
+                for (let l = 0; l < checkQuestion[k].options.length; l++) {
+                    if (checkQuestion[k].options[l][0] == "") {
+                        fieldsFilled = false;
+                        (needed =
+                            "Self Check Question " +
+                            checkQuestion[k].questionNumber.toString() +
+                            '\'s "User Facing Options"'),
+                            setStillNeeded(needed);
+                        return fieldsFilled;
+                    }
+                    if (checkQuestion[k].options[l][1] == "") {
+                        fieldsFilled = false;
+                        (needed =
+                            "Self Check Question " +
+                            checkQuestion[k].questionNumber.toString() +
+                            '\'s "Corresponding Values"'),
+                            setStillNeeded(needed);
+                        return fieldsFilled;
+                    }
+                }
+            } else {
+                console.log("not multi");
+                needed = "";
+            }
+        }
+
+        setStillNeeded(needed);
+        return fieldsFilled;
+    };
 
     //self check card
     const defaultQuestions = [
@@ -96,7 +181,7 @@ const Home: React.FC = () => {
         JSON.parse(JSON.stringify(defaultQuestions)),
     );
 
-    const [count, setCount] = useState(1);
+    const [count, setCount] = useState(2);
     const [page, setPage] = useState("home");
 
     const changeQuestionType = (
@@ -114,10 +199,12 @@ const Home: React.FC = () => {
             }
         }
         setQuestionList(newList);
+        checkRequiredTool(toolList, newList);
     };
     const changeQuestionInput = (id, target) => {
         const newList = questionList.slice(0);
         newList[newList.findIndex((e) => e._id === id)].question = target;
+        checkRequiredTool(toolList, newList);
         setQuestionList(newList);
     };
     const changeAlphanumeric = (id, target) => {
@@ -131,6 +218,7 @@ const Home: React.FC = () => {
         }
         newList[newList.findIndex((e) => e._id === id)].alphanumericInput =
             target;
+        checkRequiredTool(toolList, newList);
         setQuestionList(newList);
     };
     const changeOptionInput = (id, index, target, optionOrValue) => {
@@ -139,6 +227,7 @@ const Home: React.FC = () => {
         newList[newList.findIndex((e) => e._id === id)].options[index][
             changeIndex
         ] = target;
+        checkRequiredTool(toolList, newList);
         setQuestionList(newList);
     };
     const addOneOption = (id, target) => {
@@ -154,6 +243,7 @@ const Home: React.FC = () => {
                 ...newList[newList.findIndex((e) => e._id === id)].options,
             ];
         }
+        checkRequiredTool(toolList, newList);
         setQuestionList(newList);
     };
 
@@ -163,6 +253,7 @@ const Home: React.FC = () => {
             target,
             1,
         );
+        checkRequiredTool(toolList, newList);
         setQuestionList(newList);
     };
 
@@ -189,6 +280,7 @@ const Home: React.FC = () => {
         newList[index] = newList[index - direction];
         newList[index - direction] = tempQuestion;
         setQuestionList(newList);
+        changeQuestionNumbers(newList);
     };
 
     const addOneQuestion = (index) => {
@@ -202,25 +294,55 @@ const Home: React.FC = () => {
                 ["", ""],
             ],
             alphanumericInput: true,
-            questionNumber: count,
+            questionNumber: index,
         };
         const newList = questionList.slice(0);
         newList.splice(index + 1, 0, newQuestion);
         setCount(count + 1);
         setQuestionList(newList);
+        changeQuestionNumbers(newList);
     };
 
     const removeOneQuestion = (id) => {
-        setQuestionList(questionList.filter((item) => item._id !== id));
+        const newList = questionList.filter((item) => item._id !== id);
+        setQuestionList(newList);
+        changeQuestionNumbers(newList);
     };
     const removeAllQuestions = () => {
-        setQuestionList([]);
+        const newList = [];
+        setQuestionList(newList);
+        checkRequiredTool(toolList, newList);
     };
 
-    // const checkRequiredQuestions = () => {
-    //     console.log(object, questionsList);
-    //     return false;
-    // };
+    const clearHiddenFilledFields = () => {
+        const newList = questionList.slice(0);
+        for (let i = 0; i < newList.length; i++) {
+            if (
+                newList[i].type == "short_answer" ||
+                newList[i].type == "long_answer"
+            ) {
+                for (let j = 0; j < newList[i].options.length; j++) {
+                    newList[i].options[j] = ["", ""];
+                }
+            }
+            if (newList[i].type == "slider") {
+                for (let k = 0; k < newList[i].options.length; k++) {
+                    newList[i].options[k][1] = "";
+                }
+            }
+        }
+        setQuestionList(newList);
+    };
+
+    const changeQuestionNumbers = (listOfQuestions) => {
+        const newList = listOfQuestions;
+        for (let i = 0; i < newList.length; i++) {
+            newList[i].questionNumber = i + 1;
+            console.log(newList[i]._id);
+        }
+        setQuestionList(newList);
+        checkRequiredTool(toolList, newList);
+    };
 
     const selfCheckQuestionSize = questionList.length;
 
@@ -280,32 +402,52 @@ const Home: React.FC = () => {
                     <Text ml={10} mr={10} fontWeight="bold" fontSize="4xl">
                         Create a Tool
                     </Text>
-                    <Button
-                        _hover={{ bg: "#222222" }}
-                        _active={{
-                            transform: "scale(0.95)",
-                        }}
-                        mr={"5"}
-                        mt={"2"}
-                        minWidth={"90"}
-                        color="white"
-                        background="black"
-                        variant="outline"
-                        // isDisabled={!checkRequiredTool(toolList)}
-                        onClick={() => {
-                            toast({
-                                title: "Publication Successful",
-                                description:
-                                    "Your tool has been succesfully published",
-                                status: "success",
-                                position: "bottom-left",
-                                duration: 5000,
-                                isClosable: true,
-                            });
-                        }}
+                    <Tooltip
+                        maxWidth={"60"}
+                        hasArrow
+                        label={
+                            stillNeeded == ""
+                                ? ""
+                                : stillNeeded +
+                                  " field still needs to be filled out"
+                        }
+                        placement="right"
                     >
-                        Publish
-                    </Button>
+                        <Box>
+                            <Button
+                                _hover={{ bg: "#222222" }}
+                                _active={{
+                                    transform: "scale(0.95)",
+                                }}
+                                mr={"5"}
+                                mt={"2"}
+                                minWidth={"90"}
+                                color="white"
+                                background="black"
+                                variant="outline"
+                                isDisabled={stillNeeded == "" ? false : true}
+                                onClick={() => {
+                                    clearHiddenFilledFields();
+                                    toast({
+                                        title: "Publication Successful",
+                                        description:
+                                            "Your tool has been succesfully published (please check the console)",
+                                        status: "success",
+                                        position: "bottom-left",
+                                        duration: 5000,
+                                        isClosable: true,
+                                    });
+                                    console.log("Tool Home Page:", toolList);
+                                    console.log(
+                                        "Self Check Questions:",
+                                        questionList,
+                                    );
+                                }}
+                            >
+                                Publish
+                            </Button>
+                        </Box>
+                    </Tooltip>
                     <Flex wrap={"wrap"} ml={"auto"} mr={10}>
                         <Button
                             _hover={{ bg: "gray.100" }}
@@ -454,5 +596,4 @@ const Home: React.FC = () => {
         </Flex>
     );
 };
-
 export default Home;

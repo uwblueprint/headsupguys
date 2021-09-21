@@ -197,6 +197,11 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                         <Text
                                             color="blue.400"
                                             isTruncated
+                                            textDecoration={
+                                                link[2][index][0] != ""
+                                                    ? "underline"
+                                                    : "default"
+                                            }
                                             _hover={{ cursor: "pointer" }}
                                             onClick={() => {
                                                 setCurrentRelatedLink(link);
@@ -216,8 +221,8 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                             onClick={() => {
                                                 onChangeInput(
                                                     ["", ""],
-                                                    currentRelatedLink[1],
-                                                    modalIndex,
+                                                    link[1],
+                                                    index,
                                                 );
                                             }}
                                         />

@@ -21,7 +21,7 @@ import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 const Home: React.FC = () => {
     //Self check tool object
     const defaultTool = {
-        _id: "50e642d7e4a1ae34207a92a0",
+        _id: "50e642d7e4a1ae34207a92a0", //Replace with real id once connected to database
         title: "",
         type: "",
         thumbnail: "",
@@ -183,7 +183,7 @@ const Home: React.FC = () => {
     //self check card
     const defaultQuestions = [
         {
-            _id: "60e642d7e4a1ae34207a92a0",
+            _id: "60e642d7e4a1ae34207a92a0", //Replace with real id once connected to database
             type: "multiple_choice",
             question: "",
             options: [
@@ -347,7 +347,7 @@ const Home: React.FC = () => {
 
     const addOneQuestion = (index) => {
         const newQuestion = {
-            _id: `60e642d7e4a1ae34207a92a${count}`,
+            _id: `60e642d7e4a1ae34207a92a${count}`, //Replace with real id once connected to database
             type: "multiple_choice",
             question: "",
             options: [

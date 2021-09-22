@@ -87,11 +87,20 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
 })(); // immediately-invoked function expression
 
 function mockQuestions() {
-    const questionTypes = ["multiple_choice", "multi_select"];
+    const questionTypes = [
+        "multiple_choice",
+        "multi_select",
+        "short_answer",
+        "long_answer",
+        "slider",
+    ];
     const mockOptions = [
         [1, 2, 3],
         ["yes", "no", "maybe"],
     ];
+
+    const alphanumericOptions = [true, false];
+
     const questions = [];
 
     for (let i = 0; i < QUESTION_COUNT; i++) {
@@ -99,6 +108,8 @@ function mockQuestions() {
             type: questionTypes[i % questionTypes.length],
             question: faker.lorem.words() + faker.lorem.words() + "?",
             options: mockOptions[i % mockOptions.length],
+            alphanumericInput:
+                alphanumericOptions[i % alphanumericOptions.length],
             questionNumber: (i % QUESTIONS_PER_GROUP) + 1,
         });
     }
@@ -188,18 +199,50 @@ function mockTools(moduleIDs, groupIDs, toolIDs) {
         tools.push({
             _id: toolIDs[i],
             title: faker.lorem.words(),
+            thumbnail: faker.internet.url(),
+            type: faker.lorem.words(),
             video: faker.internet.url(),
             description: faker.lorem.sentences(),
             moduleID: i < MODULE_COUNT ? moduleIDs[i] : null,
-            resources: [
+            relatedResources: [
                 {
                     title: faker.lorem.words(),
-                    description: faker.lorem.sentences(),
                     url: faker.internet.url(),
                 },
                 {
                     title: faker.lorem.words(),
-                    description: faker.lorem.sentences(),
+                    url: faker.internet.url(),
+                },
+                {
+                    title: faker.lorem.words(),
+                    url: faker.internet.url(),
+                },
+            ],
+            relatedStories: [
+                {
+                    title: faker.lorem.words(),
+                    url: faker.internet.url(),
+                },
+                {
+                    title: faker.lorem.words(),
+                    url: faker.internet.url(),
+                },
+                {
+                    title: faker.lorem.words(),
+                    url: faker.internet.url(),
+                },
+            ],
+            externalResources: [
+                {
+                    title: faker.lorem.words(),
+                    url: faker.internet.url(),
+                },
+                {
+                    title: faker.lorem.words(),
+                    url: faker.internet.url(),
+                },
+                {
+                    title: faker.lorem.words(),
                     url: faker.internet.url(),
                 },
             ],

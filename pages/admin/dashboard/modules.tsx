@@ -62,7 +62,6 @@ const ModulesPage: Page = () => {
                             key={moduleId}
                             title={title}
                             tool={toolID}
-                            id={toolID}
                             lastUpdated={lastUpdated}
                             author={createdBy.join(", ")}
                         />

@@ -15,13 +15,13 @@ import {
     useDisclosure,
     useToast,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { Page } from "types/Page";
 import { AdminLayout } from "@components";
 import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 
 //Self Check Questions React functional component
 const ToolBuilder: Page = () => {
-
     const [tools, setTools] = useState([]);
 
     async function getTools() {

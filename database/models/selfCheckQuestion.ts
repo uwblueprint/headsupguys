@@ -3,6 +3,9 @@ import { models, model, Schema, Types } from "mongoose";
 enum QuestionType {
     MULTIPLE_CHOICE = "multiple_choice",
     MULTI_SELECT = "multi_select",
+    SHORT_ANSWER = "short_answer",
+    LONG_ANSWER = "long_answer",
+    SLIDER = "slider",
 }
 
 interface SelfCheckQuestionInterface {

@@ -221,7 +221,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                             onClick={() => {
                                                 onChangeInput(
                                                     ["", ""],
-                                                    link[1],
+                                                    String(link[1]),
                                                     index,
                                                 );
                                             }}

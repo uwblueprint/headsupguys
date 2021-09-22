@@ -1,13 +1,5 @@
 import React from "react";
-import {
-    Flex,
-    Heading,
-    VStack,
-    Spacer,
-    Link,
-    Button,
-    Text,
-} from "@chakra-ui/react";
+import { Flex, VStack, Spacer, Link, Button, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/dist/client/router";
 const NAVBAR_WIDTH = "280px";
@@ -58,6 +50,9 @@ const Navbar: React.FC = () => {
             <VStack spacing={2} align="flex-start">
                 <NavItem to="/admin/dashboard/tools">Tools</NavItem>
                 <NavItem to="/admin/dashboard/modules">Modules</NavItem>
+                <NavItem to="/admin/dashboard/toolBuilder">
+                    Tool Builder
+                </NavItem>
                 <NavItem to="/admin/dashboard/insights">Insights</NavItem>
                 <NavItem to="/admin/dashboard/settings">Settings</NavItem>
             </VStack>

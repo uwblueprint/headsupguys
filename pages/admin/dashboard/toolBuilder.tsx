@@ -15,10 +15,12 @@ import {
     useDisclosure,
     useToast,
 } from "@chakra-ui/react";
+import { Page } from "types/Page";
+import { AdminLayout } from "@components";
 import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 
 //Self Check Questions React functional component
-const Home: React.FC = () => {
+const ToolBuilder: Page = () => {
     //Self check tool object
     const defaultTool = {
         _id: "50e642d7e4a1ae34207a92a0", //Replace with real id once connected to database
@@ -664,4 +666,5 @@ const Home: React.FC = () => {
         </Flex>
     );
 };
-export default Home;
+ToolBuilder.layout = AdminLayout;
+export default ToolBuilder;

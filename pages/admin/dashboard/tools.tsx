@@ -58,6 +58,7 @@ const ToolsPage: Page = () => {
         setModalMode("publish");
         setSelectedTool(toolName);
         onOpen();
+        //TODO: Implement publishing the tool in the db
     };
 
     const onDelete = (toolName, id) => {
@@ -79,6 +80,8 @@ const ToolsPage: Page = () => {
     useEffect(() => {
         filterTools();
     }, []);
+
+    //TODO: Add connection to DB for unpublish and linking/unlinking tools
 
     return (
         <Stack spacing={8}>

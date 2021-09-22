@@ -44,6 +44,11 @@
     color: gray;
 }
 
+.markdown a {
+    text-decoration: underline;
+    color: blue;
+}
+
 .markdown pre {
     font: inherit;
 }

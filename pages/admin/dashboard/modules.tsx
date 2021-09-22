@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Flex,
     Text,
@@ -7,14 +7,33 @@ import {
     SimpleGrid,
     Stack,
 } from "@chakra-ui/react";
+import axios from "axios";
 
 import { ModuleCard } from "@components/ModuleCard";
 import { Page } from "types/Page";
 import { AdminLayout } from "@components";
-import moduleData from "data/modules";
 
-const Modules: Page = () => {
-    const modules = React.useMemo(() => moduleData, []);
+const ModulesPage: Page = () => {
+    const [modules, setModules] = useState([]);
+
+    async function getModules() {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: "/api/module/getAll",
+            });
+            setModules(response.data);
+        } catch (err) {
+            console.log(err);
+            //TODO: update error handling
+        }
+    }
+
+    // TODO: Implement Create connection
+
+    useEffect(() => {
+        getModules();
+    }, []);
     return (
         <Stack spacing={8}>
             <Flex direction="row">
@@ -38,13 +57,13 @@ const Modules: Page = () => {
             </Flex>
             <SimpleGrid minChildWidth="20rem" spacing={10}>
                 {modules.map(
-                    ({ moduleId, title, tool, lastUpdated, author }) => (
+                    ({ moduleId, title, toolID, lastUpdated, createdBy }) => (
                         <ModuleCard
                             key={moduleId}
                             title={title}
-                            tool={tool}
+                            tool={toolID}
                             lastUpdated={lastUpdated}
-                            author={author}
+                            author={createdBy.join(", ")}
                         />
                     ),
                 )}
@@ -53,6 +72,6 @@ const Modules: Page = () => {
     );
 };
 
-Modules.layout = AdminLayout;
+ModulesPage.layout = AdminLayout;
 
-export default Modules;
+export default ModulesPage;

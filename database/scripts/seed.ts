@@ -67,12 +67,20 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         );
         const slideIDs = (slides as any[]).map((x) => x._id);
 
+        // need to generate toolIDs beforehand to avoid a circular dependency
+        const toolIDs = [];
+        for (let i = 0; i < TOOL_COUNT; i++) {
+            toolIDs[i] = ObjectId();
+        }
+
         const modules = await moduleCollection.insertMany(
-            mockModules(slideIDs),
+            mockModules(slideIDs, toolIDs),
         );
         const moduleIDs = (modules as any[]).map((x) => x._id);
 
-        await toolCollection.insertMany(mockTools(moduleIDs, groupIDs));
+        await toolCollection.insertMany(
+            mockTools(moduleIDs, groupIDs, toolIDs),
+        );
 
         console.log("Successfully completed seeding");
         mongoose.connection.close();
@@ -144,7 +152,7 @@ function mockSlides(componentIDs) {
     return slides;
 }
 
-function mockModules(slideIDs) {
+function mockModules(slideIDs, toolIDs) {
     const statusTypes = ["complete", "published", "draft"];
     const modules = [];
 
@@ -157,19 +165,16 @@ function mockModules(slideIDs) {
             ),
             status: statusTypes[i % statusTypes.length],
             editing: i == 2,
+            createdBy: ["John Doe"],
+            toolID: i < TOOL_COUNT ? toolIDs[i] : null,
         });
     }
     return modules;
 }
 
-function mockTools(moduleIDs, groupIDs) {
+function mockTools(moduleIDs, groupIDs, toolIDs) {
     const statusTypes = ["published", "draft"];
-    const toolIDs = [];
     const tools = [];
-
-    for (let i = 0; i < TOOL_COUNT; i++) {
-        toolIDs.push(new ObjectId());
-    }
 
     for (let i = 0; i < TOOL_COUNT; i++) {
         const relatedToolsIDs = [];

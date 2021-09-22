@@ -24,13 +24,19 @@ import {
     Progress
 } from "@chakra-ui/react";
 import { IoIosUndo, IoIosRedo } from "react-icons/io";
-import { IoTrash } from "react-icons/io5";
+import { IoTrash, IoDesktopOutline } from "react-icons/io5";
+import { FaMobileAlt } from "react-icons/fa";
 
 import { Page } from "types/Page";
 import { BuilderLayout, MarkdownEditor, MarkdownRenderer, ModulePreview } from "@components";
 
 const Builder: Page = () => {
-    const { isOpen: isSidebarOpen, onToggle: toggleSidebar } = useDisclosure();
+    const { 
+        isOpen: isSidebarOpen, 
+        onToggle: toggleSidebar, 
+        onOpen: sidebarOpen, 
+        onClose: sidebarClose 
+    } = useDisclosure();
     const [editorText, setEditorText] = useState("Hello world!");
     const [slideNumber, setSlide] = useState(1);
     const [maxSlides, addSlide] = useState(1);
@@ -145,6 +151,34 @@ const Builder: Page = () => {
                         <ModulePreview previous={true} next={true} save={false} print={false} variant={""}>{}</ModulePreview>
                         <MarkdownRenderer>{editorText}</MarkdownRenderer>
                     </Box>
+                    <Flex justify="flex-end">
+                        <ButtonGroup spacing={0}>
+                            <IconButton
+                                color="black"
+                                background={isSidebarOpen ? "gray.300" : "white"}
+                                _hover={{ background: "gray.300" }}
+                                borderColor="gray.300" 
+                                borderWidth="1px"
+                                aria-label="mobile" 
+                                borderTopRightRadius="0px"
+                                borderBottomRightRadius="0px"
+                                icon={<FaMobileAlt />}
+                                onClick={sidebarOpen}
+                            />
+                            <IconButton 
+                                color="black"
+                                background={isSidebarOpen ? "white" : "gray.300"}
+                                borderColor="gray.300" 
+                                borderWidth="1px"
+                                _hover={{ background: "gray.300" }}
+                                aria-label="desktop"
+                                borderTopLeftRadius="0px"
+                                borderBottomLeftRadius="0px"
+                                icon={<IoDesktopOutline />} 
+                                onClick={sidebarClose}
+                            />
+                        </ButtonGroup>
+                    </Flex>
                 </VStack>
             </Flex>
         </Stack>

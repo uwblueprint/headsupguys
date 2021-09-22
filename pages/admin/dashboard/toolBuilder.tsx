@@ -21,6 +21,21 @@ import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 
 //Self Check Questions React functional component
 const ToolBuilder: Page = () => {
+
+    const [tools, setTools] = useState([]);
+
+    async function getTools() {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: "/api/tool/getAll",
+            });
+            setTools(response.data);
+        } catch (err) {
+            console.log(err);
+            //TODO: update error handling
+        }
+    }
     //Self check tool object
     const defaultTool = {
         _id: "50e642d7e4a1ae34207a92a0", //Replace with real id once connected to database

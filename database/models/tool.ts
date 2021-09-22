@@ -8,10 +8,14 @@ enum StatusType {
 export interface ToolInterface {
     _id: Types.ObjectId;
     title: string;
+    thumnbnail: string;
+    type: string;
     video: string;
     description: string;
     moduleID: Schema.Types.ObjectId;
-    resources: [{ title: string; description: string; url: string }];
+    relatedResources: [{ title: string; url: string }];
+    relatedStories: [{ title: string; url: string }];
+    externalResources: [{ title: string; url: string }];
     selfCheckGroupID: Schema.Types.ObjectId;
     relatedToolsIDs: [Schema.Types.ObjectId];
     status: StatusType;
@@ -25,10 +29,14 @@ const ToolSchema = new Schema<ToolInterface>(
             type: String,
             required: true,
         },
+        thumbnail: String,
+        type: String,
         video: String,
         description: String,
         moduleID: { type: Schema.Types.ObjectId, ref: "Module", default: null },
-        resources: [{ title: String, description: String, url: String }],
+        relatedResources: [{ title: String, url: String }],
+        relatedStories: [{ title: String, url: String }],
+        externalResources: [{ title: String, url: String }],
         selfCheckGroupID: {
             type: Schema.Types.ObjectId,
             ref: "SelfCheckGroup",

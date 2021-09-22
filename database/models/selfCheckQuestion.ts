@@ -10,6 +10,7 @@ interface SelfCheckQuestionInterface {
     type: QuestionType;
     question: string;
     options: [Schema.Types.Mixed];
+    alphanumericInput: boolean;
     questionNumber: number;
 }
 
@@ -28,6 +29,10 @@ const SelfCheckQuestionSchema = new Schema<SelfCheckQuestionInterface>(
         options: {
             type: [Schema.Types.Mixed],
             default: [],
+        },
+        alphanumericInput: {
+            type: Boolean,
+            default: true,
         },
         questionNumber: {
             type: Number,

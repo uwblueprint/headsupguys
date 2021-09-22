@@ -14,7 +14,7 @@ import {
     SimpleGrid,
     Button,
 } from "@chakra-ui/react";
-import { Header, SelfCheckQuestionCard, Footer } from "@components";
+import { SelfCheckQuestionCard } from "@components";
 
 //Self Check Questions React functional component
 const Home: React.FC = () => {
@@ -158,8 +158,6 @@ const Home: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Flex direction="column" minH="100vh">
-            <Header />
-
             <Flex mt={10} wrap={"wrap"} justify={"left"} width={"full"}>
                 <Text ml={10} mr={2} fontWeight="bold" fontSize="4xl">
                     Create a Tool

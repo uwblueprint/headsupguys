@@ -5,7 +5,7 @@ enum QuestionType {
     MULTI_SELECT = "multi_select",
 }
 
-interface SelfCheckQuestionInterface {
+export interface SelfCheckQuestionInterface {
     _id: Types.ObjectId;
     type: QuestionType;
     question: string;
@@ -43,4 +43,4 @@ const SelfCheckQuestion =
     models.SelfCheckQuestion ||
     model("SelfCheckQuestion", SelfCheckQuestionSchema, "self_check_questions");
 
-export { SelfCheckQuestion, QuestionType };
+export { SelfCheckQuestion, QuestionType, SelfCheckQuestionSchema };

@@ -15,7 +15,7 @@ const AddModal: React.FC<AddModalProps> = (props) => {
     const { setEmail, setRole, emailError } = props;
 
     return (
-        <Modal size="xl" header="Add Admin" {...props}>
+        <Modal header="Add Admin" size="xl" {...props}>
             <Flex>
                 <TextInput
                     name="email"

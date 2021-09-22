@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    Button,
     Modal as ChakraModal,
     ModalOverlay,
     ModalContent,
@@ -9,7 +10,6 @@ import {
     Text,
     Spacer,
 } from "@chakra-ui/react";
-import { Button } from "..";
 
 export interface ModalProps {
     isOpen: boolean;
@@ -21,6 +21,7 @@ export interface ModalProps {
     confirmText?: string;
     alignButtonsRight?: boolean;
     confirmButtonColorScheme?: string;
+    size?: string;
 }
 
 // to control modals:

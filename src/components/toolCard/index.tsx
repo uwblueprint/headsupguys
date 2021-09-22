@@ -13,7 +13,7 @@ import {
     Tooltip,
 } from "@chakra-ui/react";
 import { CheckIcon, DeleteIcon, StarIcon } from "@chakra-ui/icons";
-import { Button } from "..";
+import { Button } from "@chakra-ui/react";
 
 export interface ToolCardProps extends InputProps {
     title: string;
@@ -106,7 +106,9 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                         >
                                             <Button
                                                 isDisabled
-                                                _hover="none"
+                                                _hover={{
+                                                    pointerEvents: "none",
+                                                }}
                                                 onClick={onPublish}
                                             >
                                                 Publish Tool

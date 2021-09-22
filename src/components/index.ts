@@ -1,4 +1,6 @@
-export { SelfCheckQuestionCard } from "./selfCheckQuestion";
+export { Main } from "./main";
+export { ToolHomePage } from "./toolHomePage";
+export { SelfCheckQuestionCard } from "./toolSelfCheck";
 export { AdminLayout } from "./layouts/AdminLayout";
 export { BuilderLayout } from "./layouts/BuilderLayout";
 export { PublicLayout } from "./layouts/PublicLayout";
@@ -13,3 +15,4 @@ export { ToolCard } from "./toolCard";
 export { MarkdownEditor } from "./markdownEditor";
 export { MarkdownRenderer } from "./markdownRenderer";
 export { DropDown } from "./dropDown";
+export { ModulePreview } from "./modulePreview";

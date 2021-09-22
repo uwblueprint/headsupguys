@@ -2,9 +2,13 @@ import React from "react";
 import { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 import { defaultTheme } from "@definitions/chakra/theme";
-import "@styles/global.css";
 import { Page } from "types/Page";
 import { PublicLayout } from "@components";
+//import Amplify from "aws-amplify";
+import awsExports from "../src/aws-exports";
+import "@styles/global.css";
+
+//Amplify.configure({ ...awsExports, ssr: true });
 
 type AppPropsWithLayout = AppProps & {
     Component: Page;

@@ -16,15 +16,6 @@ const Button = {
                 bg: "gray.100",
             },
         },
-        outlineBlue: {
-            borderColor: "#3182CE",
-            color: "#3182CE",
-            borderWidth: "1px",
-            bg: "transparent",
-            _hover: {
-                bg: "#EBF8FF",
-            },
-        },
         brand: {
             bg: "brand.green",
             color: "white",

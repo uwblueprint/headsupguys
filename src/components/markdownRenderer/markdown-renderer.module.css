@@ -1,0 +1,52 @@
+.markdown h1 {
+    font-size: 48px;
+    color: black;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0) 55%,
+        #7cf952 55%
+    );
+    text-decoration: underline;
+    text-decoration-thickness: 19px;
+    text-decoration-color: #7cf952;
+    display: inline;
+}
+
+.markdown h2 {
+    font-size: 48px;
+    color: black;
+    display: inline;
+}
+
+.markdown h3 {
+    font-size: 32px;
+    color: black;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 5px;
+    text-decoration-color: #7cf952;
+}
+
+.markdown h4 {
+    font-size: 32px;
+    color: black;
+}
+
+.markdown h5 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: black;
+}
+
+.markdown p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: gray;
+}
+
+.markdown blockquote {
+    color: gray;
+    border-left: 1px solid gray;
+    margin: 5px;
+    padding: 5px;
+}

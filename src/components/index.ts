@@ -13,5 +13,6 @@ export { AuthButton } from "./authButton";
 export { ProgressDots } from "./progressDots";
 export { ToolCard } from "./toolCard";
 export { MarkdownEditor } from "./markdownEditor";
+export { MarkdownRenderer } from "./markdownRenderer";
 export { DropDown } from "./dropDown";
 export { ModulePreview } from "./modulePreview";

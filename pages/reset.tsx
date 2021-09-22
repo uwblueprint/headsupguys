@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Flex, Box, Heading, Text, Center } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/react";
-import { Auth } from "aws-amplify";
+//import { Auth } from "aws-amplify";
 
 import { TextInput, PasswordInput, AuthButton } from "@components";
 import {

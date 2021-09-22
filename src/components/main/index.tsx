@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Box, useTheme } from "@chakra-ui/react";
-import { Auth } from "aws-amplify";
+//import { Auth } from "aws-amplify";
 import { AuthButton } from "@components";
 
 interface Props {

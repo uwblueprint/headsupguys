@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState } from "react";
 import {
     Flex,
@@ -20,12 +21,13 @@ import {
     Editable,
     EditablePreview,
     EditableInput,
+    Progress
 } from "@chakra-ui/react";
 import { IoIosUndo, IoIosRedo } from "react-icons/io";
 import { IoTrash } from "react-icons/io5";
 
 import { Page } from "types/Page";
-import { BuilderLayout, MarkdownEditor, MarkdownRenderer } from "@components";
+import { BuilderLayout, MarkdownEditor, MarkdownRenderer, ModulePreview } from "@components";
 
 const Builder: Page = () => {
     const { isOpen: isSidebarOpen, onToggle: toggleSidebar } = useDisclosure();
@@ -126,6 +128,8 @@ const Builder: Page = () => {
                     )}
                 </Box>
                 <VStack flex="1" bg="gray.200">
+                    <Box w="80%">Progress: {slideNumber / maxSlides * 100} % <Progress hasStripe colorScheme="teal" size="sm" value={slideNumber / maxSlides * 100} /></Box>
+                    <Box></Box>
                     <Box
                         w="80%"
                         minH="80%"
@@ -138,6 +142,7 @@ const Builder: Page = () => {
                         bg="white"
                         mt={4}
                     >
+                        <ModulePreview previous={true} next={true} save={false} print={false} variant={""}>{}</ModulePreview>
                         <MarkdownRenderer>{editorText}</MarkdownRenderer>
                     </Box>
                 </VStack>

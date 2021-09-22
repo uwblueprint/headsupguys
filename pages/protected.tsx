@@ -5,7 +5,7 @@
 
 import React from "react";
 import { GetServerSideProps } from "next";
-import { withSSRContext } from "aws-amplify";
+//import { withSSRContext } from "aws-amplify";
 import { Spacer, Flex } from "@chakra-ui/react";
 // import { Auth } from from "aws-amplify" // if you wanted to call Auth on client-side
 

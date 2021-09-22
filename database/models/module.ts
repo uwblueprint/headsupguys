@@ -17,6 +17,7 @@ export interface ModuleInterface {
 
     status: StatusType;
     editing: boolean;
+    createdBy: string[];
 }
 
 const ModuleSchema = new Schema<ModuleInterface>(
@@ -40,6 +41,10 @@ const ModuleSchema = new Schema<ModuleInterface>(
         editing: {
             type: Boolean,
             default: false,
+        },
+        createdBy: {
+            type: [String],
+            required: true,
         },
     },
     {

@@ -32,8 +32,9 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
     const printButton = printText ? printText : "PRINT";
     const saveButton = saveText ? saveText : "SAVE";
 
-    const mobile = { width: 442, height: 697 };
-    const desktop = { width: 955, height: 697 };
+    const mobile = { width: 342, height: 697 };
+    //const desktop = { width: 455, height: 697 };
+    const desktop = {};
 
     return (
         <>

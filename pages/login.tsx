@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Flex, Box, Heading, Text, Link } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
-import { Auth } from "aws-amplify";
+//import { Auth } from "aws-amplify";
 
 import { TextInput, PasswordInput, AuthButton } from "@components";
 import { validateEmailHelper } from "src/utils/auth/authHelpers";

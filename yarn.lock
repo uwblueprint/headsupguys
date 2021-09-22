@@ -11219,10 +11219,17 @@ deep-object-diff@^1.1.0:
   integrity sha512-b+QLs5vHgS+IoSNcUE4n9HP2NwcHj7aqnJWsjPtuG75Rh5TOaGt0OjAYInh77d5T16V5cRDC+Pw/6ZZZiETBGw==
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 deepmerge@4.2.2, deepmerge@^4.2.2:
 =======
 deepmerge@^4.0.0, deepmerge@^4.2.2:
 >>>>>>> 760ec513689707289b54f3d20dacfc6a8ef8c1b0
+=======
+deepmerge@^4.0.0, deepmerge@^4.2.2:
+=======
+deepmerge@4.2.2, deepmerge@^4.2.2:
+>>>>>>> d797cf818b6b6c3fe5383e5078b69adf25db39f2
+>>>>>>> 15060745634a3bd230131e944d0a4333dacaf9d3
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
   integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
@@ -18480,6 +18487,7 @@ react-markdown@6.0.2:
     vfile "^4.0.0"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 react-native-get-random-values@^1.4.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.7.0.tgz#86d9d1960828b606392dba4540bf760605448530"
@@ -18487,6 +18495,8 @@ react-native-get-random-values@^1.4.0:
   dependencies:
     fast-base64-decode "^1.0.0"
 =======
+=======
+>>>>>>> 15060745634a3bd230131e944d0a4333dacaf9d3
 react-markdown@^6:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-6.0.3.tgz#625ec767fa321d91801129387e7d31ee0cb99254"
@@ -18516,7 +18526,18 @@ react-player@^2.9.0:
     memoize-one "^5.1.1"
     prop-types "^15.7.2"
     react-fast-compare "^3.0.1"
+<<<<<<< HEAD
 >>>>>>> 760ec513689707289b54f3d20dacfc6a8ef8c1b0
+=======
+=======
+react-native-get-random-values@^1.4.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.7.0.tgz#86d9d1960828b606392dba4540bf760605448530"
+  integrity sha512-zDhmpWUekGRFb9I+MQkxllHcqXN9HBSsgPwBQfrZ1KZYpzDspWLZ6/yLMMZrtq4pVqNR7C7N96L3SuLpXv1nhQ==
+  dependencies:
+    fast-base64-decode "^1.0.0"
+>>>>>>> d797cf818b6b6c3fe5383e5078b69adf25db39f2
+>>>>>>> 15060745634a3bd230131e944d0a4333dacaf9d3
 
 react-popper-tooltip@^3.1.1:
   version "3.1.1"

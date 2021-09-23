@@ -103,7 +103,6 @@ const ToolBuilder: Page = () => {
         ["thumbnail", 'The Home Page "Thumbnail"'],
         ["description", 'The Home Page "Description"'],
         ["linkedModule", 'The Home Page "Link Module"'],
-        ["video", 'The Home Page "Video"'],
         ["relatedResources", 'The Home Page "Related Resources'],
         ["relatedStories", 'The Home Page "Related Stories'],
         ["externalResources", 'The Home Page "External Resources'],

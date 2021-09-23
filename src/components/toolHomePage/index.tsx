@@ -159,7 +159,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                         <option>Module 5</option>
                     </Select>
                 </FormControl>
-                <FormControl isRequired>
+                <FormControl>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Video Link
                     </FormLabel>

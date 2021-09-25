@@ -15,3 +15,4 @@ export { ToolCard } from "./toolCard";
 export { MarkdownEditor } from "./markdownEditor";
 export { DropDown } from "./dropDown";
 export { ModulePreview } from "./modulePreview";
+export { ModuleSectionSelect } from "./moduleSectionSelect";

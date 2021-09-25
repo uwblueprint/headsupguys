@@ -10,7 +10,7 @@ import {
     CheckboxComp,
     ProgressDots,
 } from "@components";
-//import { Auth } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import {
     validateEmailHelper,
     validatePasswordHelper,

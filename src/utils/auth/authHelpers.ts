@@ -1,4 +1,4 @@
-//import { Auth } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import isEmail from "validator/lib/isEmail";
 
 const userExist = async (email) => {

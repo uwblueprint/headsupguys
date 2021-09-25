@@ -117,7 +117,7 @@ const ToolsPage: Page = () => {
                         _active={{
                             transform: "scale(0.95)",
                         }}
-                        // onClick={() => {}}
+                        onClick={() => (location.href = "/login")}
                         minWidth={"90"}
                         colorScheme="white"
                         variant="outline"

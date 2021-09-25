@@ -50,7 +50,6 @@ const Navbar: React.FC = () => {
             <VStack spacing={2} align="flex-start">
                 <NavItem to="/admin/dashboard/tools">Tools</NavItem>
                 <NavItem to="/admin/dashboard/modules">Modules</NavItem>
-                <NavItem to="/admin/dashboard/toolBuilder">Create Tool</NavItem>
                 <NavItem to="/admin/dashboard/insights">Insights</NavItem>
                 <NavItem to="/admin/dashboard/settings">Settings</NavItem>
             </VStack>

@@ -21,26 +21,36 @@ import {
     Editable,
     EditablePreview,
     EditableInput,
-    Progress
+    Progress,
 } from "@chakra-ui/react";
 import { IoIosUndo, IoIosRedo } from "react-icons/io";
 import { IoTrash, IoDesktopOutline } from "react-icons/io5";
 import { FaMobileAlt } from "react-icons/fa";
 
 import { Page } from "types/Page";
-import { BuilderLayout, MarkdownEditor, MarkdownRenderer, ModulePreview } from "@components";
+import {
+    BuilderLayout,
+    MarkdownEditor,
+    MarkdownRenderer,
+    ModulePreview,
+    CheckboxComp,
+} from "@components";
 
 const Builder: Page = () => {
-    const { 
-        isOpen: isSidebarOpen, 
-        onToggle: toggleSidebar, 
-        onOpen: sidebarOpen, 
-        onClose: sidebarClose 
+    const {
+        isOpen: isSidebarOpen,
+        onToggle: toggleSidebar,
+        onOpen: sidebarOpen,
+        onClose: sidebarClose,
     } = useDisclosure();
     const [editorText, setEditorText] = useState("Hello world!");
     const [slideNumber, setSlide] = useState(1);
     const [maxSlides, addSlide] = useState(1);
     const [slides, setSlides] = useState([editorText]);
+    const [prevButton, setPrevButton] = useState(true);
+    const [nextButton, setNextButton] = useState(true);
+    const [printButton, setPrintButton] = useState(false);
+    const [saveButton, setSaveButton] = useState(false);
 
     const moduleName = "Untitled Module";
     return (
@@ -122,20 +132,50 @@ const Builder: Page = () => {
                         </Button>
                     </Flex>
                     {isSidebarOpen && (
-                        <Container maxW="70%" py={4}>
-                            <Stack spacing={2}>
-                                <Heading>Section {slideNumber}</Heading>
-                                <MarkdownEditor
-                                    value={editorText}
-                                    setValue={setEditorText}
-                                />
-                            </Stack>
-                        </Container>
+                        <Box>
+                            <Container maxW="70%" py={4}>
+                                <Stack spacing={2}>
+                                    <Heading>Section {slideNumber}</Heading>
+                                    <MarkdownEditor
+                                        value={editorText}
+                                        setValue={setEditorText}
+                                    />
+                                </Stack>
+                            </Container>
+                            <Container>
+                                <Stack spacing={10} direction="row">
+                                    <CheckboxComp 
+                                        defaultIsChecked 
+                                        text="Prev"
+                                        onChange= {() => {
+                                            setPrevButton( !prevButton );
+                                        }}
+                                        />
+                                    <CheckboxComp 
+                                    defaultIsChecked 
+                                    text="Next"
+                                    onChange= {() => {
+                                        setNextButton( !nextButton );
+                                    }}
+                                    />
+                                    <CheckboxComp 
+                                    text="Save"
+                                    onChange= {() => {
+                                        setSaveButton( !saveButton );
+                                    }}
+                                    />
+                                    <CheckboxComp 
+                                    text="Print"
+                                    onChange= {() => {
+                                        setPrintButton( !printButton );
+                                    }}
+                                    />
+                                </Stack>
+                            </Container>
+                        </Box>
                     )}
                 </Box>
                 <VStack flex="1" bg="gray.200">
-                    <Box w="80%">Progress: {slideNumber / maxSlides * 100} % <Progress hasStripe colorScheme="teal" size="sm" value={slideNumber / maxSlides * 100} /></Box>
-                    <Box></Box>
                     <Box
                         w="80%"
                         minH="80%"
@@ -148,37 +188,52 @@ const Builder: Page = () => {
                         bg="white"
                         mt={4}
                     >
-                        <ModulePreview previous={true} next={true} save={false} print={false} variant={""}>{}</ModulePreview>
                         <MarkdownRenderer>{editorText}</MarkdownRenderer>
+                        <ModulePreview
+                            previous={prevButton}
+                            next={nextButton}
+                            save={saveButton}
+                            print={printButton}
+                            progressValue={(slideNumber / maxSlides) * 100}
+                            variant={""}
+                        >
+                            {}
+                        </ModulePreview>
                     </Box>
-                    <Flex justify="flex-end">
-                        <ButtonGroup spacing={0}>
-                            <IconButton
-                                color="black"
-                                background={isSidebarOpen ? "gray.300" : "white"}
-                                _hover={{ background: "gray.300" }}
-                                borderColor="gray.300" 
-                                borderWidth="1px"
-                                aria-label="mobile" 
-                                borderTopRightRadius="0px"
-                                borderBottomRightRadius="0px"
-                                icon={<FaMobileAlt />}
-                                onClick={sidebarOpen}
-                            />
-                            <IconButton 
-                                color="black"
-                                background={isSidebarOpen ? "white" : "gray.300"}
-                                borderColor="gray.300" 
-                                borderWidth="1px"
-                                _hover={{ background: "gray.300" }}
-                                aria-label="desktop"
-                                borderTopLeftRadius="0px"
-                                borderBottomLeftRadius="0px"
-                                icon={<IoDesktopOutline />} 
-                                onClick={sidebarClose}
-                            />
-                        </ButtonGroup>
-                    </Flex>
+                    <Box display="flex" w="80%" justifyContent="flex-end">
+                        <Flex>
+                            <ButtonGroup spacing={0}>
+                                <IconButton
+                                    color="black"
+                                    background={
+                                        isSidebarOpen ? "gray.300" : "white"
+                                    }
+                                    _hover={{ background: "gray.300" }}
+                                    borderColor="gray.300"
+                                    borderWidth="1px"
+                                    aria-label="mobile"
+                                    borderTopRightRadius="0px"
+                                    borderBottomRightRadius="0px"
+                                    icon={<FaMobileAlt />}
+                                    onClick={sidebarOpen}
+                                />
+                                <IconButton
+                                    color="black"
+                                    background={
+                                        isSidebarOpen ? "white" : "gray.300"
+                                    }
+                                    borderColor="gray.300"
+                                    borderWidth="1px"
+                                    _hover={{ background: "gray.300" }}
+                                    aria-label="desktop"
+                                    borderTopLeftRadius="0px"
+                                    borderBottomLeftRadius="0px"
+                                    icon={<IoDesktopOutline />}
+                                    onClick={sidebarClose}
+                                />
+                            </ButtonGroup>
+                        </Flex>
+                    </Box>
                 </VStack>
             </Flex>
         </Stack>

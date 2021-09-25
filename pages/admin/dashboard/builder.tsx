@@ -49,6 +49,21 @@ const Builder: Page = () => {
     const [saveButton, setSaveButton] = useState(false);
 
     const moduleName = "Untitled Module";
+
+    const handleEditableErrors = (e) => {
+        const target = e.target as HTMLInputElement;
+        if (
+            !isNaN(parseInt(target.value)) &&
+            parseInt(target.value) >= 1 &&
+            parseInt(target.value) <= maxSlides
+        ) {
+            setEditorText(slides[Number(slideNumber) - 1]);
+            setPrevSlide(slideNumber);
+        } else {
+            setSlide(prevSlide);
+        }
+    };
+
     return (
         <Stack spacing={0}>
             <Stack spacing={2} p={6}>
@@ -96,17 +111,10 @@ const Builder: Page = () => {
                         onChange={(nextValue) => {
                             setSlide(parseInt(nextValue) || 0);
                         }}
-                        onBlur={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            if (
-                                !isNaN(parseInt(target.value)) &&
-                                parseInt(target.value) >= 1 &&
-                                parseInt(target.value) <= maxSlides
-                            ) {
-                                setEditorText(slides[Number(slideNumber) - 1]);
-                                setPrevSlide(slideNumber);
-                            } else {
-                                setSlide(prevSlide);
+                        onBlur={handleEditableErrors}
+                        onKeyDown={(e) => {
+                            if(e.key === "Enter") {
+                                handleEditableErrors(e);
                             }
                         }}
                         width={8}

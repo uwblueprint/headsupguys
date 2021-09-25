@@ -46,7 +46,7 @@ const ToolSchema = new Schema<ToolInterface>(
         },
         editing: Boolean,
         createdBy: [String],
-        updatedAt: String,
+        updatedAt: Date,
     },
     {
         timestamps: true,

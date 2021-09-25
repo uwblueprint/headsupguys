@@ -153,7 +153,7 @@ const ToolsPage: Page = () => {
                                 creators={tool["createdBy"]}
                                 updated={
                                     tool["updatedAt"]
-                                        ? tool["updatedAt"]
+                                        ? new Date(tool["updatedAt"])
                                         : new Date()
                                 }
                                 module={tool["moduleID"] !== ""}

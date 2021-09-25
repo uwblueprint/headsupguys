@@ -203,7 +203,7 @@ function mockTools(moduleIDs, groupIDs, toolIDs) {
             type: faker.lorem.words(),
             video: faker.internet.url(),
             description: faker.lorem.sentences(),
-            moduleID: i < MODULE_COUNT ? moduleIDs[i] : null,
+            linkedModuleID: i < MODULE_COUNT ? moduleIDs[i] : null,
             relatedResources: [
                 {
                     title: faker.lorem.words(),

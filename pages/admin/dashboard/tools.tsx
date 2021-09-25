@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { ToolCard, Modal, AdminLayout } from "@components";
 import { Page } from "types/Page";
+import { useRouter } from "next/router";
 import axios from "axios";
 
 const ToolsPage: Page = () => {
@@ -27,7 +28,7 @@ const ToolsPage: Page = () => {
 
     // TODO: Need to update this to calculate relative date
     const date = new Date();
-
+    const router = useRouter();
     const filterTools = async () => {
         try {
             const response = await axios({
@@ -43,6 +44,23 @@ const ToolsPage: Page = () => {
         } catch (err) {
             console.log(err);
             //TODO: update error handling
+        }
+    };
+    const createTool = async () => {
+        try {
+            const response = await axios({
+                method: "POST",
+                url: "/api/tool/post",
+                data: {
+                    title: "Untitled Tool",
+                },
+            });
+            router.push({
+                pathname: "/admin/dashboard/toolBuilder",
+                query: { toolID: response.data._id },
+            });
+        } catch (err) {
+            console.log(err);
         }
     };
 
@@ -117,7 +135,9 @@ const ToolsPage: Page = () => {
                         _active={{
                             transform: "scale(0.95)",
                         }}
-                        onClick={() => (location.href = "/login")}
+                        onClick={() => {
+                            createTool();
+                        }}
                         minWidth={"90"}
                         colorScheme="white"
                         variant="outline"
@@ -152,7 +172,7 @@ const ToolsPage: Page = () => {
                                 title={tool["title"]}
                                 creators={tool["createdBy"]}
                                 updated={date}
-                                module={tool["moduleID"] !== ""}
+                                module={tool["linkedModuleID"] !== null}
                                 published={tool["status"] === "published"}
                                 onLinkModule={onLinkModule}
                                 onPublish={() => onPublish(tool["title"])}

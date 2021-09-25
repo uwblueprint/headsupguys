@@ -12,7 +12,7 @@ export interface ToolInterface {
     type: string;
     video: string;
     description: string;
-    moduleID: Schema.Types.ObjectId;
+    linkedModuleID: Schema.Types.ObjectId;
     relatedResources: [{ title: string; url: string }];
     relatedStories: [{ title: string; url: string }];
     externalResources: [{ title: string; url: string }];
@@ -33,7 +33,11 @@ const ToolSchema = new Schema<ToolInterface>(
         type: String,
         video: String,
         description: String,
-        moduleID: { type: Schema.Types.ObjectId, ref: "Module", default: null },
+        linkedModuleID: {
+            type: Schema.Types.ObjectId,
+            ref: "Module",
+            default: null,
+        },
         relatedResources: [{ title: String, url: String }],
         relatedStories: [{ title: String, url: String }],
         externalResources: [{ title: String, url: String }],

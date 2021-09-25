@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Text,
     Flex,
@@ -15,36 +15,31 @@ import {
     useDisclosure,
     useToast,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { Page } from "types/Page";
 import { AdminLayout } from "@components";
 import { SelfCheckQuestionCard, ToolHomePage } from "@components";
+import { useRouter } from "next/router";
+import axios from "axios";
 
+export const getServerSideProps = async (context) => {
+    return {
+        props: {}, // will magically be passed to the page component as props
+    };
+};
 //Self Check Questions React functional component
 const ToolBuilder: Page = () => {
-    const [tools, setTools] = useState([]);
+    const router = useRouter();
+    const toolID = router.query.toolID;
 
-    async function getTools() {
-        try {
-            const response = await axios({
-                method: "GET",
-                url: "/api/tool/getAll",
-            });
-            setTools(response.data);
-        } catch (err) {
-            console.log(err);
-            //TODO: update error handling
-        }
-    }
     //Self check tool object
     const defaultTool = {
-        _id: "50e642d7e4a1ae34207a92a0", //Replace with real id once connected to database
+        _id: toolID, //Replace with real id once connected to database
         title: "",
         type: "",
         thumbnail: "",
         video: "",
         description: "",
-        linkedModule: "",
+        linkedModuleID: null,
         relatedResources: [
             ["", ""],
             ["", ""],
@@ -60,7 +55,7 @@ const ToolBuilder: Page = () => {
             ["", ""],
             ["", ""],
         ],
-        recommendedTools: ["", "", ""],
+        relatedToolsIDs: [null, null, null],
     };
     //Sets useState of tool to a copy of the default tool
     const [toolList, setToolList] = useState(
@@ -70,6 +65,60 @@ const ToolBuilder: Page = () => {
     const [lastSavedTool, setLastSavedTool] = useState(
         JSON.parse(JSON.stringify(defaultTool)),
     );
+    const getTool = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: `/api/tool/${toolID}`,
+            });
+            const newTool = JSON.parse(JSON.stringify(toolList));
+            for (const property in newTool) {
+                if (response.data[property] != null) {
+                    newTool[property] = response.data[property];
+                }
+            }
+            // newTool.title = response.data.title;
+            // console.log(newTool);
+            // console.log(response.data);
+            // console.log(toolList, newTool);
+            setToolList(newTool);
+        } catch (err) {
+            console.log(err);
+            //TODO: update error handling
+        }
+    };
+    useEffect(() => {
+        getTool();
+    }, []);
+    const saveTool = async () => {
+        console.log("Self Check Questions:", questionList);
+        try {
+            await axios({
+                method: "PUT",
+                url: `/api/tool/update?id=${toolID}`,
+                data: toolList,
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    const allModules = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: "/api/modules",
+            });
+            console.log("allModules", response);
+            // const filteredTools = response.data.filter((t) => {
+            //     return t["status"] === selectedTab;
+            // });
+
+            // setToolsArray(filteredTools);
+        } catch (err) {
+            console.log(err);
+            //TODO: update error handling
+        }
+    };
     //Hangles all changes of input to the tool page
     const changeInput = (target, type, index1 = null, index2 = null) => {
         const newTool = JSON.parse(JSON.stringify(toolList));
@@ -102,7 +151,7 @@ const ToolBuilder: Page = () => {
         ["type", 'The Home Page "Type"'],
         ["thumbnail", 'The Home Page "Thumbnail"'],
         ["description", 'The Home Page "Description"'],
-        ["linkedModule", 'The Home Page "Link Module"'],
+        ["linkedModuleID", 'The Home Page "Link Module"'],
         ["relatedResources", 'The Home Page "Related Resources'],
         ["relatedStories", 'The Home Page "Related Stories'],
         ["externalResources", 'The Home Page "External Resources'],
@@ -580,11 +629,7 @@ const ToolBuilder: Page = () => {
                                     duration: 5000,
                                     isClosable: true,
                                 });
-                                console.log("Tool Home Page:", toolList);
-                                console.log(
-                                    "Self Check Questions:",
-                                    questionList,
-                                );
+                                saveTool();
                                 setLastSavedTool(
                                     JSON.parse(JSON.stringify(toolList)),
                                 );
@@ -627,11 +672,12 @@ const ToolBuilder: Page = () => {
                         thumbnail={toolList.thumbnail}
                         video={toolList.video}
                         description={toolList.description}
-                        linkedModule={toolList.linkedModule}
+                        linkedModuleID={toolList.linkedModuleID}
                         relatedResources={toolList.relatedResources}
                         relatedStories={toolList.relatedStories}
                         externalResources={toolList.externalResources}
-                        recommendedTools={toolList.recommendedTools}
+                        relatedToolsIDs={toolList.relatedToolsIDs}
+                        allModules={allModules}
                         onChangeInput={changeInput}
                     ></ToolHomePage>
                 )}

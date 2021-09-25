@@ -22,7 +22,7 @@ import {
     ModalFooter,
 } from "@chakra-ui/react";
 
-const recommendedToolsList = ["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"];
+const relatedToolsList = ["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"];
 export interface ToolHomePageProps {
     toolId: string;
     title: string;
@@ -30,11 +30,11 @@ export interface ToolHomePageProps {
     video: string;
     thumbnail: string;
     description: string;
-    linkedModule: string;
+    linkedModuleID: string;
     relatedResources: string[][];
     relatedStories: string[][];
     externalResources: string[][];
-    recommendedTools: string[];
+    relatedToolsIDs: string[];
     onChangeInput: (
         target: string | string[],
         type: string,
@@ -50,11 +50,11 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
     video,
     thumbnail,
     description,
-    linkedModule,
+    linkedModuleID,
     relatedResources,
     relatedStories,
     externalResources,
-    recommendedTools,
+    relatedToolsIDs,
     onChangeInput,
 }) => {
     const [openModal, setOpenModal] = useState(false);
@@ -147,9 +147,9 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                     <Select
                         placeholder={"Select option"}
                         size={"lg"}
-                        value={linkedModule}
+                        value={linkedModuleID}
                         onChange={(e) =>
-                            onChangeInput(e.target.value, "linkedModule")
+                            onChangeInput(e.target.value, "linkedModuleID")
                         }
                     >
                         <option>Module 1</option>
@@ -360,30 +360,29 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
             <WrapItem width={"50%"}>
                 <FormControl>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
-                        Select Recommended Tools
+                        Select Related Tools
                     </FormLabel>
-                    {(recommendedTools ?? []).map((choice, index) => (
+                    {(relatedToolsIDs ?? []).map((choice, index) => (
                         <Select
                             key={choice + index}
                             placeholder={"Select option"}
                             mb={"3"}
-                            value={recommendedTools[index]}
+                            value={relatedToolsIDs[index]}
                             onChange={(e) =>
                                 onChangeInput(
                                     e.target.value,
-                                    "recommendedTools",
+                                    "relatedToolsIDs",
                                     index,
                                 )
                             }
                         >
                             {(
-                                recommendedToolsList.filter((item) => {
-                                    return !recommendedTools
+                                relatedToolsList.filter((item) => {
+                                    return !relatedToolsIDs
                                         .filter((item) => {
                                             return (
-                                                recommendedTools.indexOf(
-                                                    item,
-                                                ) != index
+                                                relatedToolsIDs.indexOf(item) !=
+                                                index
                                             );
                                         })
                                         .includes(item);

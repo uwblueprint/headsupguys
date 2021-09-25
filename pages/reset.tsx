@@ -265,9 +265,7 @@ const ResetPassword: React.FC = () => {
                     <Text textAlign="left">Password reset successful.</Text>
                     <AuthButton
                         text="Log in to my account"
-                        onClick={() =>
-                            (location.href = "/admin/dashboard/toolBuilder")
-                        }
+                        onClick={() => (location.href = "/login")}
                         isDisabled={false}
                     />
                 </Box>

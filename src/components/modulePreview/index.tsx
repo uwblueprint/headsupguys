@@ -129,13 +129,11 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                     border="1px solid #000"
                 >
                     <Box w="100%" h="5%">
-                    {progressValue && (
-                            <Progress
-                                colorScheme="green"
-                                size="lg"
-                                value={progressValue}
+                        <Progress
+                            colorScheme="green"
+                            size="lg"
+                            value={progressValue}
                         />
-                    )}
                     </Box>
                     <Box w="100%" h="95%" overflow="auto">
                         <Box minHeight="88%">{props.children}</Box>

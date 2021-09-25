@@ -144,31 +144,31 @@ const Builder: Page = () => {
                             </Container>
                             <Container>
                                 <Stack spacing={10} direction="row">
-                                    <CheckboxComp 
-                                        defaultIsChecked 
+                                    <CheckboxComp
+                                        defaultIsChecked
                                         text="Prev"
-                                        onChange= {() => {
-                                            setPrevButton( !prevButton );
+                                        onChange={() => {
+                                            setPrevButton(!prevButton);
                                         }}
-                                        />
-                                    <CheckboxComp 
-                                    defaultIsChecked 
-                                    text="Next"
-                                    onChange= {() => {
-                                        setNextButton( !nextButton );
-                                    }}
                                     />
-                                    <CheckboxComp 
-                                    text="Save"
-                                    onChange= {() => {
-                                        setSaveButton( !saveButton );
-                                    }}
+                                    <CheckboxComp
+                                        defaultIsChecked
+                                        text="Next"
+                                        onChange={() => {
+                                            setNextButton(!nextButton);
+                                        }}
                                     />
-                                    <CheckboxComp 
-                                    text="Print"
-                                    onChange= {() => {
-                                        setPrintButton( !printButton );
-                                    }}
+                                    <CheckboxComp
+                                        text="Save"
+                                        onChange={() => {
+                                            setSaveButton(!saveButton);
+                                        }}
+                                    />
+                                    <CheckboxComp
+                                        text="Print"
+                                        onChange={() => {
+                                            setPrintButton(!printButton);
+                                        }}
                                     />
                                 </Stack>
                             </Container>
@@ -187,18 +187,27 @@ const Builder: Page = () => {
                         py={8}
                         bg="white"
                         mt={4}
+                        position="relative"
                     >
                         <MarkdownRenderer>{editorText}</MarkdownRenderer>
-                        <ModulePreview
-                            previous={prevButton}
-                            next={nextButton}
-                            save={saveButton}
-                            print={printButton}
-                            progressValue={(slideNumber / maxSlides) * 100}
-                            variant={""}
+                        <Box
+                            position="absolute"
+                            bottom="0"
+                            right="0"
+                            left="0"
+                            margin="10px"
                         >
-                            {}
-                        </ModulePreview>
+                            <ModulePreview
+                                previous={prevButton}
+                                next={nextButton}
+                                save={saveButton}
+                                print={printButton}
+                                progressValue={(slideNumber / maxSlides) * 100}
+                                variant={""}
+                            >
+                                {}
+                            </ModulePreview>
+                        </Box>
                     </Box>
                     <Box display="flex" w="80%" justifyContent="flex-end">
                         <Flex>

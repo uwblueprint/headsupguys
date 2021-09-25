@@ -14,6 +14,7 @@ import {
 import { UserToolCard } from "@components/userToolCard";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
+import { useMediaQuery } from "react-responsive";
 
 const Home: React.FC = () => {
     const [showAlert, setShowAlert] = useState(true);
@@ -23,13 +24,15 @@ const Home: React.FC = () => {
     const handleSelfCheck = () => {
         console.log("");
     };
-    const [variant, setVariant] = useState("desktop");
+    const variant = useMediaQuery({ query: `(max-width: 925px)` })
+        ? "mobile"
+        : "desktop";
 
     return (
         <>
+            <Image src="/assets/HUG_Banner_1.png" w="100%" />
             {variant === "desktop" ? (
                 <>
-                    <Image src="/assets/HUG_Banner_1.png" w="100%" />
                     <Container maxW="container.lg" py="50px">
                         <Box position="relative" h={50}>
                             <Image
@@ -219,7 +222,6 @@ const Home: React.FC = () => {
                 </>
             ) : (
                 <>
-                    <Image src="/assets/HUG_Banner_1.png" w="100%" />
                     <Box p={4}>
                         <Box position="relative" h={50}>
                             <Image

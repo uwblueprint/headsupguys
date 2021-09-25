@@ -46,6 +46,7 @@ const Builder: Page = () => {
     const [editorText, setEditorText] = useState("Hello world!");
     const [slideNumber, setSlide] = useState(1);
     const [maxSlides, addSlide] = useState(1);
+    const [prevSlide, setPrevSlide] = useState(1);
     const [slides, setSlides] = useState([editorText]);
     const [prevButton, setPrevButton] = useState(true);
     const [nextButton, setNextButton] = useState(true);
@@ -98,9 +99,15 @@ const Builder: Page = () => {
                         defaultValue="1"
                         value={slideNumber.toString()}
                         onChange={(nextValue) => {
-                            if (!isNaN(Number(nextValue))) {
-                                setSlide(Number(nextValue));
-                                setEditorText(slides[Number(nextValue) - 1]);
+                            setSlide(parseInt(nextValue) || 0);
+                        }}
+                        onBlur={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            if ((!isNaN(parseInt(target.value)) && parseInt(target.value) >= 1 && parseInt(target.value) <= maxSlides)) {
+                                setEditorText(slides[Number(slideNumber) - 1]);
+                                setPrevSlide(slideNumber);
+                            } else {
+                                setSlide(prevSlide);
                             }
                         }}
                         width={8}
@@ -144,31 +151,31 @@ const Builder: Page = () => {
                             </Container>
                             <Container>
                                 <Stack spacing={10} direction="row">
-                                    <CheckboxComp
-                                        defaultIsChecked
+                                    <CheckboxComp 
+                                        defaultIsChecked 
                                         text="Prev"
-                                        onChange={() => {
-                                            setPrevButton(!prevButton);
+                                        onChange= {() => {
+                                            setPrevButton( !prevButton );
                                         }}
+                                        />
+                                    <CheckboxComp 
+                                    defaultIsChecked 
+                                    text="Next"
+                                    onChange= {() => {
+                                        setNextButton( !nextButton );
+                                    }}
                                     />
-                                    <CheckboxComp
-                                        defaultIsChecked
-                                        text="Next"
-                                        onChange={() => {
-                                            setNextButton(!nextButton);
-                                        }}
+                                    <CheckboxComp 
+                                    text="Save"
+                                    onChange= {() => {
+                                        setSaveButton( !saveButton );
+                                    }}
                                     />
-                                    <CheckboxComp
-                                        text="Save"
-                                        onChange={() => {
-                                            setSaveButton(!saveButton);
-                                        }}
-                                    />
-                                    <CheckboxComp
-                                        text="Print"
-                                        onChange={() => {
-                                            setPrintButton(!printButton);
-                                        }}
+                                    <CheckboxComp 
+                                    text="Print"
+                                    onChange= {() => {
+                                        setPrintButton( !printButton );
+                                    }}
                                     />
                                 </Stack>
                             </Container>
@@ -187,27 +194,18 @@ const Builder: Page = () => {
                         py={8}
                         bg="white"
                         mt={4}
-                        position="relative"
                     >
                         <MarkdownRenderer>{editorText}</MarkdownRenderer>
-                        <Box
-                            position="absolute"
-                            bottom="0"
-                            right="0"
-                            left="0"
-                            margin="10px"
+                        <ModulePreview
+                            previous={prevButton}
+                            next={nextButton}
+                            save={saveButton}
+                            print={printButton}
+                            progressValue={(slideNumber / maxSlides) * 100}
+                            variant={""}
                         >
-                            <ModulePreview
-                                previous={prevButton}
-                                next={nextButton}
-                                save={saveButton}
-                                print={printButton}
-                                progressValue={(slideNumber / maxSlides) * 100}
-                                variant={""}
-                            >
-                                {}
-                            </ModulePreview>
-                        </Box>
+                            {}
+                        </ModulePreview>
                     </Box>
                     <Box display="flex" w="80%" justifyContent="flex-end">
                         <Flex>

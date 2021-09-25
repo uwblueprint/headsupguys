@@ -5,23 +5,18 @@ import {
     Text,
     Button,
     Spacer,
-    SimpleGrid,
     Stack,
     Box,
     useDisclosure,
-    Slide,
     VStack,
-    Grid,
     Heading,
     HStack,
-    Center,
     Container,
     IconButton,
     ButtonGroup,
     Editable,
     EditablePreview,
     EditableInput,
-    Progress,
 } from "@chakra-ui/react";
 import { IoIosUndo, IoIosRedo } from "react-icons/io";
 import { IoTrash, IoDesktopOutline } from "react-icons/io5";
@@ -103,7 +98,11 @@ const Builder: Page = () => {
                         }}
                         onBlur={(e) => {
                             const target = e.target as HTMLInputElement;
-                            if ((!isNaN(parseInt(target.value)) && parseInt(target.value) >= 1 && parseInt(target.value) <= maxSlides)) {
+                            if (
+                                !isNaN(parseInt(target.value)) &&
+                                parseInt(target.value) >= 1 &&
+                                parseInt(target.value) <= maxSlides
+                            ) {
                                 setEditorText(slides[Number(slideNumber) - 1]);
                                 setPrevSlide(slideNumber);
                             } else {
@@ -151,31 +150,31 @@ const Builder: Page = () => {
                             </Container>
                             <Container>
                                 <Stack spacing={10} direction="row">
-                                    <CheckboxComp 
-                                        defaultIsChecked 
+                                    <CheckboxComp
+                                        defaultIsChecked
                                         text="Prev"
-                                        onChange= {() => {
-                                            setPrevButton( !prevButton );
+                                        onChange={() => {
+                                            setPrevButton(!prevButton);
                                         }}
-                                        />
-                                    <CheckboxComp 
-                                    defaultIsChecked 
-                                    text="Next"
-                                    onChange= {() => {
-                                        setNextButton( !nextButton );
-                                    }}
                                     />
-                                    <CheckboxComp 
-                                    text="Save"
-                                    onChange= {() => {
-                                        setSaveButton( !saveButton );
-                                    }}
+                                    <CheckboxComp
+                                        defaultIsChecked
+                                        text="Next"
+                                        onChange={() => {
+                                            setNextButton(!nextButton);
+                                        }}
                                     />
-                                    <CheckboxComp 
-                                    text="Print"
-                                    onChange= {() => {
-                                        setPrintButton( !printButton );
-                                    }}
+                                    <CheckboxComp
+                                        text="Save"
+                                        onChange={() => {
+                                            setSaveButton(!saveButton);
+                                        }}
+                                    />
+                                    <CheckboxComp
+                                        text="Print"
+                                        onChange={() => {
+                                            setPrintButton(!printButton);
+                                        }}
                                     />
                                 </Stack>
                             </Container>
@@ -194,18 +193,27 @@ const Builder: Page = () => {
                         py={8}
                         bg="white"
                         mt={4}
+                        position="relative"
                     >
                         <MarkdownRenderer>{editorText}</MarkdownRenderer>
-                        <ModulePreview
-                            previous={prevButton}
-                            next={nextButton}
-                            save={saveButton}
-                            print={printButton}
-                            progressValue={(slideNumber / maxSlides) * 100}
-                            variant={""}
+                        <Box
+                            position="absolute"
+                            bottom="0"
+                            right="0"
+                            left="0"
+                            margin="10px"
                         >
-                            {}
-                        </ModulePreview>
+                            <ModulePreview
+                                previous={prevButton}
+                                next={nextButton}
+                                save={saveButton}
+                                print={printButton}
+                                progressValue={(slideNumber / maxSlides) * 100}
+                                variant={""}
+                            >
+                                {}
+                            </ModulePreview>
+                        </Box>
                     </Box>
                     <Box display="flex" w="80%" justifyContent="flex-end">
                         <Flex>

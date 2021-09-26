@@ -53,6 +53,27 @@ const ToolsPage: Page = () => {
                 url: "/api/tool/post",
                 data: {
                     title: "Untitled Tool",
+                    type: "",
+                    thumnbnail: "",
+                    video: "",
+                    description: "",
+                    linkedModuleID: undefined,
+                    relatedResources: [
+                        ["", ""],
+                        ["", ""],
+                        ["", ""],
+                    ],
+                    relatedStories: [
+                        ["", ""],
+                        ["", ""],
+                        ["", ""],
+                    ],
+                    externalResources: [
+                        ["", ""],
+                        ["", ""],
+                        ["", ""],
+                    ],
+                    relatedToolsIDs: [null, null, null],
                 },
             });
             router.push({
@@ -172,7 +193,7 @@ const ToolsPage: Page = () => {
                                 title={tool["title"]}
                                 creators={tool["createdBy"]}
                                 updated={date}
-                                module={tool["linkedModuleID"] !== null}
+                                module={tool["linkedModuleID"] !== undefined}
                                 published={tool["status"] === "published"}
                                 onLinkModule={onLinkModule}
                                 onPublish={() => onPublish(tool["title"])}

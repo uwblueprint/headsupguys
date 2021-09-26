@@ -35,6 +35,7 @@ export interface ToolHomePageProps {
     relatedStories: string[][];
     externalResources: string[][];
     relatedToolsIDs: string[];
+    allModules: string[][];
     onChangeInput: (
         target: string | string[],
         type: string,
@@ -55,6 +56,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
     relatedStories,
     externalResources,
     relatedToolsIDs,
+    allModules,
     onChangeInput,
 }) => {
     const [openModal, setOpenModal] = useState(false);
@@ -147,16 +149,33 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                     <Select
                         placeholder={"Select option"}
                         size={"lg"}
-                        value={linkedModuleID}
-                        onChange={(e) =>
-                            onChangeInput(e.target.value, "linkedModuleID")
-                        }
+                        id={"SelectModule"}
+                        // onChange={(e) => {
+                        //     const newModuleID = allModules[0][e.target.value];
+                        //     onChangeInput(newModuleID, "linkedModuleID");
+                        //     console.log("raa", linkedModuleID);
+                        //     console.log(
+                        //         "boo",
+                        //         document.getElementById("SelectModule").value,
+                        //     );
+                        // }}
+                        onChange={(e) => {
+                            console.log(allModules[1][e.target.value]);
+                            // document.getElementById("SelectModule").value =
+                            //     allModules[0][e.target.value];
+                            // console.log(
+                            //     "newww",
+                            //     e.target.value,
+                            //     "next",
+                            //     allModules[0],
+                            // );
+                        }}
                     >
-                        <option>Module 1</option>
-                        <option>Module 2</option>
-                        <option>Module 3</option>
-                        <option>Module 4</option>
-                        <option>Module 5</option>
+                        {(allModules[0] ?? []).map((moduleNames, index) => (
+                            <option key={index} value={index}>
+                                {moduleNames}
+                            </option>
+                        ))}
                     </Select>
                 </FormControl>
                 <FormControl>
@@ -367,14 +386,14 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                             key={choice + index}
                             placeholder={"Select option"}
                             mb={"3"}
-                            value={relatedToolsIDs[index]}
-                            onChange={(e) =>
-                                onChangeInput(
-                                    e.target.value,
-                                    "relatedToolsIDs",
-                                    index,
-                                )
-                            }
+                            // value={relatedToolsIDs[index]}
+                            // onChange={(e) =>
+                            //     onChangeInput(
+                            //         e.target.value,
+                            //         "relatedToolsIDs",
+                            //         index,
+                            //     )
+                            // }
                         >
                             {(
                                 relatedToolsList.filter((item) => {

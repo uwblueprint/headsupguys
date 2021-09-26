@@ -39,7 +39,7 @@ const ToolBuilder: Page = () => {
         thumbnail: "",
         video: "",
         description: "",
-        linkedModuleID: null,
+        linkedModuleID: undefined,
         relatedResources: [
             ["", ""],
             ["", ""],
@@ -55,12 +55,14 @@ const ToolBuilder: Page = () => {
             ["", ""],
             ["", ""],
         ],
-        relatedToolsIDs: [null, null, null],
+        relatedToolsIDs: [undefined, undefined, undefined],
     };
     //Sets useState of tool to a copy of the default tool
     const [toolList, setToolList] = useState(
         JSON.parse(JSON.stringify(defaultTool)),
     );
+
+    const [allModules, setAllModules] = useState([[], []]);
     //Remembers the last saved tool
     const [lastSavedTool, setLastSavedTool] = useState(
         JSON.parse(JSON.stringify(defaultTool)),
@@ -77,11 +79,24 @@ const ToolBuilder: Page = () => {
                     newTool[property] = response.data[property];
                 }
             }
-            // newTool.title = response.data.title;
-            // console.log(newTool);
-            // console.log(response.data);
-            // console.log(toolList, newTool);
             setToolList(newTool);
+        } catch (err) {
+            console.log(err);
+            //TODO: update error handling
+        }
+    };
+    const getAllModules = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: "/api/module/getAll",
+            });
+            const newAllModules = [[], []];
+            for (const module in response.data) {
+                newAllModules[0].push(response.data[module]._id);
+                newAllModules[1].push(response.data[module].title);
+            }
+            setAllModules(newAllModules);
         } catch (err) {
             console.log(err);
             //TODO: update error handling
@@ -89,9 +104,12 @@ const ToolBuilder: Page = () => {
     };
     useEffect(() => {
         getTool();
+        getAllModules();
     }, []);
+
     const saveTool = async () => {
         console.log("Self Check Questions:", questionList);
+        console.log("Tool Homepage:", toolList);
         try {
             await axios({
                 method: "PUT",
@@ -102,25 +120,10 @@ const ToolBuilder: Page = () => {
             console.log(err);
         }
     };
-    const allModules = async () => {
-        try {
-            const response = await axios({
-                method: "GET",
-                url: "/api/modules",
-            });
-            console.log("allModules", response);
-            // const filteredTools = response.data.filter((t) => {
-            //     return t["status"] === selectedTab;
-            // });
 
-            // setToolsArray(filteredTools);
-        } catch (err) {
-            console.log(err);
-            //TODO: update error handling
-        }
-    };
     //Hangles all changes of input to the tool page
     const changeInput = (target, type, index1 = null, index2 = null) => {
+        console.log(target);
         const newTool = JSON.parse(JSON.stringify(toolList));
         if (index2 != null) {
             //For fields with just a nested array of choices eg related resources
@@ -134,6 +137,7 @@ const ToolBuilder: Page = () => {
         }
         checkRequiredTool(newTool, questionList);
         setToolList(newTool);
+        console.log(newTool.linkedModuleID);
     };
 
     const clearToolHomePage = () => {
@@ -467,7 +471,6 @@ const ToolBuilder: Page = () => {
         const newList = listOfQuestions;
         for (let i = 0; i < newList.length; i++) {
             newList[i].questionNumber = i + 1;
-            console.log(newList[i]._id);
         }
         setQuestionList(newList);
         checkRequiredTool(toolList, newList);

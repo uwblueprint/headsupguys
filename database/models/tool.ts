@@ -27,6 +27,7 @@ const ToolSchema = new Schema<ToolInterface>(
     {
         title: {
             type: String,
+            default: "Untitled Tool",
             required: true,
         },
         thumbnail: String,
@@ -36,7 +37,7 @@ const ToolSchema = new Schema<ToolInterface>(
         linkedModuleID: {
             type: Schema.Types.ObjectId,
             ref: "Module",
-            default: null,
+            default: undefined,
         },
         relatedResources: [{ title: String, url: String }],
         relatedStories: [{ title: String, url: String }],
@@ -44,11 +45,13 @@ const ToolSchema = new Schema<ToolInterface>(
         selfCheckGroupID: {
             type: Schema.Types.ObjectId,
             ref: "SelfCheckGroup",
+            default: undefined,
         },
         relatedToolsIDs: [
             {
                 type: Schema.Types.ObjectId,
                 ref: "Tool",
+                default: undefined,
             },
         ],
         status: {

@@ -46,6 +46,7 @@ const ToolsPage: Page = () => {
             //TODO: update error handling
         }
     };
+
     const createTool = async () => {
         try {
             const response = await axios({
@@ -100,11 +101,13 @@ const ToolsPage: Page = () => {
         //TODO: Implement publishing the tool in the db
     };
 
-    const onDelete = (toolName, id) => {
+    const onDelete = (e, toolName, id) => {
         setModalMode("delete");
         setSelectedTool(toolName);
         setSelectedToolId(id);
         onOpen();
+        console.log(e);
+        e.stopPropagation();
     };
 
     const deleteTool = async () => {
@@ -186,26 +189,29 @@ const ToolsPage: Page = () => {
                     </Button>
                 </Flex>
                 <Stack>
-                    {toolsArray.map((tool, idx) => {
+                    {toolsArray.map((tool) => {
                         return (
                             <ToolCard
-                                key={idx}
-                                title={tool["title"]}
-                                creators={tool["createdBy"]}
+                                key={tool._id}
+                                id={tool._id}
+                                title={tool.title}
+                                creators={tool.createdBy}
                                 updated={date}
-                                module={tool["linkedModuleID"] !== undefined}
-                                published={tool["status"] === "published"}
-                                onLinkModule={onLinkModule}
-                                onPublish={() => onPublish(tool["title"])}
-                                onUnlinkModule={() => {
+                                module={tool.linkedModuleID !== undefined}
+                                published={tool.status === "published"}
+                                onLinkModule={(e) => {
+                                    onLinkModule;
+                                }}
+                                onPublish={(e) => {
+                                    onPublish(tool.title);
+                                }}
+                                onUnlinkModule={(e) => {
                                     console.log("unlink");
                                 }}
-                                onUnpublish={() => {
+                                onUnpublish={(e) => {
                                     console.log("unpub");
                                 }}
-                                onDelete={() =>
-                                    onDelete(tool["title"], tool["_id"])
-                                }
+                                onDelete={onDelete}
                             />
                         );
                     })}

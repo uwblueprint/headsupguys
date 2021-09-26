@@ -75,6 +75,13 @@ const ToolBuilder: Page = () => {
             });
             const newTool = JSON.parse(JSON.stringify(toolList));
             for (const property in newTool) {
+                console.log(
+                    property,
+                    "prop",
+                    newTool[property],
+                    "res",
+                    response.data[property],
+                );
                 if (response.data[property] != null) {
                     newTool[property] = response.data[property];
                 }
@@ -104,6 +111,7 @@ const ToolBuilder: Page = () => {
         }
     };
     useEffect(() => {
+        console.log("ToolList", toolList);
         getTool();
         getAllModules();
     }, []);

@@ -204,7 +204,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                             color="blue.400"
                                             isTruncated
                                             textDecoration={
-                                                link[2][index][0] != ""
+                                                link[2][index][0] != undefined
                                                     ? "underline"
                                                     : "default"
                                             }
@@ -216,7 +216,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                             }}
                                         >
                                             {`${
-                                                link[2][index][0] != ""
+                                                link[2][index][0] != undefined
                                                     ? link[2][index][0]
                                                     : "+ Add Link"
                                             }`}

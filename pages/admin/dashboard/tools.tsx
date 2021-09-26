@@ -90,14 +90,23 @@ const ToolsPage: Page = () => {
         filterTools();
     }, [selectedTab, refresh]);
 
-    const onLinkModule = () => {
+    const onLinkModule = (e) => {
         console.log("hello");
+        e.stopPropagation();
     };
 
-    const onPublish = (toolName) => {
+    const onPublish = (e, toolName) => {
         setModalMode("publish");
         setSelectedTool(toolName);
         onOpen();
+        e.stopPropagation();
+        //TODO: Implement publishing the tool in the db
+    };
+    const onUnpublish = (e, toolName) => {
+        setModalMode("draft");
+        setSelectedTool(toolName);
+        onOpen();
+        e.stopPropagation();
         //TODO: Implement publishing the tool in the db
     };
 
@@ -106,7 +115,6 @@ const ToolsPage: Page = () => {
         setSelectedTool(toolName);
         setSelectedToolId(id);
         onOpen();
-        console.log(e);
         e.stopPropagation();
     };
 
@@ -200,16 +208,17 @@ const ToolsPage: Page = () => {
                                 module={tool.linkedModuleID !== undefined}
                                 published={tool.status === "published"}
                                 onLinkModule={(e) => {
-                                    onLinkModule;
+                                    onLinkModule(e);
                                 }}
                                 onPublish={(e) => {
-                                    onPublish(tool.title);
+                                    onPublish(e, tool.title);
                                 }}
                                 onUnlinkModule={(e) => {
                                     console.log("unlink");
+                                    e.stopPropagation();
                                 }}
                                 onUnpublish={(e) => {
-                                    console.log("unpub");
+                                    onUnpublish(e, tool.title);
                                 }}
                                 onDelete={onDelete}
                             />

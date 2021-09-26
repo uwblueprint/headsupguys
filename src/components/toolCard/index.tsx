@@ -30,7 +30,7 @@ export interface ToolCardProps extends InputProps {
     onUnlinkModule(event: any): any;
     onPublish(event: any): any;
     onUnpublish(event: any): any;
-    onDelete(arg1: any, arg2: any): any;
+    onDelete(event: any, arg2: any, arg3: any): any;
 }
 
 export const ToolCard: React.FC<ToolCardProps> = ({
@@ -68,6 +68,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
     return (
         <SimpleGrid w="100%" columns={2} px={5} py={5} __css={styles.card}>
             <Flex
+                _hover={{ cursor: "pointer" }}
                 onClick={() => {
                     console.log("box clicked");
                     router.push({
@@ -77,121 +78,109 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                 }}
             >
                 <Box bg="lightgrey" w="25%" h="157px" />
-                <Button
-                    onClick={(e) => {
-                        onDelete(e,title, id);
-                        e.stopPropagation();
-                        console.log("button clicked");
-                    }}
-                >
-                    {" "}
-                    Button
-                </Button>
-                {/* <Box px={10} w="75%">
-                        <Flex justify="space-between">
-                            <Heading fontSize={20} fontWeight="500">
-                                {title}
-                                {"  "}
-                                {published && <StarIcon boxSize="0.75em" />}
-                            </Heading>
-                            {published ? (
-                                <Button
-                                    variant="default"
-                                    onClick={(e) => {
-                                        onUnpublish(e);
-                                    }}
-                                >
-                                    Unpublish Tool
-                                </Button>
-                            ) : (
-                                <Flex justify="space-between" w="58%">
-                                    {module ? (
-                                        <>
+                <Box px={10} w="75%">
+                    <Flex justify="space-between">
+                        <Heading fontSize={20} fontWeight="500">
+                            {title}
+                            {"  "}
+                            {published && <StarIcon boxSize="0.75em" />}
+                        </Heading>
+                        {published ? (
+                            <Button
+                                variant="default"
+                                onClick={(e) => {
+                                    onUnpublish(e);
+                                }}
+                            >
+                                Unpublish Tool
+                            </Button>
+                        ) : (
+                            <Flex justify="space-between" w="58%">
+                                {module ? (
+                                    <>
+                                        <Button
+                                            variant="outlineBlack"
+                                            onClick={(e) => {
+                                                onUnlinkModule(e);
+                                            }}
+                                        >
+                                            Unlink Module
+                                        </Button>
+                                        <Button
+                                            variant="default"
+                                            onClick={(e) => {
+                                                onPublish(e);
+                                            }}
+                                        >
+                                            Publish Tool
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Button
+                                            variant="outlineBlack"
+                                            onClick={(e) => {
+                                                onLinkModule(e);
+                                            }}
+                                        >
+                                            Link Module
+                                        </Button>
+                                        <Tooltip
+                                            label="Link a module to publish your tool!"
+                                            hasArrow
+                                            placement="top"
+                                        >
                                             <Button
-                                                variant="outlineBlack"
-                                                onClick={(e) => {
-                                                    onUnlinkModule;
+                                                isDisabled
+                                                _hover={{
+                                                    pointerEvents: "none",
                                                 }}
-                                            >
-                                                Unlink Module
-                                            </Button>
-                                            <Button
-                                                variant="default"
                                                 onClick={(e) => {
-                                                    onPublish;
+                                                    onPublish(e);
                                                 }}
                                             >
                                                 Publish Tool
                                             </Button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Button
-                                                variant="outlineBlack"
-                                                onClick={(e) => {
-                                                    onLinkModule;
-                                                }}
-                                            >
-                                                Link Module
-                                            </Button>
-                                            <Tooltip
-                                                label="Link a module to publish your tool!"
-                                                hasArrow
-                                                placement="top"
-                                            >
-                                                <Button
-                                                    isDisabled
-                                                    _hover={{
-                                                        pointerEvents: "none",
-                                                    }}
-                                                    onClick={(e) => {
-                                                        onPublish;
-                                                    }}
-                                                >
-                                                    Publish Tool
-                                                </Button>
-                                            </Tooltip>
-                                        </>
-                                    )}
-                                    <IconButton
-                                        aria-label="Delete tool"
-                                        variant="ghost"
-                                        icon={<DeleteIcon />}
-                                        onClick={(e) => {
-                                            console.log("deleted");
-                                            onDelete;
-                                            e.stopPropagation;
-                                        }}
-                                    />
-                                </Flex>
-                            )}
-                        </Flex>
-                        <br />
-                        <Text fontSize={16}>Created By: {creatorsText}</Text>
-                        {module && (
-                            <Tag
-                                bg="brand.lime"
-                                color="black"
-                                borderRadius="full"
-                                variant="solid"
-                            >
-                                <TagLeftIcon boxSize="12px" as={CheckIcon} />
-                                <TagLabel>
-                                    {published
-                                        ? "Module Connected"
-                                        : "Module Linked"}
-                                </TagLabel>
-                            </Tag>
+                                        </Tooltip>
+                                    </>
+                                )}
+                                <IconButton
+                                    aria-label="Delete tool"
+                                    variant="ghost"
+                                    icon={<DeleteIcon />}
+                                    onClick={(e) => {
+                                        onDelete(e, title, id);
+                                    }}
+                                />
+                            </Flex>
                         )}
-                        <Text fontSize={16} align="right">
-                            Last Updated{" "}
-                            {lastUpdated === 0
-                                ? "Today"
-                                : lastUpdated === 1
-                                ? "Yesterday"
-                                : lastUpdated + " days ago"}
-                        </Text>
-                    </Box> */}
+                    </Flex>
+                    <br />
+                    <Text fontSize={16}>Created By: {creatorsText}</Text>
+                    {module && (
+                        <Tag
+                            bg="brand.lime"
+                            color="black"
+                            borderRadius="full"
+                            variant="solid"
+                        >
+                            <TagLeftIcon boxSize="12px" as={CheckIcon} />
+                            <TagLabel>
+                                {published
+                                    ? "Module Connected"
+                                    : "Module Linked"}
+                            </TagLabel>
+                        </Tag>
+                    )}
+                    <Text fontSize={16} align="right">
+                        Last Updated{" "}
+                        {lastUpdated === 0
+                            ? "Today"
+                            : lastUpdated === 1
+                            ? "Yesterday"
+                            : lastUpdated + " days ago"}
+                    </Text>
+                </Box>
             </Flex>
         </SimpleGrid>
     );

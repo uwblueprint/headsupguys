@@ -33,7 +33,7 @@ const ToolBuilder: Page = () => {
 
     //Self check tool object
     const defaultTool = {
-        _id: toolID, //Replace with real id once connected to database
+        _id: toolID,
         title: "",
         type: "",
         thumbnail: "",
@@ -79,6 +79,7 @@ const ToolBuilder: Page = () => {
                     newTool[property] = response.data[property];
                 }
             }
+            console.log(newTool);
             setToolList(newTool);
         } catch (err) {
             console.log(err);

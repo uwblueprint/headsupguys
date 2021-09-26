@@ -133,10 +133,11 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                         width={"full"}
                         size={"lg"}
                         isRequired
-                        onChange={(e) =>
-                            onChangeInput(e.target.value, "description")
-                        }
-                        value={description}
+                        onChange={(e) => {
+                            onChangeInput(e.target.value, "description");
+                            console.log(description);
+                        }}
+                        // value={description}
                         placeholder="Description"
                     />
                 </FormControl>
@@ -149,30 +150,16 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                     <Select
                         placeholder={"Select option"}
                         size={"lg"}
-                        id={"SelectModule"}
-                        // onChange={(e) => {
-                        //     const newModuleID = allModules[0][e.target.value];
-                        //     onChangeInput(newModuleID, "linkedModuleID");
-                        //     console.log("raa", linkedModuleID);
-                        //     console.log(
-                        //         "boo",
-                        //         document.getElementById("SelectModule").value,
-                        //     );
-                        // }}
-                        onChange={(e) => {
-                            console.log(allModules[1][e.target.value]);
-                            // document.getElementById("SelectModule").value =
-                            //     allModules[0][e.target.value];
-                            // console.log(
-                            //     "newww",
-                            //     e.target.value,
-                            //     "next",
-                            //     allModules[0],
-                            // );
-                        }}
+                        value={linkedModuleID}
+                        onChange={(e) =>
+                            onChangeInput(e.target.value, "linkedModuleID")
+                        }
                     >
-                        {(allModules[0] ?? []).map((moduleNames, index) => (
-                            <option key={index} value={index}>
+                        {(allModules[1] ?? []).map((moduleNames, index) => (
+                            <option
+                                key={allModules[0][index]}
+                                value={allModules[0][index]}
+                            >
                                 {moduleNames}
                             </option>
                         ))}

@@ -205,46 +205,55 @@ function mockTools(moduleIDs, groupIDs, toolIDs) {
             description: faker.lorem.sentences(),
             linkedModuleID: i < MODULE_COUNT ? moduleIDs[i] : undefined,
             relatedResources: [
-                {
-                    title: faker.lorem.words(),
-                    url: faker.internet.url(),
-                },
-                {
-                    title: faker.lorem.words(),
-                    url: faker.internet.url(),
-                },
-                {
-                    title: faker.lorem.words(),
-                    url: faker.internet.url(),
-                },
+                [
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                ],
+                [
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                ],
+                [
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                ],
             ],
             relatedStories: [
-                {
-                    title: faker.lorem.words(),
-                    url: faker.internet.url(),
-                },
-                {
-                    title: faker.lorem.words(),
-                    url: faker.internet.url(),
-                },
-                {
-                    title: faker.lorem.words(),
-                    url: faker.internet.url(),
-                },
+                [
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                ],
+                [
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                ],
+                [
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                ],
             ],
             externalResources: [
-                {
-                    title: faker.lorem.words(),
-                    url: faker.internet.url(),
-                },
-                {
-                    title: faker.lorem.words(),
-                    url: faker.internet.url(),
-                },
-                {
-                    title: faker.lorem.words(),
-                    url: faker.internet.url(),
-                },
+                [
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                ],
+                [
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                ],
+                [
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                    [faker.lorem.words(), faker.internet.url()],
+                ],
             ],
             selfCheckGroupID: i < GROUP_COUNT ? groupIDs[i] : null,
             relatedToolsIDs,

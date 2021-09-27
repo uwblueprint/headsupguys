@@ -39,7 +39,7 @@ const ToolBuilder: Page = () => {
         thumbnail: "",
         video: "",
         description: "",
-        linkedModuleID: undefined,
+        linkedModuleID: "",
         relatedResources: [
             ["", ""],
             ["", ""],
@@ -55,7 +55,7 @@ const ToolBuilder: Page = () => {
             ["", ""],
             ["", ""],
         ],
-        relatedToolsIDs: [undefined, undefined, undefined],
+        relatedToolsIDs: ["", "", ""],
     };
     //Sets useState of tool to a copy of the default tool
     const [toolList, setToolList] = useState(
@@ -63,6 +63,7 @@ const ToolBuilder: Page = () => {
     );
 
     const [allModules, setAllModules] = useState([[], []]);
+    const [allTools, setAllTools] = useState([[], []]);
     //Remembers the last saved tool
     const [lastSavedTool, setLastSavedTool] = useState(
         JSON.parse(JSON.stringify(defaultTool)),
@@ -82,9 +83,7 @@ const ToolBuilder: Page = () => {
                     "res",
                     response.data[property],
                 );
-                if (response.data[property] != null) {
-                    newTool[property] = response.data[property];
-                }
+                newTool[property] = response.data[property];
             }
             console.log(newTool);
             setToolList(newTool);
@@ -110,10 +109,28 @@ const ToolBuilder: Page = () => {
             //TODO: update error handling
         }
     };
+    const getAllTools = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: "/api/tool/getAll",
+            });
+            const newAllTools = [[], []];
+            for (const tool in response.data) {
+                newAllTools[0].push(response.data[tool]._id);
+                newAllTools[1].push(response.data[tool].title);
+            }
+            setAllTools(newAllTools);
+        } catch (err) {
+            console.log(err);
+            //TODO: update error handling
+        }
+    };
     useEffect(() => {
         console.log("ToolList", toolList);
         getTool();
         getAllModules();
+        getAllTools();
     }, []);
 
     const saveTool = async () => {
@@ -690,6 +707,7 @@ const ToolBuilder: Page = () => {
                         externalResources={toolList.externalResources}
                         relatedToolsIDs={toolList.relatedToolsIDs}
                         allModules={allModules}
+                        allTools={allTools}
                         onChangeInput={changeInput}
                     ></ToolHomePage>
                 )}

@@ -12,12 +12,12 @@ export interface ToolInterface {
     type: string;
     video: string;
     description: string;
-    linkedModuleID: Schema.Types.ObjectId;
-    relatedResources: [{ title: string; url: string }];
-    relatedStories: [{ title: string; url: string }];
-    externalResources: [{ title: string; url: string }];
-    selfCheckGroupID: Schema.Types.ObjectId;
-    relatedToolsIDs: [Schema.Types.ObjectId];
+    linkedModuleID: string;
+    relatedResources: [[string, string], [string, string], [string, string]];
+    relatedStories: [[string, string], [string, string], [string, string]];
+    externalResources: [[string, string], [string, string], [string, string]];
+    selfCheckGroupID: string;
+    relatedToolsIDs: [string];
     status: StatusType;
     editing: boolean;
     createdBy: string[];
@@ -30,30 +30,28 @@ const ToolSchema = new Schema<ToolInterface>(
             default: "Untitled Tool",
             required: true,
         },
-        thumbnail: String,
-        type: String,
-        video: String,
-        description: String,
-        linkedModuleID: {
-            type: Schema.Types.ObjectId,
-            ref: "Module",
-            default: undefined,
-        },
-        relatedResources: [{ title: String, url: String }],
-        relatedStories: [{ title: String, url: String }],
-        externalResources: [{ title: String, url: String }],
-        selfCheckGroupID: {
-            type: Schema.Types.ObjectId,
-            ref: "SelfCheckGroup",
-            default: undefined,
-        },
-        relatedToolsIDs: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Tool",
-                default: undefined,
-            },
+        thumbnail: { type: String, default: "" },
+        type: { type: String, default: "" },
+        video: { type: String, default: "" },
+        description: { type: String, default: "" },
+        linkedModuleID: { type: String, default: "" },
+        relatedResources: [
+            [String, String],
+            [String, String],
+            [String, String],
         ],
+        relatedStories: [
+            [String, String],
+            [String, String],
+            [String, String],
+        ],
+        externalResources: [
+            [String, String],
+            [String, String],
+            [String, String],
+        ],
+        selfCheckGroupID: { type: String, default: "" },
+        relatedToolsIDs: [{ type: String, default: "" }],
         status: {
             type: StatusType,
             default: StatusType.DRAFT,

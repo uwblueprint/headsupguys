@@ -36,6 +36,7 @@ export interface ToolHomePageProps {
     externalResources: string[][];
     relatedToolsIDs: string[];
     allModules: string[][];
+    allTools: string[][];
     onChangeInput: (
         target: string | string[],
         type: string,
@@ -46,6 +47,7 @@ export interface ToolHomePageProps {
 
 //Self check question card component
 export const ToolHomePage: React.FC<ToolHomePageProps> = ({
+    toolId,
     title,
     type,
     video,
@@ -57,6 +59,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
     externalResources,
     relatedToolsIDs,
     allModules,
+    allTools,
     onChangeInput,
 }) => {
     const [openModal, setOpenModal] = useState(false);
@@ -113,9 +116,10 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                         _valid={{ outline: "red" }}
                         size={"lg"}
                         isRequired
-                        onChange={(e) =>
-                            onChangeInput(e.target.value, "thumbnail")
-                        }
+                        onChange={(e) => {
+                            onChangeInput(e.target.value, "thumbnail");
+                            console.log(thumbnail);
+                        }}
                         value={thumbnail}
                         placeholder="URL"
                         isTruncated
@@ -137,7 +141,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                             onChangeInput(e.target.value, "description");
                             console.log(description);
                         }}
-                        // value={description}
+                        value={description}
                         placeholder="Description"
                     />
                 </FormControl>
@@ -151,9 +155,10 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                         placeholder={"Select option"}
                         size={"lg"}
                         value={linkedModuleID}
-                        onChange={(e) =>
-                            onChangeInput(e.target.value, "linkedModuleID")
-                        }
+                        onChange={(e) => {
+                            console.log(e.target.value);
+                            onChangeInput(e.target.value, "linkedModuleID");
+                        }}
                     >
                         {(allModules[1] ?? []).map((moduleNames, index) => (
                             <option
@@ -204,7 +209,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                             color="blue.400"
                                             isTruncated
                                             textDecoration={
-                                                link[2][index][0] != undefined
+                                                link[2][index][0] != ""
                                                     ? "underline"
                                                     : "default"
                                             }
@@ -216,7 +221,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                             }}
                                         >
                                             {`${
-                                                link[2][index][0] != undefined
+                                                link[2][index][0] != ""
                                                     ? link[2][index][0]
                                                     : "+ Add Link"
                                             }`}
@@ -373,32 +378,39 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                             key={choice + index}
                             placeholder={"Select option"}
                             mb={"3"}
-                            // value={relatedToolsIDs[index]}
-                            // onChange={(e) =>
-                            //     onChangeInput(
-                            //         e.target.value,
-                            //         "relatedToolsIDs",
-                            //         index,
-                            //     )
-                            // }
+                            value={relatedToolsIDs[index]}
+                            onChange={(e) =>
+                                onChangeInput(
+                                    e.target.value,
+                                    "relatedToolsIDs",
+                                    index,
+                                )
+                            }
                         >
                             {(
-                                relatedToolsList.filter((item) => {
-                                    return !relatedToolsIDs
-                                        .filter((item) => {
-                                            return (
-                                                relatedToolsIDs.indexOf(item) !=
-                                                index
-                                            );
-                                        })
-                                        .includes(item);
+                                allTools[0].filter((id) => {
+                                    return (
+                                        !relatedToolsIDs
+                                            .filter((item) => {
+                                                return (
+                                                    relatedToolsIDs.indexOf(
+                                                        item,
+                                                    ) != index
+                                                );
+                                            })
+                                            .includes(id) && id != toolId
+                                    );
                                 }) ?? []
-                            ).map((selection) => (
+                            ).map((selection, index) => (
                                 <option
                                     key={choice + selection}
                                     value={selection}
                                 >
-                                    {selection}
+                                    {
+                                        allTools[1][
+                                            allTools[0].indexOf(selection)
+                                        ]
+                                    }
                                 </option>
                             ))}
                         </Select>

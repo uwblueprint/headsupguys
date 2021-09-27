@@ -131,10 +131,13 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                             placement="top"
                                         >
                                             <Button
-                                                isDisabled
+                                                variant="solid"
                                                 _hover={{
-                                                    pointerEvents: "none",
+                                                    bg: "black",
                                                 }}
+                                                color={"white"}
+                                                background={"black"}
+                                                isDisabled
                                                 onClick={(e) => {
                                                     onPublish(e);
                                                 }}

@@ -58,7 +58,7 @@ const ToolsPage: Page = () => {
                     thumnbnail: "",
                     video: "",
                     description: "",
-                    linkedModuleID: undefined,
+                    linkedModuleID: "",
                     relatedResources: [
                         ["", ""],
                         ["", ""],
@@ -74,7 +74,7 @@ const ToolsPage: Page = () => {
                         ["", ""],
                         ["", ""],
                     ],
-                    relatedToolsIDs: [null, null, null],
+                    relatedToolsIDs: ["", "", ""],
                 },
             });
             router.push({
@@ -205,7 +205,7 @@ const ToolsPage: Page = () => {
                                 title={tool.title}
                                 creators={tool.createdBy}
                                 updated={date}
-                                module={tool.linkedModuleID !== undefined}
+                                module={tool.linkedModuleID !== null}
                                 published={tool.status === "published"}
                                 onLinkModule={(e) => {
                                     onLinkModule(e);

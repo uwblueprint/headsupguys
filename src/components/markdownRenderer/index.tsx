@@ -45,6 +45,5 @@ const BaseRenderer: React.FC<{ content: string }> = ({ content }) => (
         >
             {content.replace("$[", "[")}
         </ReactMarkdown>
-        {content}
     </div>
 );

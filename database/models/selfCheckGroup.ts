@@ -2,15 +2,12 @@ import { models, model, Schema, Types } from "mongoose";
 
 interface SelfCheckGroupInterface {
     _id: Types.ObjectId;
-    questionIDs: [Types.ObjectId];
+    questionIDs: string[];
 }
 
 const SelfCheckGroupSchema = new Schema<SelfCheckGroupInterface>(
     {
-        questionIDs: {
-            type: [{ type: Schema.Types.ObjectId, ref: "SelfCheckQuestion" }],
-            default: [],
-        },
+        questionIDs: [String],
     },
     {
         timestamps: true,
@@ -18,7 +15,6 @@ const SelfCheckGroupSchema = new Schema<SelfCheckGroupInterface>(
 );
 
 const SelfCheckGroup =
-    models.SelfCheckGroup ||
-    model("SelfCheckGroup", SelfCheckGroupSchema, "self_check_groups");
+    models.SelfCheckGroup || model("SelfCheckGroup", SelfCheckGroupSchema);
 
-export { SelfCheckGroup };
+export { SelfCheckGroup, SelfCheckGroupSchema };

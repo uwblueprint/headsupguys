@@ -76,13 +76,6 @@ const ToolBuilder: Page = () => {
             });
             const newTool = JSON.parse(JSON.stringify(toolList));
             for (const property in newTool) {
-                console.log(
-                    property,
-                    "prop",
-                    newTool[property],
-                    "res",
-                    response.data[property],
-                );
                 newTool[property] = response.data[property];
             }
             console.log(newTool);
@@ -136,6 +129,9 @@ const ToolBuilder: Page = () => {
     const saveTool = async () => {
         console.log("Self Check Questions:", questionList);
         console.log("Tool Homepage:", toolList);
+        if (toolList.title == "") {
+            toolList.title = "Untitled Tool";
+        }
         try {
             await axios({
                 method: "PUT",
@@ -149,7 +145,6 @@ const ToolBuilder: Page = () => {
 
     //Hangles all changes of input to the tool page
     const changeInput = (target, type, index1 = null, index2 = null) => {
-        console.log(target);
         const newTool = JSON.parse(JSON.stringify(toolList));
         if (index2 != null) {
             //For fields with just a nested array of choices eg related resources
@@ -163,7 +158,6 @@ const ToolBuilder: Page = () => {
         }
         checkRequiredTool(newTool, questionList);
         setToolList(newTool);
-        console.log(newTool.linkedModuleID);
     };
 
     const clearToolHomePage = () => {

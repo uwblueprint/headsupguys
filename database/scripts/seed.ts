@@ -119,10 +119,6 @@ function mockQuestions() {
 function mockGroups(questionIDs) {
     const groups = [];
     for (let i = 0; i < GROUP_COUNT; i++) {
-        // when QUESTIONS_PER_GROUP = 4:
-        // id: 0   questionIDs: [ questionIDs[0], questionIDs[1], questionIDs[2], questionIDs[3] ]
-        // id: 1   questionIDs: [ questionIDs[4], questionIDs[5], questionIDs[6], questionIDs[7] ]
-        // id: 2   questionIDs: [ questionIDs[8], questionIDs[9], questionIDs[10], questionIDs[11] ]
         groups.push({
             questionIDs: questionIDs.slice(
                 QUESTIONS_PER_GROUP * i,
@@ -192,7 +188,7 @@ function mockTools(moduleIDs, groupIDs, toolIDs) {
             const index = Math.floor(Math.random() * TOOL_COUNT);
             // prevent a tool from relating to itself and another tool multiple times
             if (index != i && relatedToolsIDs.indexOf(toolIDs[index]) === -1) {
-                relatedToolsIDs.push(toolIDs[index]);
+                relatedToolsIDs.push(String(toolIDs[index]));
             }
         }
 
@@ -203,7 +199,7 @@ function mockTools(moduleIDs, groupIDs, toolIDs) {
             type: faker.lorem.words(),
             video: faker.internet.url(),
             description: faker.lorem.sentences(),
-            linkedModuleID: i < MODULE_COUNT ? moduleIDs[i] : undefined,
+            linkedModuleID: i < MODULE_COUNT ? String(moduleIDs[i]) : undefined,
             relatedResources: [
                 [
                     [faker.lorem.words(), faker.internet.url()],
@@ -255,7 +251,7 @@ function mockTools(moduleIDs, groupIDs, toolIDs) {
                     [faker.lorem.words(), faker.internet.url()],
                 ],
             ],
-            selfCheckGroupID: i < GROUP_COUNT ? groupIDs[i] : null,
+            selfCheckGroupID: i < GROUP_COUNT ? String(groupIDs[i]) : null,
             relatedToolsIDs,
             status: statusTypes[i % statusTypes.length],
             editing: i == 1,

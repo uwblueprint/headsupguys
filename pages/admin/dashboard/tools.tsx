@@ -49,7 +49,7 @@ const ToolsPage: Page = () => {
 
     const createTool = async () => {
         try {
-            const response = await axios({
+            const toolResponse = await axios({
                 method: "POST",
                 url: "/api/tool/post",
                 data: {
@@ -77,9 +77,13 @@ const ToolsPage: Page = () => {
                     relatedToolsIDs: ["", "", ""],
                 },
             });
+            // const selfCheckResponse = await axios({
+            //     method: "POST",
+            //     url: "/api/self-check/post",
+            // });
             router.push({
                 pathname: "/admin/dashboard/toolBuilder",
-                query: { toolID: response.data._id },
+                query: { toolID: toolResponse.data._id },
             });
         } catch (err) {
             console.log(err);

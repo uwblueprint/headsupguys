@@ -10,6 +10,7 @@ import { Slide as slideCollection } from "../models/slide";
 import { Tool as toolCollection } from "../models/tool";
 import { SelfCheckGroup as groupCollection } from "../models/selfCheckGroup";
 import { SelfCheckQuestion as questionCollection } from "../models/selfCheckQuestion";
+import { User as userCollection } from "../models/user";
 
 // seed config
 const QUESTION_COUNT = 24;
@@ -46,6 +47,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
                 db.collection("slides").drop(),
                 db.collection("modules").drop(),
                 db.collection("tools").drop(),
+                db.collection("users").drop()
             ]);
             console.log("Successfully cleared database");
         }

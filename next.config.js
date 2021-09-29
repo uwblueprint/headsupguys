@@ -4,12 +4,11 @@ const removeImports = require("next-remove-imports")({});
 const config = {};
 
 module.exports = withPlugins([removeImports], {
-    webpack(config) {
+    webpack: (config) => {
         config.module.rules.push({
             test: /\.svg$/,
             use: ["@svgr/webpack"],
         });
-
         return config;
     },
 });

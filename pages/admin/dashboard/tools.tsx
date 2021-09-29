@@ -84,16 +84,13 @@ const ToolsPage: Page = () => {
                     {
                         type: "multiple_choice",
                         question: "quieres?",
-                        options: ["1", "2", "3"],
+                        options: [
+                            ["", ""],
+                            ["", ""],
+                            ["", ""],
+                        ],
                         alphanumericInput: true,
-                        questionNumber: "1",
-                    },
-                    {
-                        type: "multiple_choice",
-                        question: "quieres 2?",
-                        options: ["1", "2", "3"],
-                        alphanumericInput: true,
-                        questionNumber: "1",
+                        questionNumber: 1,
                     },
                 ],
             });

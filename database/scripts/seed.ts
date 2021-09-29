@@ -95,8 +95,16 @@ function mockQuestions() {
         "slider",
     ];
     const mockOptions = [
-        [1, 2, 3],
-        ["yes", "no", "maybe"],
+        [
+            ["yes", 1],
+            ["no", 2],
+            ["maybe", 3],
+        ],
+        [
+            ["bad", 0],
+            ["okay", 2],
+            ["good", 4],
+        ],
     ];
 
     const alphanumericOptions = [true, false];

@@ -47,7 +47,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
                 db.collection("slides").drop(),
                 db.collection("modules").drop(),
                 db.collection("tools").drop(),
-                db.collection("users").drop()
+                db.collection("users").drop(),
             ]);
             console.log("Successfully cleared database");
         }

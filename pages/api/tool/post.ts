@@ -4,6 +4,7 @@ const post = async (
     req: NextApiRequest,
     res: NextApiResponse,
 ): Promise<void> => {
+    console.log("tool", req.body);
     await Tool.create(req.body)
         .then((tool) => res.status(200).json(tool))
         .catch((err) => res.status(400).send(err));

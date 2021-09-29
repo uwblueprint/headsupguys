@@ -77,10 +77,26 @@ const ToolsPage: Page = () => {
                     relatedToolsIDs: ["", "", ""],
                 },
             });
-            // const selfCheckResponse = await axios({
-            //     method: "POST",
-            //     url: "/api/self-check/post",
-            // });
+            const selfCheckResponse = await axios({
+                method: "POST",
+                url: "/api/self-check/post",
+                data: [
+                    {
+                        type: "multiple_choice",
+                        question: "quieres?",
+                        options: ["1", "2", "3"],
+                        alphanumericInput: true,
+                        questionNumber: "1",
+                    },
+                    {
+                        type: "multiple_choice",
+                        question: "quieres 2?",
+                        options: ["1", "2", "3"],
+                        alphanumericInput: true,
+                        questionNumber: "1",
+                    },
+                ],
+            });
             router.push({
                 pathname: "/admin/dashboard/toolBuilder",
                 query: { toolID: toolResponse.data._id },

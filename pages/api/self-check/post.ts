@@ -2,13 +2,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { SelfCheckGroup } from "database/models/selfCheckGroup";
 import { SelfCheckQuestion } from "database/models/selfCheckQuestion";
 
-const postSelfCheck = async (
+const post = async (
     req: NextApiRequest,
     res: NextApiResponse,
 ): Promise<void> => {
     // Get a list of self check questions
-    const { questions } = req.body;
-
+    const questions = req.body;
+    console.log("attempting to make group", questions);
     // For each, create a SelfCheckQuestion
     const selfCheckQuestions = await SelfCheckQuestion.insertMany(
         questions,
@@ -27,7 +27,7 @@ const postSelfCheck = async (
         questionIDs: questionIDs,
     });
     selfCheck.save();
-    res.status(200).send(selfCheck);
+    res.status(200).send();
 };
 
-export { postSelfCheck };
+export default post;

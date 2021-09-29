@@ -7,6 +7,7 @@ node_modules
 .env.*
 !.env.example
 .DS_Store
+storybook-static
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend

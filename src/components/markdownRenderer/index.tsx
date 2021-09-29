@@ -7,35 +7,44 @@ import ReactPlayer from "react-player";
 interface MarkdownRendererProps {
     children: string;
 }
+
 export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
     return (
         <>
-            <ReactMarkdown
-                components={{
-                    strong: ({ node, className, children, ...rest }) => (
-                        <strong>{children}</strong>
-                    ),
-                    a: ({ node, className, children, ...rest }) => (
-                        <>
-                            {node.position?.start.offset > 0 &&
-                            props.children.split("\n")[
-                                node.position?.start.line - 1
-                            ][node.position?.start.column - 2] === "$" ? (
-                                <>
-                                    <div>
-                                        <ReactPlayer controls url={rest.href} />
-                                    </div>
-                                </>
-                            ) : (
-                                <a href={rest.href}>{children}</a>
-                            )}
-                        </>
-                    ),
-                }}
-                className={style.markdown}
-            >
-                {props.children}
-            </ReactMarkdown>
+            {props.children.split("\n").map((line) => (
+                <>
+                    {line === "" ? (
+                        <div className="newline" />
+                    ) : (
+                        <BaseRenderer content={line} />
+                    )}
+                </>
+            ))}
         </>
     );
 };
+
+const BaseRenderer: React.FC<{ content: string }> = ({ content }) => (
+    <div className="md-row">
+        <ReactMarkdown
+            components={{
+                a: ({ node, className, children, ...rest }) => (
+                    <>
+                        {content.includes("$[") ? (
+                            <>
+                                <div>
+                                    <ReactPlayer controls url={rest.href} />
+                                </div>
+                            </>
+                        ) : (
+                            <a href={rest.href}>{children}</a>
+                        )}
+                    </>
+                ),
+            }}
+            className={style.markdown + " right"}
+        >
+            {content.replace("$[", "[")}
+        </ReactMarkdown>
+    </div>
+);

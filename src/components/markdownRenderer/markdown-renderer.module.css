@@ -44,9 +44,63 @@
     color: gray;
 }
 
+.markdown a {
+    text-decoration: underline;
+    color: #54c203;
+}
+
+.markdown pre {
+    font: inherit;
+}
+
+.markdown code {
+    white-space: pre;
+    text-decoration: none !important;
+    text-decoration-color: white;
+}
+
+.markdown ul {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 30px;
+}
+
+.markdown ol {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 30px;
+}
+
+.markdown .paragraph {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: gray;
+}
+
 .markdown blockquote {
     color: gray;
     border-left: 1px solid gray;
     margin: 5px;
     padding: 5px;
+}
+.markdown div {
+    display: flex;
+    flex-direction: row;
+}
+.markdown strong {
+    display: inline;
+}
+.markdown em {
+    display: inline;
+}
+
+.markdown .newline {
+    height: 15px;
+}
+
+.markdown .md-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.markdown div {
+    white-space: pre-wrap;
 }

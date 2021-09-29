@@ -70,7 +70,6 @@ export const ToolCard: React.FC<ToolCardProps> = ({
             <Flex
                 _hover={{ cursor: "pointer" }}
                 onClick={() => {
-                    console.log("box clicked");
                     router.push({
                         pathname: "/admin/dashboard/toolBuilder",
                         query: { toolID: id },

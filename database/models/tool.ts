@@ -13,11 +13,11 @@ export interface ToolInterface {
     video: string;
     description: string;
     linkedModuleID: string;
-    relatedResources: [[string, string], [string, string], [string, string]];
-    relatedStories: [[string, string], [string, string], [string, string]];
-    externalResources: [[string, string], [string, string], [string, string]];
+    relatedResources: string[][];
+    relatedStories: string[][];
+    externalResources: string[][];
     selfCheckGroupID: string;
-    relatedToolsIDs: [string];
+    relatedToolsIDs: string[];
     status: StatusType;
     editing: boolean;
     createdBy: string[];

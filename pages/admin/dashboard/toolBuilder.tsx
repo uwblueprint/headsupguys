@@ -76,7 +76,11 @@ const ToolBuilder: Page = () => {
             });
             const newTool = JSON.parse(JSON.stringify(toolList));
             for (const property in newTool) {
-                newTool[property] = response.data[property];
+                if (response.data[property] != undefined) {
+                    newTool[property] = response.data[property];
+                } else {
+                    console.log(property);
+                }
             }
             console.log(newTool);
             setToolList(newTool);

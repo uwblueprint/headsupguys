@@ -31,10 +31,10 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
             useCreateIndex: true,
             useNewUrlParser: true,
         })
+        .then(() => console.log("Successfully connected to database"))
         .catch((err) => console.log(err));
 
     try {
-        console.log("Successfully connected to database");
         if (process.argv[2] != "--init") {
             // destroy previous data
             const db = mongoose.connection.db;

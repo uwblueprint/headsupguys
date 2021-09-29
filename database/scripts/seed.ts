@@ -10,6 +10,7 @@ import { Slide as slideCollection } from "../models/slide";
 import { Tool as toolCollection } from "../models/tool";
 import { SelfCheckGroup as groupCollection } from "../models/selfCheckGroup";
 import { SelfCheckQuestion as questionCollection } from "../models/selfCheckQuestion";
+import { User as userCollection } from "../models/user";
 
 // seed config
 const QUESTION_COUNT = 24;
@@ -18,6 +19,7 @@ const COMPONENT_COUNT = 60;
 const SLIDE_COUNT = 20;
 const MODULE_COUNT = 5;
 const TOOL_COUNT = 4;
+const USER_COUNT = 5;
 
 const QUESTIONS_PER_GROUP = Math.floor(QUESTION_COUNT / GROUP_COUNT);
 const COMPONENTS_PER_SLIDE = Math.floor(COMPONENT_COUNT / SLIDE_COUNT);
@@ -45,6 +47,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
                 db.collection("slides").drop(),
                 db.collection("modules").drop(),
                 db.collection("tools").drop(),
+                db.collection("users").drop(),
             ]);
             console.log("Successfully cleared database");
         }
@@ -81,6 +84,8 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         await toolCollection.insertMany(
             mockTools(moduleIDs, groupIDs, toolIDs),
         );
+
+        await userCollection.insertMany(mockUsers());
 
         console.log("Successfully completed seeding");
         mongoose.connection.close();
@@ -214,4 +219,20 @@ function mockTools(moduleIDs, groupIDs, toolIDs) {
         });
     }
     return tools;
+}
+
+function mockUsers() {
+    const userTypes = ["USER", "ADMIN", "SUPER ADMIN"];
+    const users = [];
+
+    for (let i = 0; i < USER_COUNT; i++) {
+        users.push({
+            email: faker.internet.email(),
+            name: faker.name.findName(),
+            role: userTypes[i % userTypes.length],
+            waiverSigned: i == 0,
+            demographicInfo: {},
+        });
+    }
+    return users;
 }

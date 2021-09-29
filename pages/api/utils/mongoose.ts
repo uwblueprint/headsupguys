@@ -15,6 +15,7 @@ const connectDB =
             useFindAndModify: false,
             useCreateIndex: true,
             useNewUrlParser: true,
+            autoIndex: true,
         });
         return handler(req, res);
     };

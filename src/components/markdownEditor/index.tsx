@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { Text } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import MDEditor, {
@@ -10,19 +11,20 @@ import MDEditor, {
 } from "@uiw/react-md-editor";
 import "@uiw/react-md-editor/dist/markdown-editor.css";
 import "@uiw/react-markdown-preview/dist/markdown.css";
-import Indent from "../../../public/icons/indent.svg";
-import Underline from "../../../public/icons/underline.svg";
-import Videocam from "../../../public/icons/videocam.svg";
-import LeftAlign from "../../../public/icons/left-align.svg";
-import RightAlign from "../../../public/icons/right-align.svg";
-import CenterAlign from "../../../public/icons/center-align.svg";
 
 const underlineCommand: ICommand = {
     name: "underline",
     keyCommand: "underline",
     shortcuts: "ctrlcmd+u",
     buttonProps: { "aria-label": "Add underline text" },
-    icon: <Underline />,
+    icon: (
+        <Image
+            src="/icons/underline.svg"
+            height="12px"
+            width="12px"
+            layout="fixed"
+        />
+    ),
     execute: (state: TextState, api: TextAreaTextApi) => {
         // Adjust the selection to encompass the whole word if the caret is inside one
         const newSelectionRange = selectWord({
@@ -45,7 +47,14 @@ const videoCommand: ICommand = {
     keyCommand: "video",
     shortcuts: "ctrlcmd+y",
     buttonProps: { "aria-label": "Add video", title: "Add video" },
-    icon: <Videocam />,
+    icon: (
+        <Image
+            src="/icons/videocam.svg"
+            height="12px"
+            width="12px"
+            layout="fixed"
+        />
+    ),
     execute: (state: TextState, api: TextAreaTextApi) => {
         // Select everything
         const newSelectionRange = selectWord({
@@ -70,11 +79,18 @@ const indentCommand: ICommand = {
     keyCommand: "indent",
     shortcuts: "ctrlcmd+m",
     buttonProps: { "aria-label": "Indent text", title: "Indent" },
-    icon: <Indent />,
+    icon: (
+        <Image
+            src="/icons/indent.svg"
+            height="12px"
+            width="12px"
+            layout="fixed"
+        />
+    ),
     execute: (state: TextState, api: TextAreaTextApi) => {
-        let modifyText = `$ ${state.selectedText}\n`; // convention: notate indent with $
+        let modifyText = `\` \` ${state.selectedText}\n`; // convention: notate indent with $
         if (!state.selectedText) {
-            modifyText = `$ `;
+            modifyText = `\` \` `;
         }
         api.replaceSelection(modifyText);
     },
@@ -85,7 +101,14 @@ const rightAlignCommand: ICommand = {
     keyCommand: "right-align",
     shortcuts: "ctrlcmd+r",
     buttonProps: { "aria-label": "Add right aligned text" },
-    icon: <RightAlign />,
+    icon: (
+        <Image
+            src="/icons/right-align.svg"
+            height="12px"
+            width="12px"
+            layout="fixed"
+        />
+    ),
     execute: (state: TextState, api: TextAreaTextApi) => {
         // Adjust the selection to encompass the whole word if the caret is inside one
         const newSelectionRange = selectWord({
@@ -108,7 +131,14 @@ const centerAlignCommand: ICommand = {
     keyCommand: "center-align",
     shortcuts: "ctrlcmd+e",
     buttonProps: { "aria-label": "Add center aligned text" },
-    icon: <CenterAlign />,
+    icon: (
+        <Image
+            src="/icons/center-align.svg"
+            height="12px"
+            width="12px"
+            layout="fixed"
+        />
+    ),
     execute: (state: TextState, api: TextAreaTextApi) => {
         // Adjust the selection to encompass the whole word if the caret is inside one
         const newSelectionRange = selectWord({
@@ -131,7 +161,14 @@ const leftAlignCommand: ICommand = {
     keyCommand: "left-align",
     shortcuts: "ctrlcmd+l",
     buttonProps: { "aria-label": "Add left aligned text" },
-    icon: <LeftAlign />,
+    icon: (
+        <Image
+            src="/icons/left-align.svg"
+            height="12px"
+            width="12px"
+            layout="fixed"
+        />
+    ),
     execute: (state: TextState, api: TextAreaTextApi) => {
         // Adjust the selection to encompass the whole word if the caret is inside one
         const newSelectionRange = selectWord({

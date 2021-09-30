@@ -8,7 +8,6 @@ const post = async (
 ): Promise<void> => {
     // Get a list of self check questions
     const questions = req.body;
-    console.log("attempting to make group", questions);
     // For each, create a SelfCheckQuestion
     const selfCheckQuestions = await SelfCheckQuestion.insertMany(
         questions,
@@ -27,7 +26,7 @@ const post = async (
         questionIDs: questionIDs,
     });
     selfCheck.save();
-    res.status(200).send();
+    res.status(200).send(selfCheck);
 };
 
 export default post;

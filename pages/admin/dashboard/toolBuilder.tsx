@@ -30,6 +30,7 @@ export const getServerSideProps = async (context) => {
 const ToolBuilder: Page = () => {
     const router = useRouter();
     const toolID = router.query.toolID;
+    const selfCheckID = router.query.selfCheckID;
 
     //Self check tool object
     const defaultTool = {
@@ -62,6 +63,26 @@ const ToolBuilder: Page = () => {
         JSON.parse(JSON.stringify(defaultTool)),
     );
 
+    //self check card
+    const defaultQuestions = [
+        {
+            _id: selfCheckID, //Replace with real id once connected to database
+            type: "multiple_choice",
+            question: "",
+            options: [
+                ["", ""],
+                ["", ""],
+                ["", ""],
+            ],
+            alphanumericInput: true,
+            questionNumber: 1,
+        },
+    ];
+    const [questionList, setQuestionList] = useState(defaultQuestions);
+    const [lastSavedQuestions, setLastSavedQuestions] = useState(
+        JSON.parse(JSON.stringify(defaultQuestions)),
+    );
+
     const [allModules, setAllModules] = useState([[], []]);
     const [allTools, setAllTools] = useState([[], []]);
     //Remembers the last saved tool
@@ -82,8 +103,29 @@ const ToolBuilder: Page = () => {
                     console.log(property);
                 }
             }
-            console.log(newTool);
             setToolList(newTool);
+        } catch (err) {
+            console.log(err);
+            //TODO: update error handling
+        }
+    };
+    const getSelfCheck = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: `/api/self-check/${selfCheckID}`,
+            });
+            const newSelfCheck = JSON.parse(JSON.stringify(questionList));
+            console.log("newnew", response.data);
+            // for (const property in newSelfCheck) {
+            //     console.log(property, response[property]);
+            //     if (response.data[property] != undefined) {
+            //         newSelfCheck[property] = response.data[property];
+            //     } else {
+            //         console.log(property);
+            //     }
+            // }
+            // setQuestionList(newSelfCheck);
         } catch (err) {
             console.log(err);
             //TODO: update error handling
@@ -125,7 +167,9 @@ const ToolBuilder: Page = () => {
     };
     useEffect(() => {
         console.log("ToolList", toolList);
+        console.log("SelfCheck", questionList);
         getTool();
+        getSelfCheck();
         getAllModules();
         getAllTools();
     }, []);
@@ -273,25 +317,6 @@ const ToolBuilder: Page = () => {
         return fieldsFilled;
     };
 
-    //self check card
-    const defaultQuestions = [
-        {
-            _id: "60e642d7e4a1ae34207a92a0", //Replace with real id once connected to database
-            type: "multiple_choice",
-            question: "",
-            options: [
-                ["", ""],
-                ["", ""],
-                ["", ""],
-            ],
-            alphanumericInput: true,
-            questionNumber: 1,
-        },
-    ];
-    const [questionList, setQuestionList] = useState(defaultQuestions);
-    const [lastSavedQuestions, setLastSavedQuestions] = useState(
-        JSON.parse(JSON.stringify(defaultQuestions)),
-    );
     //keeps track of count of questions made so each question has a unique id
     const [count, setCount] = useState(2);
     //For Switching between the tool home page and the tool self check questions page
@@ -440,7 +465,7 @@ const ToolBuilder: Page = () => {
 
     const addOneQuestion = (index) => {
         const newQuestion = {
-            _id: `60e642d7e4a1ae34207a92a${count}`, //Replace with real id once connected to database
+            _id: selfCheckID, //Replace with real id once connected to database
             type: "multiple_choice",
             question: "",
             options: [

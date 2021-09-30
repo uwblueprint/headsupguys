@@ -2,12 +2,26 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { SelfCheckGroup } from "database/models/selfCheckGroup";
 import { SelfCheckQuestion } from "database/models/selfCheckQuestion";
 
+
+// const update = async (
+//     req: NextApiRequest,
+//     res: NextApiResponse,
+// ): Promise<void> => {
+//     const { id } = req.query;
+//     await Tool.findByIdAndUpdate(id, req.body, { new: true })
+//         .then((tool) => res.status(200).json(tool))
+//         .catch((err) => res.status(500).send(err));
+// };
+
+// export default update;
+
 const patchSelfCheckByID = async (
     req: NextApiRequest,
     res: NextApiResponse,
 ): Promise<void> => {
     // Find self check by id
     const { id } = req.query;
+
     const selfCheck = await SelfCheckGroup.findById(id)
         .exec()
         .catch(() => {
@@ -32,10 +46,12 @@ const patchSelfCheckByID = async (
     });
 
     // Get a list of self check questions, create a SelfCheckQuestion for each
-    const { questions } = req.body;
+    const questions = req.body;
+    console.log("ahhh", questions);
     const selfCheckQuestions = await SelfCheckQuestion.insertMany(
         questions,
     ).catch((error) => {
+        console.log("ahhh", questions);
         return res.status(501).send({ error: error }); // Failure
     });
 
@@ -51,4 +67,4 @@ const patchSelfCheckByID = async (
     res.status(200).send(selfCheck);
 };
 
-export { patchSelfCheckByID };
+export default patchSelfCheckByID;

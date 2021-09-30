@@ -20,6 +20,7 @@ import { AdminLayout } from "@components";
 import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 import { useRouter } from "next/router";
 import axios from "axios";
+import selfCheck from "pages/api/self-check";
 
 export const getServerSideProps = async (context) => {
     return {
@@ -115,17 +116,20 @@ const ToolBuilder: Page = () => {
                 method: "GET",
                 url: `/api/self-check/${selfCheckID}`,
             });
-            const newSelfCheck = JSON.parse(JSON.stringify(questionList));
-            console.log("newnew", response.data);
-            // for (const property in newSelfCheck) {
-            //     console.log(property, response[property]);
-            //     if (response.data[property] != undefined) {
-            //         newSelfCheck[property] = response.data[property];
-            //     } else {
-            //         console.log(property);
-            //     }
-            // }
-            // setQuestionList(newSelfCheck);
+            const newQuestions = JSON.parse(JSON.stringify(questionList));
+            const questionIDs = response.data.questionIDs;
+            for (const idIndex in questionIDs) {
+                const questionResponse = await axios({
+                    method: "GET",
+                    url: `/api/self-check-question/${questionIDs[idIndex]}`,
+                });
+                for (const property in newQuestions[0]) {
+                    newQuestions[0][property] = questionResponse.data[property];
+                }
+            }
+            setQuestionList(newQuestions);
+
+            // setQuestionList(newQuestionList);
         } catch (err) {
             console.log(err);
             //TODO: update error handling
@@ -166,8 +170,6 @@ const ToolBuilder: Page = () => {
         }
     };
     useEffect(() => {
-        console.log("ToolList", toolList);
-        console.log("SelfCheck", questionList);
         getTool();
         getSelfCheck();
         getAllModules();
@@ -180,11 +182,22 @@ const ToolBuilder: Page = () => {
         if (toolList.title == "") {
             toolList.title = "Untitled Tool";
         }
+        for (const i in questionList) {
+            if (questionList[i].question == "") {
+                questionList[i].question = "Untitled Question";
+            }
+        }
         try {
             await axios({
-                method: "PUT",
+                method: "PATCH",
                 url: `/api/tool/update?id=${toolID}`,
                 data: toolList,
+            });
+
+            await axios({
+                method: "PATCH",
+                url: `/api/self-check/patch?id=${selfCheckID}`,
+                data: questionList,
             });
         } catch (err) {
             console.log(err);

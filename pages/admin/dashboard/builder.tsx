@@ -202,6 +202,7 @@ const Builder: Page = () => {
                         bg="white"
                         mt={4}
                         position="relative"
+                        align="center"
                     >
                         <MarkdownRenderer>{editorText}</MarkdownRenderer>
                         <Box
@@ -218,9 +219,7 @@ const Builder: Page = () => {
                                 print={printButton}
                                 progressValue={(slideNumber / maxSlides) * 100}
                                 variant={""}
-                            >
-                                {}
-                            </ModulePreview>
+                            />
                         </Box>
                     </Box>
                     <Box display="flex" w="80%" justifyContent="flex-end">

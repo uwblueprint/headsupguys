@@ -11,15 +11,19 @@ interface MarkdownRendererProps {
 export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
     return (
         <>
-            {props.children.split("\n").map((line) => (
-                <>
-                    {line === "" ? (
-                        <div className="newline" />
-                    ) : (
-                        <BaseRenderer content={line} />
-                    )}
-                </>
-            ))}
+            {props.children ? (
+                props.children.split("\n").map((line) => (
+                    <>
+                        {line === "" ? (
+                            <div className="newline" />
+                        ) : (
+                            <BaseRenderer content={line} />
+                        )}
+                    </>
+                ))
+            ) : (
+                <div className="newline" />
+            )}
         </>
     );
 };

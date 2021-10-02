@@ -26,7 +26,7 @@ const ToolsPage: Page = () => {
     const [refresh, setRefresh] = useState(false);
 
     // TODO: Need to update this to calculate relative date
-    const date = new Date();
+    // const date = new Date();
 
     const filterTools = async () => {
         try {
@@ -151,7 +151,11 @@ const ToolsPage: Page = () => {
                                 key={idx}
                                 title={tool["title"]}
                                 creators={tool["createdBy"]}
-                                updated={date}
+                                updated={
+                                    tool["updatedAt"]
+                                        ? new Date(tool["updatedAt"])
+                                        : new Date()
+                                }
                                 module={tool["moduleID"] !== ""}
                                 published={tool["status"] === "published"}
                                 onLinkModule={onLinkModule}

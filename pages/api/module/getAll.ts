@@ -1,10 +1,9 @@
+import { Module } from "database/models/module";
 import { NextApiRequest, NextApiResponse } from "next";
-import { ErrorResponse } from "types/ErrorResponse";
-import { Module, ModuleInterface } from "../../../database/models/module";
 
 const getAll = async (
     req: NextApiRequest,
-    res: NextApiResponse<ModuleInterface | ErrorResponse>,
+    res: NextApiResponse,
 ): Promise<void> => {
     await Module.find({})
         .then((modules) => res.status(200).json(modules))

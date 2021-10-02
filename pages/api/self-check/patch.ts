@@ -32,7 +32,7 @@ const patchSelfCheckByID = async (
     });
 
     // Get a list of self check questions, create a SelfCheckQuestion for each
-    const { questions } = req.body;
+    const questions = req.body;
     const selfCheckQuestions = await SelfCheckQuestion.insertMany(
         questions,
     ).catch((error) => {
@@ -51,4 +51,4 @@ const patchSelfCheckByID = async (
     res.status(200).send(selfCheck);
 };
 
-export { patchSelfCheckByID };
+export default patchSelfCheckByID;

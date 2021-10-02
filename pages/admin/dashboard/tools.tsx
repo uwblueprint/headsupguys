@@ -83,9 +83,9 @@ const ToolsPage: Page = () => {
                 data: [
                     {
                         type: "multiple_choice",
-                        question: "quieres?",
+                        question: "Untitled Question",
                         options: [
-                            ["whaa", ""],
+                            ["", ""],
                             ["", ""],
                             ["", ""],
                         ],
@@ -94,7 +94,6 @@ const ToolsPage: Page = () => {
                     },
                 ],
             });
-            console.log("dataa", selfCheckResponse.data);
             router.push({
                 pathname: "/admin/dashboard/toolBuilder",
                 query: {

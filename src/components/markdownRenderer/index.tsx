@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import ReactMarkdown from "react-markdown";
 import React from "react";
 import style from "./markdown-renderer.module.css";

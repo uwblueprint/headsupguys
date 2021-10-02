@@ -6,7 +6,6 @@ import {
     Text,
     InputProps,
     Image,
-    Progress,
     Button,
 } from "@chakra-ui/react";
 
@@ -15,8 +14,8 @@ export interface UserToolCardProps extends InputProps {
     description: string;
     image?: string;
     progressValue?: number;
-    onClickTool(event: any): any;
-    onSelfCheck(event: any): any;
+    onClickTool: (event: any) => void;
+    onSelfCheck: (event: any) => void;
 }
 
 export const UserToolCard: React.FC<UserToolCardProps> = ({

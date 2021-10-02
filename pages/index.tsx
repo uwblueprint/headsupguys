@@ -18,7 +18,7 @@ import { useMediaQuery } from "react-responsive";
 
 const Home: React.FC = () => {
     const [showAlert, setShowAlert] = useState(true);
-    const handleGetStarted = () => {
+    const handleClickTool = () => {
         console.log("");
     };
     const handleSelfCheck = () => {
@@ -94,7 +94,7 @@ const Home: React.FC = () => {
                                     description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                    onClickTool={handleGetStarted}
+                                    onClickTool={handleClickTool}
                                     onSelfCheck={handleSelfCheck}
                                     image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                     progressValue={10}
@@ -104,7 +104,7 @@ const Home: React.FC = () => {
                                     description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                    onClickTool={handleGetStarted}
+                                    onClickTool={handleClickTool}
                                     onSelfCheck={handleSelfCheck}
                                     image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                     progressValue={10}
@@ -114,7 +114,7 @@ const Home: React.FC = () => {
                                     description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                    onClickTool={handleGetStarted}
+                                    onClickTool={handleClickTool}
                                     onSelfCheck={handleSelfCheck}
                                     image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                     progressValue={10}
@@ -124,7 +124,7 @@ const Home: React.FC = () => {
                                     description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                    onClickTool={handleGetStarted}
+                                    onClickTool={handleClickTool}
                                     onSelfCheck={handleSelfCheck}
                                     image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                     progressValue={10}
@@ -134,7 +134,7 @@ const Home: React.FC = () => {
                                     description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                    onClickTool={handleGetStarted}
+                                    onClickTool={handleClickTool}
                                     onSelfCheck={handleSelfCheck}
                                     image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                     progressValue={10}
@@ -144,7 +144,7 @@ const Home: React.FC = () => {
                                     description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                    onClickTool={handleGetStarted}
+                                    onClickTool={handleClickTool}
                                     onSelfCheck={handleSelfCheck}
                                     image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                     progressValue={10}
@@ -160,7 +160,7 @@ const Home: React.FC = () => {
                                     description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                    onClickTool={handleGetStarted}
+                                    onClickTool={handleClickTool}
                                     onSelfCheck={handleSelfCheck}
                                     image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                     progressValue={10}
@@ -170,7 +170,7 @@ const Home: React.FC = () => {
                                     description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                    onClickTool={handleGetStarted}
+                                    onClickTool={handleClickTool}
                                     onSelfCheck={handleSelfCheck}
                                     image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                     progressValue={10}
@@ -180,7 +180,7 @@ const Home: React.FC = () => {
                                     description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                    onClickTool={handleGetStarted}
+                                    onClickTool={handleClickTool}
                                     onSelfCheck={handleSelfCheck}
                                     image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                     progressValue={10}
@@ -190,7 +190,7 @@ const Home: React.FC = () => {
                                     description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                    onClickTool={handleGetStarted}
+                                    onClickTool={handleClickTool}
                                     onSelfCheck={handleSelfCheck}
                                     image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                     progressValue={10}
@@ -200,7 +200,7 @@ const Home: React.FC = () => {
                                     description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                    onClickTool={handleGetStarted}
+                                    onClickTool={handleClickTool}
                                     onSelfCheck={handleSelfCheck}
                                     image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                     progressValue={10}
@@ -210,7 +210,7 @@ const Home: React.FC = () => {
                                     description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                    onClickTool={handleGetStarted}
+                                    onClickTool={handleClickTool}
                                     onSelfCheck={handleSelfCheck}
                                     image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                     progressValue={10}
@@ -279,7 +279,7 @@ const Home: React.FC = () => {
                                 description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                onClickTool={handleGetStarted}
+                                onClickTool={handleClickTool}
                                 onSelfCheck={handleSelfCheck}
                                 image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                 progressValue={10}
@@ -289,7 +289,7 @@ const Home: React.FC = () => {
                                 description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                onClickTool={handleGetStarted}
+                                onClickTool={handleClickTool}
                                 onSelfCheck={handleSelfCheck}
                                 image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                 progressValue={10}
@@ -299,7 +299,7 @@ const Home: React.FC = () => {
                                 description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                onClickTool={handleGetStarted}
+                                onClickTool={handleClickTool}
                                 onSelfCheck={handleSelfCheck}
                                 image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                 progressValue={10}
@@ -320,7 +320,7 @@ const Home: React.FC = () => {
                                 description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                onClickTool={handleGetStarted}
+                                onClickTool={handleClickTool}
                                 onSelfCheck={handleSelfCheck}
                                 image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                 progressValue={10}
@@ -330,7 +330,7 @@ const Home: React.FC = () => {
                                 description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                onClickTool={handleGetStarted}
+                                onClickTool={handleClickTool}
                                 onSelfCheck={handleSelfCheck}
                                 image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                 progressValue={10}
@@ -340,7 +340,7 @@ const Home: React.FC = () => {
                                 description="
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Praesent laoreet feugiat"
-                                onClickTool={handleGetStarted}
+                                onClickTool={handleClickTool}
                                 onSelfCheck={handleSelfCheck}
                                 image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
                                 progressValue={10}

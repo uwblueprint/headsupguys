@@ -21,6 +21,7 @@ import {
 import { IoIosUndo, IoIosRedo } from "react-icons/io";
 import { IoTrash, IoDesktopOutline } from "react-icons/io5";
 import { FaMobileAlt } from "react-icons/fa";
+import Link from "next/link";
 
 import { Page } from "types/Page";
 import {
@@ -68,7 +69,9 @@ const Builder: Page = () => {
         <Stack spacing={0}>
             <Stack spacing={2} p={6}>
                 <Box>
-                    <Button variant="link">{"<"} Exit Builder</Button>
+                    <Link href="modules">
+                        <Button variant="link">{"<"} Exit Builder</Button>
+                    </Link>
                 </Box>
                 <Flex>
                     <Heading>{moduleName}</Heading>

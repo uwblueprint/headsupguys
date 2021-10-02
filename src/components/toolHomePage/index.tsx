@@ -22,7 +22,6 @@ import {
     ModalFooter,
 } from "@chakra-ui/react";
 
-const relatedToolsList = ["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"];
 export interface ToolHomePageProps {
     toolId: string;
     title: string;
@@ -401,7 +400,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                             .includes(id) && id != toolId
                                     );
                                 }) ?? []
-                            ).map((selection, index) => (
+                            ).map((selection) => (
                                 <option
                                     key={choice + selection}
                                     value={selection}

@@ -31,8 +31,9 @@ export const UserToolCard: React.FC<UserToolCardProps> = ({
         card: {
             border: "1px solid #000",
             maxWidth: "310px",
-            maxHeight: "350px",
             borderRadius: 4,
+            marginLeft: 1,
+            marginRight: 1,
         },
     };
 

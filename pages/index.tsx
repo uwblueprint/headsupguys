@@ -34,13 +34,12 @@ const Home: React.FC = () => {
             {variant === "desktop" ? (
                 <>
                     <Container maxW="container.lg" py="50px">
-                        <Box position="relative" h={50}>
-                            <Image
-                                src="/icons/heading-highlight.svg"
-                                position="absolute"
-                                bottom={0}
-                            />
-                            <Heading fontSize={32} position="absolute">
+                        <Box h={50}>
+                            <Heading
+                                fontSize={32}
+                                background="linear-gradient(180deg, rgba(255,255,255,0) 50%, #86FC2F 50%)"
+                                display="inline"
+                            >
                                 WELCOME TO YOUR TOOLKIT
                             </Heading>
                         </Box>
@@ -223,17 +222,15 @@ const Home: React.FC = () => {
             ) : (
                 <>
                     <Box p={4}>
-                        <Box position="relative" h={50}>
-                            <Image
-                                src="/icons/heading-highlight.svg"
-                                position="absolute"
-                                bottom={0}
-                            />
-                            <Heading fontSize={32} position="absolute">
+                        <Box>
+                            <Heading
+                                fontSize={32}
+                                background="linear-gradient(180deg, rgba(255,255,255,0) 50%, #86FC2F 50%)"
+                                display="inline"
+                            >
                                 WELCOME TO YOUR TOOLKIT
                             </Heading>
                         </Box>
-
                         <br />
                         <Box>
                             <Text>
@@ -269,7 +266,14 @@ const Home: React.FC = () => {
                         <br />
                         <Heading fontSize={24}>Life Problems</Heading>
                         <br />
-                        <Carousel infiniteLoop showIndicators={false}>
+                        <Carousel
+                            infiniteLoop
+                            showIndicators={false}
+                            showArrows={false}
+                            showStatus={false}
+                            centerMode
+                            centerSlidePercentage={85}
+                        >
                             <UserToolCard
                                 title="Anger"
                                 description="
@@ -303,7 +307,14 @@ const Home: React.FC = () => {
                         </Carousel>
                         <Heading fontSize={24}>Skills</Heading>
                         <br />
-                        <Carousel infiniteLoop showIndicators={false}>
+                        <Carousel
+                            infiniteLoop
+                            showIndicators={false}
+                            showArrows={false}
+                            showStatus={false}
+                            centerMode
+                            centerSlidePercentage={85}
+                        >
                             <UserToolCard
                                 title="Anger"
                                 description="

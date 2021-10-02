@@ -116,16 +116,6 @@ const ToolBuilder: Page = () => {
                 url: `/api/self-check/${selfCheckID}`,
             });
             const newSelfCheck = JSON.parse(JSON.stringify(questionList));
-            console.log("newnew", response.data);
-            // for (const property in newSelfCheck) {
-            //     console.log(property, response[property]);
-            //     if (response.data[property] != undefined) {
-            //         newSelfCheck[property] = response.data[property];
-            //     } else {
-            //         console.log(property);
-            //     }
-            // }
-            // setQuestionList(newSelfCheck);
         } catch (err) {
             console.log(err);
             //TODO: update error handling
@@ -175,6 +165,21 @@ const ToolBuilder: Page = () => {
     }, []);
 
     const saveTool = async () => {
+        console.log("Tool Homepage:", toolList);
+        if (toolList.title == "") {
+            toolList.title = "Untitled Tool";
+        }
+        try {
+            await axios({
+                method: "PUT",
+                url: `/api/tool/update?id=${toolID}`,
+                data: toolList,
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    const saveSelfCheck = async () => {
         console.log("Self Check Questions:", questionList);
         console.log("Tool Homepage:", toolList);
         if (toolList.title == "") {

@@ -118,7 +118,9 @@ const ToolBuilder: Page = () => {
             const questionIDs = response.data.questionIDs;
             const newQuestions = [];
             for (const question in questionIDs) {
-                newQuestions.push(JSON.parse(JSON.stringify(defaultQuestions)));
+                newQuestions.push(
+                    JSON.parse(JSON.stringify(defaultQuestions[0])),
+                );
             }
             for (const idIndex in questionIDs) {
                 const questionResponse = await axios({
@@ -183,7 +185,6 @@ const ToolBuilder: Page = () => {
         if (toolList.title == "") {
             toolList.title = "Untitled Tool";
         }
-
         try {
             await axios({
                 method: "PATCH",
@@ -195,16 +196,15 @@ const ToolBuilder: Page = () => {
         }
     };
     const saveSelfCheck = async () => {
-        console.log("Self Check Questions:", questionList);
         for (const i in questionList) {
             if (questionList[i].question == "") {
                 questionList[i].question = "Untitled Question";
             }
-            console.log(questionList[i]._id);
-            if (questionList[i]._id.length < 5) {
-                questionList[i]._id = undefined;
+            if (questionList[i]._id.slice(0, 6) == "tempId") {
+                delete questionList[i]._id;
             }
         }
+        console.log("Self Check Questions:", questionList);
         try {
             await axios({
                 method: "PATCH",
@@ -214,6 +214,7 @@ const ToolBuilder: Page = () => {
         } catch (err) {
             console.log(err);
         }
+        getSelfCheck();
     };
 
     //Hangles all changes of input to the tool page
@@ -490,7 +491,7 @@ const ToolBuilder: Page = () => {
 
     const addOneQuestion = (index) => {
         const newQuestion = {
-            _id: "tempId" + String(count), //Replace with real id once connected to database
+            _id: "tempId" + String(count),
             type: "multiple_choice",
             question: "",
             options: [

@@ -4,8 +4,6 @@ import {
     Box,
     Heading,
     Text,
-    LinkBox,
-    Link,
     Button,
     InputProps,
     Tag,
@@ -17,9 +15,9 @@ import {
 } from "@chakra-ui/react";
 import { CheckIcon, DeleteIcon, StarIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
-import { button } from "@aws-amplify/ui";
 export interface ToolCardProps extends InputProps {
     id: string;
+    selfCheckId: string;
     title: string;
     creators: string[];
     updated: Date;
@@ -30,11 +28,12 @@ export interface ToolCardProps extends InputProps {
     onUnlinkModule(event: any): any;
     onPublish(event: any): any;
     onUnpublish(event: any): any;
-    onDelete(event: any, arg2: any, arg3: any): any;
+    onDelete(event: any, arg2: any, arg3: any, arg4: any ): any;
 }
 
 export const ToolCard: React.FC<ToolCardProps> = ({
     id,
+    selfCheckId,
     title,
     creators,
     updated,
@@ -151,7 +150,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                     variant="ghost"
                                     icon={<DeleteIcon />}
                                     onClick={(e) => {
-                                        onDelete(e, title, id);
+                                        onDelete(e, title, id, selfCheckId);
                                     }}
                                 />
                             </Flex>

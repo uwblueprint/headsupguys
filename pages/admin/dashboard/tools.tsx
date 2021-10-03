@@ -18,6 +18,7 @@ const ToolsPage: Page = () => {
 
     const [selectedTool, setSelectedTool] = useState("");
     const [selectedToolId, setSelectedToolId] = useState("");
+    const [selectedSelfCheckId, setSelectedSelfCheckId] = useState("");
     // Modal can be of "publish" or "delete" mode
     const [modalMode, setModalMode] = useState("");
     const publishConfirmation = `Are you sure you want to publish ${selectedTool}? Your tool will be available to the public!`;
@@ -74,6 +75,7 @@ const ToolsPage: Page = () => {
                         ["", ""],
                         ["", ""],
                     ],
+                    selfCheckGroupID: "",
                     relatedToolsIDs: ["", "", ""],
                 },
             });
@@ -93,6 +95,13 @@ const ToolsPage: Page = () => {
                         questionNumber: 1,
                     },
                 ],
+            });
+            const newTool = toolResponse.data;
+            newTool.selfCheckGroupID = selfCheckResponse.data._id;
+            await axios({
+                method: "PATCH",
+                url: `/api/tool/update?id=${newTool._id}`,
+                data: newTool,
             });
             router.push({
                 pathname: "/admin/dashboard/toolBuilder",
@@ -130,18 +139,24 @@ const ToolsPage: Page = () => {
         //TODO: Implement publishing the tool in the db
     };
 
-    const onDelete = (e, toolName, id) => {
+    const onDelete = (e, toolName, id, selfCheckId) => {
         setModalMode("delete");
         setSelectedTool(toolName);
         setSelectedToolId(id);
+        setSelectedSelfCheckId(selfCheckId);
         onOpen();
         e.stopPropagation();
     };
 
     const deleteTool = async () => {
+        console.log("delete", selectedSelfCheckId, selectedToolId);
         await axios({
             method: "DELETE",
             url: `/api/tool/deleteOne?id=${selectedToolId}`,
+        });
+        await axios({
+            method: "DELETE",
+            url: `/api/self-check/${selectedSelfCheckId}`,
         });
         setRefresh(!refresh);
         onClose();
@@ -222,6 +237,7 @@ const ToolsPage: Page = () => {
                             <ToolCard
                                 key={tool._id}
                                 id={tool._id}
+                                selfCheckId={tool.selfCheckGroupID}
                                 title={tool.title}
                                 creators={tool.createdBy}
                                 updated={date}

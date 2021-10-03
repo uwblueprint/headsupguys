@@ -56,6 +56,7 @@ const ToolBuilder: Page = () => {
             ["", ""],
             ["", ""],
         ],
+        selfCheckGroupID: selfCheckID,
         relatedToolsIDs: ["", "", ""],
     };
     //Sets useState of tool to a copy of the default tool

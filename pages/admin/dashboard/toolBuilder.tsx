@@ -116,26 +116,23 @@ const ToolBuilder: Page = () => {
                 url: `/api/self-check/${selfCheckID}`,
             });
             const questionIDs = response.data.questionIDs;
-            // console.log("idsss", questionIDs);
             const newQuestions = [];
             for (const question in questionIDs) {
                 newQuestions.push(
                     JSON.parse(JSON.stringify(defaultQuestions[0])),
                 );
             }
-            // console.log("newwww", newQuestions, defaultQuestions[0]);
             for (const idIndex in questionIDs) {
                 const questionResponse = await axios({
                     method: "GET",
                     url: `/api/self-check-question/${questionIDs[idIndex]}`,
                 });
-                console.log("resss", questionResponse.data);
                 for (const property in newQuestions[idIndex]) {
                     newQuestions[idIndex][property] =
                         questionResponse.data[property];
                 }
             }
-            // console.log("new questions: ", newQuestions);
+            console.log("new questions: ", newQuestions);
             setQuestionList(newQuestions);
         } catch (err) {
             console.log(err);
@@ -204,7 +201,7 @@ const ToolBuilder: Page = () => {
                 questionList[i].question = "Untitled Question";
             }
             if (questionList[i]._id.slice(0, 6) == "tempId") {
-                questionList[i]._id = undefined;
+                delete questionList[i]._id;
             }
         }
         console.log("Self Check Questions:", questionList);

@@ -66,7 +66,7 @@ const ToolBuilder: Page = () => {
     //self check card
     const defaultQuestions = [
         {
-            _id: selfCheckID, //Replace with real id once connected to database
+            _id: selfCheckID,
             type: "multiple_choice",
             question: "",
             options: [
@@ -95,7 +95,7 @@ const ToolBuilder: Page = () => {
                 method: "GET",
                 url: `/api/tool/${toolID}`,
             });
-            const newTool = JSON.parse(JSON.stringify(toolList));
+            const newTool = JSON.parse(JSON.stringify(defaultTool));
             for (const property in newTool) {
                 if (response.data[property] != undefined) {
                     newTool[property] = response.data[property];
@@ -115,7 +115,28 @@ const ToolBuilder: Page = () => {
                 method: "GET",
                 url: `/api/self-check/${selfCheckID}`,
             });
-            const newSelfCheck = JSON.parse(JSON.stringify(questionList));
+            const questionIDs = response.data.questionIDs;
+            // console.log("idsss", questionIDs);
+            const newQuestions = [];
+            for (const question in questionIDs) {
+                newQuestions.push(
+                    JSON.parse(JSON.stringify(defaultQuestions[0])),
+                );
+            }
+            // console.log("newwww", newQuestions, defaultQuestions[0]);
+            for (const idIndex in questionIDs) {
+                const questionResponse = await axios({
+                    method: "GET",
+                    url: `/api/self-check-question/${questionIDs[idIndex]}`,
+                });
+                console.log("resss", questionResponse.data);
+                for (const property in newQuestions[idIndex]) {
+                    newQuestions[idIndex][property] =
+                        questionResponse.data[property];
+                }
+            }
+            // console.log("new questions: ", newQuestions);
+            setQuestionList(newQuestions);
         } catch (err) {
             console.log(err);
             //TODO: update error handling
@@ -156,8 +177,6 @@ const ToolBuilder: Page = () => {
         }
     };
     useEffect(() => {
-        console.log("ToolList", toolList);
-        console.log("SelfCheck", questionList);
         getTool();
         getSelfCheck();
         getAllModules();
@@ -171,7 +190,7 @@ const ToolBuilder: Page = () => {
         }
         try {
             await axios({
-                method: "PUT",
+                method: "PATCH",
                 url: `/api/tool/update?id=${toolID}`,
                 data: toolList,
             });
@@ -180,20 +199,25 @@ const ToolBuilder: Page = () => {
         }
     };
     const saveSelfCheck = async () => {
-        console.log("Self Check Questions:", questionList);
-        console.log("Tool Homepage:", toolList);
-        if (toolList.title == "") {
-            toolList.title = "Untitled Tool";
+        for (const i in questionList) {
+            if (questionList[i].question == "") {
+                questionList[i].question = "Untitled Question";
+            }
+            if (questionList[i]._id.slice(0, 6) == "tempId") {
+                questionList[i]._id = undefined;
+            }
         }
+        console.log("Self Check Questions:", questionList);
         try {
             await axios({
-                method: "PUT",
-                url: `/api/tool/update?id=${toolID}`,
-                data: toolList,
+                method: "PATCH",
+                url: `/api/self-check/patch?id=${selfCheckID}`,
+                data: questionList,
             });
         } catch (err) {
             console.log(err);
         }
+        getSelfCheck();
     };
 
     //Hangles all changes of input to the tool page
@@ -323,7 +347,7 @@ const ToolBuilder: Page = () => {
     };
 
     //keeps track of count of questions made so each question has a unique id
-    const [count, setCount] = useState(2);
+    const [count, setCount] = useState(0);
     //For Switching between the tool home page and the tool self check questions page
     const [page, setPage] = useState("home");
 
@@ -470,7 +494,7 @@ const ToolBuilder: Page = () => {
 
     const addOneQuestion = (index) => {
         const newQuestion = {
-            _id: selfCheckID, //Replace with real id once connected to database
+            _id: "tempId" + String(count),
             type: "multiple_choice",
             question: "",
             options: [
@@ -677,6 +701,7 @@ const ToolBuilder: Page = () => {
                             //TODO: Send this output to the database
                             //rather than just logging it in the console
                             onClick={() => {
+                                clearHiddenFilledFields();
                                 toast({
                                     title: "Save Successful",
                                     description:
@@ -687,6 +712,7 @@ const ToolBuilder: Page = () => {
                                     isClosable: true,
                                 });
                                 saveTool();
+                                saveSelfCheck();
                                 setLastSavedTool(
                                     JSON.parse(JSON.stringify(toolList)),
                                 );
@@ -756,16 +782,16 @@ const ToolBuilder: Page = () => {
                             + Question
                         </Button>
 
-                        {questionList.map((item, index) => (
+                        {questionList.map((listQuestion, index) => (
                             <SelfCheckQuestionCard
-                                alphanumeric={item.alphanumericInput}
-                                type={item.type}
-                                options={item.options}
-                                question={item.question}
-                                questionId={item._id}
+                                alphanumeric={listQuestion.alphanumericInput}
+                                type={listQuestion.type}
+                                options={listQuestion.options}
+                                question={listQuestion.question}
+                                questionId={String(listQuestion._id)}
                                 questionIndex={index}
                                 selfCheckQuestionSize={selfCheckQuestionSize}
-                                key={index + item._id}
+                                key={index + String(listQuestion._id)}
                                 onAddOption={addOneOption}
                                 onRemoveOption={removeOneOption}
                                 onChangeOptionInput={changeOptionInput}

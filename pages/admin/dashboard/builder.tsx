@@ -99,6 +99,9 @@ const Builder: Page = () => {
                         setSlide(slideNumber + 1);
                         addSlide(maxSlides + 1);
                         setEditorText("");
+                        const newSlides = [...slides];
+                        newSlides[maxSlides - 1] = editorText;
+                        setSlides(newSlides);
                     }}
                 >
                     New Slide

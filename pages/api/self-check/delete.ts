@@ -32,10 +32,9 @@ const delSelfCheckByID = async (
     });
 
     // Delete self check
-    SelfCheckGroup.deleteOne({ _id: id }, (error) => {
-        return res.status(501).send({ error: error }); // Failure
-    });
-    res.status(204).send({});
+    SelfCheckGroup.findByIdAndDelete(id)
+        .then(() => res.status(204).send({}))
+        .catch((error) => res.status(404).send({ error }));
 };
 
 export { delSelfCheckByID };

@@ -60,6 +60,7 @@ export const UserToolCard: React.FC<UserToolCardProps> = ({
                         w="100%"
                         h="100%"
                         borderRadius={progressValue ? 0 : 4}
+                        objectFit="cover"
                     />
                 )}
             </Box>

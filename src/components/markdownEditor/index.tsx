@@ -88,9 +88,9 @@ const indentCommand: ICommand = {
         />
     ),
     execute: (state: TextState, api: TextAreaTextApi) => {
-        let modifyText = `$ ${state.selectedText}\n`; // convention: notate indent with $
+        let modifyText = `\` \` ${state.selectedText}\n`; // convention: notate indent with $
         if (!state.selectedText) {
-            modifyText = `$ `;
+            modifyText = `\` \` `;
         }
         api.replaceSelection(modifyText);
     },

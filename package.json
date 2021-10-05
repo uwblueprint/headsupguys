@@ -11,7 +11,7 @@
         "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
         "prettier": "prettier --write '**/*.{js,jsx,ts,tsx}'",
         "test": "jest -c test/jest.config.js",
-        "seed": "node database/scripts/seed.ts"
+        "seed": "node --loader ts-node/esm ./database/scripts/seed.ts"
     },
     "dependencies": {
         "@aws-amplify/cli": "^5.1.0",
@@ -39,8 +39,11 @@
         "react": "17.0.2",
         "react-dom": "17.0.2",
         "react-icons": "^4.2.0",
+        "react-markdown": "^6",
+        "react-player": "^2.9.0",
         "react-table": "^7.7.0",
         "swr": "^0.4.0",
+        "ts-node": "^10.2.1",
         "validator": "^13.6.0",
         "yarn": "^1.22.10"
     },

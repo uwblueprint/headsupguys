@@ -1,8 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import mongoose from "mongoose";
 require("dotenv").config({ path: ".env.local" });
-const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectId;
 const faker = require("faker");
+
+import { Component as componentCollection } from "../models/component";
+import { Module as moduleCollection } from "../models/module";
+import { Slide as slideCollection } from "../models/slide";
+import { Tool as toolCollection } from "../models/tool";
+import { SelfCheckGroup as groupCollection } from "../models/selfCheckGroup";
+import { SelfCheckQuestion as questionCollection } from "../models/selfCheckQuestion";
+import { User as userCollection } from "../models/user";
 
 // seed config
 const QUESTION_COUNT = 24;
@@ -11,58 +19,56 @@ const COMPONENT_COUNT = 60;
 const SLIDE_COUNT = 20;
 const MODULE_COUNT = 5;
 const TOOL_COUNT = 4;
+const USER_COUNT = 5;
 
 const QUESTIONS_PER_GROUP = Math.floor(QUESTION_COUNT / GROUP_COUNT);
 const COMPONENTS_PER_SLIDE = Math.floor(COMPONENT_COUNT / SLIDE_COUNT);
 const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
 
 (async function () {
-    const client = new MongoClient(process.env.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+    await mongoose
+        .connect(process.env.MONGODB_URI, {
+            useUnifiedTopology: true,
+            useFindAndModify: false,
+            useCreateIndex: true,
+            useNewUrlParser: true,
+        })
+        .then(() => console.log("Successfully connected to database"))
+        .catch((err) => console.log(err));
 
     try {
-        await client.connect();
-        console.log("Successfully connected to database");
-
-        const db = client.db(process.env.MONGODB_DB);
-        const questionCollection = db.collection("self_check_questions");
-        const groupCollection = db.collection("self_check_groups");
-        const componentCollection = db.collection("components");
-        const slideCollection = db.collection("slides");
-        const moduleCollection = db.collection("modules");
-        const toolCollection = db.collection("tools");
-
         if (process.argv[2] != "--init") {
             // destroy previous data
+            const db = mongoose.connection.db;
             await Promise.all([
-                questionCollection.drop(),
-                groupCollection.drop(),
-                componentCollection.drop(),
-                slideCollection.drop(),
-                moduleCollection.drop(),
-                toolCollection.drop(),
+                db.collection("self_check_questions").drop(),
+                db.collection("self_check_groups").drop(),
+                db.collection("components").drop(),
+                db.collection("slides").drop(),
+                db.collection("modules").drop(),
+                db.collection("tools").drop(),
+                db.collection("users").drop(),
             ]);
+            console.log("Successfully cleared database");
         }
 
         const questions = await questionCollection.insertMany(mockQuestions());
-        const questionIDs = questions.ops.map((x) => x._id);
+        const questionIDs = questions.map((x) => x._id);
 
         const groups = await groupCollection.insertMany(
             mockGroups(questionIDs),
         );
-        const groupIDs = groups.ops.map((x) => x._id);
+        const groupIDs = groups.map((x) => x._id);
 
         const components = await componentCollection.insertMany(
             mockComponents(),
         );
-        const componentIDs = components.ops.map((x) => x._id);
+        const componentIDs = components.map((x) => x._id);
 
         const slides = await slideCollection.insertMany(
             mockSlides(componentIDs),
         );
-        const slideIDs = slides.ops.map((x) => x._id);
+        const slideIDs = (slides as any[]).map((x) => x._id);
 
         // need to generate toolIDs beforehand to avoid a circular dependency
         const toolIDs = [];
@@ -73,14 +79,16 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         const modules = await moduleCollection.insertMany(
             mockModules(slideIDs, toolIDs),
         );
-        const moduleIDs = modules.ops.map((x) => x._id);
+        const moduleIDs = (modules as any[]).map((x) => x._id);
 
         await toolCollection.insertMany(
             mockTools(moduleIDs, groupIDs, toolIDs),
         );
 
+        await userCollection.insertMany(mockUsers());
+
         console.log("Successfully completed seeding");
-        client.close();
+        mongoose.connection.close();
     } catch (err) {
         console.log(err.stack);
     }
@@ -211,4 +219,20 @@ function mockTools(moduleIDs, groupIDs, toolIDs) {
         });
     }
     return tools;
+}
+
+function mockUsers() {
+    const userTypes = ["USER", "ADMIN", "SUPER ADMIN"];
+    const users = [];
+
+    for (let i = 0; i < USER_COUNT; i++) {
+        users.push({
+            email: faker.internet.email(),
+            name: faker.name.findName(),
+            role: userTypes[i % userTypes.length],
+            waiverSigned: i == 0,
+            demographicInfo: {},
+        });
+    }
+    return users;
 }

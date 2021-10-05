@@ -97,6 +97,9 @@ const Builder: Page = () => {
                         setSlide(slideNumber + 1);
                         addSlide(maxSlides + 1);
                         setEditorText("");
+                        const newSlides = [...slides];
+                        newSlides[maxSlides - 1] = editorText;
+                        setSlides(newSlides);
                     }}
                 >
                     New Slide
@@ -192,6 +195,7 @@ const Builder: Page = () => {
                         bg="white"
                         mt={4}
                         position="relative"
+                        align="center"
                     >
                         <MarkdownRenderer>{editorText}</MarkdownRenderer>
                         <Box
@@ -208,9 +212,7 @@ const Builder: Page = () => {
                                 print= {( buttons.has("print")) ? true : false}
                                 progressValue={(slideNumber / maxSlides) * 100}
                                 variant={""}
-                            >
-                                {}
-                            </ModulePreview>
+                            />
                         </Box>
                     </Box>
                     <Box display="flex" w="80%" justifyContent="flex-end">

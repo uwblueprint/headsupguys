@@ -8,6 +8,7 @@ import {
     Stack,
 } from "@chakra-ui/react";
 import axios from "axios";
+import Link from "next/link";
 
 import { ModuleCard } from "@components/ModuleCard";
 import { Page } from "types/Page";
@@ -41,7 +42,9 @@ const ModulesPage: Page = () => {
                     Modules
                 </Text>
                 <Spacer />
-                <Button variant="outlineBlack">Create Module</Button>
+                <Link href="builder">
+                    <Button variant="outlineBlack">Create Module</Button>
+                </Link>
             </Flex>
 
             <Flex direction="row">

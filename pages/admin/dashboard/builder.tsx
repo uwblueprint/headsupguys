@@ -44,12 +44,10 @@ const Builder: Page = () => {
     const [maxSlides, addSlide] = useState(1);
     const [prevSlide, setPrevSlide] = useState(1);
     const [slides, setSlides] = useState([editorText]);
-    const [prevButton, setPrevButton] = useState(true);
-    const [nextButton, setNextButton] = useState(true);
-    const [printButton, setPrintButton] = useState(false);
-    const [saveButton, setSaveButton] = useState(false);
+    const [buttons, setButtons] = useState(new Set(['prev', 'next']));
 
     const moduleName = "Untitled Module";
+    const buttonOptions = ["prev", "next", "save", "print"];
 
     const handleEditableErrors = (e) => {
         const target = e.target as HTMLInputElement;
@@ -102,6 +100,9 @@ const Builder: Page = () => {
                         setSlide(slideNumber + 1);
                         addSlide(maxSlides + 1);
                         setEditorText("");
+                        const newSlides = [...slides];
+                        newSlides[maxSlides - 1] = editorText;
+                        setSlides(newSlides);
                     }}
                 >
                     New Slide
@@ -161,32 +162,24 @@ const Builder: Page = () => {
                             </Container>
                             <Container>
                                 <Stack spacing={10} direction="row">
-                                    <CheckboxComp
-                                        defaultIsChecked
-                                        text="Prev"
-                                        onChange={() => {
-                                            setPrevButton(!prevButton);
-                                        }}
-                                    />
-                                    <CheckboxComp
-                                        defaultIsChecked
-                                        text="Next"
-                                        onChange={() => {
-                                            setNextButton(!nextButton);
-                                        }}
-                                    />
-                                    <CheckboxComp
-                                        text="Save"
-                                        onChange={() => {
-                                            setSaveButton(!saveButton);
-                                        }}
-                                    />
-                                    <CheckboxComp
-                                        text="Print"
-                                        onChange={() => {
-                                            setPrintButton(!printButton);
-                                        }}
-                                    />
+                                    {
+                                        buttonOptions.map( (button) => (
+                                            <CheckboxComp
+                                                text={button}
+                                                isChecked={buttons.has(button) ? true : false}
+                                                onChange={() => {
+                                                    if(buttons.has(button)){
+                                                        const newButtons = new Set(buttons);
+                                                        newButtons.delete(button);
+                                                        setButtons(newButtons);
+                                                    }
+                                                    else{
+                                                        setButtons(new Set(buttons).add(button));
+                                                    }
+                                                }}
+                                            />
+                                        ))
+                                    }
                                 </Stack>
                             </Container>
                         </Box>
@@ -205,6 +198,7 @@ const Builder: Page = () => {
                         bg="white"
                         mt={4}
                         position="relative"
+                        align="center"
                     >
                         <MarkdownRenderer>{editorText}</MarkdownRenderer>
                         <Box
@@ -215,15 +209,13 @@ const Builder: Page = () => {
                             margin="10px"
                         >
                             <ModulePreview
-                                previous={prevButton}
-                                next={nextButton}
-                                save={saveButton}
-                                print={printButton}
+                                previous = {( buttons.has("prev")) ? true : false}
+                                next = {( buttons.has("next")) ? true : false}
+                                save = {( buttons.has("save")) ? true : false}
+                                print= {( buttons.has("print")) ? true : false}
                                 progressValue={(slideNumber / maxSlides) * 100}
                                 variant={""}
-                            >
-                                {}
-                            </ModulePreview>
+                            />
                         </Box>
                     </Box>
                     <Box display="flex" w="80%" justifyContent="flex-end">

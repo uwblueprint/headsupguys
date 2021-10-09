@@ -31,10 +31,8 @@ interface MongoCache {
     promise: Promise<MongoConnection>;
 }
 
-// @ts-expect-error accessing global FIXME
 let cached: MongoCache = global.mongo;
 if (!cached) {
-    // @ts-expect-error accessing global FIXME
     cached = global.mongo = { conn: null, promise: null };
 }
 

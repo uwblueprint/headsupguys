@@ -8,7 +8,6 @@ const patchSelfCheckByID = async (
 ): Promise<void> => {
     // Find self check by id
     const { id } = req.query;
-
     const selfCheck = await SelfCheckGroup.findById(id)
         .exec()
         .catch(() => {
@@ -18,7 +17,7 @@ const patchSelfCheckByID = async (
                 });
             }
         });
-
+    
     // Delete all questions in self check
     selfCheck.questionIDs.forEach((i) => {
         const selfCheckQuestion = SelfCheckQuestion.findByIdAndDelete(i)

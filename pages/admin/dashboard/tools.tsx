@@ -149,7 +149,6 @@ const ToolsPage: Page = () => {
     };
 
     const deleteTool = async () => {
-        console.log("delete", selectedSelfCheckId, selectedToolId);
         await axios({
             method: "DELETE",
             url: `/api/tool/deleteOne?id=${selectedToolId}`,

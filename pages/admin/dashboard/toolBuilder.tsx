@@ -20,6 +20,7 @@ import { AdminLayout } from "@components";
 import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 import { useRouter } from "next/router";
 import axios from "axios";
+import tool from "pages/api/tool";
 
 export const getServerSideProps = async (context) => {
     return {
@@ -31,7 +32,7 @@ const ToolBuilder: Page = () => {
     const router = useRouter();
     const toolID = router.query.toolID;
     const selfCheckID = router.query.selfCheckID;
-
+    const [count, setCount] = useState(0);
     //Self check tool object
     const defaultTool = {
         _id: toolID,
@@ -67,7 +68,7 @@ const ToolBuilder: Page = () => {
     //self check card
     const defaultQuestions = [
         {
-            _id: selfCheckID,
+            _id: "tempId" + String(count),
             type: "multiple_choice",
             question: "",
             options: [
@@ -79,7 +80,7 @@ const ToolBuilder: Page = () => {
             questionNumber: 1,
         },
     ];
-    const [questionList, setQuestionList] = useState(defaultQuestions);
+    const [questionList, setQuestionList] = useState([]);
     const [lastSavedQuestions, setLastSavedQuestions] = useState(
         JSON.parse(JSON.stringify(defaultQuestions)),
     );
@@ -118,6 +119,7 @@ const ToolBuilder: Page = () => {
             });
             const questionIDs = response.data.questionIDs;
             const newQuestions = [];
+
             for (const question in questionIDs) {
                 newQuestions.push(
                     JSON.parse(JSON.stringify(defaultQuestions[0])),
@@ -133,13 +135,13 @@ const ToolBuilder: Page = () => {
                         questionResponse.data[property];
                 }
             }
-            console.log("new questions: ", newQuestions);
             setQuestionList(newQuestions);
         } catch (err) {
             console.log(err);
             //TODO: update error handling
         }
     };
+
     const getAllModules = async () => {
         try {
             const response = await axios({
@@ -182,14 +184,13 @@ const ToolBuilder: Page = () => {
     }, []);
 
     const saveTool = async () => {
-        console.log("Tool Homepage:", toolList);
         if (toolList.title == "") {
             toolList.title = "Untitled Tool";
         }
         try {
             await axios({
                 method: "PATCH",
-                url: `/api/tool/update?id=${toolID}`,
+                url: `/api/tool/${toolID}`,
                 data: toolList,
             });
         } catch (err) {
@@ -197,6 +198,7 @@ const ToolBuilder: Page = () => {
         }
     };
     const saveSelfCheck = async () => {
+        console.log("ssave list", questionList);
         for (const i in questionList) {
             if (questionList[i].question == "") {
                 questionList[i].question = "Untitled Question";
@@ -205,11 +207,11 @@ const ToolBuilder: Page = () => {
                 delete questionList[i]._id;
             }
         }
-        console.log("Self Check Questions:", questionList);
+        console.log("Patching Self Check Questions:", questionList);
         try {
             await axios({
                 method: "PATCH",
-                url: `/api/self-check/patch?id=${selfCheckID}`,
+                url: `/api/self-check/${selfCheckID}`,
                 data: questionList,
             });
         } catch (err) {
@@ -345,7 +347,7 @@ const ToolBuilder: Page = () => {
     };
 
     //keeps track of count of questions made so each question has a unique id
-    const [count, setCount] = useState(0);
+
     //For Switching between the tool home page and the tool self check questions page
     const [page, setPage] = useState("home");
 
@@ -491,6 +493,7 @@ const ToolBuilder: Page = () => {
     };
 
     const addOneQuestion = (index) => {
+        setCount(count + 1);
         const newQuestion = {
             _id: "tempId" + String(count),
             type: "multiple_choice",
@@ -505,7 +508,6 @@ const ToolBuilder: Page = () => {
         };
         const newList = questionList.slice(0);
         newList.splice(index + 1, 0, newQuestion);
-        setCount(count + 1);
         setQuestionList(newList);
         changeQuestionNumbers(newList);
     };
@@ -587,15 +589,8 @@ const ToolBuilder: Page = () => {
                                 onClose();
                                 clearToolHomePage();
                                 removeAllQuestions();
-                                toast({
-                                    title: "Deletion Successful",
-                                    description:
-                                        "Your tool data has been succesfully deleted",
-                                    status: "success",
-                                    position: "bottom-left",
-                                    duration: 5000,
-                                    isClosable: true,
-                                });
+                                saveTool();
+                                saveSelfCheck();
                             }}
                             w={100}
                             background="red.600"

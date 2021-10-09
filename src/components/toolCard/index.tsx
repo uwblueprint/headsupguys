@@ -28,7 +28,7 @@ export interface ToolCardProps extends InputProps {
     onUnlinkModule(event: any): any;
     onPublish(event: any): any;
     onUnpublish(event: any): any;
-    onDelete(event: any, arg2: any, arg3: any, arg4: any ): any;
+    onDelete(event: any, arg2: any, arg3: any, arg4: any): any;
 }
 
 export const ToolCard: React.FC<ToolCardProps> = ({
@@ -71,7 +71,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                 onClick={() => {
                     router.push({
                         pathname: "/admin/dashboard/toolBuilder",
-                        query: { toolID: id },
+                        query: { toolID: id, selfCheckID: selfCheckId },
                     });
                 }}
             >

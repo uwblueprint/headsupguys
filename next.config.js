@@ -11,4 +11,5 @@ module.exports = withPlugins([removeImports], {
         });
         return config;
     },
+    experimental: { esmExternals: true },
 });

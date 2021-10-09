@@ -30,6 +30,7 @@ import {
     MarkdownRenderer,
     ModulePreview,
     CheckboxComp,
+    ModuleSectionSelect
 } from "@components";
 
 const Builder: Page = () => {
@@ -152,11 +153,11 @@ const Builder: Page = () => {
                         <Box>
                             <Container maxW="70%" py={4}>
                                 <Stack spacing={2}>
-                                    <Heading>Section {slideNumber}</Heading>
-                                    <MarkdownEditor
+                                    <ModuleSectionSelect editorText={editorText} setEditorText={setEditorText} sectionNumber={slideNumber} />
+                                    {/* <MarkdownEditor
                                         value={editorText}
                                         setValue={setEditorText}
-                                    />
+                                    /> */}
                                 </Stack>
                             </Container>
                             <Container>

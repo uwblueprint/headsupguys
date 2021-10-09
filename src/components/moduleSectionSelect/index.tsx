@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Box, Heading, Select } from "@chakra-ui/react";
+import { MarkdownEditor } from "@components";
 
 export interface ModuleSectionSelectProps {
     sectionNumber: number;
@@ -8,7 +9,7 @@ export interface ModuleSectionSelectProps {
 export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
     props,
 ) => {
-    const { sectionNumber } = props;
+    const { sectionNumber, editorText, setEditorText } = props;
     const [contentType, setContentType] = useState("");
 
     const handleSelect = (e) => {
@@ -32,7 +33,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                 <option value="shortAnswer">Short Answer</option>
             </Select>
             {contentType == "staticContent" ? (
-                "<StaticContent />"
+                <MarkdownEditor value={editorText} setValue={setEditorText} />
             ) : contentType == "multipleChoice" ? (
                 "<MultipleChoice />"
             ) : contentType == "multiSelect" ? (

@@ -13,6 +13,7 @@ import {
     HStack,
     Container,
     IconButton,
+    Input,
     ButtonGroup,
     Editable,
     EditablePreview,
@@ -22,6 +23,8 @@ import { IoIosUndo, IoIosRedo } from "react-icons/io";
 import { IoTrash, IoDesktopOutline } from "react-icons/io5";
 import { FaMobileAlt } from "react-icons/fa";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import axios from "axios";
 
 import { Page } from "types/Page";
 import {
@@ -39,15 +42,17 @@ const Builder: Page = () => {
         onOpen: sidebarOpen,
         onClose: sidebarClose,
     } = useDisclosure();
+    const [moduleName, setModuleName] = useState("Untitled Module");
     const [editorText, setEditorText] = useState("Hello world!");
     const [slideNumber, setSlide] = useState(1);
     const [maxSlides, addSlide] = useState(1);
     const [prevSlide, setPrevSlide] = useState(1);
     const [slides, setSlides] = useState([editorText]);
-    const [buttons, setButtons] = useState(new Set(['prev', 'next']));
-
-    const moduleName = "Untitled Module";
+    const [buttons, setButtons] = useState(new Set(["prev", "next"]));
     const buttonOptions = ["prev", "next", "save", "print"];
+
+    const router = useRouter();
+    const { moduleId } = router.query;
 
     const handleEditableErrors = (e) => {
         const target = e.target as HTMLInputElement;
@@ -63,6 +68,21 @@ const Builder: Page = () => {
         }
     };
 
+    const handleSaveModule = () => {
+        // check if moduleId in url, if so call patch otherwise call post
+        if (moduleId) {
+            const response = axios({
+                method: "PATCH",
+                url: `/api/module/${moduleId}`,
+            });
+        } else {
+            const response = axios({
+                method: "POST",
+                url: "/api/module/post",
+            });
+        }
+    };
+
     return (
         <Stack spacing={0}>
             <Stack spacing={2} p={6}>
@@ -72,7 +92,15 @@ const Builder: Page = () => {
                     </Link>
                 </Box>
                 <Flex>
-                    <Heading>{moduleName}</Heading>
+                    <Box>
+                        <Input
+                            value={moduleName}
+                            size="lg"
+                            fontSize="32px"
+                            fontWeight="bold"
+                            onChange={(e) => setModuleName(e.target.value)}
+                        />
+                    </Box>
                     <Spacer />
                     <HStack spacing={2}>
                         <Button variant="outline"> Discard </Button>
@@ -81,6 +109,7 @@ const Builder: Page = () => {
                                 const newSlides = [...slides];
                                 newSlides[slideNumber - 1] = editorText;
                                 setSlides(newSlides);
+                                handleSaveModule();
                             }}
                         >
                             Save
@@ -117,7 +146,7 @@ const Builder: Page = () => {
                         }}
                         onBlur={handleEditableErrors}
                         onKeyDown={(e) => {
-                            if(e.key === "Enter") {
+                            if (e.key === "Enter") {
                                 handleEditableErrors(e);
                             }
                         }}
@@ -162,24 +191,31 @@ const Builder: Page = () => {
                             </Container>
                             <Container>
                                 <Stack spacing={10} direction="row">
-                                    {
-                                        buttonOptions.map( (button) => (
-                                            <CheckboxComp
-                                                text={button}
-                                                isChecked={buttons.has(button) ? true : false}
-                                                onChange={() => {
-                                                    if(buttons.has(button)){
-                                                        const newButtons = new Set(buttons);
-                                                        newButtons.delete(button);
-                                                        setButtons(newButtons);
-                                                    }
-                                                    else{
-                                                        setButtons(new Set(buttons).add(button));
-                                                    }
-                                                }}
-                                            />
-                                        ))
-                                    }
+                                    {buttonOptions.map((button) => (
+                                        <CheckboxComp
+                                            text={button}
+                                            isChecked={
+                                                buttons.has(button)
+                                                    ? true
+                                                    : false
+                                            }
+                                            onChange={() => {
+                                                if (buttons.has(button)) {
+                                                    const newButtons = new Set(
+                                                        buttons,
+                                                    );
+                                                    newButtons.delete(button);
+                                                    setButtons(newButtons);
+                                                } else {
+                                                    setButtons(
+                                                        new Set(buttons).add(
+                                                            button,
+                                                        ),
+                                                    );
+                                                }
+                                            }}
+                                        />
+                                    ))}
                                 </Stack>
                             </Container>
                         </Box>
@@ -209,10 +245,10 @@ const Builder: Page = () => {
                             margin="10px"
                         >
                             <ModulePreview
-                                previous = {( buttons.has("prev")) ? true : false}
-                                next = {( buttons.has("next")) ? true : false}
-                                save = {( buttons.has("save")) ? true : false}
-                                print= {( buttons.has("print")) ? true : false}
+                                previous={buttons.has("prev") ? true : false}
+                                next={buttons.has("next") ? true : false}
+                                save={buttons.has("save") ? true : false}
+                                print={buttons.has("print") ? true : false}
                                 progressValue={(slideNumber / maxSlides) * 100}
                                 variant={""}
                             />

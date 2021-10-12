@@ -61,13 +61,15 @@ const ModulesPage: Page = () => {
             <SimpleGrid minChildWidth="20rem" spacing={10}>
                 {modules.map(
                     ({ moduleId, title, toolID, lastUpdated, createdBy }) => (
-                        <ModuleCard
-                            key={moduleId}
-                            title={title}
-                            tool={toolID}
-                            lastUpdated={lastUpdated}
-                            author={createdBy.join(", ")}
-                        />
+                        <Link href={`builder?moduleId=${moduleId}`}>
+                            <ModuleCard
+                                key={moduleId}
+                                title={title}
+                                tool={toolID}
+                                lastUpdated={lastUpdated}
+                                author={createdBy.join(", ")}
+                            />
+                        </Link>
                     ),
                 )}
             </SimpleGrid>

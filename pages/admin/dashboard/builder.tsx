@@ -154,10 +154,7 @@ const Builder: Page = () => {
                             <Container maxW="70%" py={4}>
                                 <Stack spacing={2}>
                                     <ModuleSectionSelect editorText={editorText} setEditorText={setEditorText} sectionNumber={slideNumber} />
-                                    {/* <MarkdownEditor
-                                        value={editorText}
-                                        setValue={setEditorText}
-                                    /> */}
+                                    <Button outlineColor="black" variant="ghost">+ New Section</Button>
                                 </Stack>
                             </Container>
                             <Container>

@@ -96,11 +96,8 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                         value={type}
                         onChange={(e) => onChangeInput(e.target.value, "type")}
                     >
-                        <option>Type 1</option>
-                        <option>Type 2</option>
-                        <option>Type 3</option>
-                        <option>Type 4</option>
-                        <option>Type 5</option>
+                        <option>Problem</option>
+                        <option>Skill</option>
                     </Select>
                 </FormControl>
             </WrapItem>

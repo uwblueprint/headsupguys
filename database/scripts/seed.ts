@@ -186,6 +186,7 @@ function mockModules(slideIDs, toolIDs) {
 
 function mockTools(moduleIDs, groupIDs, toolIDs) {
     const statusTypes = ["published", "draft"];
+    const toolTypes = ["Problem", "Skill"];
     const tools = [];
 
     for (let i = 0; i < TOOL_COUNT; i++) {
@@ -204,7 +205,7 @@ function mockTools(moduleIDs, groupIDs, toolIDs) {
             _id: toolIDs[i],
             title: faker.lorem.words(),
             thumbnail: faker.internet.url(),
-            type: faker.lorem.words(),
+            type: toolTypes[i % toolTypes.length],
             video: faker.internet.url(),
             description: faker.lorem.sentences(),
             linkedModuleID: i < MODULE_COUNT ? String(moduleIDs[i]) : undefined,
@@ -219,7 +220,7 @@ function mockTools(moduleIDs, groupIDs, toolIDs) {
                 [faker.lorem.words(), faker.internet.url()],
                 [faker.lorem.words(), faker.internet.url()],
             ],
-            externalResources: [
+            sources: [
                 [faker.lorem.words(), faker.internet.url()],
                 [faker.lorem.words(), faker.internet.url()],
                 [faker.lorem.words(), faker.internet.url()],

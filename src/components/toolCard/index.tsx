@@ -80,7 +80,6 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                     <Flex justify="space-between">
                         <Heading fontSize={20} fontWeight="500">
                             {title}
-                            {"  "}
                             {published && <StarIcon boxSize="0.75em" />}
                         </Heading>
                         {published ? (

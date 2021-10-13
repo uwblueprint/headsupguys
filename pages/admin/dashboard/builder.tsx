@@ -110,6 +110,9 @@ const Builder: Page = () => {
                             size="lg"
                             fontSize="32px"
                             fontWeight="bold"
+                            isInvalid={moduleName === ""}
+                            errorBorderColor="red.500"
+                            focusBorderColor="none"
                             onChange={(e) => setModuleName(e.target.value)}
                         />
                     </Box>
@@ -123,6 +126,7 @@ const Builder: Page = () => {
                                 setSlides(newSlides);
                                 handleSaveModule();
                             }}
+                            isDisabled={moduleName === ""}
                         >
                             Save
                         </Button>

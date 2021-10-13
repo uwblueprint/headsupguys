@@ -6,7 +6,6 @@ import {
     Spacer,
     SimpleGrid,
     Stack,
-    LinkOverlay,
 } from "@chakra-ui/react";
 import axios from "axios";
 import Link from "next/link";

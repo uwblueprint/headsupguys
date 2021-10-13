@@ -68,18 +68,30 @@ const Builder: Page = () => {
         }
     };
 
-    const handleSaveModule = () => {
+    const handleSaveModule = async () => {
         // check if moduleId in url, if so call patch otherwise call post
         if (moduleId) {
-            const response = axios({
+            const response = await axios({
                 method: "PATCH",
                 url: `/api/module/${moduleId}`,
+                data: {
+                    title: moduleName,
+                },
             });
+            console.log(response);
         } else {
-            const response = axios({
+            const response = await axios({
                 method: "POST",
                 url: "/api/module/post",
+                data: {
+                    title: moduleName,
+                },
             });
+            console.log(response);
+            // redirect to builder url with the moduleId
+            router.push(
+                `/admin/dashboard/builder?moduleId=${response.data._id}`,
+            );
         }
     };
 

@@ -6,6 +6,7 @@ import {
     Spacer,
     SimpleGrid,
     Stack,
+    LinkOverlay,
 } from "@chakra-ui/react";
 import axios from "axios";
 import Link from "next/link";
@@ -60,15 +61,17 @@ const ModulesPage: Page = () => {
             </Flex>
             <SimpleGrid minChildWidth="20rem" spacing={10}>
                 {modules.map(
-                    ({ moduleId, title, toolID, lastUpdated, createdBy }) => (
-                        <Link href={`builder?moduleId=${moduleId}`}>
-                            <ModuleCard
-                                key={moduleId}
-                                title={title}
-                                tool={toolID}
-                                lastUpdated={lastUpdated}
-                                author={createdBy.join(", ")}
-                            />
+                    ({ _id, title, toolID, lastUpdated, createdBy }) => (
+                        <Link href={`builder?moduleId=${_id}`} passHref>
+                            <LinkOverlay>
+                                <ModuleCard
+                                    key={_id}
+                                    title={title}
+                                    tool={toolID}
+                                    lastUpdated={lastUpdated}
+                                    author={createdBy.join(", ")}
+                                />
+                            </LinkOverlay>
                         </Link>
                     ),
                 )}

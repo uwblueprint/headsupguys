@@ -99,7 +99,7 @@ const Builder: Page = () => {
                 method: "PATCH",
                 url: `/api/module/${moduleId}`,
                 data: {
-                    title: state.title,
+                    ...state,
                 },
             });
         } else {

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import {
     Flex,
     Text,
@@ -35,6 +35,17 @@ import {
     CheckboxComp,
 } from "@components";
 
+const initialState = { title: "Untitled Module" };
+
+function reducer(state, action) {
+    switch (action.type) {
+        case "changeTitle":
+            return { title: action.value };
+        default:
+            throw new Error();
+    }
+}
+
 const Builder: Page = () => {
     const {
         isOpen: isSidebarOpen,
@@ -43,12 +54,14 @@ const Builder: Page = () => {
         onClose: sidebarClose,
     } = useDisclosure();
     const [moduleName, setModuleName] = useState("Untitled Module");
+    const [state, dispatch] = useReducer(reducer, initialState);
     const [editorText, setEditorText] = useState("Hello world!");
     const [slideNumber, setSlide] = useState(1);
     const [maxSlides, addSlide] = useState(1);
     const [prevSlide, setPrevSlide] = useState(1);
     const [slides, setSlides] = useState([editorText]);
     const [buttons, setButtons] = useState(new Set(["prev", "next"]));
+
     const buttonOptions = ["prev", "next", "save", "print"];
 
     const router = useRouter();
@@ -95,6 +108,13 @@ const Builder: Page = () => {
         }
     };
 
+    const handleNullTitleErrors = (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.value === "") {
+            dispatch({ type: "changeTitle", value: initialState.title });
+        }
+    };
+
     return (
         <Stack spacing={0}>
             <Stack spacing={2} p={6}>
@@ -116,6 +136,28 @@ const Builder: Page = () => {
                             onChange={(e) => setModuleName(e.target.value)}
                         />
                     </Box>
+                    <Heading>
+                        <Editable
+                            defaultValue={initialState.title}
+                            value={state.title}
+                            onChange={(title) =>
+                                dispatch({ type: "changeTitle", value: title })
+                            }
+                            onBlur={(e) => {
+                                handleNullTitleErrors(e);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleNullTitleErrors(e);
+                                }
+                            }}
+                            width={350}
+                            textAlign="center"
+                        >
+                            <EditablePreview />
+                            <EditableInput />
+                        </Editable>
+                    </Heading>
                     <Spacer />
                     <HStack spacing={2}>
                         <Button variant="outline"> Discard </Button>

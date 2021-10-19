@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import {
     Flex,
     Text,
@@ -32,6 +32,17 @@ import {
     CheckboxComp,
 } from "@components";
 
+const initialState = { title: "Untitled Module" };
+
+function reducer(state, action) {
+    switch (action.type) {
+        case "changeTitle":
+            return { title: action.value };
+        default:
+            throw new Error();
+    }
+}
+
 const Builder: Page = () => {
     const {
         isOpen: isSidebarOpen,
@@ -39,14 +50,14 @@ const Builder: Page = () => {
         onOpen: sidebarOpen,
         onClose: sidebarClose,
     } = useDisclosure();
+    const [state, dispatch] = useReducer(reducer, initialState);
     const [editorText, setEditorText] = useState("Hello world!");
     const [slideNumber, setSlide] = useState(1);
     const [maxSlides, addSlide] = useState(1);
     const [prevSlide, setPrevSlide] = useState(1);
     const [slides, setSlides] = useState([editorText]);
-    const [buttons, setButtons] = useState(new Set(['prev', 'next']));
+    const [buttons, setButtons] = useState(new Set(["prev", "next"]));
 
-    const moduleName = "Untitled Module";
     const buttonOptions = ["prev", "next", "save", "print"];
 
     const handleEditableErrors = (e) => {
@@ -63,6 +74,13 @@ const Builder: Page = () => {
         }
     };
 
+    const handleNullTitleErrors = (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.value === "") {
+            dispatch({ type: "changeTitle", value: initialState.title });
+        }
+    };
+
     return (
         <Stack spacing={0}>
             <Stack spacing={2} p={6}>
@@ -72,7 +90,28 @@ const Builder: Page = () => {
                     </Link>
                 </Box>
                 <Flex>
-                    <Heading>{moduleName}</Heading>
+                    <Heading>
+                        <Editable
+                            defaultValue={initialState.title}
+                            value={state.title}
+                            onChange={(title) =>
+                                dispatch({ type: "changeTitle", value: title })
+                            }
+                            onBlur={(e) => {
+                                handleNullTitleErrors(e);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleNullTitleErrors(e);
+                                }
+                            }}
+                            width={350}
+                            textAlign="center"
+                        >
+                            <EditablePreview />
+                            <EditableInput />
+                        </Editable>
+                    </Heading>
                     <Spacer />
                     <HStack spacing={2}>
                         <Button variant="outline"> Discard </Button>
@@ -117,7 +156,7 @@ const Builder: Page = () => {
                         }}
                         onBlur={handleEditableErrors}
                         onKeyDown={(e) => {
-                            if(e.key === "Enter") {
+                            if (e.key === "Enter") {
                                 handleEditableErrors(e);
                             }
                         }}
@@ -162,24 +201,31 @@ const Builder: Page = () => {
                             </Container>
                             <Container>
                                 <Stack spacing={10} direction="row">
-                                    {
-                                        buttonOptions.map( (button) => (
-                                            <CheckboxComp
-                                                text={button}
-                                                isChecked={buttons.has(button) ? true : false}
-                                                onChange={() => {
-                                                    if(buttons.has(button)){
-                                                        const newButtons = new Set(buttons);
-                                                        newButtons.delete(button);
-                                                        setButtons(newButtons);
-                                                    }
-                                                    else{
-                                                        setButtons(new Set(buttons).add(button));
-                                                    }
-                                                }}
-                                            />
-                                        ))
-                                    }
+                                    {buttonOptions.map((button) => (
+                                        <CheckboxComp
+                                            text={button}
+                                            isChecked={
+                                                buttons.has(button)
+                                                    ? true
+                                                    : false
+                                            }
+                                            onChange={() => {
+                                                if (buttons.has(button)) {
+                                                    const newButtons = new Set(
+                                                        buttons,
+                                                    );
+                                                    newButtons.delete(button);
+                                                    setButtons(newButtons);
+                                                } else {
+                                                    setButtons(
+                                                        new Set(buttons).add(
+                                                            button,
+                                                        ),
+                                                    );
+                                                }
+                                            }}
+                                        />
+                                    ))}
                                 </Stack>
                             </Container>
                         </Box>
@@ -209,10 +255,10 @@ const Builder: Page = () => {
                             margin="10px"
                         >
                             <ModulePreview
-                                previous = {( buttons.has("prev")) ? true : false}
-                                next = {( buttons.has("next")) ? true : false}
-                                save = {( buttons.has("save")) ? true : false}
-                                print= {( buttons.has("print")) ? true : false}
+                                previous={buttons.has("prev") ? true : false}
+                                next={buttons.has("next") ? true : false}
+                                save={buttons.has("save") ? true : false}
+                                print={buttons.has("print") ? true : false}
                                 progressValue={(slideNumber / maxSlides) * 100}
                                 variant={""}
                             />

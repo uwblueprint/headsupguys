@@ -50,7 +50,6 @@ const Builder: Page = () => {
         onClose: sidebarClose,
     } = useDisclosure();
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [prevTitle, setPrevTitle] = useState(initialState.title);
     const [editorText, setEditorText] = useState("Hello world!");
     const [slideNumber, setSlide] = useState(1);
     const [maxSlides, addSlide] = useState(1);
@@ -77,9 +76,7 @@ const Builder: Page = () => {
     const handleNullTitleErrors = (e) => {
         const target = e.target as HTMLInputElement;
         if (target.value === "") {
-            dispatch({ type: "changeTitle", value: prevTitle });
-        } else {
-            setPrevTitle(target.value);
+            dispatch({ type: "changeTitle", value: initialState.title });
         }
     };
 

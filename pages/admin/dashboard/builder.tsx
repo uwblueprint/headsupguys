@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import {
     Flex,
     Text,
@@ -13,7 +13,6 @@ import {
     HStack,
     Container,
     IconButton,
-    Input,
     ButtonGroup,
     Editable,
     EditablePreview,
@@ -40,7 +39,9 @@ const initialState = { title: "Untitled Module" };
 function reducer(state, action) {
     switch (action.type) {
         case "changeTitle":
-            return { title: action.value };
+            return { ...state, title: action.value };
+        case "init":
+            return { ...action.payload };
         default:
             throw new Error();
     }
@@ -53,7 +54,6 @@ const Builder: Page = () => {
         onOpen: sidebarOpen,
         onClose: sidebarClose,
     } = useDisclosure();
-    const [moduleName, setModuleName] = useState("Untitled Module");
     const [state, dispatch] = useReducer(reducer, initialState);
     const [editorText, setEditorText] = useState("Hello world!");
     const [slideNumber, setSlide] = useState(1);
@@ -66,6 +66,17 @@ const Builder: Page = () => {
 
     const router = useRouter();
     const { moduleId } = router.query;
+
+    useEffect(() => {
+        function getUrl() {
+            return `/api/module/${moduleId}`;
+        }
+        async function fetchData() {
+            const response = await axios.get(getUrl());
+            dispatch({ type: "init", payload: response.data });
+        }
+        fetchData();
+    }, [moduleId]);
 
     const handleEditableErrors = (e) => {
         const target = e.target as HTMLInputElement;
@@ -84,24 +95,21 @@ const Builder: Page = () => {
     const handleSaveModule = async () => {
         // check if moduleId in url, if so call patch otherwise call post
         if (moduleId) {
-            const response = await axios({
+            await axios({
                 method: "PATCH",
                 url: `/api/module/${moduleId}`,
                 data: {
-                    title: moduleName,
+                    title: state.title,
                 },
             });
-            console.log(response);
         } else {
             const response = await axios({
                 method: "POST",
                 url: "/api/module/post",
                 data: {
-                    title: moduleName,
+                    ...state,
                 },
             });
-            console.log(response);
-            // redirect to builder url with the moduleId
             router.push(
                 `/admin/dashboard/builder?moduleId=${response.data._id}`,
             );
@@ -124,18 +132,6 @@ const Builder: Page = () => {
                     </Link>
                 </Box>
                 <Flex>
-                    <Box>
-                        <Input
-                            value={moduleName}
-                            size="lg"
-                            fontSize="32px"
-                            fontWeight="bold"
-                            isInvalid={moduleName === ""}
-                            errorBorderColor="red.500"
-                            focusBorderColor="none"
-                            onChange={(e) => setModuleName(e.target.value)}
-                        />
-                    </Box>
                     <Heading>
                         <Editable
                             defaultValue={initialState.title}
@@ -152,7 +148,6 @@ const Builder: Page = () => {
                                 }
                             }}
                             width={350}
-                            textAlign="center"
                         >
                             <EditablePreview />
                             <EditableInput />
@@ -168,7 +163,7 @@ const Builder: Page = () => {
                                 setSlides(newSlides);
                                 handleSaveModule();
                             }}
-                            isDisabled={moduleName === ""}
+                            isDisabled={state.title === ""}
                         >
                             Save
                         </Button>

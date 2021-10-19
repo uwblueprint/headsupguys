@@ -15,7 +15,6 @@ const getSelfCheckByID = async (
                 });
             }
         });
-
     res.status(200).json(selfCheck);
 };
 

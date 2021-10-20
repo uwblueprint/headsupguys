@@ -34,7 +34,50 @@ import {
     CheckboxComp,
 } from "@components";
 
-const initialState = { title: "Untitled Module" };
+type slides = [
+    {
+        checkpoint: boolean;
+        progressBarEnabled: boolean;
+        buttons: {
+            save: boolean;
+            print: boolean;
+            previous: boolean;
+            next: boolean;
+        };
+        sections: [
+            {
+                type: string; //markdown, mc, ms, sa
+                padding: {
+                    top: number;
+                    right: number;
+                    bottom: number;
+                    left: number;
+                };
+                markdown?: string; //stores markdown content, only applies to md component
+                alignment?: string; //on frontend this will be a dropdown
+            },
+        ];
+    },
+];
+
+const initialState = {
+    title: "Untitled Module",
+    slides: [
+        {
+            checkpoint: true,
+            progressBarEnabled: true,
+            buttons: { save: false, print: false, previous: true, next: true },
+            sections: [
+                {
+                    type: "markdown", //markdown, mc, ms, sa
+                    padding: { top: 10, right: 10, bottom: 10, left: 10 },
+                    markdown: "hello world", //stores markdown content, only applies to md component
+                    alignment: "align-left", //on frontend this will be a dropdown
+                },
+            ],
+        },
+    ],
+};
 
 function reducer(state, action) {
     switch (action.type) {

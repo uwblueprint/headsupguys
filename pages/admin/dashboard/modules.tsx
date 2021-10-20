@@ -60,9 +60,10 @@ const ModulesPage: Page = () => {
             </Flex>
             <SimpleGrid minChildWidth="20rem" spacing={10}>
                 {modules.map(
-                    ({ moduleId, title, toolID, lastUpdated, createdBy }) => (
+                    ({ _id, title, toolID, lastUpdated, createdBy }) => (
                         <ModuleCard
-                            key={moduleId}
+                            key={_id}
+                            moduleId={_id}
                             title={title}
                             tool={toolID}
                             lastUpdated={lastUpdated}

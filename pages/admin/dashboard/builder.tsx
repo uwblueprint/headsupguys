@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import {
     Flex,
     Text,
@@ -22,6 +22,8 @@ import { IoIosUndo, IoIosRedo } from "react-icons/io";
 import { IoTrash, IoDesktopOutline } from "react-icons/io5";
 import { FaMobileAlt } from "react-icons/fa";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import axios from "axios";
 
 import { Page } from "types/Page";
 import {
@@ -37,7 +39,9 @@ const initialState = { title: "Untitled Module" };
 function reducer(state, action) {
     switch (action.type) {
         case "changeTitle":
-            return { title: action.value };
+            return { ...state, title: action.value };
+        case "init":
+            return { ...action.payload };
         default:
             throw new Error();
     }
@@ -60,6 +64,20 @@ const Builder: Page = () => {
 
     const buttonOptions = ["prev", "next", "save", "print"];
 
+    const router = useRouter();
+    const { moduleId } = router.query;
+
+    useEffect(() => {
+        function getUrl() {
+            return `/api/module/${moduleId}`;
+        }
+        async function fetchData() {
+            const response = await axios.get(getUrl());
+            dispatch({ type: "init", payload: response.data });
+        }
+        fetchData();
+    }, [moduleId]);
+
     const handleEditableErrors = (e) => {
         const target = e.target as HTMLInputElement;
         if (
@@ -71,6 +89,30 @@ const Builder: Page = () => {
             setPrevSlide(slideNumber);
         } else {
             setSlide(prevSlide);
+        }
+    };
+
+    const handleSaveModule = async () => {
+        // check if moduleId in url, if so call patch otherwise call post
+        if (moduleId) {
+            await axios({
+                method: "PATCH",
+                url: `/api/module/${moduleId}`,
+                data: {
+                    ...state,
+                },
+            });
+        } else {
+            const response = await axios({
+                method: "POST",
+                url: "/api/module/post",
+                data: {
+                    ...state,
+                },
+            });
+            router.push(
+                `/admin/dashboard/builder?moduleId=${response.data._id}`,
+            );
         }
     };
 
@@ -106,7 +148,6 @@ const Builder: Page = () => {
                                 }
                             }}
                             width={350}
-                            textAlign="center"
                         >
                             <EditablePreview />
                             <EditableInput />
@@ -120,7 +161,9 @@ const Builder: Page = () => {
                                 const newSlides = [...slides];
                                 newSlides[slideNumber - 1] = editorText;
                                 setSlides(newSlides);
+                                handleSaveModule();
                             }}
+                            isDisabled={state.title === ""}
                         >
                             Save
                         </Button>

@@ -37,18 +37,10 @@ const SelfCheckQuestionSchema = new Schema<SelfCheckQuestionInterface>(
             type: Boolean,
             default: true,
         },
-        questionNumber: {
-            type: Number,
-            required: true,
-        },
     },
     {
         timestamps: true,
     },
 );
 
-const SelfCheckQuestion =
-    models.SelfCheckQuestion ||
-    model("SelfCheckQuestion", SelfCheckQuestionSchema, "self_check_questions");
-
-export { SelfCheckQuestion, QuestionType };
+export { SelfCheckQuestionSchema, QuestionType };

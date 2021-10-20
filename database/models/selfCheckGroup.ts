@@ -1,13 +1,14 @@
 import { models, model, Schema, Types } from "mongoose";
+import { SelfCheckQuestionSchema } from "./selfCheckQuestion";
 
 interface SelfCheckGroupInterface {
     _id: Types.ObjectId;
-    questionIDs: string[];
+    questions: string[];
 }
 
 const SelfCheckGroupSchema = new Schema<SelfCheckGroupInterface>(
     {
-        questionIDs: [String],
+        questions: [SelfCheckQuestionSchema],
     },
     {
         timestamps: true,

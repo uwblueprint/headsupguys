@@ -7,6 +7,7 @@ import {
     Spacer,
     Stack,
     Box,
+    Divider,
     useDisclosure,
     VStack,
     Heading,
@@ -26,12 +27,12 @@ import Link from "next/link";
 import { Page } from "types/Page";
 import {
     BuilderLayout,
-    MarkdownEditor,
     MarkdownRenderer,
     ModulePreview,
     CheckboxComp,
     ModuleSectionSelect
 } from "@components";
+import _ from "lodash";
 
 const Builder: Page = () => {
     const {
@@ -40,6 +41,31 @@ const Builder: Page = () => {
         onOpen: sidebarOpen,
         onClose: sidebarClose,
     } = useDisclosure();
+
+    // remove once real slide state is created
+    const [mockSlide, setMockSlide] = useState({
+        checkpoint: true,
+        progressBarEnabled: true,
+        buttons: {
+            save: true,
+            print: true,
+            previous: true,
+            next: true,
+        },
+        sections: [
+            {
+                type: "staticContent",
+                padding: {
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0,
+                },
+                markdown: "Hello!",
+                alignment: "",
+            },
+        ],
+    });
     const [editorText, setEditorText] = useState("Hello world!");
     const [slideNumber, setSlide] = useState(1);
     const [maxSlides, addSlide] = useState(1);
@@ -63,6 +89,22 @@ const Builder: Page = () => {
             setSlide(prevSlide);
         }
     };
+
+    const handleNewSlide = () => {
+        mockSlide.sections.push({
+            type: "",
+            padding: {
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+            },
+            markdown: "",
+            alignment: "",
+        });
+        console.log(mockSlide);
+        setMockSlide(_.cloneDeep(mockSlide));
+    }
 
     return (
         <Stack spacing={0}>
@@ -152,34 +194,48 @@ const Builder: Page = () => {
                     </Flex>
                     {isSidebarOpen && (
                         <Box>
-                            <Container maxW="70%" py={4}>
-                                <Stack spacing={2}>
-                                    <ModuleSectionSelect editorText={editorText} setEditorText={setEditorText} sectionNumber={slideNumber} />
-                                    <Button outlineColor="black" variant="ghost">+ New Section</Button>
-                                </Stack>
-                            </Container>
-                            <Container>
-                                <Stack spacing={10} direction="row">
-                                    {
-                                        buttonOptions.map( (button) => (
-                                            <CheckboxComp
-                                                text={button}
-                                                isChecked={buttons.has(button) ? true : false}
-                                                onChange={() => {
-                                                    if(buttons.has(button)){
-                                                        const newButtons = new Set(buttons);
-                                                        newButtons.delete(button);
-                                                        setButtons(newButtons);
+                            <div style={{ overflowY: "auto", height: "75vh" }}>
+                                <Container maxW="70%" py={4}>
+                                        {/* TODO: Change mockSlide to use actual slide state */}
+                                        <Stack spacing={2}>
+                                            {mockSlide.sections.map((x, idx) => (
+                                                <div key={idx}>
+                                                    {idx > 0 && 
+                                                        <div style={{ marginTop: "5%", marginBottom: "5%" }}>
+                                                            <Divider />
+                                                        </div>
                                                     }
-                                                    else{
-                                                        setButtons(new Set(buttons).add(button));
-                                                    }
-                                                }}
-                                            />
-                                        ))
-                                    }
-                                </Stack>
-                            </Container>
+                                                    <ModuleSectionSelect slide={mockSlide} slideNumber={idx} setSlide={setMockSlide} />
+                                                </div>
+                                            ))}
+                                            <br />
+                                            <Button onClick={handleNewSlide} colorScheme="black" variant="outline">+ New Section</Button>
+                                        </Stack>
+                                </Container>
+                                <Container>
+                                    <Stack spacing={10} direction="row">
+                                        {
+                                            buttonOptions.map( (button) => (
+                                                <CheckboxComp
+                                                    text={button}
+                                                    isChecked={buttons.has(button) ? true : false}
+                                                    onChange={() => {
+                                                        if(buttons.has(button)){
+                                                            const newButtons = new Set(buttons);
+                                                            newButtons.delete(button);
+                                                            setButtons(newButtons);
+                                                        }
+                                                        else{
+                                                            setButtons(new Set(buttons).add(button));
+                                                        }
+                                                    }}
+                                                />
+                                            ))
+                                        }
+                                    </Stack>
+                                    <br />
+                                </Container>
+                            </div>
                         </Box>
                     )}
                 </Box>

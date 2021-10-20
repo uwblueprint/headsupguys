@@ -16,6 +16,7 @@ const post = async (
         });
         return;
     }
+    //TODO: Update with new slide/section structure
 
     const { components } = req.body;
     const slide = new Slide({

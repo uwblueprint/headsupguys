@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import {
     Flex,
     Text,
@@ -23,6 +23,8 @@ import { IoIosUndo, IoIosRedo } from "react-icons/io";
 import { IoTrash, IoDesktopOutline } from "react-icons/io5";
 import { FaMobileAlt } from "react-icons/fa";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import axios from "axios";
 
 import { Page } from "types/Page";
 import {
@@ -33,6 +35,19 @@ import {
     ModuleSectionSelect
 } from "@components";
 import _ from "lodash";
+
+const initialState = { title: "Untitled Module" };
+
+function reducer(state, action) {
+    switch (action.type) {
+        case "changeTitle":
+            return { ...state, title: action.value };
+        case "init":
+            return { ...action.payload };
+        default:
+            throw new Error();
+    }
+}
 
 const Builder: Page = () => {
     const {
@@ -66,15 +81,29 @@ const Builder: Page = () => {
             },
         ],
     });
+    const [state, dispatch] = useReducer(reducer, initialState);
     const [editorText, setEditorText] = useState("Hello world!");
     const [slideNumber, setSlide] = useState(1);
     const [maxSlides, addSlide] = useState(1);
     const [prevSlide, setPrevSlide] = useState(1);
     const [slides, setSlides] = useState([editorText]);
-    const [buttons, setButtons] = useState(new Set(['prev', 'next']));
+    const [buttons, setButtons] = useState(new Set(["prev", "next"]));
 
-    const moduleName = "Untitled Module";
     const buttonOptions = ["prev", "next", "save", "print"];
+
+    const router = useRouter();
+    const { moduleId } = router.query;
+
+    useEffect(() => {
+        function getUrl() {
+            return `/api/module/${moduleId}`;
+        }
+        async function fetchData() {
+            const response = await axios.get(getUrl());
+            dispatch({ type: "init", payload: response.data });
+        }
+        fetchData();
+    }, [moduleId]);
 
     const handleEditableErrors = (e) => {
         const target = e.target as HTMLInputElement;
@@ -105,6 +134,36 @@ const Builder: Page = () => {
         console.log(mockSlide);
         setMockSlide(_.cloneDeep(mockSlide));
     }
+    const handleSaveModule = async () => {
+        // check if moduleId in url, if so call patch otherwise call post
+        if (moduleId) {
+            await axios({
+                method: "PATCH",
+                url: `/api/module/${moduleId}`,
+                data: {
+                    ...state,
+                },
+            });
+        } else {
+            const response = await axios({
+                method: "POST",
+                url: "/api/module/post",
+                data: {
+                    ...state,
+                },
+            });
+            router.push(
+                `/admin/dashboard/builder?moduleId=${response.data._id}`,
+            );
+        }
+    };
+
+    const handleNullTitleErrors = (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.value === "") {
+            dispatch({ type: "changeTitle", value: initialState.title });
+        }
+    };
 
     return (
         <Stack spacing={0}>
@@ -115,7 +174,27 @@ const Builder: Page = () => {
                     </Link>
                 </Box>
                 <Flex>
-                    <Heading>{moduleName}</Heading>
+                    <Heading>
+                        <Editable
+                            defaultValue={initialState.title}
+                            value={state.title}
+                            onChange={(title) =>
+                                dispatch({ type: "changeTitle", value: title })
+                            }
+                            onBlur={(e) => {
+                                handleNullTitleErrors(e);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleNullTitleErrors(e);
+                                }
+                            }}
+                            width={350}
+                        >
+                            <EditablePreview />
+                            <EditableInput />
+                        </Editable>
+                    </Heading>
                     <Spacer />
                     <HStack spacing={2}>
                         <Button variant="outline"> Discard </Button>
@@ -124,7 +203,9 @@ const Builder: Page = () => {
                                 const newSlides = [...slides];
                                 newSlides[slideNumber - 1] = editorText;
                                 setSlides(newSlides);
+                                handleSaveModule();
                             }}
+                            isDisabled={state.title === ""}
                         >
                             Save
                         </Button>
@@ -160,7 +241,7 @@ const Builder: Page = () => {
                         }}
                         onBlur={handleEditableErrors}
                         onKeyDown={(e) => {
-                            if(e.key === "Enter") {
+                            if (e.key === "Enter") {
                                 handleEditableErrors(e);
                             }
                         }}
@@ -263,10 +344,10 @@ const Builder: Page = () => {
                             margin="10px"
                         >
                             <ModulePreview
-                                previous = {( buttons.has("prev")) ? true : false}
-                                next = {( buttons.has("next")) ? true : false}
-                                save = {( buttons.has("save")) ? true : false}
-                                print= {( buttons.has("print")) ? true : false}
+                                previous={buttons.has("prev") ? true : false}
+                                next={buttons.has("next") ? true : false}
+                                save={buttons.has("save") ? true : false}
+                                print={buttons.has("print") ? true : false}
                                 progressValue={(slideNumber / maxSlides) * 100}
                                 variant={""}
                             />

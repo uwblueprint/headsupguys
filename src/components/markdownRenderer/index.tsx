@@ -93,9 +93,7 @@ const BaseRenderer: React.FC<{ content: string; variables?: any }> = ({
             {content.replace(
                 new RegExp(
                     Object.keys(stringConversionObj)
-                        .map((key) =>
-                            key.replace(/[-\\\^$*+?.()|[\]{}]/g, "\\$&"),
-                        )
+                        .map((key) => key.replace(/[-^$*+?.()|[\]{}]/g, "\\$&"))
                         .join("|"),
                     "gi",
                 ),

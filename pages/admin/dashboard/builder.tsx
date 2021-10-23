@@ -276,16 +276,16 @@ const Builder: Page = () => {
                     </Flex>
                     {isSidebarOpen && (
                         <Box>
-                            <Box overflow="auto" height="75vh">
+                            <Box overflowY="auto" height="75vh">
                                 <Container maxW="70%" py={4}>
                                         {/* TODO: Change mockSlide to use actual slide state */}
                                         <Stack spacing={2}>
                                             {mockSlide.sections.map((x, idx) => (
                                                 <div key={idx}>
                                                     {idx > 0 && 
-                                                        <div style={{ marginTop: "5%", marginBottom: "5%" }}>
+                                                        <Box marginTop="5%" marginBottom="5%">
                                                             <Divider />
-                                                        </div>
+                                                        </Box>
                                                     }
                                                     <ModuleSectionSelect slide={mockSlide} sectionNumber={idx} setSlide={setMockSlide} />
                                                 </div>

@@ -8,33 +8,28 @@ import {
     Stack,
 } from "@chakra-ui/react";
 import axios from "axios";
+import useSWR from "swr";
 import Link from "next/link";
 
 import { ModuleCard } from "@components/ModuleCard";
 import { Page } from "types/Page";
 import { AdminLayout } from "@components";
 
+const fetcher = async (url) => {
+    const response = await axios({
+        method: "GET",
+        url,
+    });
+    return response.data;
+};
+
 const ModulesPage: Page = () => {
     const [modules, setModules] = useState([]);
 
-    async function getModules() {
-        try {
-            const response = await axios({
-                method: "GET",
-                url: "/api/module/getAll",
-            });
-            setModules(response.data);
-        } catch (err) {
-            console.log(err);
-            //TODO: update error handling
-        }
-    }
+    const { data, error } = useSWR("/api/module/getAll", fetcher);
+    if (error) return "An error has occurred.";
+    if (!data) return "Loading...";
 
-    // TODO: Implement Create connection
-
-    useEffect(() => {
-        getModules();
-    }, []);
     return (
         <Stack spacing={8}>
             <Flex direction="row">

@@ -11,7 +11,9 @@ const Home: React.FC = () => {
                 <MarkdownEditor value={editorText} setValue={setEditorText} />
             </div>
             {JSON.stringify(editorText)}
-            <MarkdownRenderer>{editorText}</MarkdownRenderer>
+            <MarkdownRenderer variables={{ hi: ["h", "e", "l", "l", "o"] }}>
+                {editorText}
+            </MarkdownRenderer>
             <Spacer />
         </Flex>
     );

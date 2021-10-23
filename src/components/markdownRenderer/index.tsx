@@ -60,11 +60,26 @@ const BaseRenderer: React.FC<{ content: string; variables?: any }> = ({
                         ) : content.includes("<>[") ? (
                             <>
                                 <div>
-                                    {variables
-                                        ? variables[rest.href]
-                                            ? variables[rest.href]
-                                            : ""
-                                        : `<Data for ${rest.href}>`}
+                                    {variables ? (
+                                        variables[rest.href] ? (
+                                            typeof variables[rest.href] ===
+                                            "string" ? (
+                                                variables[rest.href]
+                                            ) : (
+                                                <ul>
+                                                    {variables[rest.href].map(
+                                                        (item) => (
+                                                            <li>{item}</li>
+                                                        ),
+                                                    )}
+                                                </ul>
+                                            )
+                                        ) : (
+                                            ""
+                                        )
+                                    ) : (
+                                        `<Data for ${rest.href}>`
+                                    )}
                                 </div>
                             </>
                         ) : (

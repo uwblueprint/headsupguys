@@ -4,7 +4,7 @@ require("dotenv").config({ path: ".env.local" });
 const ObjectId = require("mongodb").ObjectId;
 const faker = require("faker");
 
-import { Section as sectionCollection } from "../models/section";
+// import { Section as sectionCollection } from "../models/section";
 import { Module as moduleCollection } from "../models/module";
 import { Slide as slideCollection } from "../models/slide";
 import { Tool as toolCollection } from "../models/tool";
@@ -44,7 +44,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
                 db.collection("self_check_questions").drop(),
                 db.collection("self_check_groups").drop(),
                 // db.collection("components").drop(),
-                db.collection("sections").drop(),
+                // db.collection("sections").drop(),
                 db.collection("slides").drop(),
                 db.collection("modules").drop(),
                 db.collection("tools").drop(),
@@ -61,13 +61,14 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         );
         const groupIDs = groups.map((x) => x._id);
 
-        const sections = await sectionCollection.insertMany(
-            mockSections(),
-        );
-        const sectionIDs = sections.map((x) => x._id);
+        // const sections = await sectionCollection.insertMany(
+        //     mockSections(),
+        // );
+        const sections = mockSections();
+        // const sectionIDs = sections.map((x) => x._id);
 
         const slides = await slideCollection.insertMany(
-            mockSlides(sectionIDs),
+            mockSlides(sections),
         );
         const slideIDs = (slides as any[]).map((x) => x._id);
 
@@ -158,16 +159,18 @@ function mockSlides(sections) {
             //     COMPONENTS_PER_SLIDE * i,
             //     COMPONENTS_PER_SLIDE * (i + 1),
             // ),
-            sections: sections[i % SECTION_COUNT], //TODO: Update to get full section in slides
-            //TODO: Update buttons for randomization 
+            sections: sections.slice(
+                    SECTIONS_PER_SLIDE * i,
+                    SECTIONS_PER_SLIDE * (i + 1),
+                ),
             buttons: {
-                save: true,
-                print: false,
-                previous: true,
-                next: false
+                save: !!(i%2),
+                print: !!(i%3),
+                previous: !!(i>0),
+                next: !!(i< SLIDE_COUNT+1)
             },
-            progressBarEnabled: true,
-            checkpoint: true
+            progressBarEnabled: !!(i%2),
+            checkpoint: !!(i%3)
         });
     }
     return slides;
@@ -180,7 +183,6 @@ function mockModules(slideIDs, toolIDs) {
     for (let i = 0; i < MODULE_COUNT; i++) {
         modules.push({
             title: faker.lorem.words(),
-            //TODO: Update to store entire slide data in the modules???
             slideIDs: slideIDs.slice(
                 SLIDES_PER_MODULE * i,
                 SLIDES_PER_MODULE * (i + 1),

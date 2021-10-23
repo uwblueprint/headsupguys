@@ -3,7 +3,7 @@ enum SectionType {
     MARKDOWN = "markdown",
     MULTIPLECHOICE = "mc",
     MULTISELECT = "ms",
-    SA="sa"
+    SHORTANSWER="sa"
 }
 
 export interface SectionInterface {
@@ -41,6 +41,5 @@ const SectionSchema = new Schema<SectionInterface>(
     },
 );
 
-const Section = models.Section || model("Section", SectionSchema);
 
-export { Section, SectionSchema };
+export { SectionSchema };

@@ -18,9 +18,9 @@ const post = async (
     }
     //TODO: Update with new slide/section structure
 
-    const { components } = req.body;
+    const { sections } = req.body;
     const slide = new Slide({
-        components,
+        sections,
     });
     slide.save();
     // Creates a new slide at the end of the ordered list of slides

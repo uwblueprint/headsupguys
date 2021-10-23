@@ -6,8 +6,12 @@ const get = async (
     req: NextApiRequest,
     res: NextApiResponse<ModuleInterface | ErrorResponse>,
 ): Promise<void> => {
-    const { id } = req.query;
+    const { id, includeSlide } = req.query;
     const module = await Module.findById(id);
+    if (includeSlide){
+        await module.populate("slideIDs").execPopulate();
+        // res.status(200).json(slide);
+    }
     if (!module)
         return res
             .status(404)

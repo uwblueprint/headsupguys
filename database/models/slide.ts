@@ -12,14 +12,16 @@ export interface SlideInterface {
     checkpoint: boolean;
     progressBarEnabled: boolean;
     buttons: {save: boolean, print: boolean, previous: boolean, next: boolean};
-    sections: [
-        {
-            type: string;
-            padding: string[4];
-            markdown: string;
-            alignment: string;
-        }
-    ];
+    // sections: [
+    //     {
+    //         type: string;
+    //         padding: string[4];
+    //         markdown: string;
+    //         alignment: string;
+    //     }
+    // ];
+    sections: SectionInterface[];
+
 }
 
 const SlideSchema = new Schema<SlideInterface>(
@@ -34,12 +36,7 @@ const SlideSchema = new Schema<SlideInterface>(
             required: true
         },
         buttons: {save: Boolean, print: Boolean, previous: Boolean, next: Boolean},
-        sections: [{
-            type: String,
-            padding: String[4],
-            markdown: String,
-            alignment: String
-        }]
+        sections: [SectionSchema]
     },
     {
         timestamps: true,

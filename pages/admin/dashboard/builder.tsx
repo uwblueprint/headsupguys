@@ -35,6 +35,7 @@ import {
     ModuleSectionSelect
 } from "@components";
 import _ from "lodash";
+import { ISlide } from "@components/moduleSectionSelect";
 
 const initialState = { title: "Untitled Module" };
 
@@ -275,7 +276,7 @@ const Builder: Page = () => {
                     </Flex>
                     {isSidebarOpen && (
                         <Box>
-                            <div style={{ overflowY: "auto", height: "75vh" }}>
+                            <Box overflow="auto" height="75vh">
                                 <Container maxW="70%" py={4}>
                                         {/* TODO: Change mockSlide to use actual slide state */}
                                         <Stack spacing={2}>
@@ -286,7 +287,7 @@ const Builder: Page = () => {
                                                             <Divider />
                                                         </div>
                                                     }
-                                                    <ModuleSectionSelect slide={mockSlide} slideNumber={idx} setSlide={setMockSlide} />
+                                                    <ModuleSectionSelect slide={mockSlide} sectionNumber={idx} setSlide={setMockSlide} />
                                                 </div>
                                             ))}
                                             <br />
@@ -316,7 +317,7 @@ const Builder: Page = () => {
                                     </Stack>
                                     <br />
                                 </Container>
-                            </div>
+                            </Box>
                         </Box>
                     )}
                 </Box>

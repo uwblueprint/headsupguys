@@ -16,11 +16,13 @@ const post = async (
         });
         return;
     }
-    //TODO: Update with new slide/section structure
-
-    const { sections } = req.body;
+    
+    const { sections, checkpoint, progressBarEnabled, buttons } = req.body;
     const slide = new Slide({
-        sections,
+        sections: sections,
+        checkpoint: checkpoint,
+        progressBarEnabled: progressBarEnabled,
+        buttons: buttons,
     });
     slide.save();
     // Creates a new slide at the end of the ordered list of slides

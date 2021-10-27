@@ -10,7 +10,6 @@ const get = async (
     const module = await Module.findById(id);
     if (includeSlide){
         await module.populate("slideIDs").execPopulate();
-        // res.status(200).json(slide);
     }
     if (!module)
         return res

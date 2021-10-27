@@ -16,7 +16,7 @@ const post = async (
         });
         return;
     }
-    
+
     const { sections, checkpoint, progressBarEnabled, buttons } = req.body;
     const slide = new Slide({
         sections: sections,

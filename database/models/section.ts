@@ -3,7 +3,7 @@ enum SectionType {
     MARKDOWN = "markdown",
     MULTIPLECHOICE = "mc",
     MULTISELECT = "ms",
-    SHORTANSWER="sa"
+    SHORTANSWER = "sa",
 }
 
 export interface SectionInterface {
@@ -40,6 +40,5 @@ const SectionSchema = new Schema<SectionInterface>(
         timestamps: true,
     },
 );
-
 
 export { SectionSchema };

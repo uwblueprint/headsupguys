@@ -8,7 +8,7 @@ const get = async (
 ): Promise<void> => {
     const { id, includeSlide } = req.query;
     const module = await Module.findById(id);
-    if (includeSlide){
+    if (includeSlide) {
         await module.populate("slideIDs").execPopulate();
     }
     if (!module)

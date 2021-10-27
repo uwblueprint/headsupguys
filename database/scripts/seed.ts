@@ -67,9 +67,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         const sections = mockSections();
         // const sectionIDs = sections.map((x) => x._id);
 
-        const slides = await slideCollection.insertMany(
-            mockSlides(sections),
-        );
+        const slides = await slideCollection.insertMany(mockSlides(sections));
         const slideIDs = (slides as any[]).map((x) => x._id);
 
         // need to generate toolIDs beforehand to avoid a circular dependency
@@ -152,7 +150,6 @@ function mockSections() {
 function mockSlides(sections) {
     const slides = [];
 
-
     for (let i = 0; i < SLIDE_COUNT; i++) {
         slides.push({
             // componentIDs: componentIDs.slice(
@@ -160,17 +157,17 @@ function mockSlides(sections) {
             //     COMPONENTS_PER_SLIDE * (i + 1),
             // ),
             sections: sections.slice(
-                    SECTIONS_PER_SLIDE * i,
-                    SECTIONS_PER_SLIDE * (i + 1),
-                ),
+                SECTIONS_PER_SLIDE * i,
+                SECTIONS_PER_SLIDE * (i + 1),
+            ),
             buttons: {
-                save: !!(i%2),
-                print: !!(i%3),
-                previous: !!(i>0),
-                next: !!(i< SLIDE_COUNT+1)
+                save: !!(i % 2),
+                print: !!(i % 3),
+                previous: !!(i > 0),
+                next: !!(i < SLIDE_COUNT + 1),
             },
-            progressBarEnabled: !!(i%2),
-            checkpoint: !!(i%3)
+            progressBarEnabled: !!(i % 2),
+            checkpoint: !!(i % 3),
         });
     }
     return slides;

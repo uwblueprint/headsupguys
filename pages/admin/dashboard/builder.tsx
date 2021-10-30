@@ -34,49 +34,52 @@ import {
     CheckboxComp,
 } from "@components";
 
+type slide = {
+    checkpoint: boolean;
+    progressBarEnabled: boolean;
+    buttons: {
+        save: boolean;
+        print: boolean;
+        previous: boolean;
+        next: boolean;
+    };
+    sections: [
+        {
+            type: string; //markdown, mc, ms, sa
+            padding: {
+                top: number;
+                right: number;
+                bottom: number;
+                left: number;
+            };
+            markdown?: string; //stores markdown content, only applies to md component
+            alignment?: string; //on frontend this will be a dropdown
+        },
+    ];
+}
 type slides = [
-    {
-        checkpoint: boolean;
-        progressBarEnabled: boolean;
-        buttons: {
-            save: boolean;
-            print: boolean;
-            previous: boolean;
-            next: boolean;
-        };
-        sections: [
-            {
-                type: string; //markdown, mc, ms, sa
-                padding: {
-                    top: number;
-                    right: number;
-                    bottom: number;
-                    left: number;
-                };
-                markdown?: string; //stores markdown content, only applies to md component
-                alignment?: string; //on frontend this will be a dropdown
-            },
-        ];
-    },
+    slide
 ];
+
+const defaultSlide = {
+    checkpoint: true,
+    progressBarEnabled: true,
+    buttons: { save: false, print: false, previous: true, next: true },
+    sections: [
+        {
+            type: "markdown", //markdown, mc, ms, sa
+            padding: { top: 10, right: 10, bottom: 10, left: 10 },
+            markdown: "hello world", //stores markdown content, only applies to md component
+            alignment: "align-left", //on frontend this will be a dropdown
+        },
+    ],
+}
 
 const initialState = {
     title: "Untitled Module",
     slides: [
-        {
-            checkpoint: true,
-            progressBarEnabled: true,
-            buttons: { save: false, print: false, previous: true, next: true },
-            sections: [
-                {
-                    type: "markdown", //markdown, mc, ms, sa
-                    padding: { top: 10, right: 10, bottom: 10, left: 10 },
-                    markdown: "hello world", //stores markdown content, only applies to md component
-                    alignment: "align-left", //on frontend this will be a dropdown
-                },
-            ],
-        },
-    ],
+            defaultSlide
+        ]
 };
 
 function reducer(state, action) {
@@ -85,6 +88,15 @@ function reducer(state, action) {
             return { ...state, title: action.value };
         case "init":
             return { ...action.payload };
+        case "addSlide":
+            return {...state, slides: {...state.slides, defaultSlide}}
+        case "updateSlide":
+            // eslint-disable-next-line no-case-declarations
+            const currentSlide = state.slides[action.index-1];
+            // eslint-disable-next-line no-case-declarations
+            const [payloadKey, payloadValue] = action.payload;
+            currentSlide[payloadKey] = payloadValue
+            return {...state, slides: {...state.slides, ...state.slides[action.index-1]}}
         default:
             throw new Error();
     }
@@ -98,14 +110,14 @@ const Builder: Page = () => {
         onClose: sidebarClose,
     } = useDisclosure();
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [editorText, setEditorText] = useState("Hello world!");
+    // const [editorText, setEditorText] = useState("Hello world!");
     const [slideNumber, setSlide] = useState(1);
     const [maxSlides, addSlide] = useState(1);
     const [prevSlide, setPrevSlide] = useState(1);
-    const [slides, setSlides] = useState([editorText]);
-    const [buttons, setButtons] = useState(new Set(["prev", "next"]));
+    // const [slides, setSlides] = useState([editorText]);
+    // const [buttons, setButtons] = useState(new Set(["prev", "next"]));
 
-    const buttonOptions = ["prev", "next", "save", "print"];
+    // const buttonOptions = ["prev", "next", "save", "print"];
 
     const router = useRouter();
     const { moduleId } = router.query;
@@ -128,7 +140,7 @@ const Builder: Page = () => {
             parseInt(target.value) >= 1 &&
             parseInt(target.value) <= maxSlides
         ) {
-            setEditorText(slides[Number(slideNumber) - 1]);
+            // setEditorText(slides[Number(slideNumber) - 1]);
             setPrevSlide(slideNumber);
         } else {
             setSlide(prevSlide);
@@ -201,10 +213,10 @@ const Builder: Page = () => {
                         <Button variant="outline"> Discard </Button>
                         <Button
                             onClick={() => {
-                                const newSlides = [...slides];
-                                newSlides[slideNumber - 1] = editorText;
-                                setSlides(newSlides);
-                                handleSaveModule();
+                                // const newSlides = [...slides];
+                                // newSlides[slideNumber - 1] = editorText;
+                                // setSlides(newSlides);
+                                // handleSaveModule();
                             }}
                             isDisabled={state.title === ""}
                         >
@@ -224,10 +236,12 @@ const Builder: Page = () => {
                     onClick={() => {
                         setSlide(slideNumber + 1);
                         addSlide(maxSlides + 1);
-                        setEditorText("");
-                        const newSlides = [...slides];
-                        newSlides[maxSlides - 1] = editorText;
-                        setSlides(newSlides);
+                        // setEditorText("");
+                        // const newSlides = [...slides];
+                        // newSlides[maxSlides - 1] = editorText;
+                        // setSlides(newSlides);
+
+                        dispatch({type: "addSlide"});
                     }}
                 >
                     New Slide
@@ -280,35 +294,38 @@ const Builder: Page = () => {
                                 <Stack spacing={2}>
                                     <Heading>Section {slideNumber}</Heading>
                                     <MarkdownEditor
-                                        value={editorText}
-                                        setValue={setEditorText}
+                                        value={state.slides[slideNumber-1]}
+                                        setValue={(content) => dispatch({type: "updateSlide", index: slideNumber, payload: {markdown: content}})}
                                     />
                                 </Stack>
                             </Container>
                             <Container>
                                 <Stack spacing={10} direction="row">
-                                    {buttonOptions.map((button) => (
+                                    {state.slides[slideNumber-1].buttons.map(([buttonKey, buttonValue]) => (
                                         <CheckboxComp
-                                            text={button}
+                                            text={buttonKey}
                                             isChecked={
-                                                buttons.has(button)
+                                                buttonValue
                                                     ? true
                                                     : false
                                             }
                                             onChange={() => {
-                                                if (buttons.has(button)) {
-                                                    const newButtons = new Set(
-                                                        buttons,
-                                                    );
-                                                    newButtons.delete(button);
-                                                    setButtons(newButtons);
-                                                } else {
-                                                    setButtons(
-                                                        new Set(buttons).add(
-                                                            button,
-                                                        ),
-                                                    );
-                                                }
+                                                // if (buttonValue) {
+                                                    // const newButtons = new Set(
+                                                    //     state.slides[slideNumber].buttons,
+                                                    // );
+                                                    // newButtons.delete(button);
+                                                    // setButtons(newButtons);
+                                                    const buttons = state.slides[slideNumber-1].buttons;
+                                                    buttons[buttonKey] = !buttonValue;
+                                                    dispatch({type: "updateSlide", index: slideNumber, payload: {buttons: buttons}})
+                                                // } else {
+                                                //     setButtons(
+                                                //         new Set(buttons).add(
+                                                //             button,
+                                                //         ),
+                                                //     );
+                                                // }
                                             }}
                                         />
                                     ))}
@@ -332,7 +349,7 @@ const Builder: Page = () => {
                         position="relative"
                         align="center"
                     >
-                        <MarkdownRenderer>{editorText}</MarkdownRenderer>
+                        <MarkdownRenderer>{state.slides[slideNumber-1].markdown}</MarkdownRenderer>
                         <Box
                             position="absolute"
                             bottom="0"
@@ -341,10 +358,10 @@ const Builder: Page = () => {
                             margin="10px"
                         >
                             <ModulePreview
-                                previous={buttons.has("prev") ? true : false}
-                                next={buttons.has("next") ? true : false}
-                                save={buttons.has("save") ? true : false}
-                                print={buttons.has("print") ? true : false}
+                                previous={state.slides[slideNumber-1].buttons.previous ? true : false}
+                                next={state.slides[slideNumber-1].buttons.next ? true : false}
+                                save={state.slides[slideNumber-1].buttons.save  ? true : false}
+                                print={state.slides[slideNumber-1].buttons.print  ? true : false}
                                 progressValue={(slideNumber / maxSlides) * 100}
                                 variant={""}
                             />

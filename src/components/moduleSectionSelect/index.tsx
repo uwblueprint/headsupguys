@@ -1,23 +1,76 @@
-import React, { useState } from "react";
-import { Box, Heading, Select } from "@chakra-ui/react";
+import React from "react";
+import {
+    Box,
+    HStack,
+    Stack,
+    Heading,
+    Text,
+    Select,
+    Input,
+} from "@chakra-ui/react";
+import _ from "lodash";
+import { MarkdownEditor } from "@components";
 
+export interface ISlide {
+    checkpoint: boolean;
+    progressBarEnabled: boolean;
+    buttons: {
+        save: boolean;
+        print: boolean;
+        previous: boolean;
+        next: boolean;
+    };
+    sections: {
+        type: string; //markdown, mc, ms, sa
+        padding: {
+            top: number;
+            right: number;
+            bottom: number;
+            left: number;
+        };
+        markdown?: string; //stores markdown content, only applies to md component
+        alignment?: string; //on frontend this will be a dropdown
+    }[];
+}
 export interface ModuleSectionSelectProps {
+    slide: ISlide;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setSlide: React.Dispatch<React.SetStateAction<ISlide>>; // TYPE IS SLIDE RIGHT ABOVE
     sectionNumber: number;
 }
 
 export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
     props,
 ) => {
-    const { sectionNumber } = props;
-    const [contentType, setContentType] = useState("");
+    const { slide, setSlide, sectionNumber } = props;
+
+    const paddingMap = {
+        T: "top",
+        R: "right",
+        B: "bottom",
+        L: "left",
+    };
 
     const handleSelect = (e) => {
-        setContentType(e.currentTarget.value);
+        slide.sections[sectionNumber].type = e.currentTarget.value;
+        setSlide(_.cloneDeep(slide));
+    };
+
+    const handleMarkdownChange = (text) => {
+        console.log("markdownchange");
+        slide.sections[sectionNumber].markdown = text;
+        console.log("slide", slide);
+        setSlide(_.cloneDeep(slide));
+    };
+
+    const handlePaddingChange = (padVal) => {
+        slide.sections[sectionNumber].padding[paddingMap[padVal]];
+        setSlide(_.cloneDeep(slide));
     };
 
     return (
         <Box>
-            <Heading size="lg">Section {sectionNumber}</Heading>
+            <Heading size="lg">Section {sectionNumber + 1}</Heading>
             <br />
             <Heading size="md">Select Content Type</Heading>
             <Select
@@ -31,13 +84,30 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                 <option value="multiSelect">Multiselect</option>
                 <option value="shortAnswer">Short Answer</option>
             </Select>
-            {contentType == "staticContent" ? (
-                "<StaticContent />"
-            ) : contentType == "multipleChoice" ? (
+            {slide.sections[sectionNumber].type == "staticContent" ? (
+                <Stack spacing={2}>
+                    <MarkdownEditor
+                        value={slide.sections[sectionNumber].markdown || ""}
+                        setValue={handleMarkdownChange}
+                    />
+                    <HStack spacing={10}>
+                        <Heading size="sm">Padding&nbsp;(%)</Heading>
+                        {["T", "R", "B", "L"].map((padVal) => (
+                            <HStack>
+                                <Text>{padVal}&nbsp;</Text>
+                                <Input
+                                    onChange={() => handlePaddingChange(padVal)}
+                                    placeholder="0%"
+                                />
+                            </HStack>
+                        ))}
+                    </HStack>
+                </Stack>
+            ) : slide.sections[sectionNumber].type == "multipleChoice" ? (
                 "<MultipleChoice />"
-            ) : contentType == "multiSelect" ? (
+            ) : slide.sections[sectionNumber].type == "multiSelect" ? (
                 "<MultiSelect />"
-            ) : contentType == "shortAnswer" ? (
+            ) : slide.sections[sectionNumber].type == "shortAnswer" ? (
                 "<ShortAnswer />"
             ) : (
                 <></>

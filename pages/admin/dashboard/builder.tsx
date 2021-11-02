@@ -77,13 +77,13 @@ const defaultSlide = {
             alignment: "align-left", //on frontend this will be a dropdown
         },
     ],
-}
+};      
 
 const initialState = {
     title: "Untitled Module",
     slides: [
-            defaultSlide
-        ]
+        defaultSlide
+    ]
 };
 
 function reducer(state: moduleState, action) {
@@ -151,6 +151,7 @@ const Builder: Page = () => {
             },
         ],
     });
+
     const [state, dispatch] = useReducer(reducer, initialState);
     // const [editorText, setEditorText] = useState("Hello world!");
     const [slideNumber, setSlide] = useState(1);
@@ -278,7 +279,7 @@ const Builder: Page = () => {
                                 // const newSlides = [...slides];
                                 // newSlides[slideNumber - 1] = editorText;
                                 // setSlides(newSlides);
-                                // handleSaveModule();
+                                handleSaveModule();
                             }}
                             isDisabled={state.title === ""}
                         >

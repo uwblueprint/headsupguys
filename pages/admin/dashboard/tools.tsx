@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
     Stack,
     Flex,
@@ -6,6 +6,7 @@ import {
     Button,
     useDisclosure,
     Spacer,
+    Spinner,
 } from "@chakra-ui/react";
 import { ToolCard, Modal, AdminLayout } from "@components";
 import { Page } from "types/Page";
@@ -20,31 +21,75 @@ const fetcher = async (url) => {
     return response.data;
 };
 
-const ToolsPage: Page = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+export interface ToolsProps {
+    selectedTab: string;
+}
 
+export interface ToolsHeaderProps extends ToolsProps {
+    setSelectedTab: (tabName: string) => void;
+}
+
+const ToolsHeader: React.FC<ToolsHeaderProps> = ({
+    selectedTab,
+    setSelectedTab,
+}) => {
+    return (
+        <>
+            <Flex wrap={"wrap"} justify={"left"} width={"full"}>
+                <Text mr={2} fontWeight="bold" fontSize="4xl">
+                    Tools
+                </Text>
+                <Spacer />
+                <Button
+                    _hover={{ bg: "#F3F3F3" }}
+                    _active={{
+                        transform: "scale(0.95)",
+                    }}
+                    // onClick={() => {}}
+                    minWidth={"90"}
+                    colorScheme="white"
+                    variant="outline"
+                >
+                    Create Tool
+                </Button>
+            </Flex>
+            <Flex mb={10} wrap={"wrap"} justify={"left"} width={"full"}>
+                <Button
+                    variant="link"
+                    mr={"20px"}
+                    _active={{ textDecoration: "underline", color: "#000" }}
+                    onClick={() => setSelectedTab("draft")}
+                    isActive={selectedTab === "draft"}
+                >
+                    Drafts
+                </Button>
+                <Button
+                    variant="link"
+                    _active={{ textDecoration: "underline", color: "#000" }}
+                    onClick={() => setSelectedTab("published")}
+                    isActive={selectedTab === "published"}
+                >
+                    Published
+                </Button>
+            </Flex>
+        </>
+    );
+};
+
+const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedTool, setSelectedTool] = useState("");
     const [selectedToolId, setSelectedToolId] = useState("");
     // Modal can be of "publish" or "delete" mode
     const [modalMode, setModalMode] = useState("");
     const publishConfirmation = `Are you sure you want to publish ${selectedTool}? Your tool will be available to the public!`;
     const deleteConfirmation = `Are you sure you want to delete ${selectedTool}? This is a permanent action that cannot be undone.`;
-
-    const [selectedTab, setSelectedTab] = useState("draft");
     const [refresh, setRefresh] = useState(false);
 
     // TODO: Need to update this to calculate relative date
     // const date = new Date();
 
-    // Fetch all tools
-    const { data, error } = useSWR("/api/tool", fetcher);
-    if (error) return "An error has occurred.";
-    if (!data) {
-        return "Loading...";
-    }
-    const toolsArray = data.filter((t) => {
-        return t["status"] === selectedTab;
-    });
+    //TODO: Add connection to DB for unpublish and linking/unlinking tools
 
     const onLinkModule = () => {
         console.log("hello");
@@ -73,10 +118,16 @@ const ToolsPage: Page = () => {
         onClose();
     };
 
-    //TODO: Add connection to DB for unpublish and linking/unlinking tools
+    const { data, error } = useSWR("/api/tool", fetcher);
+    if (error) return "An error has occurred.";
+    if (!data) return <Spinner color="brand.lime" size="xl" />;
+
+    const toolsArray = data.filter((t) => {
+        return t["status"] === selectedTab;
+    });
 
     return (
-        <Stack spacing={8}>
+        <>
             <Modal
                 isOpen={isOpen}
                 onCancel={onClose}
@@ -98,73 +149,50 @@ const ToolsPage: Page = () => {
                     modalMode === "publish" ? `black` : `red`
                 }
             />
+            <Stack>
+                {toolsArray.map((tool, idx) => {
+                    return (
+                        <ToolCard
+                            key={idx}
+                            title={tool["title"]}
+                            creators={tool["createdBy"]}
+                            updated={
+                                tool["updatedAt"]
+                                    ? new Date(tool["updatedAt"])
+                                    : new Date()
+                            }
+                            module={tool["moduleID"] !== ""}
+                            published={tool["status"] === "published"}
+                            onLinkModule={onLinkModule}
+                            onPublish={() => onPublish(tool["title"])}
+                            onUnlinkModule={() => {
+                                console.log("unlink");
+                            }}
+                            onUnpublish={() => {
+                                console.log("unpub");
+                            }}
+                            onDelete={() =>
+                                onDelete(tool["title"], tool["_id"])
+                            }
+                        />
+                    );
+                })}
+            </Stack>
+        </>
+    );
+};
+
+const ToolsPage: Page = () => {
+    const [selectedTab, setSelectedTab] = useState("draft");
+
+    return (
+        <Stack spacing={8}>
             <Flex direction="column" minH="100vh">
-                <Flex wrap={"wrap"} justify={"left"} width={"full"}>
-                    <Text mr={2} fontWeight="bold" fontSize="4xl">
-                        Tools
-                    </Text>
-                    <Spacer />
-                    <Button
-                        _hover={{ bg: "#F3F3F3" }}
-                        _active={{
-                            transform: "scale(0.95)",
-                        }}
-                        // onClick={() => {}}
-                        minWidth={"90"}
-                        colorScheme="white"
-                        variant="outline"
-                    >
-                        Create Tool
-                    </Button>
-                </Flex>
-                <Flex mb={10} wrap={"wrap"} justify={"left"} width={"full"}>
-                    <Button
-                        variant="link"
-                        mr={"20px"}
-                        _active={{ textDecoration: "underline", color: "#000" }}
-                        onClick={() => setSelectedTab("draft")}
-                        isActive={selectedTab === "draft"}
-                    >
-                        Drafts
-                    </Button>
-                    <Button
-                        variant="link"
-                        _active={{ textDecoration: "underline", color: "#000" }}
-                        onClick={() => setSelectedTab("published")}
-                        isActive={selectedTab === "published"}
-                    >
-                        Published
-                    </Button>
-                </Flex>
-                <Stack>
-                    {toolsArray.map((tool, idx) => {
-                        return (
-                            <ToolCard
-                                key={idx}
-                                title={tool["title"]}
-                                creators={tool["createdBy"]}
-                                updated={
-                                    tool["updatedAt"]
-                                        ? new Date(tool["updatedAt"])
-                                        : new Date()
-                                }
-                                module={tool["moduleID"] !== ""}
-                                published={tool["status"] === "published"}
-                                onLinkModule={onLinkModule}
-                                onPublish={() => onPublish(tool["title"])}
-                                onUnlinkModule={() => {
-                                    console.log("unlink");
-                                }}
-                                onUnpublish={() => {
-                                    console.log("unpub");
-                                }}
-                                onDelete={() =>
-                                    onDelete(tool["title"], tool["_id"])
-                                }
-                            />
-                        );
-                    })}
-                </Stack>
+                <ToolsHeader
+                    selectedTab={selectedTab}
+                    setSelectedTab={setSelectedTab}
+                />
+                <Tools selectedTab={selectedTab} />
             </Flex>
         </Stack>
     );

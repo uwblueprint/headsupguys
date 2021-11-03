@@ -24,8 +24,6 @@ const fetcher = async (url) => {
 };
 
 const ModulesPage: Page = () => {
-    const [modules, setModules] = useState([]);
-
     const { data, error } = useSWR("/api/module/getAll", fetcher);
     if (error) return "An error has occurred.";
     if (!data) return "Loading...";
@@ -54,18 +52,16 @@ const ModulesPage: Page = () => {
                 <Button variant="link">Published</Button>
             </Flex>
             <SimpleGrid minChildWidth="20rem" spacing={10}>
-                {modules.map(
-                    ({ _id, title, toolID, lastUpdated, createdBy }) => (
-                        <ModuleCard
-                            key={_id}
-                            moduleId={_id}
-                            title={title}
-                            tool={toolID}
-                            lastUpdated={lastUpdated}
-                            author={createdBy.join(", ")}
-                        />
-                    ),
-                )}
+                {data.map(({ _id, title, toolID, lastUpdated, createdBy }) => (
+                    <ModuleCard
+                        key={_id}
+                        moduleId={_id}
+                        title={title}
+                        tool={toolID}
+                        lastUpdated={lastUpdated}
+                        author={createdBy.join(", ")}
+                    />
+                ))}
             </SimpleGrid>
         </Stack>
     );

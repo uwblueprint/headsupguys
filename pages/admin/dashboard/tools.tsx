@@ -10,10 +10,18 @@ import {
 import { ToolCard, Modal, AdminLayout } from "@components";
 import { Page } from "types/Page";
 import axios from "axios";
+import useSWR from "swr";
+
+const fetcher = async (url) => {
+    const response = await axios({
+        method: "GET",
+        url,
+    });
+    return response.data;
+};
 
 const ToolsPage: Page = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [toolsArray, setToolsArray] = useState([]);
 
     const [selectedTool, setSelectedTool] = useState("");
     const [selectedToolId, setSelectedToolId] = useState("");
@@ -28,27 +36,15 @@ const ToolsPage: Page = () => {
     // TODO: Need to update this to calculate relative date
     // const date = new Date();
 
-    const filterTools = async () => {
-        try {
-            const response = await axios({
-                method: "GET",
-                url: "/api/tool",
-            });
-
-            const filteredTools = response.data.filter((t) => {
-                return t["status"] === selectedTab;
-            });
-
-            setToolsArray(filteredTools);
-        } catch (err) {
-            console.log(err);
-            //TODO: update error handling
-        }
-    };
-
-    useEffect(() => {
-        filterTools();
-    }, [selectedTab, refresh]);
+    // Fetch all tools
+    const { data, error } = useSWR("/api/tool", fetcher);
+    if (error) return "An error has occurred.";
+    if (!data) {
+        return "Loading...";
+    }
+    const toolsArray = data.filter((t) => {
+        return t["status"] === selectedTab;
+    });
 
     const onLinkModule = () => {
         console.log("hello");
@@ -76,10 +72,6 @@ const ToolsPage: Page = () => {
         setRefresh(!refresh);
         onClose();
     };
-
-    useEffect(() => {
-        filterTools();
-    }, []);
 
     //TODO: Add connection to DB for unpublish and linking/unlinking tools
 

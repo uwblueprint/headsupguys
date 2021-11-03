@@ -25,6 +25,8 @@ import { FaMobileAlt } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
+import useSWR, { SWRConfig } from "swr";
+import { GetServerSideProps } from "next";
 
 import { Page } from "types/Page";
 import {
@@ -32,7 +34,7 @@ import {
     MarkdownRenderer,
     ModulePreview,
     CheckboxComp,
-    ModuleSectionSelect
+    ModuleSectionSelect,
 } from "@components";
 import _ from "lodash";
 import { ISlide } from "@components/moduleSectionSelect";
@@ -49,6 +51,17 @@ function reducer(state, action) {
             throw new Error();
     }
 }
+
+/*export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+    const moduleData = await fetcher(`/api/module/${query.id}`);
+    return {
+        props: {
+            fallback: {
+                [`/api/module/${query.id}`]: moduleData,
+            },
+        },
+    };
+};*/
 
 const Builder: Page = () => {
     const {
@@ -95,16 +108,18 @@ const Builder: Page = () => {
     const router = useRouter();
     const { moduleId } = router.query;
 
-    useEffect(() => {
-        function getUrl() {
-            return `/api/module/${moduleId}`;
-        }
-        async function fetchData() {
-            const response = await axios.get(getUrl());
-            dispatch({ type: "init", payload: response.data });
-        }
-        fetchData();
-    }, [moduleId]);
+    const fetcher = async (url) => {
+        const response = await axios({
+            method: "GET",
+            url,
+        });
+        dispatch({ type: "init", payload: response.data });
+        return response.data;
+    };
+
+    const { data, error } = useSWR(`/api/module/${moduleId}`, fetcher);
+    if (error) return "An error has occurred.";
+    if (!data) return "Loading...";
 
     const handleEditableErrors = (e) => {
         const target = e.target as HTMLInputElement;
@@ -134,7 +149,7 @@ const Builder: Page = () => {
         });
         console.log(mockSlide);
         setMockSlide(_.cloneDeep(mockSlide));
-    }
+    };
     const handleSaveModule = async () => {
         // check if moduleId in url, if so call patch otherwise call post
         if (moduleId) {
@@ -278,42 +293,63 @@ const Builder: Page = () => {
                         <Box>
                             <Box overflowY="auto" height="75vh">
                                 <Container maxW="70%" py={4}>
-                                        {/* TODO: Change mockSlide to use actual slide state */}
-                                        <Stack spacing={2}>
-                                            {mockSlide.sections.map((x, idx) => (
-                                                <div key={idx}>
-                                                    {idx > 0 && 
-                                                        <Box marginTop="5%" marginBottom="5%">
-                                                            <Divider />
-                                                        </Box>
-                                                    }
-                                                    <ModuleSectionSelect slide={mockSlide} sectionNumber={idx} setSlide={setMockSlide} />
-                                                </div>
-                                            ))}
-                                            <br />
-                                            <Button onClick={handleNewSlide} colorScheme="black" variant="outline">+ New Section</Button>
-                                        </Stack>
+                                    {/* TODO: Change mockSlide to use actual slide state */}
+                                    <Stack spacing={2}>
+                                        {mockSlide.sections.map((x, idx) => (
+                                            <div key={idx}>
+                                                {idx > 0 && (
+                                                    <Box
+                                                        marginTop="5%"
+                                                        marginBottom="5%"
+                                                    >
+                                                        <Divider />
+                                                    </Box>
+                                                )}
+                                                <ModuleSectionSelect
+                                                    slide={mockSlide}
+                                                    sectionNumber={idx}
+                                                    setSlide={setMockSlide}
+                                                />
+                                            </div>
+                                        ))}
+                                        <br />
+                                        <Button
+                                            onClick={handleNewSlide}
+                                            colorScheme="black"
+                                            variant="outline"
+                                        >
+                                            + New Section
+                                        </Button>
+                                    </Stack>
                                 </Container>
                                 <Container>
                                     <Stack spacing={10} direction="row">
-                                        {
-                                            buttonOptions.map( (button) => (
-                                                <CheckboxComp
-                                                    text={button}
-                                                    isChecked={buttons.has(button) ? true : false}
-                                                    onChange={() => {
-                                                        if(buttons.has(button)){
-                                                            const newButtons = new Set(buttons);
-                                                            newButtons.delete(button);
-                                                            setButtons(newButtons);
-                                                        }
-                                                        else{
-                                                            setButtons(new Set(buttons).add(button));
-                                                        }
-                                                    }}
-                                                />
-                                            ))
-                                        }
+                                        {buttonOptions.map((button) => (
+                                            <CheckboxComp
+                                                text={button}
+                                                isChecked={
+                                                    buttons.has(button)
+                                                        ? true
+                                                        : false
+                                                }
+                                                onChange={() => {
+                                                    if (buttons.has(button)) {
+                                                        const newButtons =
+                                                            new Set(buttons);
+                                                        newButtons.delete(
+                                                            button,
+                                                        );
+                                                        setButtons(newButtons);
+                                                    } else {
+                                                        setButtons(
+                                                            new Set(
+                                                                buttons,
+                                                            ).add(button),
+                                                        );
+                                                    }
+                                                }}
+                                            />
+                                        ))}
                                     </Stack>
                                     <br />
                                 </Container>

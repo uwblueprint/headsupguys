@@ -1,10 +1,11 @@
 /* eslint-disable prettier/prettier */
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer } from "react";
 import {
     Flex,
     Text,
     Button,
     Spacer,
+    Spinner,
     Stack,
     Box,
     Divider,
@@ -25,8 +26,7 @@ import { FaMobileAlt } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
-import useSWR, { SWRConfig } from "swr";
-import { GetServerSideProps } from "next";
+import useSWR from "swr";
 
 import { Page } from "types/Page";
 import {
@@ -51,17 +51,6 @@ function reducer(state, action) {
             throw new Error();
     }
 }
-
-/*export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-    const moduleData = await fetcher(`/api/module/${query.id}`);
-    return {
-        props: {
-            fallback: {
-                [`/api/module/${query.id}`]: moduleData,
-            },
-        },
-    };
-};*/
 
 const Builder: Page = () => {
     const {
@@ -119,7 +108,7 @@ const Builder: Page = () => {
 
     const { data, error } = useSWR(`/api/module/${moduleId}`, fetcher);
     if (error) return "An error has occurred.";
-    if (!data) return "Loading...";
+    if (!data) return <Spinner color="brand.lime" size="xl" />;
 
     const handleEditableErrors = (e) => {
         const target = e.target as HTMLInputElement;

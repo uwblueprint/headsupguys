@@ -76,6 +76,7 @@ const defaultSlide = {
             markdown: "hello world", //stores markdown content, only applies to md component
             alignment: "align-left", //on frontend this will be a dropdown
         },
+        // TODO: Add functionality for >1 section
     ],
 };      
 
@@ -93,14 +94,20 @@ function reducer(state: moduleState, action) {
         case "init":
             return { ...action.payload };
         case "addSlide":
-            return {...state, slides: {...state.slides, defaultSlide}}
+            return {...state, slides: [...state.slides, defaultSlide]}
         case "updateSlide":
             // eslint-disable-next-line no-case-declarations
             const currentSlide = state.slides[action.index-1];
             // eslint-disable-next-line no-case-declarations
             const [payloadKey, payloadValue] = action.payload;
-            currentSlide[payloadKey] = payloadValue
-            return {...state, slides: {...state.slides, ...state.slides[action.index-1]}}
+            // case where markdown is being changed (TODO: code clean up, handle sections)
+            if( payloadKey == "markdown"){
+                currentSlide.sections[0][payloadKey] = payloadValue
+            }
+            else{
+                currentSlide[payloadKey] = payloadValue
+            }
+            return {...state, slides: [...state.slides, state.slides[action.index-1]]}
         case "removeSlide":
             // eslint-disable-next-line no-case-declarations
             let newSlides = state.slides.splice(action.index - 1, 1);
@@ -364,11 +371,11 @@ const Builder: Page = () => {
                             </Container>
                             <Container>
                                 <Stack spacing={10} direction="row">
-                                    {state.slides[slideNumber-1].buttons.map(([buttonKey, buttonValue]) => (
+                                    {Object.keys(state.slides[slideNumber-1].buttons).map((buttonKey) => (
                                         <CheckboxComp
                                             text={buttonKey}
                                             isChecked={
-                                                buttonValue
+                                                state.slides[slideNumber-1].buttons[buttonKey]
                                                     ? true
                                                     : false
                                             }
@@ -380,7 +387,7 @@ const Builder: Page = () => {
                                                     // newButtons.delete(button);
                                                     // setButtons(newButtons);
                                                     const buttons = state.slides[slideNumber-1].buttons;
-                                                    buttons[buttonKey] = !buttonValue;
+                                                    buttons[buttonKey] = !state.slides[slideNumber-1].buttons[buttonKey];
                                                     dispatch({type: "updateSlide", index: slideNumber, payload: {buttons: buttons}})
                                                 // } else {
                                                 //     setButtons(

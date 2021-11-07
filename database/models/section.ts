@@ -22,8 +22,10 @@ const SectionSchema = new Schema<SectionInterface>(
             required: true,
         },
         padding: {
-            type: String,
-            required: true,
+            top: Number,
+            bottom: Number,
+            right: Number,
+            left: Number,
         },
         markdown: {
             type: String,
@@ -33,7 +35,6 @@ const SectionSchema = new Schema<SectionInterface>(
         },
         properties: {
             type: Schema.Types.Mixed,
-            required: true,
         },
     },
     {

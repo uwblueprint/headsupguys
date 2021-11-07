@@ -10,32 +10,12 @@ import {
 } from "@chakra-ui/react";
 import _ from "lodash";
 import { MarkdownEditor } from "@components";
+import { Slide } from "pages/admin/dashboard/builder";
 
-export interface ISlide {
-    checkpoint: boolean;
-    progressBarEnabled: boolean;
-    buttons: {
-        save: boolean;
-        print: boolean;
-        previous: boolean;
-        next: boolean;
-    };
-    sections: {
-        type: string; //markdown, mc, ms, sa
-        padding: {
-            top: number;
-            right: number;
-            bottom: number;
-            left: number;
-        };
-        markdown?: string; //stores markdown content, only applies to md component
-        alignment?: string; //on frontend this will be a dropdown
-    }[];
-}
 export interface ModuleSectionSelectProps {
-    slide: ISlide;
+    slide: Slide;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setSlide: React.Dispatch<React.SetStateAction<ISlide>>; // TYPE IS SLIDE RIGHT ABOVE
+    setSlide: (s: Slide) => void; // TYPE IS SLIDE RIGHT ABOVE
     sectionNumber: number;
 }
 
@@ -52,20 +32,22 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
     };
 
     const handleSelect = (e) => {
-        slide.sections[sectionNumber].type = e.currentTarget.value;
-        setSlide(_.cloneDeep(slide));
+        const newSlide = _.cloneDeep(slide);
+        newSlide.sections[sectionNumber].type = e.currentTarget.value;
+        setSlide(newSlide);
     };
 
     const handleMarkdownChange = (text) => {
-        console.log("markdownchange");
-        slide.sections[sectionNumber].markdown = text;
-        console.log("slide", slide);
-        setSlide(_.cloneDeep(slide));
+        const newSlide = _.cloneDeep(slide);
+        newSlide.sections[sectionNumber].markdown = text;
+
+        setSlide(newSlide);
     };
 
     const handlePaddingChange = (padVal) => {
-        slide.sections[sectionNumber].padding[paddingMap[padVal]];
-        setSlide(_.cloneDeep(slide));
+        const newSlide = _.cloneDeep(slide);
+        newSlide.sections[sectionNumber].padding[paddingMap[padVal]];
+        setSlide(newSlide);
     };
 
     return (
@@ -76,6 +58,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
             <Select
                 w="368px"
                 my={3}
+                value={slide.sections[sectionNumber].type}
                 placeholder="Select Option"
                 onChange={handleSelect}
             >
@@ -93,7 +76,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                     <HStack spacing={10}>
                         <Heading size="sm">Padding&nbsp;(%)</Heading>
                         {["T", "R", "B", "L"].map((padVal) => (
-                            <HStack>
+                            <HStack key={padVal}>
                                 <Text>{padVal}&nbsp;</Text>
                                 <Input
                                     onChange={() => handlePaddingChange(padVal)}

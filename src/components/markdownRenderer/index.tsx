@@ -12,15 +12,17 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
     return (
         <>
             {props.children ? (
-                props.children.split("\n").map((line) => (
-                    <>
-                        {line === "" ? (
-                            <div className="newline" />
-                        ) : (
-                            <BaseRenderer content={line} />
-                        )}
-                    </>
-                ))
+                props.children
+                    .split("\n")
+                    .map((line, idx) => (
+                        <React.Fragment key={idx}>
+                            {line === "" ? (
+                                <div className="newline" />
+                            ) : (
+                                <BaseRenderer content={line} />
+                            )}
+                        </React.Fragment>
+                    ))
             ) : (
                 <div className="newline" />
             )}

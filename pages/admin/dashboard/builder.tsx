@@ -92,7 +92,7 @@ function reducer(
         case ModuleActionType.CHANGE_TITLE:
             return { ...state, title: action.value };
         case ModuleActionType.INITIALIZE:
-            return { ...action.payload };
+            return { ...action.payload, currentSlide: 0 };
         case ModuleActionType.ADD_SLIDE:
             return { ...state, slides: [...state.slides, DEFAULT_SLIDE] };
         case ModuleActionType.UPDATE_SLIDE:
@@ -174,7 +174,10 @@ const Builder: Page = () => {
             return `/api/module/${moduleId}`;
         }
         async function fetchData() {
-            const response = await axios.get(getUrl());
+            const response = await axios.get(getUrl(), {
+                params: { includeSlide: true },
+            });
+            console.log(response.data);
             dispatch({
                 type: ModuleActionType.INITIALIZE,
                 payload: response.data,

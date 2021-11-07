@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import { Module, ModuleInterface } from "../../../database/models/module";
+import { Slide } from "../../../database/models/slide";
 
 const get = async (
     req: NextApiRequest,
@@ -9,7 +10,11 @@ const get = async (
     const { id, includeSlide } = req.query;
     const module = await Module.findById(id);
     if (includeSlide) {
-        await module.populate("slideIDs").execPopulate();
+        // Slide model must be loaded in order to populate
+        // TODO: find workaround/cleaner soln :/
+        // Slide.init is a no-op if already initialized
+        Slide.init();
+        await module.populate("slides").execPopulate();
     }
     if (!module)
         return res

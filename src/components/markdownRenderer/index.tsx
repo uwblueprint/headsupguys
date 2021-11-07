@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import ReactMarkdown from "react-markdown";
 import React from "react";
 import style from "./markdown-renderer.module.css";
@@ -10,15 +11,21 @@ interface MarkdownRendererProps {
 export const MarkdownRenderer: React.FC<MarkdownRendererProps> = (props) => {
     return (
         <>
-            {props.children.split("\n").map((line) => (
-                <>
-                    {line === "" ? (
-                        <div className="newline" />
-                    ) : (
-                        <BaseRenderer content={line} />
-                    )}
-                </>
-            ))}
+            {props.children ? (
+                props.children
+                    .split("\n")
+                    .map((line, idx) => (
+                        <React.Fragment key={idx}>
+                            {line === "" ? (
+                                <div className="newline" />
+                            ) : (
+                                <BaseRenderer content={line} />
+                            )}
+                        </React.Fragment>
+                    ))
+            ) : (
+                <div className="newline" />
+            )}
         </>
     );
 };

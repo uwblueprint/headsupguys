@@ -32,8 +32,8 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
     const printButton = printText ? printText : "PRINT";
     const saveButton = saveText ? saveText : "SAVE";
 
-    const mobile = { width: 442, height: 697 };
-    const desktop = { width: 955, height: 697 };
+    const mobile = { width: 342, height: 697 };
+    const desktop = { width: 455, height: 697 };
 
     return (
         <>
@@ -128,13 +128,11 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                     border="1px solid #000"
                 >
                     <Box w="100%" h="5%">
-                        {progressValue && (
-                            <Progress
-                                colorScheme="green"
-                                size="lg"
-                                value={progressValue}
-                            />
-                        )}
+                        <Progress
+                            colorScheme="green"
+                            size="lg"
+                            value={progressValue}
+                        />
                     </Box>
                     <Box w="100%" h="95%" overflow="auto">
                         <Box minHeight="88%">{props.children}</Box>

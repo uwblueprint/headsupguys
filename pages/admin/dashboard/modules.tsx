@@ -8,6 +8,7 @@ import {
     Stack,
 } from "@chakra-ui/react";
 import axios from "axios";
+import Link from "next/link";
 
 import { ModuleCard } from "@components/ModuleCard";
 import { Page } from "types/Page";
@@ -41,7 +42,9 @@ const ModulesPage: Page = () => {
                     Modules
                 </Text>
                 <Spacer />
-                <Button variant="outlineBlack">Create Module</Button>
+                <Link href="builder">
+                    <Button variant="outlineBlack">Create Module</Button>
+                </Link>
             </Flex>
 
             <Flex direction="row">
@@ -57,9 +60,10 @@ const ModulesPage: Page = () => {
             </Flex>
             <SimpleGrid minChildWidth="20rem" spacing={10}>
                 {modules.map(
-                    ({ moduleId, title, toolID, lastUpdated, createdBy }) => (
+                    ({ _id, title, toolID, lastUpdated, createdBy }) => (
                         <ModuleCard
-                            key={moduleId}
+                            key={_id}
+                            moduleId={_id}
                             title={title}
                             tool={toolID}
                             lastUpdated={lastUpdated}

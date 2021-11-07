@@ -12,21 +12,29 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { Dispatch } from "react";
-import { INITIAL_STATE, ModuleState } from "pages/admin/dashboard/builder";
+import {
+    INITIAL_STATE,
+    ModuleAction,
+    ModuleState,
+    ModuleActionType,
+} from "pages/admin/dashboard/builder";
 
 const Header = ({
     dispatch,
     state,
     handleSaveModule,
 }: {
-    dispatch: Dispatch<{ type: string; value: unknown }>;
+    dispatch: Dispatch<ModuleAction>;
     state: ModuleState;
     handleSaveModule: () => void;
 }): React.ReactElement => {
     const handleNullTitleErrors = (e) => {
         const target = e.target as HTMLInputElement;
         if (target.value === "") {
-            dispatch({ type: "changeTitle", value: INITIAL_STATE.title });
+            dispatch({
+                type: ModuleActionType.CHANGE_TITLE,
+                value: INITIAL_STATE.title,
+            });
         }
     };
 
@@ -43,7 +51,10 @@ const Header = ({
                         defaultValue={INITIAL_STATE.title}
                         value={state.title}
                         onChange={(title) =>
-                            dispatch({ type: "changeTitle", value: title })
+                            dispatch({
+                                type: ModuleActionType.CHANGE_TITLE,
+                                value: title,
+                            })
                         }
                         onBlur={(e) => {
                             handleNullTitleErrors(e);

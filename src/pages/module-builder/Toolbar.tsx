@@ -10,7 +10,11 @@ import {
     Spacer,
     Text,
 } from "@chakra-ui/react";
-import { ModuleState } from "pages/admin/dashboard/builder";
+import {
+    ModuleAction,
+    ModuleState,
+    ModuleActionType,
+} from "pages/admin/dashboard/builder";
 import { Dispatch } from "react";
 import { IoIosRedo, IoIosUndo } from "react-icons/io";
 import { IoTrash } from "react-icons/io5";
@@ -19,7 +23,7 @@ const Toolbar = ({
     dispatch,
     state,
 }: {
-    dispatch: Dispatch<{ type: string; value?: unknown }>;
+    dispatch: Dispatch<ModuleAction>;
     state: ModuleState;
 }): React.ReactElement => {
     const handleEditableErrors = (e) => {
@@ -30,13 +34,13 @@ const Toolbar = ({
             parseInt(target.value) <= state.slides.length
         ) {
             dispatch({
-                type: "setSlide",
-                value: parseInt(target.value) - 1 || 0,
+                type: ModuleActionType.SET_SLIDE,
+                index: parseInt(target.value) - 1 || 0,
             });
         } else {
             dispatch({
-                type: "setSlide",
-                value: 0,
+                type: ModuleActionType.SET_SLIDE,
+                index: 0,
             });
         }
     };
@@ -51,7 +55,7 @@ const Toolbar = ({
         >
             <Button
                 onClick={() => {
-                    dispatch({ type: "addSlide" });
+                    dispatch({ type: ModuleActionType.ADD_SLIDE });
                 }}
             >
                 New Slide
@@ -63,8 +67,8 @@ const Toolbar = ({
                     value={(state.currentSlide + 1).toString()}
                     onChange={(nextValue) => {
                         dispatch({
-                            type: "setSlide",
-                            value: parseInt(nextValue) - 1 || 0,
+                            type: ModuleActionType.SET_SLIDE,
+                            index: parseInt(nextValue) - 1 || 0,
                         });
                     }}
                     onBlur={handleEditableErrors}
@@ -87,7 +91,16 @@ const Toolbar = ({
                 {/* TODO: Add functionality to these buttons */}
                 <IconButton aria-label="undo" icon={<IoIosUndo />} />
                 <IconButton aria-label="redo" icon={<IoIosRedo />} />
-                <IconButton aria-label="trash" icon={<IoTrash />} />
+                <IconButton
+                    aria-label="trash"
+                    icon={<IoTrash />}
+                    onClick={() => {
+                        dispatch({
+                            type: ModuleActionType.REMOVE_SLIDE,
+                            index: state.currentSlide,
+                        });
+                    }}
+                />
             </ButtonGroup>
         </Flex>
     );

@@ -8,7 +8,11 @@ import {
     Stack,
 } from "@chakra-ui/react";
 import { CheckboxComp, ModuleSectionSelect } from "@components";
-import { ModuleState } from "pages/admin/dashboard/builder";
+import {
+    ModuleAction,
+    ModuleState,
+    ModuleActionType,
+} from "pages/admin/dashboard/builder";
 import React, { Dispatch } from "react";
 
 const Editor = ({
@@ -17,7 +21,7 @@ const Editor = ({
     isSidebarOpen,
     toggleSidebar,
 }: {
-    dispatch: Dispatch<{ type: string; payload?: unknown; index?: unknown }>;
+    dispatch: Dispatch<ModuleAction>;
     state: ModuleState;
     isSidebarOpen: boolean;
     toggleSidebar: () => void;
@@ -56,7 +60,7 @@ const Editor = ({
                                         sectionNumber={idx}
                                         setSlide={(slide) => {
                                             dispatch({
-                                                type: "updateSlide",
+                                                type: ModuleActionType.UPDATE_SLIDE,
                                                 index: state.currentSlide,
                                                 payload: slide,
                                             });
@@ -68,7 +72,7 @@ const Editor = ({
                         <Button
                             onClick={() => {
                                 dispatch({
-                                    type: "newSection",
+                                    type: ModuleActionType.NEW_SECTION,
                                     index: state.currentSlide,
                                 });
                             }}
@@ -90,7 +94,7 @@ const Editor = ({
                                     isChecked={isChecked}
                                     onChange={(event) => {
                                         dispatch({
-                                            type: "updateSlide",
+                                            type: ModuleActionType.UPDATE_SLIDE,
                                             index: state.currentSlide,
                                             payload: {
                                                 ...state.slides[

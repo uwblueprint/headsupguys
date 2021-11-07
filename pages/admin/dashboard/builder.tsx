@@ -2,6 +2,7 @@
 import { Flex, Stack, useDisclosure } from "@chakra-ui/react";
 import { BuilderLayout } from "@components";
 import axios from "axios";
+import { min } from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useReducer } from "react";
 import Document from "src/pages/module-builder/Document";
@@ -10,7 +11,18 @@ import Header from "src/pages/module-builder/Header";
 import Toolbar from "src/pages/module-builder/Toolbar";
 import { Page } from "types/Page";
 
-type slideState = {
+export enum ModuleActionType {
+    CHANGE_TITLE,
+    INITIALIZE,
+    ADD_SLIDE,
+    UPDATE_SLIDE,
+    REMOVE_SLIDE,
+    SET_SLIDE,
+    NEW_SECTION,
+    RESET_SLIDE,
+}
+
+export type Slide = {
     checkpoint: boolean;
     progressBarEnabled: boolean;
     buttons: {
@@ -35,7 +47,7 @@ type slideState = {
 export type ModuleState = {
     title: string;
     currentSlide: number;
-    slides: slideState[];
+    slides: Slide[];
 };
 
 const DEFAULT_SECTION = {
@@ -58,15 +70,32 @@ export const INITIAL_STATE: ModuleState = {
     slides: [DEFAULT_SLIDE],
 };
 
-function reducer(state: Readonly<ModuleState>, action): Readonly<ModuleState> {
+export type ModuleAction =
+    | { type: ModuleActionType.CHANGE_TITLE; value: string }
+    | { type: ModuleActionType.INITIALIZE; payload: ModuleState }
+    | { type: ModuleActionType.ADD_SLIDE }
+    | {
+          type: ModuleActionType.UPDATE_SLIDE;
+          index: number;
+          payload: Slide;
+      }
+    | { type: ModuleActionType.REMOVE_SLIDE; index: number }
+    | { type: ModuleActionType.RESET_SLIDE; index: number }
+    | { type: ModuleActionType.SET_SLIDE; index: number }
+    | { type: ModuleActionType.NEW_SECTION; index: number };
+
+function reducer(
+    state: Readonly<ModuleState>,
+    action: ModuleAction,
+): Readonly<ModuleState> {
     switch (action.type) {
-        case "changeTitle":
+        case ModuleActionType.CHANGE_TITLE:
             return { ...state, title: action.value };
-        case "init":
+        case ModuleActionType.INITIALIZE:
             return { ...action.payload };
-        case "addSlide":
+        case ModuleActionType.ADD_SLIDE:
             return { ...state, slides: [...state.slides, DEFAULT_SLIDE] };
-        case "updateSlide":
+        case ModuleActionType.UPDATE_SLIDE:
             return {
                 ...state,
                 slides: [
@@ -75,30 +104,37 @@ function reducer(state: Readonly<ModuleState>, action): Readonly<ModuleState> {
                     ...state.slides.slice(action.index + 1),
                 ],
             };
-        case "removeSlide":
-            // eslint-disable-next-line no-case-declarations
-            let newSlides = state.slides.slice(action.value - 1, 1);
-            // If removing slide results in empty modules:
+        case ModuleActionType.REMOVE_SLIDE: {
+            let newSlides = [
+                ...state.slides.slice(0, action.index),
+                ...state.slides.slice(action.index + 1),
+            ];
+            console.log(newSlides);
             if (newSlides.length === 0) {
-                newSlides = INITIAL_STATE.slides;
+                newSlides = [DEFAULT_SLIDE];
             }
-            return { ...state, slides: newSlides };
-        case "resetSlide":
-            // eslint-disable-next-line no-case-declarations
-            const currSlide = state.slides[action.index - 1];
-            currSlide[action.index - 1] = DEFAULT_SLIDE;
             return {
                 ...state,
-                slides: { ...state.slides, ...state.slides[action.index - 1] },
+                slides: newSlides,
+                currentSlide: min([state.currentSlide, newSlides.length - 1]),
             };
-        case "setSlide":
-            if (action.value < 0 || action.value >= state.slides.length)
+        }
+        case ModuleActionType.RESET_SLIDE: {
+            const currSlide = state.slides[action.index];
+            currSlide[action.index] = DEFAULT_SLIDE;
+            return {
+                ...state,
+                slides: { ...state.slides, ...state.slides[action.index] },
+            };
+        }
+        case ModuleActionType.SET_SLIDE:
+            if (action.index < 0 || action.index >= state.slides.length)
                 return state;
             return {
                 ...state,
-                currentSlide: action.value,
+                currentSlide: action.index,
             };
-        case "newSection": {
+        case ModuleActionType.NEW_SECTION: {
             const newSlide = {
                 ...state.slides[action.index],
                 sections: [
@@ -139,7 +175,10 @@ const Builder: Page = () => {
         }
         async function fetchData() {
             const response = await axios.get(getUrl());
-            dispatch({ type: "init", payload: response.data });
+            dispatch({
+                type: ModuleActionType.INITIALIZE,
+                payload: response.data,
+            });
         }
         if (moduleId) {
             fetchData();

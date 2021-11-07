@@ -53,7 +53,7 @@ const Document = ({
                     progressValue={
                         (state.currentSlide / state.slides.length) * 100
                     }
-                    variant={""}
+                    variant={isSidebarOpen ? "mobile" : "desktop"}
                 >
                     <MarkdownRenderer>
                         {state.slides[state.currentSlide].sections.reduce(

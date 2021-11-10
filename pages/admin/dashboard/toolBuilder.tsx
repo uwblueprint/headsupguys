@@ -20,6 +20,7 @@ import { AdminLayout } from "@components";
 import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 import { useRouter } from "next/router";
 import axios from "axios";
+import selfCheck from "pages/api/self-check";
 
 export const getServerSideProps = async (context) => {
     return {
@@ -489,6 +490,19 @@ const ToolBuilder: Page = () => {
         setQuestionList(newList);
         checkRequiredFields(toolList, newList);
     };
+    const deleteTool = async () => {
+        console.log("delete");
+        await axios({
+            method: "DELETE",
+            url: `/api/tool/deleteOne?id=${toolID}`,
+        });
+        await axios({
+            method: "DELETE",
+            url: `/api/self-check/${selfCheckID}`,
+        });
+        router.push("/admin/dashboard/tools");
+        onClose();
+    };
 
     const disabledSave = () => {
         return (
@@ -569,6 +583,7 @@ const ToolBuilder: Page = () => {
                                 removeAllQuestions();
                                 saveTool();
                                 saveSelfCheck();
+                                deleteTool();
                             }}
                             w={100}
                             background="red.600"

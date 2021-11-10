@@ -17,7 +17,7 @@ const patchSelfCheckByID = async (
             }
         });
 
-    const { questions } = req.body;
+    const questions = req.body;
     // Save self check with updated questions
     selfCheck.questions = questions;
     await selfCheck.save();

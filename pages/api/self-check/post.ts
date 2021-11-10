@@ -6,13 +6,12 @@ const post = async (
     res: NextApiResponse,
 ): Promise<void> => {
     // Get a list of self check questions
-    const { questions } = req.body;
+    const questions = req.body;
 
     // Use IDs to create SelfCheckGroup
     const selfCheck = new SelfCheckGroup({
         questions: questions,
     });
-
     selfCheck.save().catch((err) => {
         res.status(500).send(err);
     });

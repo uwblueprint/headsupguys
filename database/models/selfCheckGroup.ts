@@ -3,7 +3,7 @@ import { SelfCheckQuestionSchema } from "./selfCheckQuestion";
 
 interface SelfCheckGroupInterface {
     _id: Types.ObjectId;
-    questions: string[];
+    questions: Record<string, unknown>[];
 }
 
 const SelfCheckGroupSchema = new Schema<SelfCheckGroupInterface>(

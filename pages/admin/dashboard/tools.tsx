@@ -120,7 +120,6 @@ const ToolsPage: Page = () => {
     }, [selectedTab, refresh]);
 
     const onLinkModule = (e) => {
-        console.log("hello");
         e.stopPropagation();
     };
 
@@ -249,7 +248,6 @@ const ToolsPage: Page = () => {
                                     onPublish(e, tool.title);
                                 }}
                                 onUnlinkModule={(e) => {
-                                    console.log("unlink");
                                     e.stopPropagation();
                                 }}
                                 onUnpublish={(e) => {

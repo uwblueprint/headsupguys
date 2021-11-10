@@ -114,7 +114,6 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                         isRequired
                         onChange={(e) => {
                             onChangeInput(e.target.value, "thumbnail");
-                            console.log(thumbnail);
                         }}
                         value={thumbnail}
                         placeholder="URL"
@@ -135,7 +134,6 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                         isRequired
                         onChange={(e) => {
                             onChangeInput(e.target.value, "description");
-                            console.log(description);
                         }}
                         value={description}
                         placeholder="Description"
@@ -152,7 +150,6 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                         size={"lg"}
                         value={linkedModuleID}
                         onChange={(e) => {
-                            console.log(e.target.value);
                             onChangeInput(e.target.value, "linkedModuleID");
                         }}
                     >

@@ -20,7 +20,6 @@ import { AdminLayout } from "@components";
 import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 import { useRouter } from "next/router";
 import axios from "axios";
-import tool from "pages/api/tool";
 
 export const getServerSideProps = async (context) => {
     return {
@@ -99,11 +98,7 @@ const ToolBuilder: Page = () => {
             });
             const newTool = JSON.parse(JSON.stringify(defaultTool));
             for (const property in newTool) {
-                if (response.data[property] != undefined) {
-                    newTool[property] = response.data[property];
-                } else {
-                    console.log(property);
-                }
+                newTool[property] = response.data[property];
             }
             setToolList(newTool);
         } catch (err) {
@@ -117,25 +112,7 @@ const ToolBuilder: Page = () => {
                 method: "GET",
                 url: `/api/self-check/${selfCheckID}`,
             });
-            const questionIDs = response.data.questionIDs;
-            const newQuestions = [];
-
-            for (const question in questionIDs) {
-                newQuestions.push(
-                    JSON.parse(JSON.stringify(defaultQuestions[0])),
-                );
-            }
-            for (const idIndex in questionIDs) {
-                const questionResponse = await axios({
-                    method: "GET",
-                    url: `/api/self-check-question/${questionIDs[idIndex]}`,
-                });
-                for (const property in newQuestions[idIndex]) {
-                    newQuestions[idIndex][property] =
-                        questionResponse.data[property];
-                }
-            }
-            setQuestionList(newQuestions);
+            setQuestionList(response.data.questions);
         } catch (err) {
             console.log(err);
             //TODO: update error handling
@@ -198,7 +175,6 @@ const ToolBuilder: Page = () => {
         }
     };
     const saveSelfCheck = async () => {
-        console.log("ssave list", questionList);
         for (const i in questionList) {
             if (questionList[i].question == "") {
                 questionList[i].question = "Untitled Question";
@@ -207,7 +183,6 @@ const ToolBuilder: Page = () => {
                 delete questionList[i]._id;
             }
         }
-        console.log("Patching Self Check Questions:", questionList);
         try {
             await axios({
                 method: "PATCH",
@@ -352,123 +327,115 @@ const ToolBuilder: Page = () => {
     const [page, setPage] = useState("home");
 
     const changeQuestionType = (id, target) => {
-        const newList = questionList.slice(0);
-        newList[newList.findIndex((e) => e._id === id)].type = target;
+        const newMap = new Map(
+            questionList.map((question) => {
+                return [question._id, question];
+            }),
+        );
+        newMap.get(id).type = target;
         //If there are 3 questions or less, new questions are generated for the slider
         if (target == "slider") {
-            for (
-                let i =
-                    newList[newList.findIndex((e) => e._id === id)].options
-                        .length;
-                i < 3;
-                i++
-            ) {
+            for (let i = newMap.get(id).options.length; i < 3; i++) {
                 addOneOption(id, "bottom");
             }
             /*We use the second fiel in each option array to keep track of the slider
             this is important because the slider can start at either 0  or 1 so the index
             alone of each option does not give enough information as to what each slider value
             should point to*/
-            for (
-                let j = 0;
-                j <
-                newList[newList.findIndex((e) => e._id === id)].options.length;
-                j++
-            ) {
-                newList[newList.findIndex((e) => e._id === id)].options[j][1] =
-                    j.toString();
+            for (let j = 0; j < newMap.get(id).options.length; j++) {
+                newMap.get(id).options[j][1] = j.toString();
             }
         }
-        setQuestionList(newList);
-        checkRequiredTool(toolList, newList);
+        setQuestionList([...newMap.values()]);
+        checkRequiredTool(toolList, [...newMap.values()]);
     };
     const changeQuestionInput = (id, target) => {
-        const newList = questionList.slice(0);
-        newList[newList.findIndex((e) => e._id === id)].question = target;
-        checkRequiredTool(toolList, newList);
-        setQuestionList(newList);
+        const newMap = new Map(
+            questionList.map((question) => {
+                return [question._id, question];
+            }),
+        );
+        newMap.get(id).question = target;
+        checkRequiredTool(toolList, [...newMap.values()]);
+        setQuestionList([...newMap.values()]);
     };
     const changeAlphanumeric = (id, target) => {
-        const newList = questionList.slice(0);
-        const newOptions =
-            newList[newList.findIndex((e) => e._id === id)].options;
+        const newMap = new Map(
+            questionList.map((question) => {
+                return [question._id, question];
+            }),
+        );
+        const newOptions = newMap.get(id).options;
         if (!target) {
             for (let i = 0; i < newOptions.length; i++) {
                 //Regex pattern to ensure that only numberix inputs are allowed
                 newOptions[i][1] = newOptions[i][1].replace(/[^\d]+/g, "");
             }
         }
-        newList[newList.findIndex((e) => e._id === id)].alphanumericInput =
-            target;
-        checkRequiredTool(toolList, newList);
-        setQuestionList(newList);
+        newMap.get(id).alphanumericInput = target;
+        checkRequiredTool(toolList, [...newMap.values()]);
+        setQuestionList([...newMap.values()]);
     };
     const changeOptionInput = (id, index, target, optionOrValue) => {
-        const newList = questionList.slice(0);
+        const newMap = new Map(
+            questionList.map((question) => {
+                return [question._id, question];
+            }),
+        );
         const changeIndex = optionOrValue == "option" ? 0 : 1;
-        newList[newList.findIndex((e) => e._id === id)].options[index][
-            changeIndex
-        ] = target;
-        checkRequiredTool(toolList, newList);
-        setQuestionList(newList);
+        newMap.get(id).options[index][changeIndex] = target;
+        checkRequiredTool(toolList, [...newMap.values()]);
+        setQuestionList([...newMap.values()]);
     };
     const addOneOption = (id, target) => {
         //adds a new option to the question at the target location
-        const newList = questionList.slice(0);
+        const newMap = new Map(
+            questionList.map((question) => {
+                return [question._id, question];
+            }),
+        );
         if (target == "bottom") {
-            if (
-                newList[newList.findIndex((e) => e._id === id)].type == "slider"
-            ) {
-                const lowerBound = parseInt(
-                    newList[newList.findIndex((e) => e._id === id)]
-                        .options[0][1],
-                );
+            if (newMap.get(id).type == "slider") {
+                const lowerBound = parseInt(newMap.get(id).options[0][1]);
                 const upperBound = String(
-                    lowerBound +
-                        newList[newList.findIndex((e) => e._id === id)].options
-                            .length,
+                    lowerBound + newMap.get(id).options.length,
                 );
                 1;
-                newList[newList.findIndex((e) => e._id === id)].options = [
-                    ...newList[newList.findIndex((e) => e._id === id)].options,
+                newMap.get(id).options = [
+                    ...newMap.get(id).options,
                     ["", upperBound],
                 ];
             } else {
-                newList[newList.findIndex((e) => e._id === id)].options = [
-                    ...newList[newList.findIndex((e) => e._id === id)].options,
-                    ["", ""],
-                ];
+                newMap.get(id).options = [...newMap.get(id).options, ["", ""]];
             }
         } else {
             //If 0 is selected on the slider, the first option's value is set to 0
-            newList[newList.findIndex((e) => e._id === id)].options = [
-                ["", "0"],
-                ...newList[newList.findIndex((e) => e._id === id)].options,
-            ];
+            newMap.get(id).options = [["", "0"], ...newMap.get(id).options];
         }
-        checkRequiredTool(toolList, newList);
-        setQuestionList(newList);
+        checkRequiredTool(toolList, [...newMap.values()]);
+        setQuestionList([...newMap.values()]);
     };
 
     const removeOneOption = (id, target) => {
         const newList = questionList.slice(0);
-        newList[newList.findIndex((e) => e._id === id)].options.splice(
-            target,
-            1,
+        const newMap = new Map(
+            questionList.map((question) => {
+                return [question._id, question];
+            }),
         );
+        newMap.get(id).options.splice(target, 1);
         checkRequiredTool(toolList, newList);
         setQuestionList(newList);
     };
 
     const changeSliderBounds = (id, target) => {
-        const newList = questionList.slice(0);
-        const lowerBound = parseInt(
-            newList[newList.findIndex((e) => e._id === id)].options[0][1],
+        const newMap = new Map(
+            questionList.map((question) => {
+                return [question._id, question];
+            }),
         );
-        const upperBound =
-            lowerBound +
-            newList[newList.findIndex((e) => e._id === id)].options.length -
-            1;
+        const lowerBound = parseInt(newMap.get(id).options[0][1]);
+        const upperBound = lowerBound + newMap.get(id).options.length - 1;
         if (target == 0) {
             addOneOption(id, "top");
         } else if (target == 1) {
@@ -642,11 +609,6 @@ const ToolBuilder: Page = () => {
                                         duration: 5000,
                                         isClosable: true,
                                     });
-                                    console.log("Tool Home Page:", toolList);
-                                    console.log(
-                                        "Self Check Questions:",
-                                        questionList,
-                                    );
                                 }}
                             >
                                 Publish

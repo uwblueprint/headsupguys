@@ -12,7 +12,12 @@ export interface AuthInterface {
     };
 }
 
-const isAuthenticated = async (req, res, requiresAdmin = false) => {
+const isAuthenticated = async (
+    req,
+    res,
+    redirect = "/",
+    requiresAdmin = false,
+) => {
     const { Auth } = withSSRContext({ req });
     try {
         const user = await Auth.currentAuthenticatedUser(); // retrieve user session
@@ -24,7 +29,7 @@ const isAuthenticated = async (req, res, requiresAdmin = false) => {
             attributes: user.attributes,
         };
     } catch (err) {
-        res.writeHead(302, { Location: "/" });
+        res.writeHead(302, { Location: redirect });
         res.end();
     }
     return {};

@@ -24,7 +24,7 @@ const Protected: React.FC<ProtectedProps> = ({ auth }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-    const authProps = await isAuthenticated(req, res, true);
+    const authProps = await isAuthenticated(req, res, "/redirect", true);
     return {
         props: {
             auth: authProps,

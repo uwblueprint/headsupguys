@@ -8,19 +8,23 @@ export interface AuthInterface {
         email_verified: boolean;
         name: string;
         email: string;
+        "custom:role": string;
     };
 }
 
-const isAuthenticated = async (req, res) => {
+const isAuthenticated = async (req, res, requiresAdmin = false) => {
     const { Auth } = withSSRContext({ req });
     try {
         const user = await Auth.currentAuthenticatedUser(); // retrieve user session
+        if (requiresAdmin && user.attributes["custom:role"] != "admin") {
+            throw new Error("User is not admin");
+        }
         return {
             authenticated: true,
             attributes: user.attributes,
         };
     } catch (err) {
-        res.writeHead(302, { Location: "/hi" });
+        res.writeHead(302, { Location: "/" });
         res.end();
     }
     return {};

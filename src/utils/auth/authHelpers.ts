@@ -1,5 +1,39 @@
-import { Auth } from "aws-amplify";
+import { Auth, withSSRContext } from "aws-amplify";
 import isEmail from "validator/lib/isEmail";
+
+export interface AuthInterface {
+    authenticated: boolean;
+    attributes: {
+        sub: string;
+        email_verified: boolean;
+        name: string;
+        email: string;
+        "custom:role": string;
+    };
+}
+
+const isAuthenticated = async (
+    req,
+    res,
+    redirect = "/",
+    requiresAdmin = false,
+) => {
+    const { Auth } = withSSRContext({ req });
+    try {
+        const user = await Auth.currentAuthenticatedUser(); // retrieve user session
+        if (requiresAdmin && user.attributes["custom:role"] != "admin") {
+            throw new Error("User is not admin");
+        }
+        return {
+            authenticated: true,
+            attributes: user.attributes,
+        };
+    } catch (err) {
+        res.writeHead(302, { Location: redirect });
+        res.end();
+    }
+    return {};
+};
 
 const userExist = async (email) => {
     return await Auth.signIn(email.toLowerCase(), "123")
@@ -75,4 +109,9 @@ const validatePasswordHelper = (newPassword) => {
     };
 };
 
-export { userExist, validateEmailHelper, validatePasswordHelper };
+export {
+    isAuthenticated,
+    userExist,
+    validateEmailHelper,
+    validatePasswordHelper,
+};

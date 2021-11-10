@@ -525,7 +525,6 @@ const ToolBuilder: Page = () => {
         /*ensures that the question number property
         matches the seen question number on the form*/
         const newList = listOfQuestions;
-        console.log("changing question numbers", listOfQuestions);
         for (let i = 0; i < newList.length; i++) {
             newList[i].questionNumber = i + 1;
         }
@@ -570,7 +569,6 @@ const ToolBuilder: Page = () => {
                                 removeAllQuestions();
                                 saveTool();
                                 saveSelfCheck();
-                                console.log(questionList);
                             }}
                             w={100}
                             background="red.600"
@@ -620,7 +618,7 @@ const ToolBuilder: Page = () => {
                                         duration: 5000,
                                         isClosable: true,
                                     });
-                                    changeInput("published", "tool");
+                                    changeInput("published", "status");
                                     saveTool();
                                     saveSelfCheck();
                                     setLastSavedTool(
@@ -631,7 +629,6 @@ const ToolBuilder: Page = () => {
                                             JSON.stringify(questionList),
                                         ),
                                     );
-                                    console.log(toolList);
                                 }}
                             >
                                 Publish

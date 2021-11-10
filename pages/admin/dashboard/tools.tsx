@@ -77,6 +77,7 @@ const ToolsPage: Page = () => {
                     ],
                     selfCheckGroupID: "",
                     relatedToolsIDs: ["", "", ""],
+                    status: "draft",
                 },
             });
             const selfCheckResponse = await axios({

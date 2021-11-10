@@ -58,6 +58,7 @@ const ToolBuilder: Page = () => {
         ],
         selfCheckGroupID: selfCheckID,
         relatedToolsIDs: ["", "", ""],
+        status: "draft",
     };
     //Sets useState of tool to a copy of the default tool
     const [toolList, setToolList] = useState(
@@ -489,6 +490,17 @@ const ToolBuilder: Page = () => {
         checkRequiredFields(toolList, newList);
     };
 
+    const disabledSave = () => {
+        return (
+            (JSON.stringify(questionList) ==
+                JSON.stringify(lastSavedQuestions) &&
+                JSON.stringify(toolList) == JSON.stringify(lastSavedTool)) ||
+            ((JSON.stringify(questionList) ==
+                JSON.stringify(defaultQuestions) ||
+                JSON.stringify(questionList) == "[]") &&
+                JSON.stringify(toolList) == JSON.stringify(defaultTool))
+        );
+    };
     const clearHiddenFilledFields = () => {
         /* In order to improve user experience, option fields are not cleared
         when the user switched uestion type, they are simply not displayed on the screen
@@ -608,6 +620,7 @@ const ToolBuilder: Page = () => {
                                         duration: 5000,
                                         isClosable: true,
                                     });
+                                    changeInput("published", "tool");
                                     saveTool();
                                     saveSelfCheck();
                                     setLastSavedTool(
@@ -618,6 +631,7 @@ const ToolBuilder: Page = () => {
                                             JSON.stringify(questionList),
                                         ),
                                     );
+                                    console.log(toolList);
                                 }}
                             >
                                 Publish
@@ -652,18 +666,11 @@ const ToolBuilder: Page = () => {
                             disabled={
                                 /*Save is disabled if the tool is equal
                                 to the last saved tool or the empty tool*/
-                                (JSON.stringify(questionList) ==
-                                    JSON.stringify(lastSavedQuestions) &&
-                                    JSON.stringify(toolList) ==
-                                        JSON.stringify(lastSavedTool)) ||
-                                ((JSON.stringify(questionList) ==
-                                    JSON.stringify(defaultQuestions) ||
-                                    JSON.stringify(questionList) == "[]") &&
-                                    JSON.stringify(toolList) ==
-                                        JSON.stringify(defaultTool))
+                                disabledSave()
                             }
                             //TODO: Send this output to the database
                             //rather than just logging it in the console
+
                             onClick={() => {
                                 clearHiddenFilledFields();
                                 toast({

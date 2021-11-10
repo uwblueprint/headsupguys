@@ -208,7 +208,7 @@ const ToolBuilder: Page = () => {
             //For fields with just single input boxes eg. title
             newTool[type] = target;
         }
-        checkRequiredTool(newTool, questionList);
+        checkRequiredFields(newTool, questionList);
         setToolList(newTool);
     };
 
@@ -234,7 +234,7 @@ const ToolBuilder: Page = () => {
     ];
     //The stillneeded variable defaults to the title
     const [stillNeeded, setStillNeeded] = useState(toolRequired[0][1]);
-    const checkRequiredTool = (checkTool, checkQuestion) => {
+    const checkRequiredFields = (checkTool, checkQuestion) => {
         //Says if all fields are filled or not
         let fieldsFilled = true;
         //Specifies the tool or question field that still needs to be filled
@@ -347,7 +347,7 @@ const ToolBuilder: Page = () => {
             }
         }
         setQuestionList([...newMap.values()]);
-        checkRequiredTool(toolList, [...newMap.values()]);
+        checkRequiredFields(toolList, [...newMap.values()]);
     };
     const changeQuestionInput = (id, target) => {
         const newMap = new Map(
@@ -356,7 +356,7 @@ const ToolBuilder: Page = () => {
             }),
         );
         newMap.get(id).question = target;
-        checkRequiredTool(toolList, [...newMap.values()]);
+        checkRequiredFields(toolList, [...newMap.values()]);
         setQuestionList([...newMap.values()]);
     };
     const changeAlphanumeric = (id, target) => {
@@ -373,7 +373,7 @@ const ToolBuilder: Page = () => {
             }
         }
         newMap.get(id).alphanumericInput = target;
-        checkRequiredTool(toolList, [...newMap.values()]);
+        checkRequiredFields(toolList, [...newMap.values()]);
         setQuestionList([...newMap.values()]);
     };
     const changeOptionInput = (id, index, target, optionOrValue) => {
@@ -384,7 +384,7 @@ const ToolBuilder: Page = () => {
         );
         const changeIndex = optionOrValue == "option" ? 0 : 1;
         newMap.get(id).options[index][changeIndex] = target;
-        checkRequiredTool(toolList, [...newMap.values()]);
+        checkRequiredFields(toolList, [...newMap.values()]);
         setQuestionList([...newMap.values()]);
     };
     const addOneOption = (id, target) => {
@@ -412,20 +412,19 @@ const ToolBuilder: Page = () => {
             //If 0 is selected on the slider, the first option's value is set to 0
             newMap.get(id).options = [["", "0"], ...newMap.get(id).options];
         }
-        checkRequiredTool(toolList, [...newMap.values()]);
+        checkRequiredFields(toolList, [...newMap.values()]);
         setQuestionList([...newMap.values()]);
     };
 
     const removeOneOption = (id, target) => {
-        const newList = questionList.slice(0);
         const newMap = new Map(
             questionList.map((question) => {
                 return [question._id, question];
             }),
         );
         newMap.get(id).options.splice(target, 1);
-        checkRequiredTool(toolList, newList);
-        setQuestionList(newList);
+        checkRequiredFields(toolList, [...newMap.values()]);
+        setQuestionList([...newMap.values()]);
     };
 
     const changeSliderBounds = (id, target) => {
@@ -487,7 +486,7 @@ const ToolBuilder: Page = () => {
     const removeAllQuestions = () => {
         const newList = [];
         setQuestionList(newList);
-        checkRequiredTool(toolList, newList);
+        checkRequiredFields(toolList, newList);
     };
 
     const clearHiddenFilledFields = () => {
@@ -514,11 +513,12 @@ const ToolBuilder: Page = () => {
         /*ensures that the question number property
         matches the seen question number on the form*/
         const newList = listOfQuestions;
+        console.log("changing question numbers", listOfQuestions);
         for (let i = 0; i < newList.length; i++) {
             newList[i].questionNumber = i + 1;
         }
         setQuestionList(newList);
-        checkRequiredTool(toolList, newList);
+        checkRequiredFields(toolList, newList);
     };
 
     const selfCheckQuestionSize = questionList.length;
@@ -558,6 +558,7 @@ const ToolBuilder: Page = () => {
                                 removeAllQuestions();
                                 saveTool();
                                 saveSelfCheck();
+                                console.log(questionList);
                             }}
                             w={100}
                             background="red.600"
@@ -602,13 +603,21 @@ const ToolBuilder: Page = () => {
                                     clearHiddenFilledFields();
                                     toast({
                                         title: "Publication Successful",
-                                        description:
-                                            "Your tool has been succesfully published (please check the console)",
                                         status: "success",
                                         position: "bottom-left",
                                         duration: 5000,
                                         isClosable: true,
                                     });
+                                    saveTool();
+                                    saveSelfCheck();
+                                    setLastSavedTool(
+                                        JSON.parse(JSON.stringify(toolList)),
+                                    );
+                                    setLastSavedQuestions(
+                                        JSON.parse(
+                                            JSON.stringify(questionList),
+                                        ),
+                                    );
                                 }}
                             >
                                 Publish
@@ -659,8 +668,6 @@ const ToolBuilder: Page = () => {
                                 clearHiddenFilledFields();
                                 toast({
                                     title: "Save Successful",
-                                    description:
-                                        "Check the console for the objects",
                                     status: "success",
                                     position: "bottom-left",
                                     duration: 5000,

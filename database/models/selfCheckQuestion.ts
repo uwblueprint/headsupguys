@@ -37,6 +37,9 @@ const SelfCheckQuestionSchema = new Schema<SelfCheckQuestionInterface>(
             type: Boolean,
             default: true,
         },
+        questionNumber: {
+            type: Number,
+        },
     },
     {
         timestamps: true,

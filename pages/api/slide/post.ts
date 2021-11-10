@@ -17,9 +17,12 @@ const post = async (
         return;
     }
 
-    const { components } = req.body;
+    const { sections, checkpoint, progressBarEnabled, buttons } = req.body;
     const slide = new Slide({
-        components,
+        sections: sections,
+        checkpoint: checkpoint,
+        progressBarEnabled: progressBarEnabled,
+        buttons: buttons,
     });
     slide.save();
     // Creates a new slide at the end of the ordered list of slides

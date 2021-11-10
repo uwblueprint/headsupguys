@@ -1,14 +1,36 @@
 import { models, model, Schema, Types } from "mongoose";
-import { ComponentInterface, ComponentSchema } from "./component";
+import { SectionInterface, SectionSchema } from "./section";
 
 export interface SlideInterface {
     _id: Types.ObjectId;
-    components: ComponentInterface[];
+    checkpoint: boolean;
+    progressBarEnabled: boolean;
+    buttons: {
+        save: boolean;
+        print: boolean;
+        previous: boolean;
+        next: boolean;
+    };
+    sections: SectionInterface[];
 }
 
 const SlideSchema = new Schema<SlideInterface>(
     {
-        components: [ComponentSchema],
+        checkpoint: {
+            type: Boolean,
+            required: true,
+        },
+        progressBarEnabled: {
+            type: Boolean,
+            required: true,
+        },
+        buttons: {
+            save: Boolean,
+            print: Boolean,
+            previous: Boolean,
+            next: Boolean,
+        },
+        sections: [SectionSchema],
     },
     {
         timestamps: true,

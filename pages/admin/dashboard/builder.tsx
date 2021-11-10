@@ -93,7 +93,7 @@ function reducer(
         case ModuleActionType.CHANGE_TITLE:
             return { ...state, title: action.value };
         case ModuleActionType.INITIALIZE:
-            return { ...action.payload };
+            return { ...action.payload, currentSlide: 0 };
         case ModuleActionType.ADD_SLIDE:
             return { ...state, slides: [...state.slides, DEFAULT_SLIDE] };
         case ModuleActionType.UPDATE_SLIDE:
@@ -171,9 +171,8 @@ const Builder: Page = () => {
     const { moduleId } = router.query;
 
     const fetcher = async (url) => {
-        const response = await axios({
-            method: "GET",
-            url,
+        const response = await axios.get(url, {
+            params: { includeSlide: true },
         });
         dispatch({
             type: ModuleActionType.INITIALIZE,
@@ -182,9 +181,10 @@ const Builder: Page = () => {
         return response.data;
     };
 
-    const { data, error } = useSWR(`/api/module/${moduleId}`, fetcher);
+    const fetchURL = moduleId ? `/api/module/${moduleId}` : null;
+    const { data, error } = useSWR(fetchURL, fetcher);
     if (error) return "An error has occurred.";
-    if (!data) return <Spinner color="brand.lime" size="xl" />;
+    if (!data && fetchURL) return <Spinner color="brand.lime" size="xl" />;
 
     const handleSaveModule = async () => {
         // check if moduleId in url, if so call patch otherwise call post

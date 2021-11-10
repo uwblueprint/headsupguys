@@ -4,7 +4,7 @@ require("dotenv").config({ path: ".env.local" });
 const ObjectId = require("mongodb").ObjectId;
 const faker = require("faker");
 
-import { Component as componentCollection } from "../models/component";
+// import { Section as sectionCollection } from "../models/section";
 import { Module as moduleCollection } from "../models/module";
 import { Slide as slideCollection } from "../models/slide";
 import { Tool as toolCollection } from "../models/tool";
@@ -15,14 +15,14 @@ import { User as userCollection } from "../models/user";
 // seed config
 const QUESTION_COUNT = 24;
 const GROUP_COUNT = 5;
-const COMPONENT_COUNT = 60;
+const SECTION_COUNT = 60;
 const SLIDE_COUNT = 20;
 const MODULE_COUNT = 5;
 const TOOL_COUNT = 4;
 const USER_COUNT = 5;
 
 const QUESTIONS_PER_GROUP = Math.floor(QUESTION_COUNT / GROUP_COUNT);
-const COMPONENTS_PER_SLIDE = Math.floor(COMPONENT_COUNT / SLIDE_COUNT);
+const SECTIONS_PER_SLIDE = Math.floor(SECTION_COUNT / SLIDE_COUNT);
 const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
 
 (async function () {
@@ -43,7 +43,8 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
             await Promise.all([
                 db.collection("self_check_questions").drop(),
                 db.collection("self_check_groups").drop(),
-                db.collection("components").drop(),
+                // db.collection("components").drop(),
+                // db.collection("sections").drop(),
                 db.collection("slides").drop(),
                 db.collection("modules").drop(),
                 db.collection("tools").drop(),
@@ -60,14 +61,13 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
         );
         const groupIDs = groups.map((x) => x._id);
 
-        const components = await componentCollection.insertMany(
-            mockComponents(),
-        );
-        const componentIDs = components.map((x) => x._id);
+        // const sections = await sectionCollection.insertMany(
+        //     mockSections(),
+        // );
+        const sections = mockSections();
+        // const sectionIDs = sections.map((x) => x._id);
 
-        const slides = await slideCollection.insertMany(
-            mockSlides(componentIDs),
-        );
+        const slides = await slideCollection.insertMany(mockSlides(sections));
         const slideIDs = (slides as any[]).map((x) => x._id);
 
         // need to generate toolIDs beforehand to avoid a circular dependency
@@ -130,28 +130,44 @@ function mockGroups(questionIDs) {
     return groups;
 }
 
-function mockComponents() {
-    const componentTypes = ["text", "video", "audio"];
-    const components = [];
+function mockSections() {
+    const sectionTypes = ["markdown", "mc", "ms", "sa"];
+    const paddingTypes = ["top", "right", "bottom", "left"];
+    const sections = [];
 
-    for (let i = 0; i < COMPONENT_COUNT; i++) {
-        components.push({
-            type: componentTypes[i % componentTypes.length],
+    for (let i = 0; i < SECTION_COUNT; i++) {
+        sections.push({
+            type: sectionTypes[i % sectionTypes.length],
+            padding: paddingTypes[i % paddingTypes.length],
+            markdown: " ",
+            alignment: " ",
             properties: {},
         });
     }
-    return components;
+    return sections;
 }
 
-function mockSlides(componentIDs) {
+function mockSlides(sections) {
     const slides = [];
 
     for (let i = 0; i < SLIDE_COUNT; i++) {
         slides.push({
-            componentIDs: componentIDs.slice(
-                COMPONENTS_PER_SLIDE * i,
-                COMPONENTS_PER_SLIDE * (i + 1),
+            // componentIDs: componentIDs.slice(
+            //     COMPONENTS_PER_SLIDE * i,
+            //     COMPONENTS_PER_SLIDE * (i + 1),
+            // ),
+            sections: sections.slice(
+                SECTIONS_PER_SLIDE * i,
+                SECTIONS_PER_SLIDE * (i + 1),
             ),
+            buttons: {
+                save: !!(i % 2),
+                print: !!(i % 3),
+                previous: !!(i > 0),
+                next: !!(i < SLIDE_COUNT + 1),
+            },
+            progressBarEnabled: !!(i % 2),
+            checkpoint: !!(i % 3),
         });
     }
     return slides;

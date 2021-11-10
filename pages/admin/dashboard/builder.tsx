@@ -182,7 +182,7 @@ const Builder: Page = () => {
     };
 
     const fetchURL = moduleId ? `/api/module/${moduleId}` : null;
-    const { data, error } = useSWR(fetchURL, fetcher);
+    const { data, error } = useSWR(() => fetchURL, fetcher);
     if (error) return "An error has occurred.";
     if (!data && fetchURL) return <Spinner color="brand.lime" size="xl" />;
 

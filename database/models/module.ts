@@ -1,7 +1,6 @@
 import { models, model, Schema } from "mongoose";
 import { ToolInterface } from "./tool";
 import { SlideInterface } from "./slide";
-
 enum StatusType {
     COMPLETE = "complete",
     DRAFT = "draft",
@@ -12,8 +11,8 @@ export interface ModuleInterface {
     _id: Schema.Types.ObjectId;
     title: string;
 
-    toolID: ToolInterface["_id"];
-    slideIDs: SlideInterface["_id"][];
+    tool: ToolInterface["_id"];
+    slides: SlideInterface["_id"][];
 
     status: StatusType;
     editing: boolean;
@@ -30,7 +29,7 @@ const ModuleSchema = new Schema<ModuleInterface>(
             type: Schema.Types.ObjectId,
             default: null,
         },
-        slideIDs: {
+        slides: {
             type: [{ type: Schema.Types.ObjectId, ref: "Slide" }],
             default: [],
         },

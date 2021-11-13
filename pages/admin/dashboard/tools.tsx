@@ -27,9 +27,6 @@ const ToolsPage: Page = () => {
     const [selectedTab, setSelectedTab] = useState("draft");
     const [refresh, setRefresh] = useState(false);
 
-    // TODO: Need to update this to calculate relative date
-    const date = new Date();
-    const router = useRouter();
     const filterTools = async () => {
         try {
             const response = await axios({
@@ -239,7 +236,11 @@ const ToolsPage: Page = () => {
                                 selfCheckId={tool.selfCheckGroupID}
                                 title={tool.title}
                                 creators={tool.createdBy}
-                                updated={date}
+                                updated={
+                                    tool.updatedAt
+                                        ? new Date(tool.updatedAt)
+                                        : new Date()
+                                }
                                 module={tool.linkedModuleID !== null}
                                 published={tool.status === "published"}
                                 onLinkModule={(e) => {

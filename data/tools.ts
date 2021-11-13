@@ -26,6 +26,7 @@ const toolsList = [
         status: "draft",
         editing: true,
         createdBy: ["John Doe"],
+        updatedAt: new Date(),
     },
     {
         title: "Linked Tool",
@@ -54,6 +55,7 @@ const toolsList = [
         status: "draft",
         editing: true,
         createdBy: ["Jane Smith"],
+        updatedAt: new Date(),
     },
     {
         title: "Tool title",
@@ -82,6 +84,7 @@ const toolsList = [
         status: "published",
         editing: false,
         createdBy: ["John Doe"],
+        updatedAt: new Date(),
     },
     {
         title: "Linked Tool",
@@ -110,6 +113,7 @@ const toolsList = [
         status: "draft",
         editing: true,
         createdBy: ["Jane Smith"],
+        updatedAt: new Date(),
     },
 ];
 

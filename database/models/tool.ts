@@ -21,6 +21,7 @@ export interface ToolInterface {
     status: StatusType;
     editing: boolean;
     createdBy: string[];
+    updatedAt: Date;
 }
 
 const ToolSchema = new Schema<ToolInterface>(
@@ -58,6 +59,7 @@ const ToolSchema = new Schema<ToolInterface>(
         },
         editing: Boolean,
         createdBy: [String],
+        updatedAt: Date,
     },
     {
         timestamps: true,

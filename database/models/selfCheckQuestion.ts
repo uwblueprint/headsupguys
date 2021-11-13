@@ -8,7 +8,7 @@ enum QuestionType {
     SLIDER = "slider",
 }
 
-interface SelfCheckQuestionInterface {
+export interface SelfCheckQuestionInterface {
     _id: Types.ObjectId;
     type: QuestionType;
     question: string;

@@ -12,6 +12,8 @@ import { Page } from "types/Page";
 import { useRouter } from "next/router";
 import axios from "axios";
 
+const router = useRouter();
+
 const ToolsPage: Page = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [toolsArray, setToolsArray] = useState([]);

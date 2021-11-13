@@ -12,7 +12,7 @@ import { Page } from "types/Page";
 import { useRouter } from "next/router";
 import axios from "axios";
 
-const router = useRouter();
+
 
 const ToolsPage: Page = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,7 +28,7 @@ const ToolsPage: Page = () => {
 
     const [selectedTab, setSelectedTab] = useState("draft");
     const [refresh, setRefresh] = useState(false);
-
+    const router = useRouter();
     const filterTools = async () => {
         try {
             const response = await axios({

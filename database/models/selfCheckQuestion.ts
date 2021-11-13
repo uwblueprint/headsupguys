@@ -46,4 +46,8 @@ const SelfCheckQuestionSchema = new Schema<SelfCheckQuestionInterface>(
     },
 );
 
-export { SelfCheckQuestionSchema, QuestionType };
+const SelfCheckQuestion =
+    models.SelfCheckQuestion ||
+    model("SelfCheckQuestion", SelfCheckQuestionSchema, "self_check_questions");
+
+export { SelfCheckQuestion, QuestionType, SelfCheckQuestionSchema };

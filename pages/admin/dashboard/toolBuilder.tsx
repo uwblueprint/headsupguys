@@ -20,9 +20,8 @@ import { AdminLayout } from "@components";
 import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 import { useRouter } from "next/router";
 import axios from "axios";
-import selfCheck from "pages/api/self-check";
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async () => {
     return {
         props: {}, // will magically be passed to the page component as props
     };
@@ -235,7 +234,7 @@ const ToolBuilder: Page = () => {
         ["externalResources", 'The Home Page "External Resources'],
     ];
     //The stillneeded variable defaults to the title
-    const [stillNeeded, setStillNeeded] = useState(toolRequired[0][1]);
+    const [stillNeeded, setStillNeeded] = useState("New Page");
     const checkRequiredFields = (checkTool, checkQuestion) => {
         //Says if all fields are filled or not
         let fieldsFilled = true;
@@ -491,7 +490,6 @@ const ToolBuilder: Page = () => {
         checkRequiredFields(toolList, newList);
     };
     const deleteTool = async () => {
-        console.log("delete");
         await axios({
             method: "DELETE",
             url: `/api/tool/deleteOne?id=${toolID}`,
@@ -603,12 +601,19 @@ const ToolBuilder: Page = () => {
                         //Shows the users which fields remain when they hover over the submit button
                         maxWidth={"60"}
                         hasArrow
-                        label={
-                            stillNeeded == ""
-                                ? ""
-                                : stillNeeded +
-                                  " field still needs to be filled out"
-                        }
+                        label={(() => {
+                            switch (stillNeeded) {
+                                case "":
+                                    return "";
+                                case "New Page":
+                                    return "Please make a change before publishing";
+                                default:
+                                    return (
+                                        stillNeeded +
+                                        "field still needs to be filled out"
+                                    );
+                            }
+                        })()}
                         placement="right"
                     >
                         <Box>
@@ -633,7 +638,7 @@ const ToolBuilder: Page = () => {
                                         duration: 5000,
                                         isClosable: true,
                                     });
-                                    changeInput("published", "status");
+                                    toolList.status = "published";
                                     saveTool();
                                     saveSelfCheck();
                                     setLastSavedTool(

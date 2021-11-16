@@ -216,12 +216,17 @@ function mockTools(moduleIDs, groupIDs, toolIDs) {
     for (let i = 0; i < TOOL_COUNT; i++) {
         const relatedToolsIDs = [];
         while (
-            relatedToolsIDs.length < Math.floor(Math.random() * TOOL_COUNT) // generate random number of related tools between 0 and (TOOL_COUNT - 1)
+            relatedToolsIDs.length < 3 // generate random number of related tools between 0 and (TOOL_COUNT - 1)
         ) {
             const index = Math.floor(Math.random() * TOOL_COUNT);
             // prevent a tool from relating to itself and another tool multiple times
-            if (index != i && relatedToolsIDs.indexOf(toolIDs[index]) === -1) {
+            if (
+                index != i &&
+                relatedToolsIDs.indexOf(String(toolIDs[index])) === -1
+            ) {
                 relatedToolsIDs.push(String(toolIDs[index]));
+            } else {
+                relatedToolsIDs.push("");
             }
         }
 
@@ -244,7 +249,7 @@ function mockTools(moduleIDs, groupIDs, toolIDs) {
                 [faker.lorem.words(), faker.internet.url()],
                 [faker.lorem.words(), faker.internet.url()],
             ],
-            sources: [
+            externalResources: [
                 [faker.lorem.words(), faker.internet.url()],
                 [faker.lorem.words(), faker.internet.url()],
                 [faker.lorem.words(), faker.internet.url()],

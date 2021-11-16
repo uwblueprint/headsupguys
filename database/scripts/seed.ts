@@ -53,12 +53,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
             console.log("Successfully cleared database");
         }
 
-        const questions = await questionCollection.insertMany(mockQuestions());
-        const questionIDs = questions.map((x) => x._id);
-
-        const groups = await groupCollection.insertMany(
-            mockGroups(questionIDs),
-        );
+        const groups = await groupCollection.insertMany(mockGroups());
         const groupIDs = groups.map((x) => x._id);
 
         // const sections = await sectionCollection.insertMany(
@@ -132,11 +127,12 @@ function mockQuestions() {
     return questions;
 }
 
-function mockGroups(questionIDs) {
+function mockGroups() {
     const groups = [];
+    const questions = mockQuestions();
     for (let i = 0; i < GROUP_COUNT; i++) {
         groups.push({
-            questionIDs: questionIDs.slice(
+            questions: questions.slice(
                 QUESTIONS_PER_GROUP * i,
                 QUESTIONS_PER_GROUP * (i + 1),
             ),

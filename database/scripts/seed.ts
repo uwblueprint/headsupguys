@@ -53,12 +53,7 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
             console.log("Successfully cleared database");
         }
 
-        const questions = await questionCollection.insertMany(mockQuestions());
-        const questionIDs = questions.map((x) => x._id);
-
-        const groups = await groupCollection.insertMany(
-            mockGroups(questionIDs),
-        );
+        const groups = await groupCollection.insertMany(mockGroups());
         const groupIDs = groups.map((x) => x._id);
 
         // const sections = await sectionCollection.insertMany(
@@ -95,11 +90,28 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
 })(); // immediately-invoked function expression
 
 function mockQuestions() {
-    const questionTypes = ["multiple_choice", "multi_select"];
-    const mockOptions = [
-        [1, 2, 3],
-        ["yes", "no", "maybe"],
+    const questionTypes = [
+        "multiple_choice",
+        "multi_select",
+        "short_answer",
+        "long_answer",
+        "slider",
     ];
+    const mockOptions = [
+        [
+            ["yes", 1],
+            ["no", 2],
+            ["maybe", 3],
+        ],
+        [
+            ["bad", 0],
+            ["okay", 2],
+            ["good", 4],
+        ],
+    ];
+
+    const alphanumericOptions = [true, false];
+
     const questions = [];
 
     for (let i = 0; i < QUESTION_COUNT; i++) {
@@ -107,21 +119,20 @@ function mockQuestions() {
             type: questionTypes[i % questionTypes.length],
             question: faker.lorem.words() + faker.lorem.words() + "?",
             options: mockOptions[i % mockOptions.length],
+            alphanumericInput:
+                alphanumericOptions[i % alphanumericOptions.length],
             questionNumber: (i % QUESTIONS_PER_GROUP) + 1,
         });
     }
     return questions;
 }
 
-function mockGroups(questionIDs) {
+function mockGroups() {
     const groups = [];
+    const questions = mockQuestions();
     for (let i = 0; i < GROUP_COUNT; i++) {
-        // when QUESTIONS_PER_GROUP = 4:
-        // id: 0   questionIDs: [ questionIDs[0], questionIDs[1], questionIDs[2], questionIDs[3] ]
-        // id: 1   questionIDs: [ questionIDs[4], questionIDs[5], questionIDs[6], questionIDs[7] ]
-        // id: 2   questionIDs: [ questionIDs[8], questionIDs[9], questionIDs[10], questionIDs[11] ]
         groups.push({
-            questionIDs: questionIDs.slice(
+            questions: questions.slice(
                 QUESTIONS_PER_GROUP * i,
                 QUESTIONS_PER_GROUP * (i + 1),
             ),
@@ -195,39 +206,51 @@ function mockModules(slideIDs, toolIDs) {
 
 function mockTools(moduleIDs, groupIDs, toolIDs) {
     const statusTypes = ["published", "draft"];
+    const toolTypes = ["Problem", "Skill"];
     const tools = [];
 
     for (let i = 0; i < TOOL_COUNT; i++) {
         const relatedToolsIDs = [];
         while (
-            relatedToolsIDs.length < Math.floor(Math.random() * TOOL_COUNT) // generate random number of related tools between 0 and (TOOL_COUNT - 1)
+            relatedToolsIDs.length < 3 // generate random number of related tools between 0 and (TOOL_COUNT - 1)
         ) {
             const index = Math.floor(Math.random() * TOOL_COUNT);
             // prevent a tool from relating to itself and another tool multiple times
-            if (index != i && relatedToolsIDs.indexOf(toolIDs[index]) === -1) {
-                relatedToolsIDs.push(toolIDs[index]);
+            if (
+                index != i &&
+                relatedToolsIDs.indexOf(String(toolIDs[index])) === -1
+            ) {
+                relatedToolsIDs.push(String(toolIDs[index]));
+            } else {
+                relatedToolsIDs.push("");
             }
         }
 
         tools.push({
             _id: toolIDs[i],
             title: faker.lorem.words(),
+            thumbnail: faker.internet.url(),
+            type: toolTypes[i % toolTypes.length],
             video: faker.internet.url(),
             description: faker.lorem.sentences(),
-            moduleID: i < MODULE_COUNT ? moduleIDs[i] : null,
-            resources: [
-                {
-                    title: faker.lorem.words(),
-                    description: faker.lorem.sentences(),
-                    url: faker.internet.url(),
-                },
-                {
-                    title: faker.lorem.words(),
-                    description: faker.lorem.sentences(),
-                    url: faker.internet.url(),
-                },
+            linkedModuleID: i < MODULE_COUNT ? String(moduleIDs[i]) : undefined,
+            relatedResources: [
+                [faker.lorem.words(), faker.internet.url()],
+                [faker.lorem.words(), faker.internet.url()],
+                [faker.lorem.words(), faker.internet.url()],
             ],
-            selfCheckGroupID: i < GROUP_COUNT ? groupIDs[i] : null,
+
+            relatedStories: [
+                [faker.lorem.words(), faker.internet.url()],
+                [faker.lorem.words(), faker.internet.url()],
+                [faker.lorem.words(), faker.internet.url()],
+            ],
+            externalResources: [
+                [faker.lorem.words(), faker.internet.url()],
+                [faker.lorem.words(), faker.internet.url()],
+                [faker.lorem.words(), faker.internet.url()],
+            ],
+            selfCheckGroupID: i < GROUP_COUNT ? String(groupIDs[i]) : null,
             relatedToolsIDs,
             status: statusTypes[i % statusTypes.length],
             editing: i == 1,

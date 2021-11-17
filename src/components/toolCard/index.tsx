@@ -4,6 +4,7 @@ import {
     Box,
     Heading,
     Text,
+    Button,
     InputProps,
     Tag,
     TagLeftIcon,
@@ -13,9 +14,10 @@ import {
     Tooltip,
 } from "@chakra-ui/react";
 import { CheckIcon, DeleteIcon, StarIcon } from "@chakra-ui/icons";
-import { Button } from "@chakra-ui/react";
-
+import { useRouter } from "next/router";
 export interface ToolCardProps extends InputProps {
+    id: string;
+    selfCheckId: string;
     title: string;
     creators: string[];
     updated: Date;
@@ -26,10 +28,12 @@ export interface ToolCardProps extends InputProps {
     onUnlinkModule(event: any): any;
     onPublish(event: any): any;
     onUnpublish(event: any): any;
-    onDelete(event: any): any;
+    onDelete(event: any, arg2: any, arg3: any, arg4: any): any;
 }
 
 export const ToolCard: React.FC<ToolCardProps> = ({
+    id,
+    selfCheckId,
     title,
     creators,
     updated,
@@ -42,6 +46,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
     onUnpublish,
     onDelete,
 }) => {
+    const router = useRouter();
     const creatorsText = creators.map((name, i) =>
         i == creators.length - 1 ? name : name + ", ",
     );
@@ -61,17 +66,29 @@ export const ToolCard: React.FC<ToolCardProps> = ({
 
     return (
         <SimpleGrid w="100%" columns={2} px={5} py={5} __css={styles.card}>
-            <Flex>
+            <Flex
+                _hover={{ cursor: "pointer" }}
+                onClick={() => {
+                    router.push({
+                        pathname: "/admin/dashboard/toolBuilder",
+                        query: { toolID: id, selfCheckID: selfCheckId },
+                    });
+                }}
+            >
                 <Box bg="lightgrey" w="25%" h="157px" />
                 <Box px={10} w="75%">
                     <Flex justify="space-between">
                         <Heading fontSize={20} fontWeight="500">
                             {title}
-                            {"  "}
                             {published && <StarIcon boxSize="0.75em" />}
                         </Heading>
                         {published ? (
-                            <Button variant="default" onClick={onUnpublish}>
+                            <Button
+                                variant="default"
+                                onClick={(e) => {
+                                    onUnpublish(e);
+                                }}
+                            >
                                 Unpublish Tool
                             </Button>
                         ) : (
@@ -80,13 +97,17 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                     <>
                                         <Button
                                             variant="outlineBlack"
-                                            onClick={onUnlinkModule}
+                                            onClick={(e) => {
+                                                onUnlinkModule(e);
+                                            }}
                                         >
                                             Unlink Module
                                         </Button>
                                         <Button
                                             variant="default"
-                                            onClick={onPublish}
+                                            onClick={(e) => {
+                                                onPublish(e);
+                                            }}
                                         >
                                             Publish Tool
                                         </Button>
@@ -95,7 +116,9 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                     <>
                                         <Button
                                             variant="outlineBlack"
-                                            onClick={onLinkModule}
+                                            onClick={(e) => {
+                                                onLinkModule(e);
+                                            }}
                                         >
                                             Link Module
                                         </Button>
@@ -105,11 +128,16 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                             placement="top"
                                         >
                                             <Button
-                                                isDisabled
+                                                variant="solid"
                                                 _hover={{
-                                                    pointerEvents: "none",
+                                                    bg: "black",
                                                 }}
-                                                onClick={onPublish}
+                                                color={"white"}
+                                                background={"black"}
+                                                isDisabled
+                                                onClick={(e) => {
+                                                    onPublish(e);
+                                                }}
                                             >
                                                 Publish Tool
                                             </Button>
@@ -120,7 +148,9 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                     aria-label="Delete tool"
                                     variant="ghost"
                                     icon={<DeleteIcon />}
-                                    onClick={onDelete}
+                                    onClick={(e) => {
+                                        onDelete(e, title, id, selfCheckId);
+                                    }}
                                 />
                             </Flex>
                         )}

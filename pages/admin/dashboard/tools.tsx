@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { ToolCard, Modal, AdminLayout } from "@components";
 import { Page } from "types/Page";
+import { useRouter } from "next/router";
 import axios from "axios";
 
 const ToolsPage: Page = () => {
@@ -17,6 +18,7 @@ const ToolsPage: Page = () => {
 
     const [selectedTool, setSelectedTool] = useState("");
     const [selectedToolId, setSelectedToolId] = useState("");
+    const [selectedSelfCheckId, setSelectedSelfCheckId] = useState("");
     // Modal can be of "publish" or "delete" mode
     const [modalMode, setModalMode] = useState("");
     const publishConfirmation = `Are you sure you want to publish ${selectedTool}? Your tool will be available to the public!`;
@@ -24,10 +26,7 @@ const ToolsPage: Page = () => {
 
     const [selectedTab, setSelectedTab] = useState("draft");
     const [refresh, setRefresh] = useState(false);
-
-    // TODO: Need to update this to calculate relative date
-    // const date = new Date();
-
+    const router = useRouter();
     const filterTools = async () => {
         try {
             const response = await axios({
@@ -46,32 +45,114 @@ const ToolsPage: Page = () => {
         }
     };
 
+    const createTool = async () => {
+        try {
+            const toolResponse = await axios({
+                method: "POST",
+                url: "/api/tool/post",
+                data: {
+                    title: "Untitled Tool",
+                    type: "",
+                    thumnbnail: "",
+                    video: "",
+                    description: "",
+                    linkedModuleID: "",
+                    relatedResources: [
+                        ["", ""],
+                        ["", ""],
+                        ["", ""],
+                    ],
+                    relatedStories: [
+                        ["", ""],
+                        ["", ""],
+                        ["", ""],
+                    ],
+                    externalResources: [
+                        ["", ""],
+                        ["", ""],
+                        ["", ""],
+                    ],
+                    selfCheckGroupID: "",
+                    relatedToolsIDs: ["", "", ""],
+                    status: "draft",
+                },
+            });
+            const selfCheckResponse = await axios({
+                method: "POST",
+                url: "/api/self-check/post",
+                data: [
+                    {
+                        type: "multiple_choice",
+                        question: "Untitled Question",
+                        options: [
+                            ["", ""],
+                            ["", ""],
+                            ["", ""],
+                        ],
+                        alphanumericInput: true,
+                        questionNumber: 1,
+                    },
+                ],
+            });
+            const newTool = toolResponse.data;
+            newTool.selfCheckGroupID = selfCheckResponse.data._id;
+            await axios({
+                method: "PATCH",
+                url: `/api/tool/update?id=${newTool._id}`,
+                data: newTool,
+            });
+            router.push({
+                pathname: "/admin/dashboard/toolBuilder",
+                query: {
+                    toolID: toolResponse.data._id,
+                    selfCheckID: selfCheckResponse.data._id,
+                },
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     useEffect(() => {
         filterTools();
     }, [selectedTab, refresh]);
 
-    const onLinkModule = () => {
-        console.log("hello");
+    const onLinkModule = (e) => {
+        e.stopPropagation();
     };
 
-    const onPublish = (toolName) => {
+    const onPublish = (e, toolName) => {
         setModalMode("publish");
         setSelectedTool(toolName);
         onOpen();
+        e.stopPropagation();
+        //TODO: Implement publishing the tool in the db
+    };
+    const onUnpublish = (e, toolName) => {
+        setModalMode("draft");
+        setSelectedTool(toolName);
+        onOpen();
+        e.stopPropagation();
         //TODO: Implement publishing the tool in the db
     };
 
-    const onDelete = (toolName, id) => {
+    const onDelete = (e, toolName, id, selfCheckId) => {
         setModalMode("delete");
         setSelectedTool(toolName);
         setSelectedToolId(id);
+        setSelectedSelfCheckId(selfCheckId);
         onOpen();
+        e.stopPropagation();
     };
 
     const deleteTool = async () => {
         await axios({
             method: "DELETE",
             url: `/api/tool/deleteOne?id=${selectedToolId}`,
+        });
+        await axios({
+            method: "DELETE",
+            url: `/api/self-check/${selectedSelfCheckId}`,
         });
         setRefresh(!refresh);
         onClose();
@@ -117,7 +198,9 @@ const ToolsPage: Page = () => {
                         _active={{
                             transform: "scale(0.95)",
                         }}
-                        // onClick={() => {}}
+                        onClick={() => {
+                            createTool();
+                        }}
                         minWidth={"90"}
                         colorScheme="white"
                         variant="outline"
@@ -145,30 +228,34 @@ const ToolsPage: Page = () => {
                     </Button>
                 </Flex>
                 <Stack>
-                    {toolsArray.map((tool, idx) => {
+                    {toolsArray.map((tool) => {
                         return (
                             <ToolCard
-                                key={idx}
-                                title={tool["title"]}
-                                creators={tool["createdBy"]}
+                                key={tool._id}
+                                id={tool._id}
+                                selfCheckId={tool.selfCheckGroupID}
+                                title={tool.title}
+                                creators={tool.createdBy}
                                 updated={
-                                    tool["updatedAt"]
-                                        ? new Date(tool["updatedAt"])
+                                    tool.updatedAt
+                                        ? new Date(tool.updatedAt)
                                         : new Date()
                                 }
-                                module={tool["moduleID"] !== ""}
-                                published={tool["status"] === "published"}
-                                onLinkModule={onLinkModule}
-                                onPublish={() => onPublish(tool["title"])}
-                                onUnlinkModule={() => {
-                                    console.log("unlink");
+                                module={tool.linkedModuleID !== null}
+                                published={tool.status === "published"}
+                                onLinkModule={(e) => {
+                                    onLinkModule(e);
                                 }}
-                                onUnpublish={() => {
-                                    console.log("unpub");
+                                onPublish={(e) => {
+                                    onPublish(e, tool.title);
                                 }}
-                                onDelete={() =>
-                                    onDelete(tool["title"], tool["_id"])
-                                }
+                                onUnlinkModule={(e) => {
+                                    e.stopPropagation();
+                                }}
+                                onUnpublish={(e) => {
+                                    onUnpublish(e, tool.title);
+                                }}
+                                onDelete={onDelete}
                             />
                         );
                     })}

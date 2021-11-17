@@ -96,7 +96,7 @@ const Toolbar = ({
                     icon={<IoTrash />}
                     onClick={() => {
                         dispatch({
-                            type: ModuleActionType.RESET_SLIDE,
+                            type: ModuleActionType.REMOVE_SLIDE,
                             index: state.currentSlide,
                         });
                     }}

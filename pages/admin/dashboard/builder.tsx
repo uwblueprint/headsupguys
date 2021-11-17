@@ -1,6 +1,17 @@
 /* eslint-disable prettier/prettier */
 import React, { useReducer } from "react";
-import { Flex, Spinner, Stack, useDisclosure } from "@chakra-ui/react";
+import {
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalOverlay,
+    Flex,
+    Spinner,
+    Stack,
+    useDisclosure,
+    Center,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import useSWR from "swr";
@@ -183,8 +194,7 @@ const Builder: Page = () => {
 
     const fetchURL = moduleId ? `/api/module/${moduleId}` : null;
     const { data, error } = useSWR(() => fetchURL, fetcher);
-    if (error) return "An error has occurred.";
-    if (!data && fetchURL) return <Spinner color="brand.lime" size="xl" />;
+    const isLoading = !data && fetchURL;
 
     const handleSaveModule = async () => {
         // check if moduleId in url, if so call patch otherwise call post
@@ -211,28 +221,57 @@ const Builder: Page = () => {
     };
 
     return (
-        <Stack spacing={0}>
-            <Header
-                state={state}
-                dispatch={dispatch}
-                handleSaveModule={handleSaveModule}
-            />
-            <Toolbar state={state} dispatch={dispatch} />
-            <Flex h="80vh">
-                <Editor
+        <>
+            <Stack spacing={0}>
+                <Header
                     state={state}
                     dispatch={dispatch}
-                    isSidebarOpen={isSidebarOpen}
-                    toggleSidebar={toggleSidebar}
+                    handleSaveModule={handleSaveModule}
                 />
-                <Document
-                    state={state}
-                    isSidebarOpen={isSidebarOpen}
-                    sidebarOpen={sidebarOpen}
-                    sidebarClose={sidebarClose}
-                />
-            </Flex>
-        </Stack>
+                <Toolbar state={state} dispatch={dispatch} />
+                <Flex h="80vh">
+                    <Editor
+                        state={state}
+                        dispatch={dispatch}
+                        isSidebarOpen={isSidebarOpen}
+                        toggleSidebar={toggleSidebar}
+                    />
+                    <Document
+                        state={state}
+                        isSidebarOpen={isSidebarOpen}
+                        sidebarOpen={sidebarOpen}
+                        sidebarClose={sidebarClose}
+                    />
+                </Flex>
+            </Stack>
+            {(error || isLoading) && (
+                <Modal
+                    isCentered
+                    closeOnOverlayClick={false}
+                    isOpen={!data}
+                    onClose={() => console.log("data fetched")}
+                >
+                    <ModalOverlay />
+                    <ModalContent w={300} h={300}>
+                        <Center w="100%" h="100%">
+                            {error ? (
+                                <ModalHeader>
+                                    An error has occurred.
+                                </ModalHeader>
+                            ) : (
+                                <>
+                                    <ModalHeader>Loading...</ModalHeader>
+                                    <br />
+                                    <ModalBody>
+                                        <Spinner color="brand.lime" size="xl" />
+                                    </ModalBody>
+                                </>
+                            )}
+                        </Center>
+                    </ModalContent>
+                </Modal>
+            )}
+        </>
     );
 };
 

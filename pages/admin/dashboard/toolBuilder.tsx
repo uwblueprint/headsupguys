@@ -161,7 +161,7 @@ const ToolBuilder: Page = () => {
         getAllTools();
     }, []);
 
-    const saveTool = async () => {
+    const saveTool = async (saveOrPublish) => {
         if (toolList.title == "") {
             toolList.title = "Untitled Tool";
         }
@@ -170,6 +170,13 @@ const ToolBuilder: Page = () => {
                 method: "PATCH",
                 url: `/api/tool/${toolID}`,
                 data: toolList,
+            });
+            toast({
+                title: saveOrPublish + "Successful",
+                status: "success",
+                position: "bottom-left",
+                duration: 5000,
+                isClosable: true,
             });
         } catch (err) {
             console.log(err);
@@ -190,6 +197,7 @@ const ToolBuilder: Page = () => {
                 url: `/api/self-check/${selfCheckID}`,
                 data: questionList,
             });
+            return true;
         } catch (err) {
             console.log(err);
         }
@@ -339,7 +347,7 @@ const ToolBuilder: Page = () => {
             for (let i = newMap.get(id).options.length; i < 3; i++) {
                 addOneOption(id, "bottom");
             }
-            /*We use the second fiel in each option array to keep track of the slider
+            /*We use the second field in each option array to keep track of the slider
             this is important because the slider can start at either 0  or 1 so the index
             alone of each option does not give enough information as to what each slider value
             should point to*/
@@ -450,7 +458,7 @@ const ToolBuilder: Page = () => {
             }
         }
     };
-    const moveQuesiton = (index, direction) => {
+    const moveQuestion = (index, direction) => {
         const newList = questionList.slice(0);
         const tempQuestion = newList[index];
         newList[index] = newList[index - direction];
@@ -579,7 +587,7 @@ const ToolBuilder: Page = () => {
                                 onClose();
                                 clearToolHomePage();
                                 removeAllQuestions();
-                                saveTool();
+                                saveTool("Delete ");
                                 saveSelfCheck();
                                 deleteTool();
                             }}
@@ -631,19 +639,14 @@ const ToolBuilder: Page = () => {
                                 isDisabled={stillNeeded == "" ? false : true}
                                 onClick={() => {
                                     clearHiddenFilledFields();
-                                    toast({
-                                        title: "Publication Successful",
-                                        status: "success",
-                                        position: "bottom-left",
-                                        duration: 5000,
-                                        isClosable: true,
-                                    });
                                     toolList.status = "published";
-                                    saveTool();
-                                    saveSelfCheck();
-                                    setLastSavedTool(
-                                        JSON.parse(JSON.stringify(toolList)),
-                                    );
+                                    saveTool("Publish ");
+                                    saveSelfCheck() &&
+                                        setLastSavedTool(
+                                            JSON.parse(
+                                                JSON.stringify(toolList),
+                                            ),
+                                        );
                                     setLastSavedQuestions(
                                         JSON.parse(
                                             JSON.stringify(questionList),
@@ -690,14 +693,7 @@ const ToolBuilder: Page = () => {
 
                             onClick={() => {
                                 clearHiddenFilledFields();
-                                toast({
-                                    title: "Save Successful",
-                                    status: "success",
-                                    position: "bottom-left",
-                                    duration: 5000,
-                                    isClosable: true,
-                                });
-                                saveTool();
+                                saveTool("Save ");
                                 saveSelfCheck();
                                 setLastSavedTool(
                                     JSON.parse(JSON.stringify(toolList)),
@@ -784,7 +780,7 @@ const ToolBuilder: Page = () => {
                                 onChangeAlphanumeric={changeAlphanumeric}
                                 onAddQuestion={addOneQuestion}
                                 onRemoveQuestion={removeOneQuestion}
-                                onMoveQuestion={moveQuesiton}
+                                onMoveQuestion={moveQuestion}
                                 onChangeQuestionInput={changeQuestionInput}
                                 onChangeQuestionType={changeQuestionType}
                                 onChangeSliderBounds={changeSliderBounds}

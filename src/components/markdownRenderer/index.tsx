@@ -23,7 +23,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             {children ? (
                 children
                     .split("\n")
-                    .map((line) => (
+                    .map((line, idx) => (
                         <React.Fragment key={idx}>
                             {line === "" ? (
                                 <div className="newline" />
@@ -34,7 +34,6 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
                                 />
                             )}
                         </React.Fragment>
-
                     ))
             ) : (
                 <div className="newline" />

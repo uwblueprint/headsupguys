@@ -54,7 +54,7 @@ const ModulesHeader: React.FC = () => {
 
 const Modules: React.FC = () => {
     const { data, error } = useSWR("/api/module/getAll", fetcher);
-    if (error) return "An error has occurred.";
+    if (error) return <div>An error has occurred.</div>;
     if (!data) return <Spinner color="brand.lime" size="xl" />;
 
     return (

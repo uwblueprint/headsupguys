@@ -3,6 +3,9 @@ import { models, model, Schema, Types } from "mongoose";
 enum QuestionType {
     MULTIPLE_CHOICE = "multiple_choice",
     MULTI_SELECT = "multi_select",
+    SHORT_ANSWER = "short_answer",
+    LONG_ANSWER = "long_answer",
+    SLIDER = "slider",
 }
 
 export interface SelfCheckQuestionInterface {
@@ -10,6 +13,7 @@ export interface SelfCheckQuestionInterface {
     type: QuestionType;
     question: string;
     options: [Schema.Types.Mixed];
+    alphanumericInput: boolean;
     questionNumber: number;
 }
 
@@ -29,9 +33,12 @@ const SelfCheckQuestionSchema = new Schema<SelfCheckQuestionInterface>(
             type: [Schema.Types.Mixed],
             default: [],
         },
+        alphanumericInput: {
+            type: Boolean,
+            default: true,
+        },
         questionNumber: {
             type: Number,
-            required: true,
         },
     },
     {

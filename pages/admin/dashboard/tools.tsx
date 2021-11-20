@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { ToolCard, Modal, AdminLayout } from "@components";
 import { Page } from "types/Page";
+import { useRouter } from "next/router";
 import axios from "axios";
 import useSWR from "swr";
 
@@ -33,6 +34,75 @@ const ToolsHeader: React.FC<ToolsHeaderProps> = ({
     selectedTab,
     setSelectedTab,
 }) => {
+    const router = useRouter();
+    const createTool = async () => {
+        try {
+            const toolResponse = await axios({
+                method: "POST",
+                url: "/api/tool/post",
+                data: {
+                    title: "Untitled Tool",
+                    type: "",
+                    thumnbnail: "",
+                    video: "",
+                    description: "",
+                    linkedModuleID: "",
+                    relatedResources: [
+                        ["", ""],
+                        ["", ""],
+                        ["", ""],
+                    ],
+                    relatedStories: [
+                        ["", ""],
+                        ["", ""],
+                        ["", ""],
+                    ],
+                    externalResources: [
+                        ["", ""],
+                        ["", ""],
+                        ["", ""],
+                    ],
+                    selfCheckGroupID: "",
+                    relatedToolsIDs: ["", "", ""],
+                    status: "draft",
+                },
+            });
+            const selfCheckResponse = await axios({
+                method: "POST",
+                url: "/api/self-check/post",
+                data: [
+                    {
+                        type: "multiple_choice",
+                        question: "Untitled Question",
+                        options: [
+                            ["", ""],
+                            ["", ""],
+                            ["", ""],
+                        ],
+                        alphanumericInput: true,
+                        questionNumber: 1,
+                    },
+                ],
+            });
+            const newTool = toolResponse.data;
+            newTool.selfCheckGroupID = selfCheckResponse.data._id;
+            await axios({
+                method: "PATCH",
+                url: `/api/tool/update?id=${newTool._id}`,
+                data: newTool,
+            });
+            router.push({
+                pathname: "/admin/dashboard/toolBuilder",
+                query: {
+                    toolID: toolResponse.data._id,
+                    selfCheckID: selfCheckResponse.data._id,
+                },
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         <>
             <Flex wrap={"wrap"} justify={"left"} width={"full"}>
@@ -45,7 +115,9 @@ const ToolsHeader: React.FC<ToolsHeaderProps> = ({
                     _active={{
                         transform: "scale(0.95)",
                     }}
-                    // onClick={() => {}}
+                    onClick={() => {
+                        createTool();
+                    }}
                     minWidth={"90"}
                     colorScheme="white"
                     variant="outline"
@@ -80,33 +152,39 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedTool, setSelectedTool] = useState("");
     const [selectedToolId, setSelectedToolId] = useState("");
+    const [selectedSelfCheckId, setSelectedSelfCheckId] = useState("");
     // Modal can be of "publish" or "delete" mode
     const [modalMode, setModalMode] = useState("");
     const publishConfirmation = `Are you sure you want to publish ${selectedTool}? Your tool will be available to the public!`;
     const deleteConfirmation = `Are you sure you want to delete ${selectedTool}? This is a permanent action that cannot be undone.`;
     const [refresh, setRefresh] = useState(false);
 
-    // TODO: Need to update this to calculate relative date
-    // const date = new Date();
-
-    //TODO: Add connection to DB for unpublish and linking/unlinking tools
-
-    const onLinkModule = () => {
-        console.log("hello");
+    const onLinkModule = (e) => {
+        e.stopPropagation();
     };
 
-    const onPublish = (toolName) => {
+    const onPublish = (e, toolName) => {
         setModalMode("publish");
         setSelectedTool(toolName);
         onOpen();
+        e.stopPropagation();
+        //TODO: Implement publishing the tool in the db
+    };
+    const onUnpublish = (e, toolName) => {
+        setModalMode("draft");
+        setSelectedTool(toolName);
+        onOpen();
+        e.stopPropagation();
         //TODO: Implement publishing the tool in the db
     };
 
-    const onDelete = (toolName, id) => {
+    const onDelete = (e, toolName, id, selfCheckId) => {
         setModalMode("delete");
         setSelectedTool(toolName);
         setSelectedToolId(id);
+        setSelectedSelfCheckId(selfCheckId);
         onOpen();
+        e.stopPropagation();
     };
 
     const deleteTool = async () => {
@@ -114,12 +192,16 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
             method: "DELETE",
             url: `/api/tool/deleteOne?id=${selectedToolId}`,
         });
+        await axios({
+            method: "DELETE",
+            url: `/api/self-check/${selectedSelfCheckId}`,
+        });
         setRefresh(!refresh);
         onClose();
     };
 
     const { data, error } = useSWR("/api/tool", fetcher);
-    if (error) return "An error has occurred.";
+    if (error) return <div>An error has occurred.</div>;
     if (!data) return <Spinner color="brand.lime" size="xl" />;
 
     const toolsArray = data.filter((t) => {
@@ -150,30 +232,34 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                 }
             />
             <Stack>
-                {toolsArray.map((tool, idx) => {
+                {toolsArray.map((tool) => {
                     return (
                         <ToolCard
-                            key={idx}
-                            title={tool["title"]}
-                            creators={tool["createdBy"]}
+                            key={tool._id}
+                            id={tool._id}
+                            selfCheckId={tool.selfCheckGroupID}
+                            title={tool.title}
+                            creators={tool.createdBy}
                             updated={
-                                tool["updatedAt"]
-                                    ? new Date(tool["updatedAt"])
+                                tool.updatedAt
+                                    ? new Date(tool.updatedAt)
                                     : new Date()
                             }
-                            module={tool["moduleID"] !== ""}
-                            published={tool["status"] === "published"}
-                            onLinkModule={onLinkModule}
-                            onPublish={() => onPublish(tool["title"])}
-                            onUnlinkModule={() => {
-                                console.log("unlink");
+                            module={tool.linkedModuleID !== null}
+                            published={tool.status === "published"}
+                            onLinkModule={(e) => {
+                                onLinkModule(e);
                             }}
-                            onUnpublish={() => {
-                                console.log("unpub");
+                            onPublish={(e) => {
+                                onPublish(e, tool.title);
                             }}
-                            onDelete={() =>
-                                onDelete(tool["title"], tool["_id"])
-                            }
+                            onUnlinkModule={(e) => {
+                                e.stopPropagation();
+                            }}
+                            onUnpublish={(e) => {
+                                onUnpublish(e, tool.title);
+                            }}
+                            onDelete={onDelete}
                         />
                     );
                 })}

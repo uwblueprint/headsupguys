@@ -132,11 +132,13 @@ function reducer(
             };
         }
         case ModuleActionType.RESET_SLIDE: {
-            const currSlide = state.slides[action.index];
-            currSlide[action.index] = DEFAULT_SLIDE;
             return {
                 ...state,
-                slides: { ...state.slides, ...state.slides[action.index] },
+                slides: [
+                    ...state.slides.slice(0, action.index),
+                    DEFAULT_SLIDE,
+                    ...state.slides.slice(action.index + 1)
+                ]
             };
         }
         case ModuleActionType.SET_SLIDE:

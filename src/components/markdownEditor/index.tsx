@@ -74,6 +74,37 @@ const videoCommand: ICommand = {
     },
 };
 
+const injectCommand: ICommand = {
+    name: "inject",
+    keyCommand: "inject",
+    shortcuts: "ctrlcmd+j",
+    buttonProps: { "aria-label": "Inject variable", title: "Inject variable" },
+    icon: (
+        <Image
+            src="/icons/syringe.svg"
+            height="12px"
+            width="12px"
+            layout="fixed"
+        />
+    ),
+    execute: (state: TextState, api: TextAreaTextApi) => {
+        // Select everything
+        const newSelectionRange = selectWord({
+            text: state.text,
+            selection: state.selection,
+        });
+        const state1 = api.setSelectionRange(newSelectionRange);
+        // Replaces the current selection with the injection string
+        const variable = state1.selectedText || "";
+        api.replaceSelection(`<>[](${variable})`); // prepend injections with <>
+        // Adjust the selection to not contain the <>[]( or )
+        api.setSelectionRange({
+            start: 5 + state1.selection.start,
+            end: 5 + state1.selection.start + variable.length,
+        });
+    },
+};
+
 const indentCommand: ICommand = {
     name: "indent",
     keyCommand: "indent",
@@ -240,6 +271,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                 commands.divider,
                 commands.image,
                 videoCommand,
+                injectCommand,
             ]}
             extraCommands={[]}
         />

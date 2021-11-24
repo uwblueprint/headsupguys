@@ -67,12 +67,22 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                 <option value="multiSelect">Multiselect</option>
                 <option value="shortAnswer">Short Answer</option>
             </Select>
-            {slide.sections[sectionNumber].type == "staticContent" ? (
-                <Stack spacing={2}>
+            <Stack spacing={2}>
+                {slide.sections[sectionNumber].type == "staticContent" ? (
                     <MarkdownEditor
                         value={slide.sections[sectionNumber].markdown || ""}
                         setValue={handleMarkdownChange}
                     />
+                ) : slide.sections[sectionNumber].type == "multipleChoice" ? (
+                    "<MultipleChoice />"
+                ) : slide.sections[sectionNumber].type == "multiSelect" ? (
+                    "<MultiSelect />"
+                ) : slide.sections[sectionNumber].type == "shortAnswer" ? (
+                    "<ShortAnswer />"
+                ) : (
+                    <></>
+                )}
+                {slide.sections[sectionNumber].type && (
                     <HStack spacing={10}>
                         <Heading size="sm">Padding&nbsp;(%)</Heading>
                         {["T", "R", "B", "L"].map((padVal) => (
@@ -85,16 +95,8 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                             </HStack>
                         ))}
                     </HStack>
-                </Stack>
-            ) : slide.sections[sectionNumber].type == "multipleChoice" ? (
-                "<MultipleChoice />"
-            ) : slide.sections[sectionNumber].type == "multiSelect" ? (
-                "<MultiSelect />"
-            ) : slide.sections[sectionNumber].type == "shortAnswer" ? (
-                "<ShortAnswer />"
-            ) : (
-                <></>
-            )}
+                )}
+            </Stack>
         </Box>
     );
 };

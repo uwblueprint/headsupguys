@@ -63,7 +63,7 @@ export type ModuleState = {
 };
 
 const DEFAULT_SECTION = {
-    type: "markdown", //markdown, mc, ms, sa
+    type: "", //markdown, mc, ms, sa
     padding: { top: 0, right: 0, bottom: 0, left: 0 },
     markdown: "", //stores markdown content, only applies to md component
     alignment: "align-left", //on frontend this will be a dropdown
@@ -137,8 +137,8 @@ function reducer(
                 slides: [
                     ...state.slides.slice(0, action.index),
                     DEFAULT_SLIDE,
-                    ...state.slides.slice(action.index + 1)
-                ]
+                    ...state.slides.slice(action.index + 1),
+                ],
             };
         }
         case ModuleActionType.SET_SLIDE:

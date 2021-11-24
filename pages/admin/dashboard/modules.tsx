@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
     Flex,
     Text,
@@ -6,37 +6,27 @@ import {
     Spacer,
     SimpleGrid,
     Stack,
+    Spinner,
 } from "@chakra-ui/react";
 import axios from "axios";
+import useSWR from "swr";
 import Link from "next/link";
 
 import { ModuleCard } from "@components/ModuleCard";
 import { Page } from "types/Page";
 import { AdminLayout } from "@components";
 
-const ModulesPage: Page = () => {
-    const [modules, setModules] = useState([]);
+const fetcher = async (url) => {
+    const response = await axios({
+        method: "GET",
+        url,
+    });
+    return response.data;
+};
 
-    async function getModules() {
-        try {
-            const response = await axios({
-                method: "GET",
-                url: "/api/module/getAll",
-            });
-            setModules(response.data);
-        } catch (err) {
-            console.log(err);
-            //TODO: update error handling
-        }
-    }
-
-    // TODO: Implement Create connection
-
-    useEffect(() => {
-        getModules();
-    }, []);
+const ModulesHeader: React.FC = () => {
     return (
-        <Stack spacing={8}>
+        <>
             <Flex direction="row">
                 <Text mr={2} mb={0} fontWeight="bold" fontSize="4xl">
                     Modules
@@ -58,20 +48,36 @@ const ModulesPage: Page = () => {
                 </Button>
                 <Button variant="link">Published</Button>
             </Flex>
-            <SimpleGrid minChildWidth="20rem" spacing={10}>
-                {modules.map(
-                    ({ _id, title, toolID, lastUpdated, createdBy }) => (
-                        <ModuleCard
-                            key={_id}
-                            moduleId={_id}
-                            title={title}
-                            tool={toolID}
-                            lastUpdated={lastUpdated}
-                            author={createdBy.join(", ")}
-                        />
-                    ),
-                )}
-            </SimpleGrid>
+        </>
+    );
+};
+
+const Modules: React.FC = () => {
+    const { data, error } = useSWR("/api/module/getAll", fetcher);
+    if (error) return <div>An error has occurred.</div>;
+    if (!data) return <Spinner color="brand.lime" size="xl" />;
+
+    return (
+        <SimpleGrid minChildWidth="20rem" spacing={10}>
+            {data.map(({ _id, title, toolID, lastUpdated, createdBy }) => (
+                <ModuleCard
+                    key={_id}
+                    moduleId={_id}
+                    title={title}
+                    tool={toolID}
+                    lastUpdated={lastUpdated}
+                    author={createdBy.join(", ")}
+                />
+            ))}
+        </SimpleGrid>
+    );
+};
+
+const ModulesPage: Page = () => {
+    return (
+        <Stack spacing={8}>
+            <ModulesHeader />
+            <Modules />
         </Stack>
     );
 };

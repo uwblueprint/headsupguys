@@ -1,15 +1,27 @@
 /* eslint-disable prettier/prettier */
-import { Flex, Stack, useDisclosure } from "@chakra-ui/react";
-import { BuilderLayout } from "@components";
-import axios from "axios";
-import { min } from "lodash";
+import React, { useReducer } from "react";
+import {
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalOverlay,
+    Flex,
+    Spinner,
+    Stack,
+    useDisclosure,
+    Center,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React, { useEffect, useReducer } from "react";
+import axios from "axios";
+import useSWR from "swr";
+import { Page } from "types/Page";
+import { BuilderLayout } from "@components";
+import { min } from "lodash";
 import Document from "src/pages/module-builder/Document";
 import Editor from "src/pages/module-builder/Editor";
 import Header from "src/pages/module-builder/Header";
 import Toolbar from "src/pages/module-builder/Toolbar";
-import { Page } from "types/Page";
 
 export enum ModuleActionType {
     CHANGE_TITLE,
@@ -171,24 +183,20 @@ const Builder: Page = () => {
     const router = useRouter();
     const { moduleId } = router.query;
 
-    useEffect(() => {
-        function getUrl() {
-            return `/api/module/${moduleId}`;
-        }
-        async function fetchData() {
-            const response = await axios.get(getUrl(), {
-                params: { includeSlide: true },
-            });
-            console.log(response.data);
-            dispatch({
-                type: ModuleActionType.INITIALIZE,
-                payload: response.data,
-            });
-        }
-        if (moduleId) {
-            fetchData();
-        }
-    }, [moduleId]);
+    const fetcher = async (url) => {
+        const response = await axios.get(url, {
+            params: { includeSlide: true },
+        });
+        dispatch({
+            type: ModuleActionType.INITIALIZE,
+            payload: response.data,
+        });
+        return response.data;
+    };
+
+    const fetchURL = moduleId ? `/api/module/${moduleId}` : null;
+    const { data, error } = useSWR(() => fetchURL, fetcher);
+    const isLoading = !data && fetchURL;
 
     const handleSaveModule = async () => {
         // check if moduleId in url, if so call patch otherwise call post
@@ -215,28 +223,57 @@ const Builder: Page = () => {
     };
 
     return (
-        <Stack spacing={0}>
-            <Header
-                state={state}
-                dispatch={dispatch}
-                handleSaveModule={handleSaveModule}
-            />
-            <Toolbar state={state} dispatch={dispatch} />
-            <Flex h="80vh">
-                <Editor
+        <>
+            <Stack spacing={0}>
+                <Header
                     state={state}
                     dispatch={dispatch}
-                    isSidebarOpen={isSidebarOpen}
-                    toggleSidebar={toggleSidebar}
+                    handleSaveModule={handleSaveModule}
                 />
-                <Document
-                    state={state}
-                    isSidebarOpen={isSidebarOpen}
-                    sidebarOpen={sidebarOpen}
-                    sidebarClose={sidebarClose}
-                />
-            </Flex>
-        </Stack>
+                <Toolbar state={state} dispatch={dispatch} />
+                <Flex h="80vh">
+                    <Editor
+                        state={state}
+                        dispatch={dispatch}
+                        isSidebarOpen={isSidebarOpen}
+                        toggleSidebar={toggleSidebar}
+                    />
+                    <Document
+                        state={state}
+                        isSidebarOpen={isSidebarOpen}
+                        sidebarOpen={sidebarOpen}
+                        sidebarClose={sidebarClose}
+                    />
+                </Flex>
+            </Stack>
+            {(error || isLoading) && (
+                <Modal
+                    isCentered
+                    closeOnOverlayClick={false}
+                    isOpen={!data}
+                    onClose={() => console.log("data fetched")}
+                >
+                    <ModalOverlay />
+                    <ModalContent w={300} h={300}>
+                        <Center w="100%" h="100%">
+                            {error ? (
+                                <ModalHeader>
+                                    An error has occurred.
+                                </ModalHeader>
+                            ) : (
+                                <>
+                                    <ModalHeader>Loading...</ModalHeader>
+                                    <br />
+                                    <ModalBody>
+                                        <Spinner color="brand.lime" size="xl" />
+                                    </ModalBody>
+                                </>
+                            )}
+                        </Center>
+                    </ModalContent>
+                </Modal>
+            )}
+        </>
     );
 };
 

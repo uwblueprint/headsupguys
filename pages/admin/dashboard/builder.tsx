@@ -137,8 +137,8 @@ function reducer(
                 slides: [
                     ...state.slides.slice(0, action.index),
                     DEFAULT_SLIDE,
-                    ...state.slides.slice(action.index + 1)
-                ]
+                    ...state.slides.slice(action.index + 1),
+                ],
             };
         }
         case ModuleActionType.SET_SLIDE:
@@ -160,7 +160,7 @@ function reducer(
                 ...state,
                 slides: [
                     ...state.slides.slice(0, action.index),
-                    newSlide,
+                    JSON.parse(JSON.stringify(newSlide)),
                     ...state.slides.slice(action.index + 1),
                 ],
             };

@@ -20,11 +20,13 @@ const Editor = ({
     state,
     isSidebarOpen,
     toggleSidebar,
+    saveInputData,
 }: {
     dispatch: Dispatch<ModuleAction>;
     state: ModuleState;
     isSidebarOpen: boolean;
     toggleSidebar: () => void;
+    saveInputData: boolean;
 }): React.ReactElement => {
     return (
         <Box
@@ -65,6 +67,7 @@ const Editor = ({
                                                 payload: slide,
                                             });
                                         }}
+                                        saveInputData={saveInputData}
                                     />
                                 </React.Fragment>
                             ),

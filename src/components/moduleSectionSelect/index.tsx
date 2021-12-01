@@ -9,7 +9,7 @@ import {
     Input,
 } from "@chakra-ui/react";
 import _ from "lodash";
-import { MarkdownEditor } from "@components";
+import { MarkdownEditor, MultipleChoice } from "@components";
 import { Slide } from "pages/admin/dashboard/builder";
 
 export interface ModuleSectionSelectProps {
@@ -17,6 +17,7 @@ export interface ModuleSectionSelectProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setSlide: (s: Slide) => void; // TYPE IS SLIDE RIGHT ABOVE
     sectionNumber: number;
+    saveInputData: boolean;
 }
 
 export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
@@ -40,7 +41,18 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
     const handleMarkdownChange = (text) => {
         const newSlide = _.cloneDeep(slide);
         newSlide.sections[sectionNumber].markdown = text;
+        setSlide(newSlide);
+    };
 
+    const handleMultipleChoiceQuestionChange = (newQuestion) => {
+        const newSlide = _.cloneDeep(slide);
+        newSlide.sections[sectionNumber].multipleChoice.question = newQuestion;
+        setSlide(newSlide);
+    };
+
+    const handleMultipleChoiceOptionsChange = (newOptions) => {
+        const newSlide = _.cloneDeep(slide);
+        newSlide.sections[sectionNumber].multipleChoice.options = newOptions;
         setSlide(newSlide);
     };
 
@@ -50,6 +62,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
         setSlide(newSlide);
     };
 
+    console.log(slide.sections[sectionNumber]);
     return (
         <Box>
             <Heading size="lg">Section {sectionNumber + 1}</Heading>
@@ -74,7 +87,23 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                         setValue={handleMarkdownChange}
                     />
                 ) : slide.sections[sectionNumber].type == "multipleChoice" ? (
-                    "<MultipleChoice />"
+                    <MultipleChoice
+                        question={
+                            slide.sections[sectionNumber].multipleChoice
+                                ? slide.sections[sectionNumber].multipleChoice
+                                      .question
+                                : ""
+                        }
+                        setQuestion={handleMultipleChoiceQuestionChange}
+                        options={
+                            slide.sections[sectionNumber].multipleChoice
+                                ? slide.sections[sectionNumber].multipleChoice
+                                      .options
+                                : [""]
+                        }
+                        setOptions={handleMultipleChoiceOptionsChange}
+                        saveInputData={props.saveInputData}
+                    />
                 ) : slide.sections[sectionNumber].type == "multiSelect" ? (
                     "<MultiSelect />"
                 ) : slide.sections[sectionNumber].type == "shortAnswer" ? (

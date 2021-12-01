@@ -648,12 +648,10 @@ const ToolBuilder: Page = () => {
                                     clearHiddenFilledFields();
                                     toolList.status = "published";
                                     saveTool("Publish ");
-                                    saveSelfCheck() &&
-                                        setLastSavedTool(
-                                            JSON.parse(
-                                                JSON.stringify(toolList),
-                                            ),
-                                        );
+                                    saveSelfCheck();
+                                    setLastSavedTool(
+                                        JSON.parse(JSON.stringify(toolList)),
+                                    );
                                     setLastSavedQuestions(
                                         JSON.parse(
                                             JSON.stringify(questionList),

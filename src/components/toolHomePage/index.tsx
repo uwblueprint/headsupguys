@@ -22,7 +22,6 @@ import {
     ModalFooter,
 } from "@chakra-ui/react";
 
-const recommendedToolsList = ["Tool 1", "Tool 2", "Tool 3", "Tool 4", "Tool 5"];
 export interface ToolHomePageProps {
     toolId: string;
     title: string;
@@ -30,11 +29,13 @@ export interface ToolHomePageProps {
     video: string;
     thumbnail: string;
     description: string;
-    linkedModule: string;
+    linkedModuleID: string;
     relatedResources: string[][];
     relatedStories: string[][];
     externalResources: string[][];
-    recommendedTools: string[];
+    relatedToolsIDs: string[];
+    allModules: string[][];
+    allTools: string[][];
     onChangeInput: (
         target: string | string[],
         type: string,
@@ -45,16 +46,19 @@ export interface ToolHomePageProps {
 
 //Self check question card component
 export const ToolHomePage: React.FC<ToolHomePageProps> = ({
+    toolId,
     title,
     type,
     video,
     thumbnail,
     description,
-    linkedModule,
+    linkedModuleID,
     relatedResources,
     relatedStories,
     externalResources,
-    recommendedTools,
+    relatedToolsIDs,
+    allModules,
+    allTools,
     onChangeInput,
 }) => {
     const [openModal, setOpenModal] = useState(false);
@@ -92,11 +96,8 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                         value={type}
                         onChange={(e) => onChangeInput(e.target.value, "type")}
                     >
-                        <option>Type 1</option>
-                        <option>Type 2</option>
-                        <option>Type 3</option>
-                        <option>Type 4</option>
-                        <option>Type 5</option>
+                        <option>Problem</option>
+                        <option>Skill</option>
                     </Select>
                 </FormControl>
             </WrapItem>
@@ -111,9 +112,9 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                         _valid={{ outline: "red" }}
                         size={"lg"}
                         isRequired
-                        onChange={(e) =>
-                            onChangeInput(e.target.value, "thumbnail")
-                        }
+                        onChange={(e) => {
+                            onChangeInput(e.target.value, "thumbnail");
+                        }}
                         value={thumbnail}
                         placeholder="URL"
                         isTruncated
@@ -131,9 +132,9 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                         width={"full"}
                         size={"lg"}
                         isRequired
-                        onChange={(e) =>
-                            onChangeInput(e.target.value, "description")
-                        }
+                        onChange={(e) => {
+                            onChangeInput(e.target.value, "description");
+                        }}
                         value={description}
                         placeholder="Description"
                     />
@@ -147,19 +148,22 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                     <Select
                         placeholder={"Select option"}
                         size={"lg"}
-                        value={linkedModule}
-                        onChange={(e) =>
-                            onChangeInput(e.target.value, "linkedModule")
-                        }
+                        value={linkedModuleID}
+                        onChange={(e) => {
+                            onChangeInput(e.target.value, "linkedModuleID");
+                        }}
                     >
-                        <option>Module 1</option>
-                        <option>Module 2</option>
-                        <option>Module 3</option>
-                        <option>Module 4</option>
-                        <option>Module 5</option>
+                        {(allModules[1] ?? []).map((moduleNames, index) => (
+                            <option
+                                key={allModules[0][index]}
+                                value={allModules[0][index]}
+                            >
+                                {moduleNames}
+                            </option>
+                        ))}
                     </Select>
                 </FormControl>
-                <FormControl isRequired>
+                <FormControl>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
                         Video Link
                     </FormLabel>
@@ -360,40 +364,46 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
             <WrapItem width={"50%"}>
                 <FormControl>
                     <FormLabel fontSize={20} fontWeight={"bold"}>
-                        Select Recommended Tools
+                        Select Related Tools
                     </FormLabel>
-                    {(recommendedTools ?? []).map((choice, index) => (
+                    {(relatedToolsIDs ?? []).map((choice, index) => (
                         <Select
                             key={choice + index}
                             placeholder={"Select option"}
                             mb={"3"}
-                            value={recommendedTools[index]}
+                            value={relatedToolsIDs[index]}
                             onChange={(e) =>
                                 onChangeInput(
                                     e.target.value,
-                                    "recommendedTools",
+                                    "relatedToolsIDs",
                                     index,
                                 )
                             }
                         >
                             {(
-                                recommendedToolsList.filter((item) => {
-                                    return !recommendedTools
-                                        .filter((item) => {
-                                            return (
-                                                recommendedTools.indexOf(
-                                                    item,
-                                                ) != index
-                                            );
-                                        })
-                                        .includes(item);
+                                allTools[0].filter((id) => {
+                                    return (
+                                        !relatedToolsIDs
+                                            .filter((item) => {
+                                                return (
+                                                    relatedToolsIDs.indexOf(
+                                                        item,
+                                                    ) != index
+                                                );
+                                            })
+                                            .includes(id) && id != toolId
+                                    );
                                 }) ?? []
                             ).map((selection) => (
                                 <option
                                     key={choice + selection}
                                     value={selection}
                                 >
-                                    {selection}
+                                    {
+                                        allTools[1][
+                                            allTools[0].indexOf(selection)
+                                        ]
+                                    }
                                 </option>
                             ))}
                         </Select>

@@ -8,7 +8,6 @@ const update = async (
 ): Promise<void> => {
     const { id } = req.query;
     try {
-        const tool = await Tool.findByIdAndUpdate(id, req.body, { new: true });
         //If the module contains a module id...
         if (req.body.linkedModuleID) {
             //If said module id is present but invalid (not an object ID), return and error
@@ -26,9 +25,12 @@ const update = async (
                     error: "Module is already linked to a tool.",
                 });
             }
-            module.toolID = tool._id;
+            module.toolID = id;
             await module.save();
         }
+        const tool = await Tool.findByIdAndUpdate(id, req.body, {
+            new: true,
+        });
         res.status(200).json(tool);
     } catch (err) {
         res.status(500).send(err);

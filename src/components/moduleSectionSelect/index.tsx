@@ -17,7 +17,6 @@ export interface ModuleSectionSelectProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setSlide: (s: Slide) => void; // TYPE IS SLIDE RIGHT ABOVE
     sectionNumber: number;
-    saveInputData: boolean;
 }
 
 export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
@@ -62,7 +61,6 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
         setSlide(newSlide);
     };
 
-    console.log(slide.sections[sectionNumber]);
     return (
         <Box>
             <Heading size="lg">Section {sectionNumber + 1}</Heading>
@@ -90,19 +88,13 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                     <MultipleChoice
                         question={
                             slide.sections[sectionNumber].multipleChoice
-                                ? slide.sections[sectionNumber].multipleChoice
-                                      .question
-                                : ""
+                                .question
                         }
                         setQuestion={handleMultipleChoiceQuestionChange}
                         options={
-                            slide.sections[sectionNumber].multipleChoice
-                                ? slide.sections[sectionNumber].multipleChoice
-                                      .options
-                                : [""]
+                            slide.sections[sectionNumber].multipleChoice.options
                         }
                         setOptions={handleMultipleChoiceOptionsChange}
-                        saveInputData={props.saveInputData}
                     />
                 ) : slide.sections[sectionNumber].type == "multiSelect" ? (
                     "<MultiSelect />"

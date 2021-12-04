@@ -34,7 +34,7 @@ export enum ModuleActionType {
     RESET_SLIDE,
 }
 
-type MultipleChoiceQuestion = {
+export type MultipleChoiceQuestion = {
     question: string;
     options: string[];
 };
@@ -186,7 +186,6 @@ const Builder: Page = () => {
     } = useDisclosure();
 
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-    const [saveInputData, setSaveInputData] = useState(false);
 
     const router = useRouter();
     const { moduleId } = router.query;
@@ -207,7 +206,6 @@ const Builder: Page = () => {
     const isLoading = !data && fetchURL;
 
     const handleSaveModule = async () => {
-        setSaveInputData(true);
         // check if moduleId in url, if so call patch otherwise call post
         if (moduleId) {
             await axios({
@@ -246,7 +244,6 @@ const Builder: Page = () => {
                         dispatch={dispatch}
                         isSidebarOpen={isSidebarOpen}
                         toggleSidebar={toggleSidebar}
-                        saveInputData={saveInputData}
                     />
                     <Document
                         state={state}

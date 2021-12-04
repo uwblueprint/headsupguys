@@ -1,26 +1,19 @@
-import React, { Dispatch, useState } from "react";
+import React from "react";
 import {
     Box,
     Button,
-    HStack,
     Stack,
     Heading,
-    Text,
-    Select,
     Input,
     Radio,
     Flex,
 } from "@chakra-ui/react";
-import _ from "lodash";
-import { MarkdownEditor } from "@components";
-import { ModuleAction, Slide } from "pages/admin/dashboard/builder";
 
 export interface MultipleChoiceProps {
     question: string;
     setQuestion: (newQuestion: string) => void;
     options: string[];
     setOptions: (newOptions: string[]) => void;
-    saveInputData: boolean;
 }
 interface MultipleChoiceOptionProps {
     index: number;
@@ -53,20 +46,12 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
     setQuestion,
     options,
     setOptions,
-    saveInputData,
 }) => {
-    const [editedQuestion, setEditedQuestion] = useState(question);
-    const [editedOptions, setEditedOptions] = useState([...options]);
-    const onInputChange = (value, index) => {
-        const newOptions = [...editedOptions];
+    const onOptionsChange = (value, index) => {
+        const newOptions = [...options];
         newOptions[index] = value;
-        setEditedOptions(newOptions);
+        setOptions(newOptions);
     };
-
-    if (saveInputData) {
-        setQuestion(editedQuestion);
-        setOptions(editedOptions);
-    }
 
     return (
         <>
@@ -74,21 +59,23 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
                 <Box>
                     <Heading size="md">Question</Heading>
                     <Input
-                        value={editedQuestion}
-                        onChange={(e) => setEditedQuestion(e.target.value)}
+                        value={question}
+                        onChange={(e) => {
+                            setQuestion(e.target.value);
+                        }}
                         placeholder="Text Here"
                     />
                 </Box>
                 <Box>
-                    {editedOptions.map((option, i) => (
+                    {options.map((option, i) => (
                         <MultipleChoiceOption
-                            value={editedOptions[i]}
+                            value={option}
                             index={i}
-                            onChange={onInputChange}
+                            onChange={onOptionsChange}
                         />
                     ))}
                     <Button
-                        onClick={() => setEditedOptions([...editedOptions, ""])}
+                        onClick={() => setOptions([...options, ""])}
                         colorScheme="black"
                         variant="ghost"
                     >

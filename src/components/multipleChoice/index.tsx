@@ -69,6 +69,7 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
                 <Box>
                     {options.map((option, i) => (
                         <MultipleChoiceOption
+                            key={i}
                             value={option}
                             index={i}
                             onChange={onOptionsChange}

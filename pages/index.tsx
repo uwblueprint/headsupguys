@@ -111,14 +111,19 @@ const Home: React.FC = () => {
                             <Grid templateColumns="repeat(3, 1fr)" gap={6}>
                                 {toolsArray.map((tool) => (
                                     <UserToolCard
-                                        key={tool["_id"]}
-                                        title={tool["title"]}
-                                        description={tool[
-                                            "description"
-                                        ].substring(0, 100)}
+                                        key={tool._id}
+                                        title={tool.title}
+                                        description={
+                                            tool.description.length > 100
+                                                ? tool.description.substring(
+                                                      0,
+                                                      97,
+                                                  ) + "..."
+                                                : tool.description
+                                        }
                                         onClickTool={handleClickTool}
                                         onSelfCheck={handleSelfCheck}
-                                        image={tool["thumbnail"]}
+                                        image={tool.thumbnail}
                                         progressValue={0} //TODO: Update progress value based on user progress
                                     />
                                 ))}

@@ -34,7 +34,7 @@ export enum ModuleActionType {
     RESET_SLIDE,
 }
 
-export type MultipleChoiceQuestion = {
+export type OptionsQuestion = {
     question: string;
     options: string[];
 };
@@ -57,7 +57,8 @@ export type Slide = {
             left: number;
         };
         markdown?: string; //stores markdown content, only applies to md component
-        multipleChoice?: MultipleChoiceQuestion;
+        multipleChoice?: OptionsQuestion;
+        multiSelect?: OptionsQuestion;
         alignment?: string; //on frontend this will be a dropdown
     }[];
 };
@@ -73,6 +74,7 @@ const DEFAULT_SECTION = {
     padding: { top: 0, right: 0, bottom: 0, left: 0 },
     markdown: "", //stores markdown content, only applies to md component
     multipleChoice: { question: "", options: [""] }, //stores mc content, only applies to mc component
+    multiSelect: { question: "", options: [""] }, //stores ms content, only applies to ms component
     alignment: "align-left", //on frontend this will be a dropdown
 };
 

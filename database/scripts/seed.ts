@@ -152,6 +152,7 @@ function mockSections() {
             padding: paddingTypes[i % paddingTypes.length],
             markdown: " ",
             multipleChoice: {},
+            multiSelect: {},
             alignment: " ",
             properties: {},
         });

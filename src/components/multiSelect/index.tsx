@@ -7,18 +7,21 @@ import {
     Input,
     Flex,
     Checkbox,
+    Grid,
 } from "@chakra-ui/react";
+import { Option } from "pages/admin/dashboard/builder";
 
 export interface MultiSelectProps {
     question: string;
     setQuestion: (newQuestion: string) => void;
-    options: string[];
-    setOptions: (newOptions: string[]) => void;
+    options: Option[];
+    setOptions: (newOptions: Option[]) => void;
+    columns: string;
 }
 interface MultiSelectOptionProps {
     index: number;
-    value: string;
-    onChange: (value: string, index: number) => void;
+    value: Option;
+    onChange: (newOption: Option, index: number) => void;
 }
 
 const MultiSelectOption: React.FC<MultiSelectOptionProps> = ({
@@ -26,16 +29,17 @@ const MultiSelectOption: React.FC<MultiSelectOptionProps> = ({
     value,
     onChange,
 }) => {
+    const { option, column } = value;
     return (
         <Flex>
-            <Checkbox mr={2} />
+            <Checkbox mr={2} isReadOnly />
             <Input
                 variant="flushed"
                 placeholder={`Multi-Select Option ${index + 1}`}
                 onChange={(e) => {
-                    onChange(e.target.value, index);
+                    onChange({ option: e.target.value, column }, index);
                 }}
-                value={value}
+                value={option}
             />
         </Flex>
     );
@@ -46,12 +50,91 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
     setQuestion,
     options,
     setOptions,
+    columns,
 }) => {
-    const onOptionsChange = (value, index) => {
+    const onOptionsChange = (newOption, index) => {
         const newOptions = [...options];
-        newOptions[index] = value;
+        newOptions[index] = newOption;
         setOptions(newOptions);
     };
+    const leftColumnOptions = options.filter(({ column }) => column === "left");
+    const rightColumnOptions = options.filter(
+        ({ column }) => column === "right",
+    );
+
+    const optionFields =
+        columns && columns === "double" ? (
+            <Grid templateColumns="repeat(2, 1fr)" gap={3}>
+                <Box>
+                    {leftColumnOptions.map((leftOption) => {
+                        const i = options.indexOf(leftOption);
+                        return (
+                            <MultiSelectOption
+                                key={i}
+                                value={leftOption}
+                                index={i}
+                                onChange={onOptionsChange}
+                            />
+                        );
+                    })}
+                    <Button
+                        onClick={() =>
+                            setOptions([
+                                ...options,
+                                { option: "", column: "left" },
+                            ])
+                        }
+                        colorScheme="black"
+                        variant="ghost"
+                    >
+                        + Add Option
+                    </Button>
+                </Box>
+                <Box>
+                    {rightColumnOptions.map((rightOption) => {
+                        const i = options.indexOf(rightOption);
+                        return (
+                            <MultiSelectOption
+                                key={i}
+                                value={rightOption}
+                                index={i}
+                                onChange={onOptionsChange}
+                            />
+                        );
+                    })}
+                    <Button
+                        onClick={() =>
+                            setOptions([
+                                ...options,
+                                { option: "", column: "right" },
+                            ])
+                        }
+                        colorScheme="black"
+                        variant="ghost"
+                    >
+                        + Add Option
+                    </Button>
+                </Box>
+            </Grid>
+        ) : (
+            <Box>
+                {options.map((currentOption, i) => (
+                    <MultiSelectOption
+                        key={i}
+                        value={currentOption}
+                        index={i}
+                        onChange={onOptionsChange}
+                    />
+                ))}
+                <Button
+                    onClick={() => setOptions([...options, { option: "" }])}
+                    colorScheme="black"
+                    variant="ghost"
+                >
+                    + Add Option
+                </Button>
+            </Box>
+        );
 
     return (
         <>
@@ -66,23 +149,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
                         placeholder="Text Here"
                     />
                 </Box>
-                <Box>
-                    {options.map((option, i) => (
-                        <MultiSelectOption
-                            key={i}
-                            value={option}
-                            index={i}
-                            onChange={onOptionsChange}
-                        />
-                    ))}
-                    <Button
-                        onClick={() => setOptions([...options, ""])}
-                        colorScheme="black"
-                        variant="ghost"
-                    >
-                        + Add Option
-                    </Button>
-                </Box>
+                {optionFields}
             </Stack>
         </>
     );

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useReducer, useState } from "react";
+import React, { useReducer } from "react";
 import {
     Modal,
     ModalContent,
@@ -34,9 +34,14 @@ export enum ModuleActionType {
     RESET_SLIDE,
 }
 
+export type Option = {
+    option: string;
+    column?: string;
+};
+
 export type OptionsQuestion = {
     question: string;
-    options: string[];
+    options: Option[];
 };
 
 export type Slide = {
@@ -60,6 +65,11 @@ export type Slide = {
         multipleChoice?: OptionsQuestion;
         multiSelect?: OptionsQuestion;
         alignment?: string; //on frontend this will be a dropdown
+        properties?: {
+            variableName?: string;
+            dataType?: string;
+            columns?: string;
+        };
     }[];
 };
 
@@ -73,9 +83,26 @@ const DEFAULT_SECTION = {
     type: "", //markdown, mc, ms, sa
     padding: { top: 0, right: 0, bottom: 0, left: 0 },
     markdown: "", //stores markdown content, only applies to md component
-    multipleChoice: { question: "", options: [""] }, //stores mc content, only applies to mc component
-    multiSelect: { question: "", options: [""] }, //stores ms content, only applies to ms component
+    multipleChoice: {
+        question: "",
+        options: [
+            { option: "", column: "left" },
+            { option: "", column: "right" },
+        ],
+    }, //stores mc content, only applies to mc component
+    multiSelect: {
+        question: "",
+        options: [
+            { option: "", column: "left" },
+            { option: "", column: "right" },
+        ],
+    }, //stores ms content, only applies to ms component
     alignment: "align-left", //on frontend this will be a dropdown
+    properties: {
+        variableName: "",
+        dataType: "string",
+        columns: "single",
+    },
 };
 
 const DEFAULT_SLIDE = {

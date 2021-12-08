@@ -73,6 +73,8 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
         setSlide(newSlide);
     };
 
+    //TODO: handlePropertiesChange (advanced features)
+
     return (
         <Box>
             <Heading size="lg">Section {sectionNumber + 1}</Heading>
@@ -107,6 +109,9 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                             slide.sections[sectionNumber].multipleChoice.options
                         }
                         setOptions={handleMultipleChoiceOptionsChange}
+                        columns={
+                            slide.sections[sectionNumber].properties.columns
+                        }
                     />
                 ) : slide.sections[sectionNumber].type == "multiSelect" ? (
                     <MultiSelect
@@ -118,6 +123,9 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                             slide.sections[sectionNumber].multiSelect.options
                         }
                         setOptions={handleMultiSelectOptionsChange}
+                        columns={
+                            slide.sections[sectionNumber].properties.columns
+                        }
                     />
                 ) : slide.sections[sectionNumber].type == "shortAnswer" ? (
                     "<ShortAnswer />"

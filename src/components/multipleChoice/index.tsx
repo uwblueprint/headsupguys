@@ -154,3 +154,49 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
         </>
     );
 };
+
+interface MultipleChoicePreviewProps {
+    question: string;
+    options: Option[];
+    variant: string;
+    columns: string;
+}
+
+export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
+    question,
+    options,
+    variant,
+    columns,
+}) => {
+    let leftColumnOptions, rightColumnOptions;
+    const showDoubleColumns =
+        variant === "desktop" && columns && columns === "double";
+    if (showDoubleColumns) {
+        leftColumnOptions = options.filter(({ column }) => column === "left");
+        rightColumnOptions = options.filter(({ column }) => column === "right");
+    }
+
+    const optionFields = showDoubleColumns ? (
+        <Grid templateColumns="repeat(2, 1fr)" gap={3}>
+            <Box>
+                {leftColumnOptions.map(({ option }) => (
+                    <Box>{option}</Box>
+                ))}
+            </Box>
+            <Box>
+                {rightColumnOptions.map(({ option }) => (
+                    <Box>{option}</Box>
+                ))}
+            </Box>
+        </Grid>
+    ) : (
+        <Box>
+            {options.map(({ option }) => (
+                <Box>{option}</Box>
+            ))}
+        </Box>
+    );
+
+    //TODO: render nothing if question && options null
+    return optionFields;
+};

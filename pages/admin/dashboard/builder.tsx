@@ -86,7 +86,7 @@ const DEFAULT_SECTION = {
     multipleChoice: {
         question: "",
         options: [
-            { option: "", column: "left" },
+            { option: "", column: "left" }, //TODO: change when implement advanced features
             { option: "", column: "right" },
         ],
     }, //stores mc content, only applies to mc component

@@ -1,5 +1,6 @@
 import { Box, ButtonGroup, Flex, IconButton, VStack } from "@chakra-ui/react";
 import { MarkdownRenderer, ModulePreview } from "@components";
+import { MultipleChoicePreview } from "@components/multipleChoice";
 import { ModuleState } from "pages/admin/dashboard/builder";
 import React from "react";
 import { FaMobileAlt } from "react-icons/fa";
@@ -16,6 +17,7 @@ const Document = ({
     sidebarOpen: () => void;
     sidebarClose: () => void;
 }): React.ReactElement => {
+    const modulePreviewVariant = isSidebarOpen ? "mobile" : "desktop";
     return (
         <VStack flex="1" bg="gray.200">
             <Box
@@ -53,14 +55,31 @@ const Document = ({
                     progressValue={
                         (state.currentSlide / state.slides.length) * 100
                     }
-                    variant={isSidebarOpen ? "mobile" : "desktop"}
+                    variant={modulePreviewVariant}
                 >
-                    <MarkdownRenderer>
-                        {state.slides[state.currentSlide].sections.reduce(
-                            (prev, cur) => prev + "\n" + cur.markdown,
-                            "",
-                        )}
-                    </MarkdownRenderer>
+                    {state.slides[state.currentSlide].sections.reduce(
+                        (prev, cur) => {
+                            let sectionPreview;
+                            if (cur.type === "staticContent") {
+                                sectionPreview = (
+                                    <MarkdownRenderer>
+                                        {cur.markdown}
+                                    </MarkdownRenderer>
+                                );
+                            } else if (cur.type === "multipleChoice") {
+                                sectionPreview = (
+                                    <MultipleChoicePreview
+                                        question={cur.multipleChoice.question}
+                                        options={cur.multipleChoice.options}
+                                        variant={modulePreviewVariant}
+                                        columns={cur.properties.columns}
+                                    />
+                                );
+                            }
+                            return sectionPreview;
+                        },
+                        "",
+                    )}
                 </ModulePreview>
             </Box>
             <Box display="flex" w="80%" justifyContent="flex-end">

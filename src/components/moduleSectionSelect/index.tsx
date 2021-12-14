@@ -44,10 +44,27 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
         setSlide(newSlide);
     };
 
-    const handlePaddingChange = (padVal) => {
+    const handlePaddingChange = (padVal, val) => {
         const newSlide = _.cloneDeep(slide);
-        newSlide.sections[sectionNumber].padding[paddingMap[padVal]];
+        newSlide.sections[sectionNumber].padding[paddingMap[padVal]] = val;
         setSlide(newSlide);
+    };
+
+    const isNumeric = (value) => {
+        return /^\d+$/.test(value);
+    };
+
+    const validatePadding = (padVal) => {
+        const paddingVal =
+            slide.sections[sectionNumber].padding[paddingMap[padVal]];
+        // set max padding to 90% for now
+        if (
+            (!isNumeric(paddingVal) && paddingVal != "") ||
+            parseInt(paddingVal) > 90
+        ) {
+            handlePaddingChange(padVal, "0");
+            console.log("invalid padding");
+        }
     };
 
     return (
@@ -79,7 +96,18 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                             <HStack key={padVal}>
                                 <Text>{padVal}&nbsp;</Text>
                                 <Input
-                                    onChange={() => handlePaddingChange(padVal)}
+                                    value={
+                                        slide.sections[sectionNumber].padding[
+                                            paddingMap[padVal]
+                                        ] || ""
+                                    }
+                                    onChange={(e) =>
+                                        handlePaddingChange(
+                                            padVal,
+                                            e.target.value,
+                                        )
+                                    }
+                                    onBlur={() => validatePadding(padVal)}
                                     placeholder="0%"
                                 />
                             </HStack>

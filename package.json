@@ -48,7 +48,7 @@
         "swr": "^1.0.1",
         "ts-node": "^10.2.1",
         "validator": "^13.6.0",
-        "yarn": "^1.22.10"
+        "yarn": "^1.22.17"
     },
     "devDependencies": {
         "@babel/core": "^7.12.10",

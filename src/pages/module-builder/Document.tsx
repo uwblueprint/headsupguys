@@ -55,12 +55,20 @@ const Document = ({
                     }
                     variant={isSidebarOpen ? "mobile" : "desktop"}
                 >
-                    <MarkdownRenderer>
-                        {state.slides[state.currentSlide].sections.reduce(
-                            (prev, cur) => prev + "\n" + cur.markdown,
-                            "",
-                        )}
-                    </MarkdownRenderer>
+                    {state.slides[state.currentSlide].sections.map(
+                        (section) => (
+                            <Box
+                                paddingTop={section.padding.top + "%"}
+                                paddingLeft={section.padding.left + "%"}
+                                paddingRight={section.padding.right + "%"}
+                                paddingBottom={section.padding.bottom + "%"}
+                            >
+                                <MarkdownRenderer>
+                                    {section.markdown}
+                                </MarkdownRenderer>
+                            </Box>
+                        ),
+                    )}
                 </ModulePreview>
             </Box>
             <Box display="flex" w="80%" justifyContent="flex-end">

@@ -22,7 +22,7 @@ const Editor = ({
     toggleSidebar,
 }: {
     dispatch: Dispatch<ModuleAction>;
-    state: ModuleState;
+    state: Readonly<ModuleState>;
     isSidebarOpen: boolean;
     toggleSidebar: () => void;
 }): React.ReactElement => {
@@ -46,7 +46,7 @@ const Editor = ({
                 <Box>
                     <Container maxW="70%" py={4}>
                         {state.slides[state.currentSlide].sections.map(
-                            (_, idx) => (
+                            (section, idx) => (
                                 <React.Fragment
                                     key={`${state.currentSlide}:${idx}`}
                                 >
@@ -56,13 +56,14 @@ const Editor = ({
                                         </Box>
                                     ) : null}
                                     <ModuleSectionSelect
-                                        slide={state.slides[state.currentSlide]}
+                                        section={section}
                                         sectionNumber={idx}
-                                        setSlide={(slide) => {
+                                        setSection={(section) => {
                                             dispatch({
-                                                type: ModuleActionType.UPDATE_SLIDE,
-                                                index: state.currentSlide,
-                                                payload: slide,
+                                                type: ModuleActionType.UPDATE_SECTION,
+                                                slideIndex: state.currentSlide,
+                                                sectionIndex: idx,
+                                                payload: section,
                                             });
                                         }}
                                     />

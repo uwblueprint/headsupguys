@@ -180,23 +180,37 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
         <Grid templateColumns="repeat(2, 1fr)" gap={3}>
             <Box>
                 {leftColumnOptions.map(({ option }) => (
-                    <Box>{option}</Box>
+                    <Flex p={1}>
+                        <Radio mr={2} isReadOnly />
+                        <Box>{option}</Box>
+                    </Flex>
                 ))}
             </Box>
             <Box>
                 {rightColumnOptions.map(({ option }) => (
-                    <Box>{option}</Box>
+                    <Flex p={1}>
+                        <Radio mr={2} isReadOnly />
+                        <Box>{option}</Box>
+                    </Flex>
                 ))}
             </Box>
         </Grid>
     ) : (
         <Box>
             {options.map(({ option }) => (
-                <Box>{option}</Box>
+                <Flex p={1}>
+                    <Radio mr={2} isReadOnly />
+                    <Box>{option}</Box>
+                </Flex>
             ))}
         </Box>
     );
 
     //TODO: render nothing if question && options null
-    return optionFields;
+    return (
+        <Box textAlign="left">
+            <Box p={1}>{question}</Box>
+            {optionFields}
+        </Box>
+    );
 };

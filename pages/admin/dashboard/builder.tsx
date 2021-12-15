@@ -101,7 +101,7 @@ const DEFAULT_SECTION = {
     properties: {
         variableName: "",
         dataType: "string",
-        columns: "single",
+        columns: "single", //NOTE: for now, manually change to double to test
     },
 };
 

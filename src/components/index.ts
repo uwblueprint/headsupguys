@@ -17,5 +17,5 @@ export { MarkdownRenderer } from "./markdownRenderer";
 export { DropDown } from "./dropDown";
 export { ModulePreview } from "./modulePreview";
 export { ModuleSectionSelect } from "./moduleSectionSelect";
-export { MultipleChoice } from "./multipleChoice";
-export { MultiSelect } from "./multiSelect";
+export { MultipleChoice, MultipleChoicePreview } from "./multipleChoice";
+export { MultiSelect, MultiSelectPreview } from "./multiSelect";

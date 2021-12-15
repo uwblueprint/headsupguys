@@ -154,3 +154,63 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
         </>
     );
 };
+
+interface MultiSelectPreviewProps {
+    question: string;
+    options: Option[];
+    variant: string;
+    columns: string;
+}
+
+export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
+    question,
+    options,
+    variant,
+    columns,
+}) => {
+    let leftColumnOptions, rightColumnOptions;
+    const showDoubleColumns =
+        variant === "desktop" && columns && columns === "double";
+    if (showDoubleColumns) {
+        leftColumnOptions = options.filter(({ column }) => column === "left");
+        rightColumnOptions = options.filter(({ column }) => column === "right");
+    }
+
+    const optionFields = showDoubleColumns ? (
+        <Grid templateColumns="repeat(2, 1fr)" gap={3}>
+            <Box>
+                {leftColumnOptions.map(({ option }) => (
+                    <Flex p={1}>
+                        <Checkbox mr={2} isReadOnly />
+                        <Box>{option}</Box>
+                    </Flex>
+                ))}
+            </Box>
+            <Box>
+                {rightColumnOptions.map(({ option }) => (
+                    <Flex p={1}>
+                        <Checkbox mr={2} isReadOnly />
+                        <Box>{option}</Box>
+                    </Flex>
+                ))}
+            </Box>
+        </Grid>
+    ) : (
+        <Box>
+            {options.map(({ option }) => (
+                <Flex p={1}>
+                    <Checkbox mr={2} isReadOnly />
+                    <Box>{option}</Box>
+                </Flex>
+            ))}
+        </Box>
+    );
+
+    //TODO: render nothing if question && options null
+    return (
+        <Box textAlign="left">
+            <Box p={1}>{question}</Box>
+            {optionFields}
+        </Box>
+    );
+};

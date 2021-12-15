@@ -1,6 +1,10 @@
 import { Box, ButtonGroup, Flex, IconButton, VStack } from "@chakra-ui/react";
-import { MarkdownRenderer, ModulePreview } from "@components";
-import { MultipleChoicePreview } from "@components/multipleChoice";
+import {
+    MarkdownRenderer,
+    ModulePreview,
+    MultipleChoicePreview,
+    MultiSelectPreview,
+} from "@components";
 import { ModuleState } from "pages/admin/dashboard/builder";
 import React from "react";
 import { FaMobileAlt } from "react-icons/fa";
@@ -71,6 +75,15 @@ const Document = ({
                                     <MultipleChoicePreview
                                         question={cur.multipleChoice.question}
                                         options={cur.multipleChoice.options}
+                                        variant={modulePreviewVariant}
+                                        columns={cur.properties.columns}
+                                    />
+                                );
+                            } else if (cur.type === "multiSelect") {
+                                sectionPreview = (
+                                    <MultiSelectPreview
+                                        question={cur.multiSelect.question}
+                                        options={cur.multiSelect.options}
                                         variant={modulePreviewVariant}
                                         columns={cur.properties.columns}
                                     />

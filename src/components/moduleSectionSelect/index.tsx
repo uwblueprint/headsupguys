@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import {
     Box,
     HStack,
@@ -10,19 +10,19 @@ import {
 } from "@chakra-ui/react";
 import _ from "lodash";
 import { MarkdownEditor, MultipleChoice, MultiSelect } from "@components";
-import { Slide } from "pages/admin/dashboard/builder";
+import { Section, Slide } from "pages/admin/dashboard/builder";
 
 export interface ModuleSectionSelectProps {
-    slide: Slide;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setSlide: (s: Slide) => void; // TYPE IS SLIDE RIGHT ABOVE
+    section: Section;
+    setSection: (s: Section) => void; // TYPE IS SLIDE RIGHT ABOVE
     sectionNumber: number;
 }
 
 export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
     props,
 ) => {
-    const { slide, setSlide, sectionNumber } = props;
+    const { section, setSection, sectionNumber } = props;
 
     const paddingMap = {
         T: "top",
@@ -32,49 +32,53 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
     };
 
     const handleSelect = (e) => {
-        const newSlide = _.cloneDeep(slide);
-        newSlide.sections[sectionNumber].type = e.currentTarget.value;
-        setSlide(newSlide);
+        setSection({ ...section, type: e.currentTarget.value });
     };
 
     const handleMarkdownChange = (text) => {
-        const newSlide = _.cloneDeep(slide);
-        newSlide.sections[sectionNumber].markdown = text;
-        setSlide(newSlide);
+        setSection({ ...section, markdown: text });
     };
 
-    const handleMultipleChoiceQuestionChange = (newQuestion) => {
-        const newSlide = _.cloneDeep(slide);
-        newSlide.sections[sectionNumber].multipleChoice.question = newQuestion;
-        setSlide(newSlide);
+    const handleMultipleChoiceQuestionChange = (question) => {
+        setSection({
+            ...section,
+            multipleChoice: { ...section.multipleChoice, question },
+        });
     };
 
-    const handleMultipleChoiceOptionsChange = (newOptions) => {
-        const newSlide = _.cloneDeep(slide);
-        newSlide.sections[sectionNumber].multipleChoice.options = newOptions;
-        setSlide(newSlide);
+    const handleMultipleChoiceOptionsChange = (options) => {
+        setSection({
+            ...section,
+            multipleChoice: { ...section.multipleChoice, options },
+        });
     };
 
-    const handleMultiSelectQuestionChange = (newQuestion) => {
-        const newSlide = _.cloneDeep(slide);
-        newSlide.sections[sectionNumber].multiSelect.question = newQuestion;
-        setSlide(newSlide);
+    const handleMultiSelectQuestionChange = (question) => {
+        setSection({
+            ...section,
+            multiSelect: { ...section.multiSelect, question },
+        });
     };
 
-    const handleMultiSelectOptionsChange = (newOptions) => {
-        const newSlide = _.cloneDeep(slide);
-        newSlide.sections[sectionNumber].multiSelect.options = newOptions;
-        setSlide(newSlide);
+    const handleMultiSelectOptionsChange = (options) => {
+        setSection({
+            ...section,
+            multiSelect: { ...section.multiSelect, options },
+        });
     };
 
-    const handlePaddingChange = (padVal) => {
-        const newSlide = _.cloneDeep(slide);
-        newSlide.sections[sectionNumber].padding[paddingMap[padVal]];
-        setSlide(newSlide);
+    const handlePaddingChange = (newPadding) => {
+        console.log({
+            ...section,
+            padding: { ...section.padding, ...newPadding },
+        });
+        setSection({
+            ...section,
+            padding: { ...section.padding, ...newPadding },
+        });
     };
 
-    //TODO: handlePropertiesChange (advanced features)
-
+    const { type, markdown } = section;
     return (
         <Box>
             <Heading size="lg">Section {sectionNumber + 1}</Heading>
@@ -83,7 +87,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
             <Select
                 w="368px"
                 my={3}
-                value={slide.sections[sectionNumber].type}
+                value={type}
                 placeholder="Select Option"
                 onChange={handleSelect}
             >
@@ -93,57 +97,55 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                 <option value="shortAnswer">Short Answer</option>
             </Select>
             <Stack spacing={2}>
-                {slide.sections[sectionNumber].type == "staticContent" ? (
+                {type == "staticContent" ? (
                     <MarkdownEditor
-                        value={slide.sections[sectionNumber].markdown || ""}
+                        value={markdown || ""}
                         setValue={handleMarkdownChange}
                     />
-                ) : slide.sections[sectionNumber].type == "multipleChoice" ? (
+                ) : type == "multipleChoice" ? (
                     <MultipleChoice
-                        question={
-                            slide.sections[sectionNumber].multipleChoice
-                                .question
-                        }
+                        question={section.multipleChoice.question}
                         setQuestion={handleMultipleChoiceQuestionChange}
-                        options={
-                            slide.sections[sectionNumber].multipleChoice.options
-                        }
+                        options={section.multipleChoice.options}
                         setOptions={handleMultipleChoiceOptionsChange}
-                        columns={
-                            slide.sections[sectionNumber].properties.columns
-                        }
+                        columns={section.properties.columns}
                     />
-                ) : slide.sections[sectionNumber].type == "multiSelect" ? (
+                ) : section.type == "multiSelect" ? (
                     <MultiSelect
-                        question={
-                            slide.sections[sectionNumber].multiSelect.question
-                        }
+                        question={section.multiSelect.question}
                         setQuestion={handleMultiSelectQuestionChange}
-                        options={
-                            slide.sections[sectionNumber].multiSelect.options
-                        }
+                        options={section.multiSelect.options}
                         setOptions={handleMultiSelectOptionsChange}
-                        columns={
-                            slide.sections[sectionNumber].properties.columns
-                        }
+                        columns={section.properties.columns}
                     />
-                ) : slide.sections[sectionNumber].type == "shortAnswer" ? (
+                ) : section.type == "shortAnswer" ? (
                     "<ShortAnswer />"
                 ) : (
                     <></>
                 )}
-                {slide.sections[sectionNumber].type && (
+                {section.type && (
                     <HStack spacing={10}>
                         <Heading size="sm">Padding&nbsp;(%)</Heading>
-                        {["T", "R", "B", "L"].map((padVal) => (
-                            <HStack key={padVal}>
-                                <Text>{padVal}&nbsp;</Text>
-                                <Input
-                                    onChange={() => handlePaddingChange(padVal)}
-                                    placeholder="0%"
-                                />
-                            </HStack>
-                        ))}
+                        {Object.entries(section.padding).map(
+                            ([direction, value]) => (
+                                <HStack key={direction}>
+                                    <Text>{direction}&nbsp;</Text>
+                                    <Input
+                                        value={value}
+                                        onChange={(
+                                            e: ChangeEvent<HTMLInputElement>,
+                                        ) =>
+                                            handlePaddingChange({
+                                                [direction]: parseInt(
+                                                    e.target.value,
+                                                ),
+                                            })
+                                        }
+                                        placeholder={"0"}
+                                    />
+                                </HStack>
+                            ),
+                        )}
                     </HStack>
                 )}
             </Stack>

@@ -32,6 +32,7 @@ export enum ModuleActionType {
     SET_SLIDE,
     NEW_SECTION,
     RESET_SLIDE,
+    UPDATE_SECTION,
 }
 
 export type Option = {
@@ -44,6 +45,25 @@ export type OptionsQuestion = {
     options: Option[];
 };
 
+export type Section = {
+    type: string; //markdown, mc, ms, sa
+    padding: {
+        top: number;
+        right: number;
+        bottom: number;
+        left: number;
+    };
+    markdown?: string; //stores markdown content, only applies to md component
+    multipleChoice?: OptionsQuestion;
+    multiSelect?: OptionsQuestion;
+    alignment?: string; //on frontend this will be a dropdown
+    properties?: {
+        variableName?: string;
+        dataType?: string;
+        columns?: string;
+    };
+};
+
 export type Slide = {
     checkpoint: boolean;
     progressBarEnabled: boolean;
@@ -53,24 +73,7 @@ export type Slide = {
         previous: boolean;
         next: boolean;
     };
-    sections: {
-        type: string; //markdown, mc, ms, sa
-        padding: {
-            top: number;
-            right: number;
-            bottom: number;
-            left: number;
-        };
-        markdown?: string; //stores markdown content, only applies to md component
-        multipleChoice?: OptionsQuestion;
-        multiSelect?: OptionsQuestion;
-        alignment?: string; //on frontend this will be a dropdown
-        properties?: {
-            variableName?: string;
-            dataType?: string;
-            columns?: string;
-        };
-    }[];
+    sections: Section[];
 };
 
 export type ModuleState = {
@@ -130,7 +133,13 @@ export type ModuleAction =
     | { type: ModuleActionType.REMOVE_SLIDE; index: number }
     | { type: ModuleActionType.RESET_SLIDE; index: number }
     | { type: ModuleActionType.SET_SLIDE; index: number }
-    | { type: ModuleActionType.NEW_SECTION; index: number };
+    | { type: ModuleActionType.NEW_SECTION; index: number }
+    | {
+          type: ModuleActionType.UPDATE_SECTION;
+          sectionIndex: number;
+          slideIndex: number;
+          payload: Section;
+      };
 
 function reducer(
     state: Readonly<ModuleState>,
@@ -189,7 +198,7 @@ function reducer(
                 ...state.slides[action.index],
                 sections: [
                     ...state.slides[action.index].sections,
-                    DEFAULT_SECTION,
+                    JSON.parse(JSON.stringify(DEFAULT_SECTION)),
                 ],
             };
             return {
@@ -198,6 +207,30 @@ function reducer(
                     ...state.slides.slice(0, action.index),
                     newSlide,
                     ...state.slides.slice(action.index + 1),
+                ],
+            };
+        }
+        case ModuleActionType.UPDATE_SECTION: {
+            const newSlide = {
+                ...state.slides[action.slideIndex],
+                sections: [
+                    ...state.slides[action.slideIndex].sections.slice(
+                        0,
+                        action.sectionIndex,
+                    ),
+                    action.payload,
+                    ...state.slides[action.slideIndex].sections.slice(
+                        action.sectionIndex + 1,
+                    ),
+                ],
+            };
+
+            return {
+                ...state,
+                slides: [
+                    ...state.slides.slice(0, action.slideIndex),
+                    newSlide,
+                    ...state.slides.slice(action.slideIndex + 1),
                 ],
             };
         }

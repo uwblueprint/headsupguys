@@ -61,31 +61,33 @@ const Document = ({
                     }
                     variant={modulePreviewVariant}
                 >
-                    {state.slides[state.currentSlide].sections.reduce(
-                        (prev, cur) => {
+                    {state.slides[state.currentSlide].sections.map(
+                        (section) => {
                             let sectionPreview;
-                            if (cur.type === "staticContent") {
+                            if (section.type === "staticContent") {
                                 sectionPreview = (
                                     <MarkdownRenderer>
-                                        {cur.markdown}
+                                        {section.markdown}
                                     </MarkdownRenderer>
                                 );
-                            } else if (cur.type === "multipleChoice") {
+                            } else if (section.type === "multipleChoice") {
                                 sectionPreview = (
                                     <MultipleChoicePreview
-                                        question={cur.multipleChoice.question}
-                                        options={cur.multipleChoice.options}
+                                        question={
+                                            section.multipleChoice.question
+                                        }
+                                        options={section.multipleChoice.options}
                                         variant={modulePreviewVariant}
-                                        columns={cur.properties.columns}
+                                        columns={section.properties.columns}
                                     />
                                 );
-                            } else if (cur.type === "multiSelect") {
+                            } else if (section.type === "multiSelect") {
                                 sectionPreview = (
                                     <MultiSelectPreview
-                                        question={cur.multiSelect.question}
-                                        options={cur.multiSelect.options}
+                                        question={section.multiSelect.question}
+                                        options={section.multiSelect.options}
                                         variant={modulePreviewVariant}
-                                        columns={cur.properties.columns}
+                                        columns={section.properties.columns}
                                     />
                                 );
                             }

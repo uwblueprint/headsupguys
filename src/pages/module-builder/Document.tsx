@@ -1,5 +1,10 @@
 import { Box, ButtonGroup, Flex, IconButton, VStack } from "@chakra-ui/react";
-import { MarkdownRenderer, ModulePreview } from "@components";
+import {
+    MarkdownRenderer,
+    ModulePreview,
+    MultipleChoicePreview,
+    MultiSelectPreview,
+} from "@components";
 import { ModuleState } from "pages/admin/dashboard/builder";
 import React from "react";
 import { FaMobileAlt } from "react-icons/fa";
@@ -16,6 +21,7 @@ const Document = ({
     sidebarOpen: () => void;
     sidebarClose: () => void;
 }): React.ReactElement => {
+    const modulePreviewVariant = isSidebarOpen ? "mobile" : "desktop";
     return (
         <VStack flex="1" bg="gray.200">
             <Box
@@ -53,14 +59,42 @@ const Document = ({
                     progressValue={
                         (state.currentSlide / state.slides.length) * 100
                     }
-                    variant={isSidebarOpen ? "mobile" : "desktop"}
+                    variant={modulePreviewVariant}
                 >
-                    <MarkdownRenderer>
-                        {state.slides[state.currentSlide].sections.reduce(
-                            (prev, cur) => prev + "\n" + cur.markdown,
-                            "",
-                        )}
-                    </MarkdownRenderer>
+                    {state.slides[state.currentSlide].sections.map(
+                        (section) => {
+                            let sectionPreview;
+                            if (section.type === "staticContent") {
+                                sectionPreview = (
+                                    <MarkdownRenderer>
+                                        {section.markdown}
+                                    </MarkdownRenderer>
+                                );
+                            } else if (section.type === "multipleChoice") {
+                                sectionPreview = (
+                                    <MultipleChoicePreview
+                                        question={
+                                            section.multipleChoice.question
+                                        }
+                                        options={section.multipleChoice.options}
+                                        variant={modulePreviewVariant}
+                                        columns={section.properties.columns}
+                                    />
+                                );
+                            } else if (section.type === "multiSelect") {
+                                sectionPreview = (
+                                    <MultiSelectPreview
+                                        question={section.multiSelect.question}
+                                        options={section.multiSelect.options}
+                                        variant={modulePreviewVariant}
+                                        columns={section.properties.columns}
+                                    />
+                                );
+                            }
+                            return sectionPreview;
+                        },
+                        "",
+                    )}
                 </ModulePreview>
             </Box>
             <Box display="flex" w="80%" justifyContent="flex-end">

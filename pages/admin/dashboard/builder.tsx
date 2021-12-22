@@ -35,6 +35,16 @@ export enum ModuleActionType {
     UPDATE_SECTION,
 }
 
+export type Option = {
+    option: string;
+    column?: string;
+};
+
+export type OptionsQuestion = {
+    question: string;
+    options: Option[];
+};
+
 export type Section = {
     type: string; //markdown, mc, ms, sa
     padding: {
@@ -44,7 +54,14 @@ export type Section = {
         left: number;
     };
     markdown?: string; //stores markdown content, only applies to md component
+    multipleChoice?: OptionsQuestion;
+    multiSelect?: OptionsQuestion;
     alignment?: string; //on frontend this will be a dropdown
+    properties?: {
+        variableName?: string;
+        dataType?: string;
+        columns?: string;
+    };
 };
 
 export type Slide = {
@@ -66,10 +83,29 @@ export type ModuleState = {
 };
 
 const DEFAULT_SECTION = {
-    type: "markdown", //markdown, mc, ms, sa
+    type: "", //markdown, mc, ms, sa
     padding: { top: 0, right: 0, bottom: 0, left: 0 },
     markdown: "", //stores markdown content, only applies to md component
+    multipleChoice: {
+        question: "",
+        options: [
+            { option: "", column: "left" }, //TODO: change when implement advanced features
+            { option: "", column: "right" },
+        ],
+    }, //stores mc content, only applies to mc component
+    multiSelect: {
+        question: "",
+        options: [
+            { option: "", column: "left" },
+            { option: "", column: "right" },
+        ],
+    }, //stores ms content, only applies to ms component
     alignment: "align-left", //on frontend this will be a dropdown
+    properties: {
+        variableName: "",
+        dataType: "string",
+        columns: "single", //NOTE: for now, manually change to double to test
+    },
 };
 
 const DEFAULT_SLIDE = {

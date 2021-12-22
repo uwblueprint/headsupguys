@@ -9,7 +9,7 @@ import {
     Input,
 } from "@chakra-ui/react";
 import _ from "lodash";
-import { MarkdownEditor } from "@components";
+import { MarkdownEditor, MultipleChoice, MultiSelect } from "@components";
 import { Section, Slide } from "pages/admin/dashboard/builder";
 
 export interface ModuleSectionSelectProps {
@@ -39,6 +39,34 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
         setSection({ ...section, markdown: text });
     };
 
+    const handleMultipleChoiceQuestionChange = (question) => {
+        setSection({
+            ...section,
+            multipleChoice: { ...section.multipleChoice, question },
+        });
+    };
+
+    const handleMultipleChoiceOptionsChange = (options) => {
+        setSection({
+            ...section,
+            multipleChoice: { ...section.multipleChoice, options },
+        });
+    };
+
+    const handleMultiSelectQuestionChange = (question) => {
+        setSection({
+            ...section,
+            multiSelect: { ...section.multiSelect, question },
+        });
+    };
+
+    const handleMultiSelectOptionsChange = (options) => {
+        setSection({
+            ...section,
+            multiSelect: { ...section.multiSelect, options },
+        });
+    };
+
     const handlePaddingChange = (newPadding) => {
         console.log({
             ...section,
@@ -49,6 +77,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
             padding: { ...section.padding, ...newPadding },
         });
     };
+
     const { type, markdown } = section;
     return (
         <Box>
@@ -64,15 +93,37 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
             >
                 <option value="staticContent">Text / Image / Video</option>
                 <option value="multipleChoice">Multiple Choice</option>
-                <option value="multiSelect">Multiselect</option>
+                <option value="multiSelect">Multi-Select</option>
                 <option value="shortAnswer">Short Answer</option>
             </Select>
-            {section.type == "staticContent" ? (
-                <Stack spacing={2}>
+            <Stack spacing={2}>
+                {type == "staticContent" ? (
                     <MarkdownEditor
                         value={markdown || ""}
                         setValue={handleMarkdownChange}
                     />
+                ) : type == "multipleChoice" ? (
+                    <MultipleChoice
+                        question={section.multipleChoice.question}
+                        setQuestion={handleMultipleChoiceQuestionChange}
+                        options={section.multipleChoice.options}
+                        setOptions={handleMultipleChoiceOptionsChange}
+                        columns={section.properties.columns}
+                    />
+                ) : section.type == "multiSelect" ? (
+                    <MultiSelect
+                        question={section.multiSelect.question}
+                        setQuestion={handleMultiSelectQuestionChange}
+                        options={section.multiSelect.options}
+                        setOptions={handleMultiSelectOptionsChange}
+                        columns={section.properties.columns}
+                    />
+                ) : section.type == "shortAnswer" ? (
+                    "<ShortAnswer />"
+                ) : (
+                    <></>
+                )}
+                {section.type && (
                     <HStack spacing={10}>
                         <Heading size="sm">Padding&nbsp;(%)</Heading>
                         {Object.entries(section.padding).map(
@@ -96,16 +147,8 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                             ),
                         )}
                     </HStack>
-                </Stack>
-            ) : type == "multipleChoice" ? (
-                "<MultipleChoice />"
-            ) : type == "multiSelect" ? (
-                "<MultiSelect />"
-            ) : type == "shortAnswer" ? (
-                "<ShortAnswer />"
-            ) : (
-                <></>
-            )}
+                )}
+            </Stack>
         </Box>
     );
 };

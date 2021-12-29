@@ -28,7 +28,7 @@ const Module: Page = () => {
     const { data, error } = useSWR(`/api/module/${module}`, fetcher);
 
     function goNextSlide() {
-        if (currentSlide < data.slides.length) {
+        if (currentSlide < data.slides.length - 1) {
             setCurrentSlide(currentSlide + 1);
         }
     }

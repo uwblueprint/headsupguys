@@ -45,6 +45,7 @@ const Module: Page = () => {
         return (
             <div style={{ height: "100vh" }}>
                 <Spinner
+                    position="absolute"
                     top="50%"
                     left="50%"
                     transform="-webkit-translate(-50%, -50%)"

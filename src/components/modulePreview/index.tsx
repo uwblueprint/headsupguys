@@ -12,6 +12,8 @@ export interface ModulePreviewProps {
     printText?: string;
     progressValue?: number;
     variant: string;
+    goNextSlide?: () => void;
+    goPrevSlide?: () => void;
 }
 
 export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
@@ -26,7 +28,10 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
         variant,
         saveText,
         printText,
+        goNextSlide,
+        goPrevSlide,
     } = props;
+
     const prevButton = prevText ? prevText : "PREV";
     const nextButton = nextText ? nextText : "NEXT";
     const printButton = printText ? printText : "PRINT";
@@ -101,6 +106,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                             )}
                             <Flex justify="space-between" py={2}>
                                 <Button
+                                    onClick={() => goPrevSlide()}
                                     variant="moduleGreen"
                                     w="184px"
                                     h="55px"
@@ -109,6 +115,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                                     {prevButton}
                                 </Button>
                                 <Button
+                                    onClick={() => goNextSlide()}
                                     variant="moduleGreen"
                                     w="184px"
                                     h="55px"

@@ -151,7 +151,11 @@ function reducer(
         case ModuleActionType.INITIALIZE:
             return { ...action.payload, currentSlide: 0 };
         case ModuleActionType.ADD_SLIDE:
-            return { ...state, slides: [...state.slides, DEFAULT_SLIDE] };
+            return {
+                ...state,
+                slides: [...state.slides, DEFAULT_SLIDE],
+                currentSlide: state.slides.length,
+            };
         case ModuleActionType.UPDATE_SLIDE:
             return {
                 ...state,

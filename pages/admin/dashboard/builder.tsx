@@ -295,6 +295,31 @@ const Builder: Page = () => {
         }
     };
 
+    const handleDiscardModule = async () => {
+        if (moduleId) {
+            const response = await axios({
+                method: "GET",
+                url: `/api/tool/${moduleId}`,
+            });
+            //set slides to respnse data
+            dispatch({
+                type: ModuleActionType.INITIALIZE,
+                payload: response.data,
+            });
+        } else {
+            //set slides to empty slide
+            dispatch({
+                type: ModuleActionType.INITIALIZE,
+                payload: {
+                    title: "Untitled Module",
+                    slides: [DEFAULT_SLIDE],
+                    currentSlide: 0,
+                },
+            });
+        }
+        router.push("/admin/dashboard/builder");
+    };
+
     return (
         <>
             <Stack spacing={0}>
@@ -302,6 +327,7 @@ const Builder: Page = () => {
                     state={state}
                     dispatch={dispatch}
                     handleSaveModule={handleSaveModule}
+                    handleDiscardModule={handleDiscardModule}
                 />
                 <Toolbar state={state} dispatch={dispatch} />
                 <Flex h="80vh">

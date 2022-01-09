@@ -33,6 +33,7 @@ export enum ModuleActionType {
     NEW_SECTION,
     RESET_SLIDE,
     UPDATE_SECTION,
+    UPDATE_LAST_SAVED_STATE,
 }
 
 export type Option = {
@@ -80,6 +81,7 @@ export type ModuleState = {
     title: string;
     currentSlide: number;
     slides: Slide[];
+    lastSavedState: Record<string, unknown>;
 };
 
 const DEFAULT_SECTION = {
@@ -119,6 +121,10 @@ export const INITIAL_STATE: ModuleState = {
     title: "Untitled Module",
     currentSlide: 0,
     slides: [DEFAULT_SLIDE],
+    lastSavedState: {
+        title: "Untitled Module",
+        slides: [DEFAULT_SLIDE],
+    },
 };
 
 export type ModuleAction =
@@ -139,8 +145,12 @@ export type ModuleAction =
           sectionIndex: number;
           slideIndex: number;
           payload: Section;
+      }
+    | {
+          type: ModuleActionType.UPDATE_LAST_SAVED_STATE;
+          title: string;
+          slides: Slide[];
       };
-
 function reducer(
     state: Readonly<ModuleState>,
     action: ModuleAction,
@@ -238,6 +248,15 @@ function reducer(
                 ],
             };
         }
+        case ModuleActionType.UPDATE_LAST_SAVED_STATE: {
+            return {
+                ...state,
+                lastSavedState: {
+                    title: action.title,
+                    slides: action.slides,
+                },
+            };
+        }
         default:
             throw new Error();
     }
@@ -293,6 +312,12 @@ const Builder: Page = () => {
                 `/admin/dashboard/builder?moduleId=${response.data._id}`,
             );
         }
+        dispatch({
+            type: ModuleActionType.UPDATE_LAST_SAVED_STATE,
+            title: state.title,
+            slides: state.slides,
+        });
+        console.log(state.lastSavedState);
     };
 
     const handleDiscardModule = async () => {
@@ -312,13 +337,16 @@ const Builder: Page = () => {
                 });
                 databaseSlides.push(slide.data);
             }
-            console.log(databaseSlides);
             dispatch({
                 type: ModuleActionType.INITIALIZE,
                 payload: {
                     title: response.data.title,
                     slides: databaseSlides,
                     currentSlide: 0,
+                    lastSavedState: {
+                        title: response.data.title,
+                        slides: databaseSlides,
+                    },
                 },
             });
             router.push(
@@ -332,6 +360,10 @@ const Builder: Page = () => {
                     title: "Untitled Module",
                     slides: [DEFAULT_SLIDE],
                     currentSlide: 0,
+                    lastSavedState: {
+                        title: "Untitled Module",
+                        slides: [DEFAULT_SLIDE],
+                    },
                 },
             });
             router.push("/admin/dashboard/builder");

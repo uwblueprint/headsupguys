@@ -299,13 +299,31 @@ const Builder: Page = () => {
         if (moduleId) {
             const response = await axios({
                 method: "GET",
-                url: `/api/tool/${moduleId}`,
+                url: `/api/module/${moduleId}`,
             });
             //set slides to respnse data
+            console.log(response.data);
+            const databaseSlides = [];
+            for (let i = 0; i < response.data.slides.length; i++) {
+                console.log(response.data.slides[i]);
+                const slide = await axios({
+                    method: "GET",
+                    url: `/api/slide/${response.data.slides[i]}`,
+                });
+                databaseSlides.push(slide.data);
+            }
+            console.log(databaseSlides);
             dispatch({
                 type: ModuleActionType.INITIALIZE,
-                payload: response.data,
+                payload: {
+                    title: response.data.title,
+                    slides: databaseSlides,
+                    currentSlide: 0,
+                },
             });
+            router.push(
+                `/admin/dashboard/builder?moduleId=${response.data._id}`,
+            );
         } else {
             //set slides to empty slide
             dispatch({
@@ -316,8 +334,8 @@ const Builder: Page = () => {
                     currentSlide: 0,
                 },
             });
+            router.push("/admin/dashboard/builder");
         }
-        router.push("/admin/dashboard/builder");
     };
 
     return (

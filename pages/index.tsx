@@ -18,6 +18,7 @@ import { Carousel } from "react-responsive-carousel";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import useSWR from "swr";
+import { useRouter } from "next/router";
 
 const fetcher = async (url) => {
     const response = await axios({
@@ -28,9 +29,11 @@ const fetcher = async (url) => {
 };
 
 const Home: React.FC = () => {
+    const router = useRouter();
+
     const [showAlert, setShowAlert] = useState(true);
-    const handleClickTool = () => {
-        console.log(data);
+    const handleClickTool = (tool) => {
+        console.log(tool);
         console.log("");
     };
     const handleSelfCheck = () => {
@@ -116,7 +119,15 @@ const Home: React.FC = () => {
                                         description={tool[
                                             "description"
                                         ].substring(0, 100)}
-                                        onClickTool={handleClickTool}
+                                        // onClickTool={(e) =>
+                                        //     handleClickTool(tool)
+                                        // }
+                                        onClickTool={() => {
+                                            router.push({
+                                                pathname: "/tool/[tool]",
+                                                query: { tool: tool["_id"] },
+                                            });
+                                        }}
                                         onSelfCheck={handleSelfCheck}
                                         image={tool["thumbnail"]}
                                         progressValue={0} //TODO: Update progress value based on user progress

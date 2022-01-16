@@ -49,19 +49,20 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                     p="20px"
                     border="1px solid #000"
                 >
-                    {
-                        <Box w="100%" h="5%">
-                            {
-                                <Box h="17px" backgroundColor="black">
-                                    <Box
-                                        w={`${progressValue}%`}
-                                        h="100%"
-                                        backgroundColor="brand.lime"
-                                    ></Box>
-                                </Box>
-                            }
-                        </Box>
-                    }
+                    <Box w="100%" h="5%">
+                        <Flex
+                            alignItems="start"
+                            h="17px"
+                            backgroundColor="black"
+                        >
+                            <Box
+                                w={`${progressValue}%`}
+                                h="100%"
+                                backgroundColor="brand.lime"
+                            ></Box>
+                        </Flex>
+                    </Box>
+
                     <Box w="100%" h="95%" overflow="auto">
                         <Box minHeight="77%">{props.children}</Box>
                         <Box w="100%">
@@ -136,13 +137,13 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                     p="28px"
                     border="1px solid #000"
                 >
-                    <Box w="100%" h="5%">
-                        <Progress
-                            colorScheme="green"
-                            size="lg"
-                            value={progressValue}
-                        />
-                    </Box>
+                    <Flex alignItems="start" h="17px" backgroundColor="black">
+                        <Box
+                            w={`${progressValue}%`}
+                            h="100%"
+                            backgroundColor="brand.lime"
+                        ></Box>
+                    </Flex>
                     <Box w="100%" h="95%" overflow="auto">
                         <Box minHeight="88%">{props.children}</Box>
                         <Box w="100%" h="10%">

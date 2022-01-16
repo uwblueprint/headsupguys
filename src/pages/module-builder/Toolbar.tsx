@@ -16,7 +16,12 @@ import {
     ModuleActionType,
 } from "pages/admin/dashboard/builder";
 import { Dispatch } from "react";
-import { IoIosRedo, IoIosUndo } from "react-icons/io";
+import {
+    IoIosRedo,
+    IoIosUndo,
+    IoMdArrowBack,
+    IoMdArrowForward,
+} from "react-icons/io";
 import { IoTrash } from "react-icons/io5";
 
 const Toolbar = ({
@@ -62,6 +67,17 @@ const Toolbar = ({
             </Button>
             <Spacer />
             <HStack spacing={2}>
+                <IconButton
+                    variant="ghost"
+                    aria-label="undo"
+                    icon={<IoMdArrowBack />}
+                    onClick={() =>
+                        dispatch({
+                            type: ModuleActionType.SET_SLIDE,
+                            index: Math.max(state.currentSlide - 1, 0),
+                        })
+                    }
+                />
                 <Editable
                     defaultValue="1"
                     value={(state.currentSlide + 1).toString()}
@@ -84,7 +100,21 @@ const Toolbar = ({
                     <EditablePreview />
                     <EditableInput />
                 </Editable>
-                <Text>/ {state.slides.length} Slides</Text>
+                <Text> / &nbsp; &nbsp; {state.slides.length} Slides</Text>
+                <IconButton
+                    variant="ghost"
+                    aria-label="redo"
+                    onClick={() =>
+                        dispatch({
+                            type: ModuleActionType.SET_SLIDE,
+                            index: Math.min(
+                                state.currentSlide + 1,
+                                state.slides.length - 1,
+                            ),
+                        })
+                    }
+                    icon={<IoMdArrowForward />}
+                />
             </HStack>
             <Spacer />
             <ButtonGroup variant="ghost">

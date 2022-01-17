@@ -86,12 +86,7 @@ const Header = ({
                         onClick={() => {
                             handleSaveModule();
                         }}
-                        isDisabled={
-                            state.title === "" ||
-                            (state.lastSavedState &&
-                                state.lastSavedState.title === state.title &&
-                                state.lastSavedState.slides === state.slides)
-                        }
+                        isDisabled={state.title === "" || !state.stateChanged}
                     >
                         Save
                     </Button>

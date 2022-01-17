@@ -69,7 +69,7 @@ const Toolbar = ({
             <HStack spacing={2}>
                 <IconButton
                     variant="ghost"
-                    aria-label="undo"
+                    aria-label="previous slide"
                     icon={<IoMdArrowBack />}
                     onClick={() =>
                         dispatch({
@@ -103,7 +103,7 @@ const Toolbar = ({
                 <Text> / &nbsp; &nbsp; {state.slides.length} Slides</Text>
                 <IconButton
                     variant="ghost"
-                    aria-label="redo"
+                    aria-label="previous slide"
                     onClick={() =>
                         dispatch({
                             type: ModuleActionType.SET_SLIDE,

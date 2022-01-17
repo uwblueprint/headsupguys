@@ -57,7 +57,7 @@ const Document = ({
                             : false
                     }
                     progressValue={
-                        (state.currentSlide / state.slides.length) * 100
+                        ((state.currentSlide + 1) / state.slides.length) * 100
                     }
                     variant={modulePreviewVariant}
                 >

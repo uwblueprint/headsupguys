@@ -23,10 +23,12 @@ const Header = ({
     dispatch,
     state,
     handleSaveModule,
+    handleDiscardModule,
 }: {
     dispatch: Dispatch<ModuleAction>;
     state: ModuleState;
     handleSaveModule: () => void;
+    handleDiscardModule: () => void;
 }): React.ReactElement => {
     const handleNullTitleErrors = (e) => {
         const target = e.target as HTMLInputElement;
@@ -75,8 +77,7 @@ const Header = ({
                     <Button
                         variant="outline"
                         onClick={() => {
-                            // TODO: implement discard
-                            console.log("module discard clicked");
+                            handleDiscardModule();
                         }}
                     >
                         Discard
@@ -85,7 +86,7 @@ const Header = ({
                         onClick={() => {
                             handleSaveModule();
                         }}
-                        isDisabled={state.title === ""}
+                        isDisabled={state.title === "" || !state.stateChanged}
                     >
                         Save
                     </Button>

@@ -33,6 +33,7 @@ export enum ModuleActionType {
     NEW_SECTION,
     RESET_SLIDE,
     UPDATE_SECTION,
+    UPDATE_LAST_SAVED_STATE,
 }
 
 export type Option = {
@@ -80,6 +81,7 @@ export type ModuleState = {
     title: string;
     currentSlide: number;
     slides: Slide[];
+    stateChanged: boolean;
 };
 
 const DEFAULT_SECTION = {
@@ -119,6 +121,7 @@ export const INITIAL_STATE: ModuleState = {
     title: "Untitled Module",
     currentSlide: 0,
     slides: [DEFAULT_SLIDE],
+    stateChanged: false,
 };
 
 export type ModuleAction =
@@ -139,19 +142,27 @@ export type ModuleAction =
           sectionIndex: number;
           slideIndex: number;
           payload: Section;
+      }
+    | {
+          type: ModuleActionType.UPDATE_LAST_SAVED_STATE;
+          stateChanged: boolean;
       };
-
 function reducer(
     state: Readonly<ModuleState>,
     action: ModuleAction,
 ): Readonly<ModuleState> {
     switch (action.type) {
         case ModuleActionType.CHANGE_TITLE:
-            return { ...state, title: action.value };
+            return { ...state, title: action.value, stateChanged: true };
         case ModuleActionType.INITIALIZE:
             return { ...action.payload, currentSlide: 0 };
         case ModuleActionType.ADD_SLIDE:
-            return { ...state, slides: [...state.slides, DEFAULT_SLIDE] };
+            return {
+                ...state,
+                slides: [...state.slides, DEFAULT_SLIDE],
+                currentSlide: state.slides.length,
+                stateChanged: true,
+            };
         case ModuleActionType.UPDATE_SLIDE:
             return {
                 ...state,
@@ -160,6 +171,7 @@ function reducer(
                     action.payload,
                     ...state.slides.slice(action.index + 1),
                 ],
+                stateChanged: true,
             };
         case ModuleActionType.REMOVE_SLIDE: {
             let newSlides = [
@@ -174,6 +186,7 @@ function reducer(
                 ...state,
                 slides: newSlides,
                 currentSlide: min([state.currentSlide, newSlides.length - 1]),
+                stateChanged: true,
             };
         }
         case ModuleActionType.RESET_SLIDE: {
@@ -184,6 +197,7 @@ function reducer(
                     DEFAULT_SLIDE,
                     ...state.slides.slice(action.index + 1),
                 ],
+                stateChanged: true,
             };
         }
         case ModuleActionType.SET_SLIDE:
@@ -208,6 +222,7 @@ function reducer(
                     newSlide,
                     ...state.slides.slice(action.index + 1),
                 ],
+                stateChanged: true,
             };
         }
         case ModuleActionType.UPDATE_SECTION: {
@@ -232,8 +247,16 @@ function reducer(
                     newSlide,
                     ...state.slides.slice(action.slideIndex + 1),
                 ],
+                stateChanged: true,
             };
         }
+        case ModuleActionType.UPDATE_LAST_SAVED_STATE: {
+            return {
+                ...state,
+                stateChanged: false,
+            };
+        }
+
         default:
             throw new Error();
     }
@@ -289,6 +312,54 @@ const Builder: Page = () => {
                 `/admin/dashboard/builder?moduleId=${response.data._id}`,
             );
         }
+        dispatch({
+            type: ModuleActionType.UPDATE_LAST_SAVED_STATE,
+            stateChanged: false,
+        });
+    };
+
+    const handleDiscardModule = async () => {
+        if (moduleId) {
+            const response = await axios({
+                method: "GET",
+                url: `/api/module/${moduleId}`,
+            });
+            //set slides to respnse data
+            console.log(response.data);
+            const databaseSlides = [];
+            for (let i = 0; i < response.data.slides.length; i++) {
+                console.log(response.data.slides[i]);
+                const slide = await axios({
+                    method: "GET",
+                    url: `/api/slide/${response.data.slides[i]}`,
+                });
+                databaseSlides.push(slide.data);
+            }
+            dispatch({
+                type: ModuleActionType.INITIALIZE,
+                payload: {
+                    title: response.data.title,
+                    slides: databaseSlides,
+                    currentSlide: 0,
+                    stateChanged: false,
+                },
+            });
+            router.push(
+                `/admin/dashboard/builder?moduleId=${response.data._id}`,
+            );
+        } else {
+            //set slides to empty slide
+            dispatch({
+                type: ModuleActionType.INITIALIZE,
+                payload: {
+                    title: "Untitled Module",
+                    slides: [DEFAULT_SLIDE],
+                    currentSlide: 0,
+                    stateChanged: false,
+                },
+            });
+            router.push("/admin/dashboard/builder");
+        }
     };
 
     return (
@@ -298,6 +369,7 @@ const Builder: Page = () => {
                     state={state}
                     dispatch={dispatch}
                     handleSaveModule={handleSaveModule}
+                    handleDiscardModule={handleDiscardModule}
                 />
                 <Toolbar state={state} dispatch={dispatch} />
                 <Flex h="80vh">

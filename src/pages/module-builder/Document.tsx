@@ -112,10 +112,10 @@ const Document = ({
                             }
                             return (
                                 <Container
-                                    paddingTop={section.padding.top}
-                                    paddingRight={section.padding.right}
-                                    paddingBottom={section.padding.bottom}
-                                    paddingLeft={section.padding.left}
+                                    paddingTop={`${section.padding.top}px`}
+                                    paddingRight={`${section.padding.right}px`}
+                                    paddingBottom={`${section.padding.bottom}px`}
+                                    paddingLeft={`${section.padding.left}px`}
                                     children={sectionPreview}
                                 ></Container>
                             );

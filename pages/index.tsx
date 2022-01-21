@@ -51,7 +51,7 @@ const Tools: React.FC = ({ variant }) => {
                                     _id,
                                     title,
                                     description,
-                                    thumnbnail,
+                                    thumbnail,
                                     selfCheckGroupID,
                                 }) => (
                                     <UserToolCard
@@ -66,7 +66,7 @@ const Tools: React.FC = ({ variant }) => {
                                                 `/selfCheck?id=${selfCheckGroupID}`,
                                             )
                                         }
-                                        image={thumnbnail}
+                                        image={thumbnail}
                                         progressValue={10}
                                     />
                                 ),
@@ -84,7 +84,7 @@ const Tools: React.FC = ({ variant }) => {
                                     _id,
                                     title,
                                     description,
-                                    thumnbnail,
+                                    thumbnail,
                                     selfCheckGroupID,
                                 }) => (
                                     <UserToolCard
@@ -99,7 +99,7 @@ const Tools: React.FC = ({ variant }) => {
                                                 `/selfCheck?id=${selfCheckGroupID}`,
                                             )
                                         }
-                                        image={thumnbnail}
+                                        image={thumbnail}
                                         progressValue={10}
                                     />
                                 ),
@@ -125,7 +125,7 @@ const Tools: React.FC = ({ variant }) => {
                                     _id,
                                     title,
                                     description,
-                                    thumnbnail,
+                                    thumbnail,
                                     selfCheckGroupID,
                                 }) => (
                                     <UserToolCard
@@ -140,7 +140,7 @@ const Tools: React.FC = ({ variant }) => {
                                                 `/selfCheck?id=${selfCheckGroupID}`,
                                             )
                                         }
-                                        image={thumnbnail}
+                                        image={thumbnail}
                                         progressValue={10}
                                     />
                                 ),
@@ -163,7 +163,7 @@ const Tools: React.FC = ({ variant }) => {
                                     _id,
                                     title,
                                     description,
-                                    thumnbnail,
+                                    thumbnail,
                                     selfCheckGroupID,
                                 }) => (
                                     <UserToolCard
@@ -178,7 +178,7 @@ const Tools: React.FC = ({ variant }) => {
                                                 `/selfCheck?id=${selfCheckGroupID}`,
                                             )
                                         }
-                                        image={thumnbnail}
+                                        image={thumbnail}
                                         progressValue={10}
                                     />
                                 ),

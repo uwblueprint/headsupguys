@@ -9,7 +9,12 @@ import {
     Input,
 } from "@chakra-ui/react";
 import _ from "lodash";
-import { MarkdownEditor, MultipleChoice, MultiSelect } from "@components";
+import {
+    MarkdownEditor,
+    MultipleChoice,
+    MultiSelect,
+    ShortAnswer,
+} from "@components";
 import { Section, Slide } from "pages/admin/dashboard/builder";
 
 export interface ModuleSectionSelectProps {
@@ -77,6 +82,19 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
             padding: { ...section.padding, ...newPadding },
         });
     };
+    const handleShortAnswerQuestionChange = (question) => {
+        setSection({
+            ...section,
+            multipleChoice: { ...section.multipleChoice, question },
+        });
+    };
+
+    const handleShortAnswerOptionsChange = (options) => {
+        setSection({
+            ...section,
+            multipleChoice: { ...section.multipleChoice, options },
+        });
+    };
 
     const { type, markdown } = section;
     return (
@@ -119,7 +137,13 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                         columns={section.properties.columns}
                     />
                 ) : section.type == "shortAnswer" ? (
-                    "<ShortAnswer />"
+                    <ShortAnswer
+                        question={section.multipleChoice.question}
+                        setQuestion={handleShortAnswerQuestionChange}
+                        options={section.multipleChoice.options}
+                        setOptions={handleShortAnswerOptionsChange}
+                        columns={section.properties.columns}
+                    />
                 ) : (
                     <></>
                 )}

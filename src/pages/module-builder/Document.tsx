@@ -1,4 +1,11 @@
-import { Box, ButtonGroup, Flex, IconButton, VStack } from "@chakra-ui/react";
+import {
+    Box,
+    ButtonGroup,
+    Container,
+    Flex,
+    IconButton,
+    VStack,
+} from "@chakra-ui/react";
 import {
     MarkdownRenderer,
     ModulePreview,
@@ -66,29 +73,56 @@ const Document = ({
                             let sectionPreview;
                             if (section.type === "staticContent") {
                                 sectionPreview = (
-                                    <MarkdownRenderer>
-                                        {section.markdown}
-                                    </MarkdownRenderer>
+                                    <Container
+                                        paddingTop={section.padding.top}
+                                        paddingRight={section.padding.right}
+                                        paddingBottom={section.padding.bottom}
+                                        paddingLeft={section.padding.left}
+                                    >
+                                        <MarkdownRenderer>
+                                            {section.markdown}
+                                        </MarkdownRenderer>
+                                    </Container>
                                 );
                             } else if (section.type === "multipleChoice") {
                                 sectionPreview = (
-                                    <MultipleChoicePreview
-                                        question={
-                                            section.multipleChoice.question
-                                        }
-                                        options={section.multipleChoice.options}
-                                        variant={modulePreviewVariant}
-                                        columns={section.properties.columns}
-                                    />
+                                    <Container
+                                        paddingTop={section.padding.top}
+                                        paddingRight={section.padding.right}
+                                        paddingBottom={section.padding.bottom}
+                                        paddingLeft={section.padding.left}
+                                    >
+                                        <MultipleChoicePreview
+                                            question={
+                                                section.multipleChoice.question
+                                            }
+                                            options={
+                                                section.multipleChoice.options
+                                            }
+                                            variant={modulePreviewVariant}
+                                            columns={section.properties.columns}
+                                        />
+                                    </Container>
                                 );
                             } else if (section.type === "multiSelect") {
                                 sectionPreview = (
-                                    <MultiSelectPreview
-                                        question={section.multiSelect.question}
-                                        options={section.multiSelect.options}
-                                        variant={modulePreviewVariant}
-                                        columns={section.properties.columns}
-                                    />
+                                    <Container
+                                        paddingTop={section.padding.top}
+                                        paddingRight={section.padding.right}
+                                        paddingBottom={section.padding.bottom}
+                                        paddingLeft={section.padding.left}
+                                    >
+                                        <MultiSelectPreview
+                                            question={
+                                                section.multiSelect.question
+                                            }
+                                            options={
+                                                section.multiSelect.options
+                                            }
+                                            variant={modulePreviewVariant}
+                                            columns={section.properties.columns}
+                                        />
+                                    </Container>
                                 );
                             }
                             return sectionPreview;

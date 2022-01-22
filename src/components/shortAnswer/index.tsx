@@ -1,5 +1,16 @@
 import React from "react";
-import { Box, Button, Stack, Heading, Input, Flex } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Stack,
+    Heading,
+    Input,
+    Flex,
+    InputGroup,
+    InputRightElement,
+    CloseButton,
+    Spacer,
+} from "@chakra-ui/react";
 import { Question } from "pages/admin/dashboard/builder";
 
 export interface ShortAnswerProps {
@@ -10,26 +21,33 @@ interface ShortAnswerQuestionProps {
     index: number;
     value: Question;
     onChange: (newQuestion: Question, index: number) => void;
+    onDelete: (index: number) => void;
 }
 
 const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
     index,
     value,
     onChange,
+    onDelete,
 }) => {
     const { question } = value;
     return (
         <Flex>
             <Stack width={"full"} pb={8}>
                 <Heading size="md">Short Answer {index + 1}</Heading>
-                <Input
-                    variant="flushed"
-                    placeholder={"Text Here"}
-                    onChange={(e) => {
-                        onChange({ question: e.target.value }, index);
-                    }}
-                    value={question}
-                />
+                <InputGroup>
+                    <Input
+                        variant="flushed"
+                        placeholder="Text Here"
+                        onChange={(e) => {
+                            onChange({ question: e.target.value }, index);
+                        }}
+                        value={question}
+                    />
+                    <InputRightElement width="4.5rem">
+                        <CloseButton onClick={() => onDelete(index)} />
+                    </InputRightElement>
+                </InputGroup>
             </Stack>
         </Flex>
     );
@@ -45,6 +63,12 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
         setQuestions(newQuestions);
     };
 
+    const deleteQuestion = (index: number) => {
+        const newQuestions = [...questions];
+        newQuestions.splice(index, 1);
+        setQuestions(newQuestions);
+    };
+
     const questionFields = (
         <Box>
             {questions.map((currentQuestion, i) => (
@@ -53,6 +77,7 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
                     value={currentQuestion}
                     index={i}
                     onChange={onQuestionsChange}
+                    onDelete={deleteQuestion}
                 />
             ))}
             <Button

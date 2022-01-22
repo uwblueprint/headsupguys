@@ -99,8 +99,6 @@ const Module: Page = () => {
                             <ShortAnswerPreview
                                 question={section.multipleChoice.question}
                                 options={section.multipleChoice.options}
-                                variant="mobile"
-                                columns={section.properties.columns}
                             />
                         );
                     return sectionPreview;

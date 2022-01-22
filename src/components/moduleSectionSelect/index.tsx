@@ -75,7 +75,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
             padding: { ...section.padding, ...newPadding },
         });
     };
-    const handleShortAnswerOptionsChange = (options) => {
+    const handleShortAnswerQuestionsChange = (options) => {
         setSection({
             ...section,
             multipleChoice: { ...section.multipleChoice, options },
@@ -125,7 +125,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                 ) : section.type == "shortAnswer" ? (
                     <ShortAnswer
                         questions={section.multipleChoice.options}
-                        setQuestions={handleShortAnswerOptionsChange}
+                        setQuestions={handleShortAnswerQuestionsChange}
                     />
                 ) : (
                     <></>

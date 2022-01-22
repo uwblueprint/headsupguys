@@ -1,4 +1,4 @@
-import { models, model, Schema, Types } from "mongoose";
+import { Schema, Types } from "mongoose";
 import {
     OptionsQuestion,
     ShortAnswerQuestion,

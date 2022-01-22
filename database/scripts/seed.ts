@@ -9,7 +9,6 @@ import { Module as moduleCollection } from "../models/module";
 import { Slide as slideCollection } from "../models/slide";
 import { Tool as toolCollection } from "../models/tool";
 import { SelfCheckGroup as groupCollection } from "../models/selfCheckGroup";
-import { SelfCheckQuestion as questionCollection } from "../models/selfCheckQuestion";
 import { User as userCollection } from "../models/user";
 
 // seed config
@@ -43,8 +42,6 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
             await Promise.all([
                 db.collection("self_check_questions").drop(),
                 db.collection("self_check_groups").drop(),
-                // db.collection("components").drop(),
-                // db.collection("sections").drop(),
                 db.collection("slides").drop(),
                 db.collection("modules").drop(),
                 db.collection("tools").drop(),
@@ -184,10 +181,6 @@ function mockSlides(sections) {
 
     for (let i = 0; i < SLIDE_COUNT; i++) {
         slides.push({
-            // componentIDs: componentIDs.slice(
-            //     COMPONENTS_PER_SLIDE * i,
-            //     COMPONENTS_PER_SLIDE * (i + 1),
-            // ),
             sections: sections.slice(
                 SECTIONS_PER_SLIDE * i,
                 SECTIONS_PER_SLIDE * (i + 1),

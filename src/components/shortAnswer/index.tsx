@@ -9,7 +9,7 @@ export interface ShortAnswerProps {
 interface ShortAnswerQuestionProps {
     index: number;
     value: Question;
-    onChange: (newOption: Question, index: number) => void;
+    onChange: (newQuestion: Question, index: number) => void;
 }
 
 const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
@@ -45,7 +45,7 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
         setQuestions(newQuestions);
     };
 
-    const optionFields = (
+    const questionFields = (
         <Box>
             {questions.map((currentQuestion, i) => (
                 <ShortAnswerQuestion
@@ -67,7 +67,7 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
 
     return (
         <>
-            <Stack spacing={2}>{optionFields}</Stack>
+            <Stack spacing={2}>{questionFields}</Stack>
         </>
     );
 };
@@ -79,7 +79,7 @@ interface ShortAnswerPreviewProps {
 export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
     questions,
 }) => {
-    const optionFields = (
+    const questionFields = (
         <Box>
             {questions.map(({ question }) => (
                 <Flex p={1}>
@@ -91,6 +91,6 @@ export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
             ))}
         </Box>
     );
-    //TODO: render nothing if question && options null
-    return <Box textAlign="left">{optionFields}</Box>;
+    //TODO: render nothing if question is null
+    return <Box textAlign="left">{questionFields}</Box>;
 };

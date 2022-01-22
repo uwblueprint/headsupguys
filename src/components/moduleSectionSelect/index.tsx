@@ -124,8 +124,8 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                     />
                 ) : section.type == "shortAnswer" ? (
                     <ShortAnswer
-                        options={section.multipleChoice.options}
-                        setOptions={handleShortAnswerOptionsChange}
+                        questions={section.multipleChoice.options}
+                        setQuestions={handleShortAnswerOptionsChange}
                     />
                 ) : (
                     <></>

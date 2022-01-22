@@ -3,8 +3,8 @@ import { Box, Button, Stack, Heading, Input, Flex } from "@chakra-ui/react";
 import { Question } from "pages/admin/dashboard/builder";
 
 export interface ShortAnswerProps {
-    options: Question[];
-    setOptions: (newOptions: Question[]) => void;
+    questions: Question[];
+    setQuestions: (newOptions: Question[]) => void;
 }
 interface ShortAnswerOptionProps {
     index: number;
@@ -36,18 +36,18 @@ const ShortAnswerOption: React.FC<ShortAnswerOptionProps> = ({
 };
 
 export const ShortAnswer: React.FC<ShortAnswerProps> = ({
-    options,
-    setOptions,
+    questions,
+    setQuestions,
 }) => {
     const onOptionsChange = (newOption, index) => {
-        const newOptions = [...options];
+        const newOptions = [...questions];
         newOptions[index] = newOption;
-        setOptions(newOptions);
+        setQuestions(newOptions);
     };
 
     const optionFields = (
         <Box>
-            {options.map((currentOption, i) => (
+            {questions.map((currentOption, i) => (
                 <ShortAnswerOption
                     key={i}
                     value={currentOption}
@@ -56,7 +56,7 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
                 />
             ))}
             <Button
-                onClick={() => setOptions([...options, { option: "" }])}
+                onClick={() => setQuestions([...questions, { option: "" }])}
                 colorScheme="black"
                 variant="ghost"
             >

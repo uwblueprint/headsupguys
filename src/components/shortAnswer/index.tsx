@@ -6,13 +6,13 @@ export interface ShortAnswerProps {
     questions: Question[];
     setQuestions: (newQuestions: Question[]) => void;
 }
-interface ShortAnswerOptionProps {
+interface ShortAnswerQuestionProps {
     index: number;
     value: Question;
     onChange: (newOption: Question, index: number) => void;
 }
 
-const ShortAnswerOption: React.FC<ShortAnswerOptionProps> = ({
+const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
     index,
     value,
     onChange,
@@ -47,10 +47,10 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
 
     const optionFields = (
         <Box>
-            {questions.map((currentOption, i) => (
-                <ShortAnswerOption
+            {questions.map((currentQuestion, i) => (
+                <ShortAnswerQuestion
                     key={i}
-                    value={currentOption}
+                    value={currentQuestion}
                     index={i}
                     onChange={onQuestionsChange}
                 />
@@ -73,19 +73,15 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
 };
 
 interface ShortAnswerPreviewProps {
-    question: string;
-    options: Question[];
-    variant: string;
-    columns: string;
+    questions: Question[];
 }
 
 export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
-    question,
-    options,
+    questions,
 }) => {
     const optionFields = (
         <Box>
-            {options.map(({ question }) => (
+            {questions.map(({ question }) => (
                 <Flex p={1}>
                     <Stack width={"full"} pb={5}>
                         <Box>{question}</Box>

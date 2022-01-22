@@ -97,7 +97,7 @@ const Module: Page = () => {
                     else if (section.type === "shortAnswer") {
                         sectionPreview = (
                             <ShortAnswerPreview
-                                question={section.multipleChoice.question}
+                                questions={section.multipleChoice.question}
                                 options={section.multipleChoice.options}
                             />
                         );

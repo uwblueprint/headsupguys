@@ -148,14 +148,32 @@ function mockSections() {
 
     for (let i = 0; i < SECTION_COUNT; i++) {
         sections.push({
-            type: sectionTypes[i % sectionTypes.length],
+            type: sectionTypes[i % sectionTypes.length], //markdown, mc, ms, sa
             padding: paddingTypes[i % paddingTypes.length],
-            markdown: " ",
-            multipleChoice: {},
-            multiSelect: {},
-            shortAnswer: {},
-            alignment: " ",
-            properties: {},
+            markdown: " ", //stores markdown content, only applies to md component
+            multipleChoice: {
+                question: "",
+                options: [
+                    { option: "", column: "left" }, //TODO: change when implement advanced features
+                    { option: "", column: "right" },
+                ],
+            }, //stores mc content, only applies to mc component
+            multiSelect: {
+                question: "",
+                options: [
+                    { option: "", column: "left" },
+                    { option: "", column: "right" },
+                ],
+            }, //stores ms content, only applies to ms component
+            shortAnswer: {
+                questions: [{ question: "" }, { question: "" }],
+            }, //stores sa content, only applies to sa component
+            alignment: "align-left", //on frontend this will be a dropdown
+            properties: {
+                variableName: "",
+                dataType: "string",
+                columns: "single", //NOTE: for now, manually change to double to test
+            },
         });
     }
     return sections;

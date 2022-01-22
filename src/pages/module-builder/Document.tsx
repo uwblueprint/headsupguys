@@ -1,9 +1,17 @@
-import { Box, ButtonGroup, Flex, IconButton, VStack } from "@chakra-ui/react";
+import {
+    Box,
+    ButtonGroup,
+    Container,
+    Flex,
+    IconButton,
+    VStack,
+} from "@chakra-ui/react";
 import {
     MarkdownRenderer,
     ModulePreview,
     MultipleChoicePreview,
     MultiSelectPreview,
+    ShortAnswerPreview,
 } from "@components";
 import { ModuleState } from "pages/admin/dashboard/builder";
 import React from "react";
@@ -90,8 +98,27 @@ const Document = ({
                                         columns={section.properties.columns}
                                     />
                                 );
+                            } else if (section.type === "shortAnswer") {
+                                sectionPreview = (
+                                    <MultipleChoicePreview
+                                        question={
+                                            section.multipleChoice.question
+                                        }
+                                        options={section.multipleChoice.options}
+                                        variant={modulePreviewVariant}
+                                        columns={section.properties.columns}
+                                    />
+                                );
                             }
-                            return sectionPreview;
+                            return (
+                                <Container
+                                    paddingTop={`${section.padding.top}px`}
+                                    paddingRight={`${section.padding.right}px`}
+                                    paddingBottom={`${section.padding.bottom}px`}
+                                    paddingLeft={`${section.padding.left}px`}
+                                    children={sectionPreview}
+                                ></Container>
+                            );
                         },
                         "",
                     )}

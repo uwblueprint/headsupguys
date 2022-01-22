@@ -125,12 +125,13 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                 )}
                 {section.type && (
                     <HStack spacing={10}>
-                        <Heading size="sm">Padding&nbsp;(%)</Heading>
+                        <Heading size="sm">Padding</Heading>
                         {Object.entries(section.padding).map(
                             ([direction, value]) => (
                                 <HStack key={direction}>
                                     <Text>{direction}&nbsp;</Text>
                                     <Input
+                                        type="number"
                                         value={value}
                                         onChange={(
                                             e: ChangeEvent<HTMLInputElement>,

@@ -370,7 +370,7 @@ const Builder: Page = () => {
                     dispatch={dispatch}
                     handleSaveModule={handleSaveModule}
                     handleDiscardModule={handleDiscardModule}
-                />
+                    />
                 <Toolbar state={state} dispatch={dispatch} />
                 <Flex h="80vh">
                     <Editor

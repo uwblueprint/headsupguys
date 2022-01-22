@@ -8,7 +8,6 @@ import {
     Select,
     Input,
 } from "@chakra-ui/react";
-import _ from "lodash";
 import {
     MarkdownEditor,
     MultipleChoice,
@@ -75,10 +74,10 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
             padding: { ...section.padding, ...newPadding },
         });
     };
-    const handleShortAnswerQuestionsChange = (options) => {
+    const handleShortAnswerQuestionsChange = (questions) => {
         setSection({
             ...section,
-            multipleChoice: { ...section.multipleChoice, options },
+            shortAnswer: { ...section.shortAnswer, questions },
         });
     };
 
@@ -124,7 +123,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                     />
                 ) : section.type == "shortAnswer" ? (
                     <ShortAnswer
-                        questions={section.multipleChoice.options}
+                        questions={section.shortAnswer.questions}
                         setQuestions={handleShortAnswerQuestionsChange}
                     />
                 ) : (

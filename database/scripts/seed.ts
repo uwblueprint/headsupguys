@@ -153,6 +153,7 @@ function mockSections() {
             markdown: " ",
             multipleChoice: {},
             multiSelect: {},
+            shortAnswer: {},
             alignment: " ",
             properties: {},
         });

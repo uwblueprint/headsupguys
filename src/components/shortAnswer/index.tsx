@@ -4,7 +4,7 @@ import { Question } from "pages/admin/dashboard/builder";
 
 export interface ShortAnswerProps {
     questions: Question[];
-    setQuestions: (newOptions: Question[]) => void;
+    setQuestions: (newQuestions: Question[]) => void;
 }
 interface ShortAnswerOptionProps {
     index: number;
@@ -39,7 +39,7 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
     questions,
     setQuestions,
 }) => {
-    const onOptionsChange = (newQuestion, index) => {
+    const onQuestionsChange = (newQuestion, index) => {
         const newQuestions = [...questions];
         newQuestions[index] = newQuestion;
         setQuestions(newQuestions);
@@ -52,7 +52,7 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
                     key={i}
                     value={currentOption}
                     index={i}
-                    onChange={onOptionsChange}
+                    onChange={onQuestionsChange}
                 />
             ))}
             <Button
@@ -96,10 +96,5 @@ export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
         </Box>
     );
     //TODO: render nothing if question && options null
-    return (
-        <Box textAlign="left">
-            <Box p={1}>{question}</Box>
-            {optionFields}
-        </Box>
-    );
+    return <Box textAlign="left">{optionFields}</Box>;
 };

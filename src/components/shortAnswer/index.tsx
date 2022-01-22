@@ -17,7 +17,7 @@ const ShortAnswerOption: React.FC<ShortAnswerOptionProps> = ({
     value,
     onChange,
 }) => {
-    const { option } = value;
+    const { question } = value;
     return (
         <Flex>
             <Stack width={"full"} pb={8}>
@@ -26,9 +26,9 @@ const ShortAnswerOption: React.FC<ShortAnswerOptionProps> = ({
                     variant="flushed"
                     placeholder={"Text Here"}
                     onChange={(e) => {
-                        onChange({ option: e.target.value }, index);
+                        onChange({ question: e.target.value }, index);
                     }}
-                    value={option}
+                    value={question}
                 />
             </Stack>
         </Flex>
@@ -39,10 +39,10 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
     questions,
     setQuestions,
 }) => {
-    const onOptionsChange = (newOption, index) => {
-        const newOptions = [...questions];
-        newOptions[index] = newOption;
-        setQuestions(newOptions);
+    const onOptionsChange = (newQuestion, index) => {
+        const newQuestions = [...questions];
+        newQuestions[index] = newQuestion;
+        setQuestions(newQuestions);
     };
 
     const optionFields = (
@@ -56,7 +56,7 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
                 />
             ))}
             <Button
-                onClick={() => setQuestions([...questions, { option: "" }])}
+                onClick={() => setQuestions([...questions, { question: "" }])}
                 colorScheme="black"
                 variant="ghost"
             >
@@ -85,10 +85,10 @@ export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
 }) => {
     const optionFields = (
         <Box>
-            {options.map(({ option }) => (
+            {options.map(({ question }) => (
                 <Flex p={1}>
                     <Stack width={"full"} pb={5}>
-                        <Box>{option}</Box>
+                        <Box>{question}</Box>
                         <Input isReadOnly minHeight={100}></Input>
                     </Stack>
                 </Flex>

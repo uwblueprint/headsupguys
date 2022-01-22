@@ -53,7 +53,6 @@ export type Section = {
         right: number;
         bottom: number;
         left: number;
-        type: string;
     };
     markdown?: string; //stores markdown content, only applies to md component
     multipleChoice?: OptionsQuestion;
@@ -87,7 +86,7 @@ export type ModuleState = {
 
 const DEFAULT_SECTION = {
     type: "", //markdown, mc, ms, sa
-    padding: { top: 0, right: 0, bottom: 0, left: 0, type: "percent" },
+    padding: { top: 0, right: 0, bottom: 0, left: 0 },
     markdown: "", //stores markdown content, only applies to md component
     multipleChoice: {
         question: "",
@@ -371,7 +370,7 @@ const Builder: Page = () => {
                     dispatch={dispatch}
                     handleSaveModule={handleSaveModule}
                     handleDiscardModule={handleDiscardModule}
-                />
+                    />
                 <Toolbar state={state} dispatch={dispatch} />
                 <Flex h="80vh">
                     <Editor

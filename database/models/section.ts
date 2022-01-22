@@ -7,23 +7,10 @@ enum SectionType {
     SHORTANSWER = "sa",
 }
 
-enum PaddingType {
-    px = "px",
-    percent = "percent",
-}
-
-interface IPadding {
-    top: number;
-    right: number;
-    bottom: number;
-    left: number;
-    type: PaddingType;
-}
-
 export interface SectionInterface {
     _id: Types.ObjectId;
     type: SectionType;
-    padding: IPadding;
+    padding: string;
     markdown: string;
     multipleChoice: OptionsQuestion;
     multiSelect: OptionsQuestion;
@@ -42,11 +29,6 @@ const SectionSchema = new Schema<SectionInterface>(
             bottom: Number,
             right: Number,
             left: Number,
-            type: {
-                type: String,
-                enum: ["px", "percent"],
-                default: "px",
-            },
         },
         markdown: {
             type: String,

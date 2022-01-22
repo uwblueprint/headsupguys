@@ -93,13 +93,13 @@ const Module: Page = () => {
                                 columns={section.properties.columns}
                             />
                         );
-                    }
-                    else if (section.type === "shortAnswer") {
+                    } else if (section.type === "shortAnswer") {
                         sectionPreview = (
                             <ShortAnswerPreview
                                 questions={section.shortAnswer.question}
                             />
                         );
+                    }
                     return sectionPreview;
                 }, "")}
             </ModulePreview>

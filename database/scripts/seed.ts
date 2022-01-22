@@ -143,17 +143,25 @@ function mockGroups() {
 
 function mockSections() {
     const sectionTypes = ["markdown", "mc", "ms", "sa"];
-    const paddingTypes = ["top", "right", "bottom", "left", "type"];
+    const paddingTypes = ["top", "right", "bottom", "left"];
+    const paddingTypeTypes = ["px", "percent"];
+    const alignments = ["left", "center", "right"];
     const sections = [];
 
     for (let i = 0; i < SECTION_COUNT; i++) {
         sections.push({
             type: sectionTypes[i % sectionTypes.length],
-            padding: paddingTypes[i % paddingTypes.length],
-            markdown: " ",
+            padding: {
+                top: i * i * (i % 2),
+                right: i * i * (i % 2),
+                bottom: i * i * (i % 2),
+                left: i * i * (i % 2),
+                type: paddingTypeTypes[i % paddingTypeTypes.length],
+            },
+            markdown: "#Hi",
             multipleChoice: {},
             multiSelect: {},
-            alignment: " ",
+            alignment: alignments[i % alignments.length],
             properties: {},
         });
     }

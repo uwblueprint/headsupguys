@@ -100,29 +100,11 @@ const Document = ({
                                 );
                             } else if (section.type === "shortAnswer") {
                                 sectionPreview = (
-                                    <MultipleChoicePreview
-                                        question={
-                                            section.multipleChoice.question
+                                    <ShortAnswerPreview
+                                        questions={
+                                            section.shortAnswer.questions
                                         }
-                                        options={section.multipleChoice.options}
-                                        variant={modulePreviewVariant}
-                                        columns={section.properties.columns}
                                     />
-                                );
-                            } else if (section.type === "shortAnswer") {
-                                sectionPreview = (
-                                    <Container
-                                        paddingTop={section.padding.top}
-                                        paddingRight={section.padding.right}
-                                        paddingBottom={section.padding.bottom}
-                                        paddingLeft={section.padding.left}
-                                    >
-                                        <ShortAnswerPreview
-                                            questions={
-                                                section.shortAnswer.questions
-                                            }
-                                        />
-                                    </Container>
                                 );
                             }
                             return (

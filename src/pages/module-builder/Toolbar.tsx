@@ -24,6 +24,8 @@ import {
 } from "react-icons/io";
 import { IoTrash } from "react-icons/io5";
 
+const UNDO_ENABLED = false;
+
 const Toolbar = ({
     dispatch,
     state,
@@ -119,8 +121,12 @@ const Toolbar = ({
             <Spacer />
             <ButtonGroup variant="ghost">
                 {/* TODO: Add functionality to these buttons */}
-                <IconButton aria-label="undo" icon={<IoIosUndo />} />
-                <IconButton aria-label="redo" icon={<IoIosRedo />} />
+                {UNDO_ENABLED && (
+                    <>
+                        <IconButton aria-label="undo" icon={<IoIosUndo />} />
+                        <IconButton aria-label="redo" icon={<IoIosRedo />} />
+                    </>
+                )}
                 <IconButton
                     aria-label="trash"
                     icon={<IoTrash />}

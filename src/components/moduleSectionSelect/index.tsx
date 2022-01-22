@@ -7,6 +7,10 @@ import {
     Text,
     Select,
     Input,
+    Button,
+    ButtonGroup,
+    Flex,
+    Spacer,
 } from "@chakra-ui/react";
 import _ from "lodash";
 import { MarkdownEditor, MultipleChoice, MultiSelect } from "@components";
@@ -124,31 +128,106 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                     <></>
                 )}
                 {section.type && (
-                    <HStack spacing={10}>
+                    <HStack spacing={6}>
                         <Heading size="sm">Padding</Heading>
                         {Object.entries(section.padding).map(
                             ([direction, value]) => (
-                                <HStack key={direction}>
-                                    <Text>{direction}&nbsp;</Text>
-                                    <Input
-                                        type="number"
-                                        value={value}
-                                        onChange={(
-                                            e: ChangeEvent<HTMLInputElement>,
-                                        ) =>
-                                            handlePaddingChange({
-                                                [direction]: parseInt(
-                                                    e.target.value,
-                                                ),
-                                            })
-                                        }
-                                        placeholder={"0"}
-                                    />
-                                </HStack>
+                                <>
+                                    {direction !== "type" ? (
+                                        <HStack key={direction}>
+                                            <Text>{direction}&nbsp;</Text>
+                                            <input
+                                                type="number"
+                                                value={value === 0 ? "" : value}
+                                                onChange={(
+                                                    e: ChangeEvent<HTMLInputElement>,
+                                                ) => {
+                                                    handlePaddingChange({
+                                                        [direction]: e.target
+                                                            .value.length
+                                                            ? parseInt(
+                                                                  e.target
+                                                                      .value,
+                                                              )
+                                                            : 0,
+                                                    });
+                                                }}
+                                                placeholder={"0"}
+                                                style={{
+                                                    padding: 4,
+                                                    width: 35,
+                                                }}
+                                            />
+                                        </HStack>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </>
                             ),
                         )}
+                        <Flex width={"full"} justify={"right"} wrap={"wrap"}>
+                            <ButtonGroup
+                                ml={"0"}
+                                mr={"0"}
+                                size="sm"
+                                isAttached
+                                variant="outline"
+                            >
+                                <Button
+                                    onClick={() => {
+                                        handlePaddingChange({
+                                            type: "px",
+                                        });
+                                    }}
+                                    _hover={{
+                                        bg:
+                                            section.padding.type === "px"
+                                                ? "black"
+                                                : "white",
+                                    }}
+                                    color={
+                                        section.padding.type === "px"
+                                            ? "white"
+                                            : "black"
+                                    }
+                                    background={
+                                        section.padding.type === "px"
+                                            ? "black"
+                                            : "white"
+                                    }
+                                >
+                                    px
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        handlePaddingChange({
+                                            type: "percent",
+                                        });
+                                    }}
+                                    _hover={{
+                                        bg:
+                                            section.padding.type === "px"
+                                                ? "white"
+                                                : "black",
+                                    }}
+                                    color={
+                                        section.padding.type === "px"
+                                            ? "black"
+                                            : "white"
+                                    }
+                                    background={
+                                        section.padding.type === "px"
+                                            ? "white"
+                                            : "black"
+                                    }
+                                >
+                                    %
+                                </Button>
+                            </ButtonGroup>
+                        </Flex>
                     </HStack>
                 )}
+                <br />
             </Stack>
         </Box>
     );

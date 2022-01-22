@@ -143,9 +143,9 @@ function mockGroups() {
 
 function mockSections() {
     const sectionTypes = ["markdown", "mc", "ms", "sa"];
-    const paddingTypes = ["top", "right", "bottom", "left"];
     const paddingTypeTypes = ["px", "percent"];
     const alignments = ["left", "center", "right"];
+    const paddingTypes = ["top", "right", "bottom", "left", "type"];
     const sections = [];
 
     for (let i = 0; i < SECTION_COUNT; i++) {

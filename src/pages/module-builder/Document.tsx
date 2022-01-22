@@ -74,56 +74,40 @@ const Document = ({
                             let sectionPreview;
                             if (section.type === "staticContent") {
                                 sectionPreview = (
-                                    <Container
-                                        paddingTop={section.padding.top}
-                                        paddingRight={section.padding.right}
-                                        paddingBottom={section.padding.bottom}
-                                        paddingLeft={section.padding.left}
-                                    >
-                                        <MarkdownRenderer>
-                                            {section.markdown}
-                                        </MarkdownRenderer>
-                                    </Container>
+                                    <MarkdownRenderer>
+                                        {section.markdown}
+                                    </MarkdownRenderer>
                                 );
                             } else if (section.type === "multipleChoice") {
                                 sectionPreview = (
-                                    <Container
-                                        paddingTop={section.padding.top}
-                                        paddingRight={section.padding.right}
-                                        paddingBottom={section.padding.bottom}
-                                        paddingLeft={section.padding.left}
-                                    >
-                                        <MultipleChoicePreview
-                                            question={
-                                                section.multipleChoice.question
-                                            }
-                                            options={
-                                                section.multipleChoice.options
-                                            }
-                                            variant={modulePreviewVariant}
-                                            columns={section.properties.columns}
-                                        />
-                                    </Container>
+                                    <MultipleChoicePreview
+                                        question={
+                                            section.multipleChoice.question
+                                        }
+                                        options={section.multipleChoice.options}
+                                        variant={modulePreviewVariant}
+                                        columns={section.properties.columns}
+                                    />
                                 );
                             } else if (section.type === "multiSelect") {
                                 sectionPreview = (
-                                    <Container
-                                        paddingTop={section.padding.top}
-                                        paddingRight={section.padding.right}
-                                        paddingBottom={section.padding.bottom}
-                                        paddingLeft={section.padding.left}
-                                    >
-                                        <MultiSelectPreview
-                                            question={
-                                                section.multiSelect.question
-                                            }
-                                            options={
-                                                section.multiSelect.options
-                                            }
-                                            variant={modulePreviewVariant}
-                                            columns={section.properties.columns}
-                                        />
-                                    </Container>
+                                    <MultiSelectPreview
+                                        question={section.multiSelect.question}
+                                        options={section.multiSelect.options}
+                                        variant={modulePreviewVariant}
+                                        columns={section.properties.columns}
+                                    />
+                                );
+                            } else if (section.type === "shortAnswer") {
+                                sectionPreview = (
+                                    <MultipleChoicePreview
+                                        question={
+                                            section.multipleChoice.question
+                                        }
+                                        options={section.multipleChoice.options}
+                                        variant={modulePreviewVariant}
+                                        columns={section.properties.columns}
+                                    />
                                 );
                             } else if (section.type === "shortAnswer") {
                                 sectionPreview = (
@@ -141,7 +125,15 @@ const Document = ({
                                     </Container>
                                 );
                             }
-                            return sectionPreview;
+                            return (
+                                <Container
+                                    paddingTop={`${section.padding.top}px`}
+                                    paddingRight={`${section.padding.right}px`}
+                                    paddingBottom={`${section.padding.bottom}px`}
+                                    paddingLeft={`${section.padding.left}px`}
+                                    children={sectionPreview}
+                                ></Container>
+                            );
                         },
                         "",
                     )}

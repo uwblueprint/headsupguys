@@ -10,20 +10,188 @@ import {
     Container,
     Grid,
     GridItem,
+    Spinner,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import axios from "axios";
+import useSWR from "swr";
 import { UserToolCard } from "@components/userToolCard";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { useMediaQuery } from "react-responsive";
 
+const fetcher = async (url) => {
+    const response = await axios({
+        method: "GET",
+        url,
+    });
+    return response.data;
+};
+
+const Tools: React.FC = ({ variant }) => {
+    const { data, error } = useSWR("/api/tool/getAll", fetcher);
+    if (error) return <div>An error has occurred.</div>;
+    if (!data) return <Spinner color="brand.lime" size="xl" />;
+
+    const router = useRouter();
+
+    return (
+        <>
+            {variant === "desktop" ? (
+                <>
+                    <br />
+                    <br />
+                    <Heading fontSize={24}>Life Problems</Heading>
+                    <br />
+                    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+                        {data
+                            .filter((datum) => datum.type === "Problem")
+                            .map(
+                                ({
+                                    _id,
+                                    title,
+                                    description,
+                                    thumbnail,
+                                    selfCheckGroupID,
+                                }) => (
+                                    <UserToolCard
+                                        key={_id}
+                                        title={title}
+                                        description={description}
+                                        onClickTool={() =>
+                                            router.push(`/tool?id=${_id}`)
+                                        }
+                                        onSelfCheck={() =>
+                                            router.push(
+                                                `/selfCheck?id=${selfCheckGroupID}`,
+                                            )
+                                        }
+                                        image={thumbnail}
+                                        progressValue={10}
+                                    />
+                                ),
+                            )}
+                    </Grid>
+                    <br />
+                    <br />
+                    <Heading fontSize={24}>Skills</Heading>
+                    <br />
+                    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+                        {data
+                            .filter((datum) => datum.type === "Skill")
+                            .map(
+                                ({
+                                    _id,
+                                    title,
+                                    description,
+                                    thumbnail,
+                                    selfCheckGroupID,
+                                }) => (
+                                    <UserToolCard
+                                        key={_id}
+                                        title={title}
+                                        description={description}
+                                        onClickTool={() =>
+                                            router.push(`/tool?id=${_id}`)
+                                        }
+                                        onSelfCheck={() =>
+                                            router.push(
+                                                `/selfCheck?id=${selfCheckGroupID}`,
+                                            )
+                                        }
+                                        image={thumbnail}
+                                        progressValue={10}
+                                    />
+                                ),
+                            )}
+                    </Grid>
+                </>
+            ) : (
+                <>
+                    <Heading fontSize={24}>Life Problems</Heading>
+                    <br />
+                    <Carousel
+                        infiniteLoop
+                        showIndicators={false}
+                        showArrows={false}
+                        showStatus={false}
+                        centerMode
+                        centerSlidePercentage={85}
+                    >
+                        {data
+                            .filter((datum) => datum.type === "Problem")
+                            .map(
+                                ({
+                                    _id,
+                                    title,
+                                    description,
+                                    thumbnail,
+                                    selfCheckGroupID,
+                                }) => (
+                                    <UserToolCard
+                                        key={_id}
+                                        title={title}
+                                        description={description}
+                                        onClickTool={() =>
+                                            router.push(`/tool?id=${_id}`)
+                                        }
+                                        onSelfCheck={() =>
+                                            router.push(
+                                                `/selfCheck?id=${selfCheckGroupID}`,
+                                            )
+                                        }
+                                        image={thumbnail}
+                                        progressValue={10}
+                                    />
+                                ),
+                            )}
+                    </Carousel>
+                    <Heading fontSize={24}>Skills</Heading>
+                    <br />
+                    <Carousel
+                        infiniteLoop
+                        showIndicators={false}
+                        showArrows={false}
+                        showStatus={false}
+                        centerMode
+                        centerSlidePercentage={85}
+                    >
+                        {data
+                            .filter((datum) => datum.type === "Skill")
+                            .map(
+                                ({
+                                    _id,
+                                    title,
+                                    description,
+                                    thumbnail,
+                                    selfCheckGroupID,
+                                }) => (
+                                    <UserToolCard
+                                        key={_id}
+                                        title={title}
+                                        description={description}
+                                        onClickTool={() =>
+                                            router.push(`/tool?id=${_id}`)
+                                        }
+                                        onSelfCheck={() =>
+                                            router.push(
+                                                `/selfCheck?id=${selfCheckGroupID}`,
+                                            )
+                                        }
+                                        image={thumbnail}
+                                        progressValue={10}
+                                    />
+                                ),
+                            )}
+                    </Carousel>
+                </>
+            )}
+        </>
+    );
+};
+
 const Home: React.FC = () => {
     const [showAlert, setShowAlert] = useState(true);
-    const handleClickTool = () => {
-        console.log("");
-    };
-    const handleSelfCheck = () => {
-        console.log("");
-    };
     const variant = useMediaQuery({ query: `(max-width: 925px)` })
         ? "mobile"
         : "desktop";
@@ -85,137 +253,7 @@ const Home: React.FC = () => {
                             >
                                 TOOLS
                             </Heading>
-                            <br /> <br />
-                            <Heading fontSize={24}>Life Problems</Heading>
-                            <br />
-                            <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-                                <UserToolCard
-                                    title="Anger"
-                                    description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                    onClickTool={handleClickTool}
-                                    onSelfCheck={handleSelfCheck}
-                                    image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                    progressValue={10}
-                                />
-                                <UserToolCard
-                                    title="Anxiety"
-                                    description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                    onClickTool={handleClickTool}
-                                    onSelfCheck={handleSelfCheck}
-                                    image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                    progressValue={10}
-                                />
-                                <UserToolCard
-                                    title="Depression"
-                                    description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                    onClickTool={handleClickTool}
-                                    onSelfCheck={handleSelfCheck}
-                                    image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                    progressValue={10}
-                                />
-                                <UserToolCard
-                                    title="Anger"
-                                    description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                    onClickTool={handleClickTool}
-                                    onSelfCheck={handleSelfCheck}
-                                    image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                    progressValue={10}
-                                />
-                                <UserToolCard
-                                    title="Anxiety"
-                                    description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                    onClickTool={handleClickTool}
-                                    onSelfCheck={handleSelfCheck}
-                                    image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                    progressValue={10}
-                                />
-                                <UserToolCard
-                                    title="Depression"
-                                    description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                    onClickTool={handleClickTool}
-                                    onSelfCheck={handleSelfCheck}
-                                    image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                    progressValue={10}
-                                />
-                            </Grid>
-                            <br />
-                            <br />
-                            <Heading fontSize={24}>Skills</Heading>
-                            <br />
-                            <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-                                <UserToolCard
-                                    title="Anger"
-                                    description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                    onClickTool={handleClickTool}
-                                    onSelfCheck={handleSelfCheck}
-                                    image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                    progressValue={10}
-                                />
-                                <UserToolCard
-                                    title="Anxiety"
-                                    description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                    onClickTool={handleClickTool}
-                                    onSelfCheck={handleSelfCheck}
-                                    image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                    progressValue={10}
-                                />
-                                <UserToolCard
-                                    title="Depression"
-                                    description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                    onClickTool={handleClickTool}
-                                    onSelfCheck={handleSelfCheck}
-                                    image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                    progressValue={10}
-                                />
-                                <UserToolCard
-                                    title="Anger"
-                                    description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                    onClickTool={handleClickTool}
-                                    onSelfCheck={handleSelfCheck}
-                                    image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                    progressValue={10}
-                                />
-                                <UserToolCard
-                                    title="Anxiety"
-                                    description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                    onClickTool={handleClickTool}
-                                    onSelfCheck={handleSelfCheck}
-                                    image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                    progressValue={10}
-                                />
-                                <UserToolCard
-                                    title="Depression"
-                                    description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                    onClickTool={handleClickTool}
-                                    onSelfCheck={handleSelfCheck}
-                                    image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                    progressValue={10}
-                                />
-                            </Grid>
+                            <Tools variant={variant} />
                         </Box>
                     </Container>
                 </>
@@ -264,88 +302,7 @@ const Home: React.FC = () => {
                             TOOLS
                         </Heading>
                         <br />
-                        <Heading fontSize={24}>Life Problems</Heading>
-                        <br />
-                        <Carousel
-                            infiniteLoop
-                            showIndicators={false}
-                            showArrows={false}
-                            showStatus={false}
-                            centerMode
-                            centerSlidePercentage={85}
-                        >
-                            <UserToolCard
-                                title="Anger"
-                                description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                onClickTool={handleClickTool}
-                                onSelfCheck={handleSelfCheck}
-                                image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                progressValue={10}
-                            />
-                            <UserToolCard
-                                title="Anxiety"
-                                description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                onClickTool={handleClickTool}
-                                onSelfCheck={handleSelfCheck}
-                                image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                progressValue={10}
-                            />
-                            <UserToolCard
-                                title="Depression"
-                                description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                onClickTool={handleClickTool}
-                                onSelfCheck={handleSelfCheck}
-                                image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                progressValue={10}
-                            />
-                        </Carousel>
-                        <Heading fontSize={24}>Skills</Heading>
-                        <br />
-                        <Carousel
-                            infiniteLoop
-                            showIndicators={false}
-                            showArrows={false}
-                            showStatus={false}
-                            centerMode
-                            centerSlidePercentage={85}
-                        >
-                            <UserToolCard
-                                title="Anger"
-                                description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                onClickTool={handleClickTool}
-                                onSelfCheck={handleSelfCheck}
-                                image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                progressValue={10}
-                            />
-                            <UserToolCard
-                                title="Anxiety"
-                                description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                onClickTool={handleClickTool}
-                                onSelfCheck={handleSelfCheck}
-                                image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                progressValue={10}
-                            />
-                            <UserToolCard
-                                title="Depression"
-                                description="
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Praesent laoreet feugiat"
-                                onClickTool={handleClickTool}
-                                onSelfCheck={handleSelfCheck}
-                                image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-flower-blooming-outdoors-royalty-free-image-739387273-1544039749.jpg"
-                                progressValue={10}
-                            />
-                        </Carousel>
+                        <Tools variant={variant} />
                     </Box>
                 </>
             )}

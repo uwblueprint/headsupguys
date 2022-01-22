@@ -1,99 +1,216 @@
 import React from "react";
-import { Box, Button, Stack, Heading, Input, Flex } from "@chakra-ui/react";
-import { Question } from "pages/admin/dashboard/builder";
+import {
+    Box,
+    Button,
+    Stack,
+    Heading,
+    Input,
+    Radio,
+    Flex,
+    Grid,
+} from "@chakra-ui/react";
+import { Option } from "pages/admin/dashboard/builder";
 
 export interface ShortAnswerProps {
-    questions: Question[];
-    setQuestions: (newQuestions: Question[]) => void;
+    question: string;
+    setQuestion: (newQuestion: string) => void;
+    options: Option[];
+    setOptions: (newOptions: Option[]) => void;
     columns: string;
 }
-interface ShortAnswerQuestionProps {
+interface ShortAnswerOptionProps {
     index: number;
-    value: Question;
-    onChange: (newQuestion: Question, index: number) => void;
+    value: Option;
+    onChange: (newOption: Option, index: number) => void;
 }
 
-const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
+const ShortAnswerOption: React.FC<ShortAnswerOptionProps> = ({
     index,
     value,
     onChange,
 }) => {
-    const { question } = value;
+    const { option, column } = value;
     return (
         <Flex>
-            <Stack width={"full"} paddingBottom={5}>
-                <Heading size="md">Short Answer Question {index + 1}</Heading>
-                <Input
-                    variant="flushed"
-                    placeholder={"Text Here"}
-                    onChange={(e) => {
-                        onChange({ question: e.target.value }, index);
-                    }}
-                    value={question}
-                />
-            </Stack>
+            <Radio mr={2} isReadOnly />
+            <Input
+                variant="flushed"
+                placeholder={`Short Answer Option ${index + 1}`}
+                onChange={(e) => {
+                    onChange({ option: e.target.value, column }, index);
+                }}
+                value={option}
+            />
         </Flex>
     );
 };
 
 export const ShortAnswer: React.FC<ShortAnswerProps> = ({
-    questions,
-    setQuestions,
+    question,
+    setQuestion,
+    options,
+    setOptions,
+    columns,
 }) => {
-    const onQuestionsChange = (newQuestion, index) => {
-        const newQuestions = [...questions];
-        newQuestions[index] = newQuestion;
-        setQuestions(newQuestions);
+    const onOptionsChange = (newOption, index) => {
+        const newOptions = [...options];
+        newOptions[index] = newOption;
+        setOptions(newOptions);
     };
-
-    const questionFields = (
-        <Box>
-            {questions.map((currentQuestion, i) => (
-                <ShortAnswerQuestion
-                    key={i}
-                    value={currentQuestion}
-                    index={i}
-                    onChange={onQuestionsChange}
-                />
-            ))}
-            <Button
-                onClick={() => setQuestions([...questions, { question: "" }])}
-                colorScheme="black"
-                variant="ghost"
-            >
-                + Add Short Answer
-            </Button>
-        </Box>
+    const leftColumnOptions = options.filter(({ column }) => column === "left");
+    const rightColumnOptions = options.filter(
+        ({ column }) => column === "right",
     );
+
+    const optionFields =
+        columns && columns === "double" ? (
+            <Grid templateColumns="repeat(2, 1fr)" gap={3}>
+                <Box>
+                    {leftColumnOptions.map((leftOption) => {
+                        const i = options.indexOf(leftOption);
+                        return (
+                            <ShortAnswerOption
+                                key={i}
+                                value={leftOption}
+                                index={i}
+                                onChange={onOptionsChange}
+                            />
+                        );
+                    })}
+                    <Button
+                        onClick={() =>
+                            setOptions([
+                                ...options,
+                                { option: "", column: "left" },
+                            ])
+                        }
+                        colorScheme="black"
+                        variant="ghost"
+                    >
+                        + Add Option
+                    </Button>
+                </Box>
+                <Box>
+                    {rightColumnOptions.map((rightOption) => {
+                        const i = options.indexOf(rightOption);
+                        return (
+                            <ShortAnswerOption
+                                key={i}
+                                value={rightOption}
+                                index={i}
+                                onChange={onOptionsChange}
+                            />
+                        );
+                    })}
+                    <Button
+                        onClick={() =>
+                            setOptions([
+                                ...options,
+                                { option: "", column: "right" },
+                            ])
+                        }
+                        colorScheme="black"
+                        variant="ghost"
+                    >
+                        + Add Option
+                    </Button>
+                </Box>
+            </Grid>
+        ) : (
+            <Box>
+                {options.map((currentOption, i) => (
+                    <ShortAnswerOption
+                        key={i}
+                        value={currentOption}
+                        index={i}
+                        onChange={onOptionsChange}
+                    />
+                ))}
+                <Button
+                    onClick={() => setOptions([...options, { option: "" }])}
+                    colorScheme="black"
+                    variant="ghost"
+                >
+                    + Add Option
+                </Button>
+            </Box>
+        );
 
     return (
         <>
-            <Stack spacing={2}>{questionFields}</Stack>
+            <Stack spacing={2}>
+                <Box>
+                    <Heading size="md">Question</Heading>
+                    <Input
+                        value={question}
+                        onChange={(e) => {
+                            setQuestion(e.target.value);
+                        }}
+                        placeholder="Text Here"
+                    />
+                </Box>
+                {optionFields}
+            </Stack>
         </>
     );
 };
 
 interface ShortAnswerPreviewProps {
-    questions: Question[];
+    question: string;
+    options: Option[];
     variant: string;
+    columns: string;
 }
 
 export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
-    questions,
+    question,
+    options,
+    variant,
+    columns,
 }) => {
-    const questionFields = (
+    let leftColumnOptions, rightColumnOptions;
+    const showDoubleColumns =
+        variant === "desktop" && columns && columns === "double";
+    if (showDoubleColumns) {
+        leftColumnOptions = options.filter(({ column }) => column === "left");
+        rightColumnOptions = options.filter(({ column }) => column === "right");
+    }
+
+    const optionFields = showDoubleColumns ? (
+        <Grid templateColumns="repeat(2, 1fr)" gap={3}>
+            <Box>
+                {leftColumnOptions.map(({ option }) => (
+                    <Flex p={1}>
+                        <Radio mr={2} isReadOnly />
+                        <Box>{option}</Box>
+                    </Flex>
+                ))}
+            </Box>
+            <Box>
+                {rightColumnOptions.map(({ option }) => (
+                    <Flex p={1}>
+                        <Radio mr={2} isReadOnly />
+                        <Box>{option}</Box>
+                    </Flex>
+                ))}
+            </Box>
+        </Grid>
+    ) : (
         <Box>
-            {questions.map(({ question }) => (
+            {options.map(({ option }) => (
                 <Flex p={1}>
-                    <Stack paddingBottom={5} width={"full"}>
-                        <Box>{question}</Box>
-                        <Input isReadOnly minHeight={100}></Input>
-                    </Stack>
+                    <Radio mr={2} isReadOnly />
+                    <Box>{option}</Box>
                 </Flex>
             ))}
         </Box>
     );
 
-    //TODO: render nothing if questions == null
-    return <Box textAlign="left">{questionFields}</Box>;
+    //TODO: render nothing if question && options null
+    return (
+        <Box textAlign="left">
+            <Box p={1}>{question}</Box>
+            {optionFields}
+        </Box>
+    );
 };

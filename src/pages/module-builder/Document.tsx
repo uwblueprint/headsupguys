@@ -134,8 +134,11 @@ const Document = ({
                                         paddingLeft={section.padding.left}
                                     >
                                         <ShortAnswerPreview
-                                            questions={
-                                                section.multipleChoice.questions
+                                            question={
+                                                section.multipleChoice.question
+                                            }
+                                            options={
+                                                section.multipleChoice.options
                                             }
                                             variant={modulePreviewVariant}
                                             columns={section.properties.columns}

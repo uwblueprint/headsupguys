@@ -46,6 +46,10 @@ export type OptionsQuestion = {
     options: Option[];
 };
 
+export type Question = {
+    question: string;
+};
+
 export type Section = {
     type: string; //markdown, mc, ms, sa
     padding: {
@@ -370,7 +374,7 @@ const Builder: Page = () => {
                     dispatch={dispatch}
                     handleSaveModule={handleSaveModule}
                     handleDiscardModule={handleDiscardModule}
-                    />
+                />
                 <Toolbar state={state} dispatch={dispatch} />
                 <Flex h="80vh">
                     <Editor

@@ -15,7 +15,7 @@ import {
     MultiSelect,
     ShortAnswer,
 } from "@components";
-import { Section, Slide } from "pages/admin/dashboard/builder";
+import { Section } from "pages/admin/dashboard/builder";
 
 export interface ModuleSectionSelectProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,13 +28,6 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
     props,
 ) => {
     const { section, setSection, sectionNumber } = props;
-
-    const paddingMap = {
-        T: "top",
-        R: "right",
-        B: "bottom",
-        L: "left",
-    };
 
     const handleSelect = (e) => {
         setSection({ ...section, type: e.currentTarget.value });
@@ -82,13 +75,6 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
             padding: { ...section.padding, ...newPadding },
         });
     };
-    const handleShortAnswerQuestionChange = (question) => {
-        setSection({
-            ...section,
-            multipleChoice: { ...section.multipleChoice, question },
-        });
-    };
-
     const handleShortAnswerOptionsChange = (options) => {
         setSection({
             ...section,
@@ -138,11 +124,8 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                     />
                 ) : section.type == "shortAnswer" ? (
                     <ShortAnswer
-                        question={section.multipleChoice.question}
-                        setQuestion={handleShortAnswerQuestionChange}
                         options={section.multipleChoice.options}
                         setOptions={handleShortAnswerOptionsChange}
-                        columns={section.properties.columns}
                     />
                 ) : (
                     <></>

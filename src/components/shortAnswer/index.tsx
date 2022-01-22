@@ -1,24 +1,15 @@
 import React from "react";
-import {
-    Box,
-    Button,
-    Stack,
-    Heading,
-    Input,
-    Radio,
-    Flex,
-    Grid,
-} from "@chakra-ui/react";
-import { Option } from "pages/admin/dashboard/builder";
+import { Box, Button, Stack, Heading, Input, Flex } from "@chakra-ui/react";
+import { Question } from "pages/admin/dashboard/builder";
 
 export interface ShortAnswerProps {
-    options: Option[];
-    setOptions: (newOptions: Option[]) => void;
+    options: Question[];
+    setOptions: (newOptions: Question[]) => void;
 }
 interface ShortAnswerOptionProps {
     index: number;
-    value: Option;
-    onChange: (newOption: Option, index: number) => void;
+    value: Question;
+    onChange: (newOption: Question, index: number) => void;
 }
 
 const ShortAnswerOption: React.FC<ShortAnswerOptionProps> = ({
@@ -83,7 +74,7 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
 
 interface ShortAnswerPreviewProps {
     question: string;
-    options: Option[];
+    options: Question[];
     variant: string;
     columns: string;
 }

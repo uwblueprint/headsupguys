@@ -46,6 +46,10 @@ export type OptionsQuestion = {
     options: Option[];
 };
 
+export type Question = {
+    option: string;
+};
+
 export type Section = {
     type: string; //markdown, mc, ms, sa
     padding: {

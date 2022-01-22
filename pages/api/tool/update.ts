@@ -27,21 +27,25 @@ const update = async (
             }
             module.toolID = id;
             await module.save();
-
-            //Remove any other existing modules linked to tool
-            const existingModules = await Module.find({
-                toolID: id,
-                _id: { $ne: req.body.linkedModuleID },
-            });
-
-            for (const module of existingModules) {
-                module.toolID = null;
-                await module.save();
-            }
         }
         const tool = await Tool.findByIdAndUpdate(id, req.body, {
             new: true,
         });
+        //Remove any other existing modules linked to tool
+
+        const existingModuleCheckFind = tool.linkedModuleID
+            ? {
+                  toolID: id,
+                  _id: { $ne: req.body.linkedModuleID },
+              }
+            : { toolID: id };
+
+        const existingModules = await Module.find(existingModuleCheckFind);
+
+        for (const module of existingModules) {
+            module.toolID = null;
+            await module.save();
+        }
 
         res.status(200).json(tool);
     } catch (err) {

@@ -47,7 +47,11 @@ export type OptionsQuestion = {
 };
 
 export type Question = {
-    questions: string[];
+    question: string;
+};
+
+export type ShortAnswerQuestion = {
+    questions: Question[];
 };
 
 export type Section = {
@@ -61,7 +65,7 @@ export type Section = {
     markdown?: string; //stores markdown content, only applies to md component
     multipleChoice?: OptionsQuestion;
     multiSelect?: OptionsQuestion;
-    shortAnswer?: Question;
+    shortAnswer?: ShortAnswerQuestion;
     alignment?: string; //on frontend this will be a dropdown
     properties?: {
         variableName?: string;
@@ -108,7 +112,7 @@ const DEFAULT_SECTION = {
         ],
     }, //stores ms content, only applies to ms component
     shortAnswer: {
-        questions: [""],
+        questions: [{ question: "" }, { question: "" }],
     },
     alignment: "align-left", //on frontend this will be a dropdown
     properties: {

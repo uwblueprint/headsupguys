@@ -28,7 +28,7 @@ const fetcher = async (url) => {
     return response.data;
 };
 
-const Tools: React.FC = ({ variant }) => {
+const Tools: React.FC<{ variant: string }> = ({ variant }) => {
     const { data, error } = useSWR("/api/tool/getAll", fetcher);
     if (error) return <div>An error has occurred.</div>;
     if (!data) return <Spinner color="brand.lime" size="xl" />;

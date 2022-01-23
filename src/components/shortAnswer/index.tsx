@@ -10,14 +10,12 @@ interface ShortAnswerQuestionProps {
     index: number;
     value: Question;
     onChange: (newQuestion: Question, index: number) => void;
-    onDelete: (index: number) => void;
 }
 
 const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
     index,
     value,
     onChange,
-    onDelete,
 }) => {
     const { question } = value;
     return (
@@ -47,12 +45,6 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
         setQuestions(newQuestions);
     };
 
-    const deleteQuestion = (index: number) => {
-        const newQuestions = [...questions];
-        newQuestions.splice(index, 1);
-        setQuestions(newQuestions);
-    };
-
     const questionFields = (
         <Box>
             {questions.map((currentQuestion, i) => (
@@ -61,7 +53,6 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
                     value={currentQuestion}
                     index={i}
                     onChange={onQuestionsChange}
-                    onDelete={deleteQuestion}
                 />
             ))}
             <Button

@@ -9,7 +9,7 @@ enum SectionType {
 
 enum PaddingType {
     px = "px",
-    percent = "%",
+    "%" = "%",
 }
 
 interface IPadding {
@@ -44,8 +44,8 @@ const SectionSchema = new Schema<SectionInterface>(
             left: Number,
             type: {
                 type: String,
-                enum: ["px", "%"],
-                default: "px",
+                enum: PaddingType,
+                default: PaddingType["%"],
             },
         },
         markdown: {

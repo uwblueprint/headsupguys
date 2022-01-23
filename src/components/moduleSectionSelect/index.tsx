@@ -72,10 +72,6 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
     };
 
     const handlePaddingChange = (newPadding) => {
-        console.log({
-            ...section,
-            padding: { ...section.padding, ...newPadding },
-        });
         setSection({
             ...section,
             padding: { ...section.padding, ...newPadding },

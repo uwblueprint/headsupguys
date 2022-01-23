@@ -71,7 +71,7 @@ const Document = ({
                 >
                     {state.slides[state.currentSlide].sections.map(
                         (section) => {
-                            const paddingType = section?.padding.type;
+                            const paddingType = section?.padding.type || "%";
                             let sectionPreview;
                             if (section.type === "staticContent") {
                                 sectionPreview = (

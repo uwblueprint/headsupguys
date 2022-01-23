@@ -201,7 +201,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                                 <Button
                                     onClick={() => {
                                         handlePaddingChange({
-                                            type: "percent",
+                                            type: "%",
                                         });
                                     }}
                                     _hover={{

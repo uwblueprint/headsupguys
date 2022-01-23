@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Stack, Heading, Input, Flex } from "@chakra-ui/react";
+import { Box, Stack, Heading, Input, Flex } from "@chakra-ui/react";
 import { Question } from "pages/admin/dashboard/builder";
 
 export interface ShortAnswerProps {
@@ -55,13 +55,6 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
                     onChange={onQuestionsChange}
                 />
             ))}
-            <Button
-                onClick={() => setQuestions([...questions, { question: "" }])}
-                colorScheme="black"
-                variant="ghost"
-            >
-                + Add Short Answer
-            </Button>
         </Box>
     );
 

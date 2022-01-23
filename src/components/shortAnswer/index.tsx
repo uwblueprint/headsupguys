@@ -1,16 +1,5 @@
 import React from "react";
-import {
-    Box,
-    Button,
-    Stack,
-    Heading,
-    Input,
-    Flex,
-    InputGroup,
-    InputRightElement,
-    CloseButton,
-    Spacer,
-} from "@chakra-ui/react";
+import { Box, Button, Stack, Heading, Input, Flex } from "@chakra-ui/react";
 import { Question } from "pages/admin/dashboard/builder";
 
 export interface ShortAnswerProps {
@@ -35,19 +24,14 @@ const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
         <Flex>
             <Stack width={"full"} pb={8}>
                 <Heading size="md">Short Answer {index + 1}</Heading>
-                <InputGroup>
-                    <Input
-                        variant="flushed"
-                        placeholder="Text Here"
-                        onChange={(e) => {
-                            onChange({ question: e.target.value }, index);
-                        }}
-                        value={question}
-                    />
-                    <InputRightElement width="4.5rem">
-                        <CloseButton onClick={() => onDelete(index)} />
-                    </InputRightElement>
-                </InputGroup>
+                <Input
+                    variant="flushed"
+                    placeholder="Text Here"
+                    onChange={(e) => {
+                        onChange({ question: e.target.value }, index);
+                    }}
+                    value={question}
+                />
             </Stack>
         </Flex>
     );

@@ -77,7 +77,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
     const handleShortAnswerQuestionChange = (question) => {
         setSection({
             ...section,
-            shortAnswer: { ...section.shortAnswer, question },
+            shortAnswer: question,
         });
     };
 
@@ -123,7 +123,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                     />
                 ) : section.type == "shortAnswer" ? (
                     <ShortAnswer
-                        question={section.shortAnswer.question}
+                        question={section.shortAnswer}
                         setQuestion={handleShortAnswerQuestionChange}
                     />
                 ) : (

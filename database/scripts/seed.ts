@@ -162,9 +162,8 @@ function mockSections() {
                     { option: "", column: "right" },
                 ],
             }, //stores ms content, only applies to ms component
-            shortAnswer: {
-                question: "",
-            }, //stores sa content, only applies to sa component
+            shortAnswer: "",
+            //stores sa content, only applies to sa component
             alignment: "align-left", //on frontend this will be a dropdown
             properties: {
                 variableName: "",

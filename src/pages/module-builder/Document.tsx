@@ -99,9 +99,10 @@ const Document = ({
                                     />
                                 );
                             } else if (section.type === "shortAnswer") {
+                                console.log(section);
                                 sectionPreview = (
                                     <ShortAnswerPreview
-                                        question={section.shortAnswer.question}
+                                        question={section.shortAnswer}
                                     />
                                 );
                             }

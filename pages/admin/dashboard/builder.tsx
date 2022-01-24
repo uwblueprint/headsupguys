@@ -50,10 +50,6 @@ export type Question = {
     question: string;
 };
 
-export type ShortAnswerQuestion = {
-    question: Question;
-};
-
 export type Section = {
     type: string; //markdown, mc, ms, sa
     padding: {
@@ -65,7 +61,7 @@ export type Section = {
     markdown?: string; //stores markdown content, only applies to md component
     multipleChoice?: OptionsQuestion;
     multiSelect?: OptionsQuestion;
-    shortAnswer?: ShortAnswerQuestion;
+    shortAnswer?: string;
     alignment?: string; //on frontend this will be a dropdown
     properties?: {
         variableName?: string;
@@ -111,9 +107,8 @@ const DEFAULT_SECTION = {
             { option: "", column: "right" },
         ],
     }, //stores ms content, only applies to ms component
-    shortAnswer: {
-        question: "",
-    },//stores sa content, only applies to sa component
+    shortAnswer: "",
+    //stores sa content, only applies to sa component
     alignment: "align-left", //on frontend this will be a dropdown
     properties: {
         variableName: "",

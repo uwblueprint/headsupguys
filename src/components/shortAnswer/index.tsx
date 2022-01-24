@@ -1,21 +1,20 @@
 import React from "react";
 import { Box, Stack, Heading, Input, Flex } from "@chakra-ui/react";
-import { Question } from "pages/admin/dashboard/builder";
 
 export interface ShortAnswerProps {
-    question: Question;
-    setQuestion: (newQuestion: Question) => void;
+    question: string;
+    setQuestion: (newQuestion: string) => void;
 }
 interface ShortAnswerQuestionProps {
-    value: Question;
-    onChange: (newQuestion: Question) => void;
+    value: string;
+    onChange: (newQuestion: string) => void;
 }
 
 const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
     value,
     onChange,
 }) => {
-    const { question } = value;
+    const question = value;
     return (
         <Flex>
             <Stack width={"full"} pb={8}>
@@ -24,7 +23,7 @@ const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
                     variant="flushed"
                     placeholder="Text Here"
                     onChange={(e) => {
-                        onChange({ question: e.target.value });
+                        onChange(e.target.value);
                     }}
                     value={question}
                 />
@@ -38,7 +37,7 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
     setQuestion,
 }) => {
     const onQuestionChange = (newQuestion) => {
-        setQuestion(newQuestion.question);
+        setQuestion(newQuestion);
     };
 
     const questionFields = (
@@ -55,7 +54,7 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
 };
 
 interface ShortAnswerPreviewProps {
-    question: Question;
+    question: string;
 }
 
 export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({

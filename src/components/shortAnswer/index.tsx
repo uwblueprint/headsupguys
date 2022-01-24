@@ -3,17 +3,15 @@ import { Box, Stack, Heading, Input, Flex } from "@chakra-ui/react";
 import { Question } from "pages/admin/dashboard/builder";
 
 export interface ShortAnswerProps {
-    questions: Question[];
-    setQuestions: (newQuestions: Question[]) => void;
+    question: Question;
+    setQuestion: (newQuestion: Question) => void;
 }
 interface ShortAnswerQuestionProps {
-    index: number;
     value: Question;
-    onChange: (newQuestion: Question, index: number) => void;
+    onChange: (newQuestion: Question) => void;
 }
 
 const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
-    index,
     value,
     onChange,
 }) => {
@@ -21,12 +19,12 @@ const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
     return (
         <Flex>
             <Stack width={"full"} pb={8}>
-                <Heading size="md">Short Answer {index + 1}</Heading>
+                <Heading size="md">Short Answer</Heading>
                 <Input
                     variant="flushed"
                     placeholder="Text Here"
                     onChange={(e) => {
-                        onChange({ question: e.target.value }, index);
+                        onChange({ question: e.target.value });
                     }}
                     value={question}
                 />
@@ -36,25 +34,16 @@ const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
 };
 
 export const ShortAnswer: React.FC<ShortAnswerProps> = ({
-    questions,
-    setQuestions,
+    question,
+    setQuestion,
 }) => {
-    const onQuestionsChange = (newQuestion, index) => {
-        const newQuestions = [...questions];
-        newQuestions[index] = newQuestion;
-        setQuestions(newQuestions);
+    const onQuestionChange = (newQuestion) => {
+        setQuestion(newQuestion.question);
     };
 
     const questionFields = (
         <Box>
-            {questions.map((currentQuestion, i) => (
-                <ShortAnswerQuestion
-                    key={i}
-                    value={currentQuestion}
-                    index={i}
-                    onChange={onQuestionsChange}
-                />
-            ))}
+            <ShortAnswerQuestion value={question} onChange={onQuestionChange} />
         </Box>
     );
 
@@ -66,22 +55,20 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
 };
 
 interface ShortAnswerPreviewProps {
-    questions: Question[];
+    question: Question;
 }
 
 export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
-    questions,
+    question,
 }) => {
     const questionFields = (
         <Box>
-            {questions.map(({ question }) => (
-                <Flex p={1}>
-                    <Stack width={"full"} pb={5}>
-                        <Box>{question}</Box>
-                        <Input isReadOnly minHeight={100}></Input>
-                    </Stack>
-                </Flex>
-            ))}
+            <Flex p={1}>
+                <Stack width={"full"} pb={5}>
+                    <Box>{question}</Box>
+                    <Input isReadOnly minHeight={100}></Input>
+                </Stack>
+            </Flex>
         </Box>
     );
     //TODO: render nothing if question is null

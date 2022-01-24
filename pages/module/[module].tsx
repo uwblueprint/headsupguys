@@ -96,7 +96,7 @@ const Module: Page = () => {
                     } else if (section.type === "shortAnswer") {
                         sectionPreview = (
                             <ShortAnswerPreview
-                                questions={section.shortAnswer.question}
+                                question={section.shortAnswer.question}
                             />
                         );
                     }

@@ -51,7 +51,7 @@ export type Question = {
 };
 
 export type ShortAnswerQuestion = {
-    questions: Question[];
+    question: Question;
 };
 
 export type Section = {
@@ -112,7 +112,7 @@ const DEFAULT_SECTION = {
         ],
     }, //stores ms content, only applies to ms component
     shortAnswer: {
-        questions: [{ question: "" }],
+        question: "",
     },//stores sa content, only applies to sa component
     alignment: "align-left", //on frontend this will be a dropdown
     properties: {

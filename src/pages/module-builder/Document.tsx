@@ -101,9 +101,7 @@ const Document = ({
                             } else if (section.type === "shortAnswer") {
                                 sectionPreview = (
                                     <ShortAnswerPreview
-                                        questions={
-                                            section.shortAnswer.questions
-                                        }
+                                        question={section.shortAnswer.question}
                                     />
                                 );
                             }

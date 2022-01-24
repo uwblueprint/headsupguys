@@ -14,7 +14,6 @@ const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
     value,
     onChange,
 }) => {
-    const question = value;
     return (
         <Flex>
             <Stack width={"full"} pb={8}>
@@ -25,7 +24,7 @@ const ShortAnswerQuestion: React.FC<ShortAnswerQuestionProps> = ({
                     onChange={(e) => {
                         onChange(e.target.value);
                     }}
-                    value={question}
+                    value={value}
                 />
             </Stack>
         </Flex>

@@ -11,6 +11,7 @@ import {
     ModulePreview,
     MultipleChoicePreview,
     MultiSelectPreview,
+    ShortAnswerPreview,
 } from "@components";
 import { ModuleState } from "pages/admin/dashboard/builder";
 import React from "react";

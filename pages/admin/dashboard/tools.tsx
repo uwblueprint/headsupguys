@@ -245,7 +245,7 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                                     ? new Date(tool.updatedAt)
                                     : new Date()
                             }
-                            module={tool.linkedModuleID !== null}
+                            module={tool.linkedModuleID || null}
                             published={tool.status === "published"}
                             onLinkModule={(e) => {
                                 onLinkModule(e);

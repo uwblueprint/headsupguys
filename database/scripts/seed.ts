@@ -140,7 +140,9 @@ function mockGroups() {
 
 function mockSections() {
     const sectionTypes = ["markdown", "mc", "ms", "sa"];
-    const paddingTypes = ["top", "right", "bottom", "left"];
+    const paddingTypeTypes = ["px", "%"];
+    const alignments = ["left", "center", "right"];
+    const paddingTypes = ["top", "right", "bottom", "left", "type"];
     const sections = [];
 
     for (let i = 0; i < SECTION_COUNT; i++) {
@@ -164,7 +166,7 @@ function mockSections() {
             }, //stores ms content, only applies to ms component
             shortAnswer: "",
             //stores sa content, only applies to sa component
-            alignment: "align-left", //on frontend this will be a dropdown
+            alignment: alignments[i % alignments.length], //on frontend this will be a dropdown
             properties: {
                 variableName: "",
                 dataType: "string",

@@ -57,6 +57,7 @@ export type Section = {
         right: number;
         bottom: number;
         left: number;
+        type: "%" | "px";
     };
     markdown?: string; //stores markdown content, only applies to md component
     multipleChoice?: OptionsQuestion;
@@ -89,9 +90,9 @@ export type ModuleState = {
     stateChanged: boolean;
 };
 
-const DEFAULT_SECTION = {
+const DEFAULT_SECTION: Section = {
     type: "", //markdown, mc, ms, sa
-    padding: { top: 0, right: 0, bottom: 0, left: 0 },
+    padding: { top: 0, right: 0, bottom: 0, left: 0, type: "%" },
     markdown: "", //stores markdown content, only applies to md component
     multipleChoice: {
         question: "",

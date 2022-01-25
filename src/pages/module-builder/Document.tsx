@@ -11,7 +11,6 @@ import {
     ModulePreview,
     MultipleChoicePreview,
     MultiSelectPreview,
-    ShortAnswerPreview,
 } from "@components";
 import { ModuleState } from "pages/admin/dashboard/builder";
 import React from "react";
@@ -71,6 +70,7 @@ const Document = ({
                 >
                     {state.slides[state.currentSlide].sections.map(
                         (section) => {
+                            const paddingType = section?.padding.type || "%";
                             let sectionPreview;
                             if (section.type === "staticContent") {
                                 sectionPreview = (
@@ -108,10 +108,10 @@ const Document = ({
                             }
                             return (
                                 <Container
-                                    paddingTop={`${section.padding.top}px`}
-                                    paddingRight={`${section.padding.right}px`}
-                                    paddingBottom={`${section.padding.bottom}px`}
-                                    paddingLeft={`${section.padding.left}px`}
+                                    paddingTop={`${section?.padding.top}${paddingType}`}
+                                    paddingRight={`${section?.padding.right}${paddingType}`}
+                                    paddingBottom={`${section?.padding.bottom}${paddingType}`}
+                                    paddingLeft={`${section?.padding.left}${paddingType}`}
                                     children={sectionPreview}
                                 ></Container>
                             );

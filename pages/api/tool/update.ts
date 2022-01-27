@@ -20,7 +20,7 @@ const update = async (
                     error: "Invalid moduleID.",
                 });
             }
-            if (module.toolID) {
+            if (module.toolID && module.toolID != id) {
                 return res.status(400).send({
                     error: "Module is already linked to a tool.",
                 });
@@ -31,6 +31,22 @@ const update = async (
         const tool = await Tool.findByIdAndUpdate(id, req.body, {
             new: true,
         });
+        //Remove any other existing modules linked to tool
+
+        const existingModuleCheckFind = tool.linkedModuleID
+            ? {
+                  toolID: id,
+                  _id: { $ne: req.body.linkedModuleID },
+              }
+            : { toolID: id };
+
+        const existingModules = await Module.find(existingModuleCheckFind);
+
+        for (const module of existingModules) {
+            module.toolID = null;
+            await module.save();
+        }
+
         res.status(200).json(tool);
     } catch (err) {
         res.status(500).send(err);

@@ -1,5 +1,5 @@
-import { models, model, Schema, Types } from "mongoose";
-import { OptionsQuestion } from "pages/admin/dashboard/builder";
+import { Schema, Types } from "mongoose";
+import { OptionsQuestion, Question } from "pages/admin/dashboard/builder";
 enum SectionType {
     MARKDOWN = "markdown",
     MULTIPLECHOICE = "mc",
@@ -27,6 +27,7 @@ export interface SectionInterface {
     markdown: string;
     multipleChoice: OptionsQuestion;
     multiSelect: OptionsQuestion;
+    shortAnswer: string;
     alignment: string;
     properties: any;
 }
@@ -56,6 +57,9 @@ const SectionSchema = new Schema<SectionInterface>(
         },
         multiSelect: {
             type: Object,
+        },
+        shortAnswer: {
+            type: String,
         },
         alignment: {
             type: String,

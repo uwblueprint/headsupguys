@@ -9,7 +9,6 @@ import { Module as moduleCollection } from "../models/module";
 import { Slide as slideCollection } from "../models/slide";
 import { Tool as toolCollection } from "../models/tool";
 import { SelfCheckGroup as groupCollection } from "../models/selfCheckGroup";
-import { SelfCheckQuestion as questionCollection } from "../models/selfCheckQuestion";
 import { User as userCollection } from "../models/user";
 
 // seed config
@@ -43,8 +42,6 @@ const SLIDES_PER_MODULE = Math.floor(SLIDE_COUNT / MODULE_COUNT);
             await Promise.all([
                 db.collection("self_check_questions").drop(),
                 db.collection("self_check_groups").drop(),
-                // db.collection("components").drop(),
-                // db.collection("sections").drop(),
                 db.collection("slides").drop(),
                 db.collection("modules").drop(),
                 db.collection("tools").drop(),
@@ -150,19 +147,31 @@ function mockSections() {
 
     for (let i = 0; i < SECTION_COUNT; i++) {
         sections.push({
-            type: sectionTypes[i % sectionTypes.length],
-            padding: {
-                top: i * i * (i % 2),
-                right: i * i * (i % 2),
-                bottom: i * i * (i % 2),
-                left: i * i * (i % 2),
-                type: paddingTypeTypes[i % paddingTypeTypes.length],
+            type: sectionTypes[i % sectionTypes.length], //markdown, mc, ms, sa
+            padding: paddingTypes[i % paddingTypes.length],
+            markdown: " ", //stores markdown content, only applies to md component
+            multipleChoice: {
+                question: "",
+                options: [
+                    { option: "", column: "left" }, //TODO: change when implement advanced features
+                    { option: "", column: "right" },
+                ],
+            }, //stores mc content, only applies to mc component
+            multiSelect: {
+                question: "",
+                options: [
+                    { option: "", column: "left" },
+                    { option: "", column: "right" },
+                ],
+            }, //stores ms content, only applies to ms component
+            shortAnswer: "",
+            //stores sa content, only applies to sa component
+            alignment: alignments[i % alignments.length], //on frontend this will be a dropdown
+            properties: {
+                variableName: "",
+                dataType: "string",
+                columns: "single", //NOTE: for now, manually change to double to test
             },
-            markdown: "#Hi",
-            multipleChoice: {},
-            multiSelect: {},
-            alignment: alignments[i % alignments.length],
-            properties: {},
         });
     }
     return sections;
@@ -173,10 +182,6 @@ function mockSlides(sections) {
 
     for (let i = 0; i < SLIDE_COUNT; i++) {
         slides.push({
-            // componentIDs: componentIDs.slice(
-            //     COMPONENTS_PER_SLIDE * i,
-            //     COMPONENTS_PER_SLIDE * (i + 1),
-            // ),
             sections: sections.slice(
                 SECTIONS_PER_SLIDE * i,
                 SECTIONS_PER_SLIDE * (i + 1),

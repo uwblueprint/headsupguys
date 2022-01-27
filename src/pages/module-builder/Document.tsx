@@ -11,6 +11,7 @@ import {
     ModulePreview,
     MultipleChoicePreview,
     MultiSelectPreview,
+    ShortAnswerPreview,
 } from "@components";
 import { ModuleState } from "pages/admin/dashboard/builder";
 import React from "react";
@@ -99,14 +100,10 @@ const Document = ({
                                     />
                                 );
                             } else if (section.type === "shortAnswer") {
+                                console.log(section);
                                 sectionPreview = (
-                                    <MultipleChoicePreview
-                                        question={
-                                            section.multipleChoice.question
-                                        }
-                                        options={section.multipleChoice.options}
-                                        variant={modulePreviewVariant}
-                                        columns={section.properties.columns}
+                                    <ShortAnswerPreview
+                                        question={section.shortAnswer}
                                     />
                                 );
                             }

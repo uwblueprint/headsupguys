@@ -12,9 +12,13 @@ import {
     Flex,
     Spacer,
 } from "@chakra-ui/react";
-import _ from "lodash";
-import { MarkdownEditor, MultipleChoice, MultiSelect } from "@components";
-import { Section, Slide } from "pages/admin/dashboard/builder";
+import {
+    MarkdownEditor,
+    MultipleChoice,
+    MultiSelect,
+    ShortAnswer,
+} from "@components";
+import { Section } from "pages/admin/dashboard/builder";
 
 export interface ModuleSectionSelectProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,13 +31,6 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
     props,
 ) => {
     const { section, setSection, sectionNumber } = props;
-
-    const paddingMap = {
-        T: "top",
-        R: "right",
-        B: "bottom",
-        L: "left",
-    };
 
     const handleSelect = (e) => {
         setSection({ ...section, type: e.currentTarget.value });
@@ -75,6 +72,12 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
         setSection({
             ...section,
             padding: { ...section.padding, ...newPadding },
+        });
+    };
+    const handleShortAnswerQuestionChange = (question) => {
+        setSection({
+            ...section,
+            shortAnswer: question,
         });
     };
 
@@ -119,7 +122,10 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                         columns={section.properties.columns}
                     />
                 ) : section.type == "shortAnswer" ? (
-                    "<ShortAnswer />"
+                    <ShortAnswer
+                        question={section.shortAnswer}
+                        setQuestion={handleShortAnswerQuestionChange}
+                    />
                 ) : (
                     <></>
                 )}

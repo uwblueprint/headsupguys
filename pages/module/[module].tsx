@@ -8,6 +8,7 @@ import {
     MarkdownRenderer,
     MultipleChoicePreview,
     MultiSelectPreview,
+    ShortAnswerPreview,
 } from "@components";
 import useSWR from "swr";
 import { Spinner } from "@chakra-ui/react";
@@ -90,6 +91,12 @@ const Module: Page = () => {
                                 options={section.multiSelect.options}
                                 variant="mobile"
                                 columns={section.properties.columns}
+                            />
+                        );
+                    } else if (section.type === "shortAnswer") {
+                        sectionPreview = (
+                            <ShortAnswerPreview
+                                question={section.shortAnswer}
                             />
                         );
                     }

@@ -24,12 +24,18 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-    const authProps = await isAuthenticated(req, res, "/redirect", true);
-    return {
-        props: {
-            auth: authProps,
-        },
-    };
+    if (process.env.NODE_ENV == "production") {
+        const authProps = await isAuthenticated(req, res, "/redirect", true);
+        return {
+            props: {
+                auth: authProps,
+            },
+        };
+    }
+    else {
+        return {
+            props: {},
+        };
 };
 
 //Self Check Questions React functional component

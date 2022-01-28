@@ -18,10 +18,27 @@ import useSWR from "swr";
 import { Page } from "types/Page";
 import { BuilderLayout } from "@components";
 import { min } from "lodash";
+import { isAuthenticated } from "src/utils/auth/authHelpers";
+import { GetServerSideProps } from "next";
 import Document from "src/pages/module-builder/Document";
 import Editor from "src/pages/module-builder/Editor";
 import Header from "src/pages/module-builder/Header";
 import Toolbar from "src/pages/module-builder/Toolbar";
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    if (process.env.NODE_ENV == "production") {
+        const authProps = await isAuthenticated(req, res, "/redirect", true);
+        return {
+            props: {
+                auth: authProps,
+            },
+        };
+    }
+    else {
+        return {
+            props: {},
+        };
+};
 
 export enum ModuleActionType {
     CHANGE_TITLE,

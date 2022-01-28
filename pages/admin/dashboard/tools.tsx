@@ -11,8 +11,25 @@ import {
 import { ToolCard, Modal, AdminLayout } from "@components";
 import { Page } from "types/Page";
 import { useRouter } from "next/router";
+import { isAuthenticated } from "src/utils/auth/authHelpers";
+import { GetServerSideProps } from "next";
 import axios from "axios";
 import useSWR from "swr";
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    if (process.env.NODE_ENV == "production") {
+        const authProps = await isAuthenticated(req, res, "/redirect", true);
+        return {
+            props: {
+                auth: authProps,
+            },
+        };
+    } else {
+        return {
+            props: {},
+        };
+    }
+};
 
 const fetcher = async (url) => {
     const response = await axios({

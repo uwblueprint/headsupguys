@@ -19,7 +19,7 @@ import { AdminLayout } from "@components";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     if (process.env.NODE_ENV == "production") {
-        const authProps = await isAuthenticated(req, res, "/redirect", true);
+        const authProps = await isAuthenticated(req, res, "/redirect", true); // TODO: change redirect to login page (once we have a login page that's deployed)
         return {
             props: {
                 auth: authProps,

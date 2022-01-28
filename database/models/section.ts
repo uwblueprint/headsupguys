@@ -1,5 +1,5 @@
 import { Schema, Types } from "mongoose";
-import { OptionsQuestion, Question } from "pages/admin/dashboard/builder";
+import { OptionsQuestion } from "pages/admin/dashboard/builder";
 enum SectionType {
     MARKDOWN = "markdown",
     MULTIPLECHOICE = "mc",

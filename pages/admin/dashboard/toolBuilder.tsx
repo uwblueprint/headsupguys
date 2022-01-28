@@ -31,11 +31,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
                 auth: authProps,
             },
         };
-    }
-    else {
+    } else {
         return {
             props: {},
         };
+    }
 };
 
 //Self Check Questions React functional component

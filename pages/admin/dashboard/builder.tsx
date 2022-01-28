@@ -33,11 +33,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
                 auth: authProps,
             },
         };
-    }
-    else {
+    } else {
         return {
             props: {},
         };
+    }
 };
 
 export enum ModuleActionType {

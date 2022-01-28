@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { isAuthenticated } from "src/utils/auth/authHelpers";
+import { GetServerSideProps } from "next";
 import {
     Text,
     Flex,
@@ -21,11 +23,15 @@ import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 import { useRouter } from "next/router";
 import axios from "axios";
 
-export const getServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    const authProps = await isAuthenticated(req, res, "/redirect", true);
     return {
-        props: {}, // will magically be passed to the page component as props
+        props: {
+            auth: authProps,
+        },
     };
 };
+
 //Self Check Questions React functional component
 const ToolBuilder: Page = () => {
     const router = useRouter();

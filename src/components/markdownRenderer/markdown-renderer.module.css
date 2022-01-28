@@ -7,6 +7,7 @@
         #7cf952 55%
     );
     text-decoration: underline;
+    text-decoration-skip-ink: none;
     text-decoration-thickness: 19px;
     text-decoration-color: #7cf952;
     display: inline;
@@ -103,4 +104,8 @@
 
 .markdown div {
     white-space: pre-wrap;
+}
+
+.markdown span {
+    text-decoration: underline;
 }

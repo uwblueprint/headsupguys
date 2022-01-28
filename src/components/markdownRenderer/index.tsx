@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import ReactMarkdown from "react-markdown";
+import CSS from 'csstype';
+import ReactMarkdown, { ReactNode } from "react-markdown";
 import React from "react";
 import style from "./markdown-renderer.module.css";
 import ReactPlayer from "react-player";
@@ -13,6 +14,27 @@ const stringConversionObj = {
     "$[": "[",
     "<>[": "[",
 };
+
+function alignCommand(content, children): ReactNode {
+    let style: CSS.Properties = { textAlign: 'center' };
+    let stripped = children.toString();
+
+    if(content.startsWith("||") && content.endsWith("||")) {
+        stripped = stripped.slice(2, -2);
+    } else if(content.startsWith("//") && content.endsWith("//")) {
+        style.textAlign = 'right';
+        stripped = stripped.slice(2, -2);
+    } else if(content.startsWith("\\\\") && content.endsWith("\\\\")) {
+        style.textAlign = 'left';
+        stripped = stripped.slice(1, -1);
+    }
+
+    return (
+        <p style={style}>
+            {stripped}
+        </p>
+    );
+}
 
 export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
     children,
@@ -85,6 +107,29 @@ const BaseRenderer: React.FC<{ content: string; variables?: any }> = ({
                         ) : (
                             <a href={rest.href}>{children}</a>
                         )}
+                    </>
+                ),
+                strong: ({children}) => (
+                    <>
+                        {content.startsWith("__") ? (
+                            <>
+                                <span>{children}</span>
+                            </>
+                        ) : (
+                            <strong>{children}</strong>
+                        )}
+                    </>
+                ),
+                p: ({node, className, children, ...rest}) => (
+                    <>
+                        {!(content.startsWith("||") && content.endsWith("||")) &&
+                        !(content.startsWith("//") && content.endsWith("//")) &&
+                        !(content.startsWith("\\\\") && content.endsWith("\\\\")) ? (
+                            <p>{children}</p>
+                        ) : <>
+                            {alignCommand(content, children)}
+                            </>
+                        }
                     </>
                 ),
             }}

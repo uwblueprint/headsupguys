@@ -15,24 +15,40 @@ const stringConversionObj = {
     "<>[": "[",
 };
 
-function alignCommand(content, children): ReactNode {
-    let style: CSS.Properties = { textAlign: 'center' };
-    let stripped = children.toString();
+// maps the alignment identifiers to what they align to
+//  + how much should be trimmed
+const alignConfigsMap = new Map([
+    ["||", [2, 'center']],
+    ["//", [2, 'right']],
+    ["\\\\", [1, 'left']],
+]);
 
-    if(content.startsWith("||") && content.endsWith("||")) {
-        stripped = stripped.slice(2, -2);
-    } else if(content.startsWith("//") && content.endsWith("//")) {
-        style.textAlign = 'right';
-        stripped = stripped.slice(2, -2);
-    } else if(content.startsWith("\\\\") && content.endsWith("\\\\")) {
-        style.textAlign = 'left';
-        stripped = stripped.slice(1, -1);
+// aligns the text accordingly for p + h tags (except h1)
+function alignCommand(children, tag): ReactNode {
+    const HeaderTag = tag as keyof JSX.IntrinsicElements;
+    if ((!children?.toString().startsWith("||") || !children?.toString().endsWith("||")) && 
+    (!children?.toString().startsWith("//") || !children?.toString().endsWith("//")) && 
+    (!children?.toString().startsWith("\\") || !children?.toString().endsWith("\\"))) {
+        return (
+            <HeaderTag>{children}</HeaderTag>
+        );
     }
 
+    let trimVal;
+    let alignStyle;
+    if (children?.toString().startsWith("\\")) {
+        trimVal = alignConfigsMap.get("\\\\")[0];
+        alignStyle = alignConfigsMap.get("\\\\")[1];
+    } else {
+        trimVal = alignConfigsMap.get(children.toString().slice(0, 2))[0];
+        alignStyle = alignConfigsMap.get(children.toString().slice(0, 2))[1];
+    }
+
+    children[0] = children[0].slice(trimVal);
+    children[children.length - 1] = children[children.length - 1].slice(0, -trimVal);
+
     return (
-        <p style={style}>
-            {stripped}
-        </p>
+        <HeaderTag style={{ textAlign: alignStyle as CSS.Property.TextAlign }}>{children}</HeaderTag>
     );
 }
 
@@ -111,27 +127,25 @@ const BaseRenderer: React.FC<{ content: string; variables?: any }> = ({
                 ),
                 strong: ({children}) => (
                     <>
-                        {content.startsWith("__") ? (
+                        {content.includes("__") ? (
                             <>
-                                <span>{children}</span>
+                                {content.includes("**") ? (
+                                    <strong><u>{children}</u></strong>
+                                ) : (
+                                    <u>{children}</u>
+                                )}
                             </>
                         ) : (
                             <strong>{children}</strong>
                         )}
                     </>
                 ),
-                p: ({node, className, children, ...rest}) => (
-                    <>
-                        {!(content.startsWith("||") && content.endsWith("||")) &&
-                        !(content.startsWith("//") && content.endsWith("//")) &&
-                        !(content.startsWith("\\\\") && content.endsWith("\\\\")) ? (
-                            <p>{children}</p>
-                        ) : <>
-                            {alignCommand(content, children)}
-                            </>
-                        }
-                    </>
-                ),
+                p: ({children}) => alignCommand(children, 'p'),
+                h2: ({children}) => alignCommand(children, 'h2'),
+                h3: ({children}) => alignCommand(children, 'h3'),
+                h4: ({children}) => alignCommand(children, 'h4'),
+                h5: ({children}) => alignCommand(children, 'h5'),
+                h6: ({children}) => alignCommand(children, 'h6'),
             }}
             className={style.markdown + " right"}
         >

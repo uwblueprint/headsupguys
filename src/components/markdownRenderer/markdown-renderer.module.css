@@ -16,7 +16,6 @@
 .markdown h2 {
     font-size: 48px;
     color: black;
-    display: inline;
 }
 
 .markdown h3 {
@@ -104,8 +103,4 @@
 
 .markdown div {
     white-space: pre-wrap;
-}
-
-.markdown span {
-    text-decoration: underline;
 }

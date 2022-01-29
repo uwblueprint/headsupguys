@@ -15,40 +15,32 @@ const stringConversionObj = {
     "<>[": "[",
 };
 
-// maps the alignment identifiers to what they align to
-//  + how much should be trimmed
-const alignConfigsMap = new Map([
-    ["||", [2, 'center']],
-    ["//", [2, 'right']],
-    ["\\\\", [1, 'left']],
-]);
-
 // aligns the text accordingly for p + h tags (except h1)
 function alignCommand(children, tag): ReactNode {
-    const HeaderTag = tag as keyof JSX.IntrinsicElements;
-    if ((!children?.toString().startsWith("||") || !children?.toString().endsWith("||")) && 
-    (!children?.toString().startsWith("//") || !children?.toString().endsWith("//")) && 
-    (!children?.toString().startsWith("\\") || !children?.toString().endsWith("\\"))) {
-        return (
-            <HeaderTag>{children}</HeaderTag>
-        );
-    }
-
+    const Tag = tag as keyof JSX.IntrinsicElements;
+    
     let trimVal;
     let alignStyle;
-    if (children?.toString().startsWith("\\")) {
-        trimVal = alignConfigsMap.get("\\\\")[0];
-        alignStyle = alignConfigsMap.get("\\\\")[1];
+    if (children?.toString().startsWith("||") && children?.toString().endsWith("||")) {
+        trimVal = 2;
+        alignStyle = 'center';
+    } else if (children?.toString().startsWith("//") && children?.toString().endsWith("//")) {
+        trimVal = 2;
+        alignStyle = 'right';
+    } else if (children?.toString().startsWith("\\") && children?.toString().endsWith("\\")) {
+        trimVal = 1; // ReactMarkdown recognizes \\ as \ so only trim 1 character
+        alignStyle = 'left';
     } else {
-        trimVal = alignConfigsMap.get(children.toString().slice(0, 2))[0];
-        alignStyle = alignConfigsMap.get(children.toString().slice(0, 2))[1];
+        return (
+            <Tag>{children}</Tag>
+        );
     }
 
     children[0] = children[0].slice(trimVal);
     children[children.length - 1] = children[children.length - 1].slice(0, -trimVal);
 
     return (
-        <HeaderTag style={{ textAlign: alignStyle as CSS.Property.TextAlign }}>{children}</HeaderTag>
+        <Tag style={{ textAlign: alignStyle as CSS.Property.TextAlign }}>{children}</Tag>
     );
 }
 

@@ -6,11 +6,9 @@ import {
     Heading,
     Text,
     Select,
-    Input,
     Button,
     ButtonGroup,
     Flex,
-    Spacer,
 } from "@chakra-ui/react";
 import {
     MarkdownEditor,

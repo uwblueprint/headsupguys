@@ -69,6 +69,9 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
         ["External Resources", "externalResources", externalResources],
     ];
     const [currentRelatedLink, setCurrentRelatedLink] = useState(null);
+    const unlinkedModules = allModules.filter((module) => {
+        return module[2] == null;
+    });
     return (
         <Wrap spacing="30px">
             <WrapItem width={"full"}>
@@ -153,12 +156,9 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                             onChangeInput(e.target.value, "linkedModuleID");
                         }}
                     >
-                        {(allModules[1] ?? []).map((moduleNames, index) => (
-                            <option
-                                key={allModules[0][index]}
-                                value={allModules[0][index]}
-                            >
-                                {moduleNames}
+                        {unlinkedModules.map((moduleNames) => (
+                            <option key={moduleNames[0]} value={moduleNames[0]}>
+                                {moduleNames[1]}
                             </option>
                         ))}
                     </Select>

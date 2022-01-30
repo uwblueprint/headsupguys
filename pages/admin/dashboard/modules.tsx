@@ -11,10 +11,26 @@ import {
 import axios from "axios";
 import useSWR from "swr";
 import Link from "next/link";
-
+import { isAuthenticated } from "src/utils/auth/authHelpers";
+import { GetServerSideProps } from "next";
 import { ModuleCard } from "@components/ModuleCard";
 import { Page } from "types/Page";
 import { AdminLayout } from "@components";
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    if (process.env.NODE_ENV == "production") {
+        const authProps = await isAuthenticated(req, res, "/redirect", true); // TODO: change redirect to login page (once we have a login page that's deployed)
+        return {
+            props: {
+                auth: authProps,
+            },
+        };
+    } else {
+        return {
+            props: {},
+        };
+    }
+};
 
 const fetcher = async (url) => {
     const response = await axios({

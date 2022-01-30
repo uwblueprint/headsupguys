@@ -15,7 +15,7 @@ const stringConversionObj = {
     "<>[": "[",
 };
 
-// aligns the text accordingly for p + h tags (except h1)
+// aligns the text accordingly for p + h tags
 function alignCommand(children, tag): ReactNode {
     const Tag = tag as keyof JSX.IntrinsicElements;
     
@@ -138,6 +138,9 @@ const BaseRenderer: React.FC<{ content: string; variables?: any }> = ({
                 h4: ({children}) => alignCommand(children, 'h4'),
                 h5: ({children}) => alignCommand(children, 'h5'),
                 h6: ({children}) => alignCommand(children, 'h6'),
+                ul: ({children}) => (
+                    <ul style={{ textAlign: 'left' }}>{children}</ul>
+                )
             }}
             className={style.markdown + " right"}
         >

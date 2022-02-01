@@ -1,15 +1,9 @@
 import React from "react";
-import {
-    Text,
-    Spinner,
-    Heading,
-    AspectRatio,
-} from "@chakra-ui/react";
+import { Text, Spinner, Heading, AspectRatio } from "@chakra-ui/react";
 import axios from "axios";
 import useSWR from "swr";
 
 import { useRouter } from "next/router";
-import { useMediaQuery } from "react-responsive";
 
 const fetcher = async (url) => {
     const response = await axios({
@@ -21,10 +15,7 @@ const fetcher = async (url) => {
 
 const Module: React.FC = () => {
     const router = useRouter();
-    const {id} = router.query;
-    const variant = useMediaQuery({ query: `(max-width: 925px)` })
-        ? "mobile"
-        : "desktop";
+    const { id } = router.query;
 
     const fetchURL = id ? `/api/tool/${id}` : null;
     const { data, error } = useSWR(() => fetchURL, fetcher);
@@ -36,18 +27,12 @@ const Module: React.FC = () => {
             <Heading> {data.title} </Heading>
 
             <AspectRatio maxW="100%" maxH={290} ratio={1}>
-                <iframe
-                    title="Toolkit"
-                    src={data.video}
-                    allowFullScreen
-                />
+                <iframe title="Toolkit" src={data.video} allowFullScreen />
             </AspectRatio>
 
             <br />
 
-            <Text textAlign="left">
-                {data.description}
-            </Text>
+            <Text textAlign="left"> {data.description} </Text>
 
             <br />
 
@@ -58,7 +43,7 @@ const Module: React.FC = () => {
                 </div>
             ))}
         </>
-    )
+    );
 };
 
 export default Module;

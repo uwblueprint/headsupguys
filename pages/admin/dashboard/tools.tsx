@@ -178,37 +178,12 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
     const linkConfirmation = `Are you sure you want to link ${selectedTool}? This will add the tool to the module.`;
     const [refresh, setRefresh] = useState(false);
 
-    const onLinkModule = (e, id, toolName) => {
-        setModalMode("draft");
+    const onEdit = (e, id, toolName, modalMode) => {
+        setModalMode(modalMode);
         setSelectedTool(toolName);
         setSelectedToolId(id);
         onOpen();
         e.stopPropagation();
-    };
-
-    const onUnlinkModule = (e, id, toolName) => {
-        setModalMode("draft");
-        setSelectedTool(toolName);
-        setSelectedToolId(id);
-        onOpen();
-        e.stopPropagation();
-    };
-
-    const onPublish = (e, id, toolName) => {
-        setModalMode("publish");
-        setSelectedTool(toolName);
-        setSelectedToolId(id);
-        onOpen();
-        e.stopPropagation();
-        //TODO: Implement publishing the tool in the db
-    };
-    const onUnpublish = (e, id, toolName) => {
-        setModalMode("draft");
-        setSelectedTool(toolName);
-        setSelectedToolId(id);
-        onOpen();
-        e.stopPropagation();
-        //TODO: Implement publishing the tool in the db
     };
 
     const onDelete = (e, toolName, id, selfCheckId) => {
@@ -220,20 +195,14 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
         e.stopPropagation();
     };
 
-    const onUnlinkSelfCheck = (e, id, toolName) => {
-        setModalMode("unlink");
-        setSelectedTool(toolName);
-        setSelectedToolId(id);
-        onOpen();
-        e.stopPropagation();
-    };
-
-    const onLinkSelfCheck = (e, id, toolName) => {
-        setModalMode("link");
-        setSelectedTool(toolName);
-        setSelectedToolId(id);
-        onOpen();
-        e.stopPropagation();
+    const patchTool = async (changedField) => {
+        await axios({
+            method: "PATCH",
+            url: `/api/tool/update?id=${selectedToolId}`,
+            data: changedField,
+        });
+        setRefresh(!refresh);
+        onClose();
     };
 
     const deleteTool = async () => {
@@ -244,30 +213,6 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
         await axios({
             method: "DELETE",
             url: `/api/self-check/${selectedSelfCheckId}`,
-        });
-        setRefresh(!refresh);
-        onClose();
-    };
-
-    const publishTool = async () => {
-        await axios({
-            method: "PATCH",
-            url: `/api/tool/update?id=${selectedToolId}`,
-            data: {
-                status: "published",
-            },
-        });
-        setRefresh(!refresh);
-        onClose();
-    };
-
-    const unpublishTool = async () => {
-        await axios({
-            method: "PATCH",
-            url: `/api/tool/update?id=${selectedToolId}`,
-            data: {
-                status: "draft",
-            },
         });
         setRefresh(!refresh);
         onClose();
@@ -288,12 +233,16 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                 onCancel={onClose}
                 onConfirm={() => {
                     modalMode === "publish"
-                        ? publishTool()
+                        ? patchTool({ status: "published" })
                         : modalMode === "draft"
-                        ? unpublishTool()
+                        ? patchTool({ status: "draft" })
                         : modalMode === "delete"
                         ? deleteTool()
-                        : console.log("Unknown Selection");
+                        : modalMode === "unlink"
+                        ? patchTool({ module: "" })
+                        : modalMode === "link"
+                        ? patchTool({ module: selectedToolId })
+                        : null;
                 }}
                 header={
                     modalMode === "publish"
@@ -302,7 +251,11 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                         ? `Delete ${selectedTool}`
                         : modalMode === "draft"
                         ? `Unpublish ${selectedTool}`
-                        : ""
+                        : modalMode === "unlink"
+                        ? `Unlink ${selectedTool}`
+                        : modalMode === "link"
+                        ? `Link ${selectedTool}`
+                        : null
                 }
                 bodyText={
                     modalMode === "publish"
@@ -311,7 +264,11 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                         ? deleteConfirmation
                         : modalMode === "draft"
                         ? unpublishConfirmation
-                        : ""
+                        : modalMode === "unlink"
+                        ? unlinkConfirmation
+                        : modalMode === "link"
+                        ? linkConfirmation
+                        : null
                 }
                 confirmText={
                     modalMode === "publish"
@@ -320,7 +277,11 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                         ? "Delete"
                         : modalMode === "draft"
                         ? "Unpublish"
-                        : ""
+                        : modalMode === "unlink"
+                        ? "Unlink"
+                        : modalMode === "link"
+                        ? "Link"
+                        : null
                 }
                 confirmButtonColorScheme={
                     modalMode === "publish" ? `black` : `red`
@@ -343,16 +304,16 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                             module={tool.linkedModuleID || null}
                             published={tool.status === "published"}
                             onLinkModule={(e) => {
-                                onLinkModule(e, tool._id, tool.title);
-                            }}
-                            onPublish={(e) => {
-                                onPublish(e, tool._id, tool.title);
+                                onEdit(e, tool._id, tool.title, "link");
                             }}
                             onUnlinkModule={(e) => {
-                                onUnlinkModule(e, tool._id, tool.title);
+                                onEdit(e, tool._id, tool.title, "unlink");
+                            }}
+                            onPublish={(e) => {
+                                onEdit(e, tool._id, tool.title, "publish");
                             }}
                             onUnpublish={(e) => {
-                                onUnpublish(e, tool._id, tool.title);
+                                onEdit(e, tool._id, tool.title, "draft");
                             }}
                             onDelete={onDelete}
                         />

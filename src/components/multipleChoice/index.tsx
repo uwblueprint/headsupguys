@@ -8,6 +8,7 @@ import {
     Radio,
     Flex,
     Grid,
+    CloseButton,
 } from "@chakra-ui/react";
 import { Option } from "pages/admin/dashboard/builder";
 
@@ -22,12 +23,14 @@ interface MultipleChoiceOptionProps {
     index: number;
     value: Option;
     onChange: (newOption: Option, index: number) => void;
+    onDelete: (index: number) => void;
 }
 
 const MultipleChoiceOption: React.FC<MultipleChoiceOptionProps> = ({
     index,
     value,
     onChange,
+    onDelete,
 }) => {
     const { option, column } = value;
     return (
@@ -41,6 +44,7 @@ const MultipleChoiceOption: React.FC<MultipleChoiceOptionProps> = ({
                 }}
                 value={option}
             />
+            <CloseButton mt="5px" onClick={() => onDelete(index)} />
         </Flex>
     );
 };
@@ -61,6 +65,13 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
     const rightColumnOptions = options.filter(
         ({ column }) => column === "right",
     );
+    const onDelete = (index) => {
+        const newOptions = [
+            ...options.slice(0, index),
+            ...options.slice(index + 1),
+        ];
+        setOptions(newOptions);
+    };
 
     const optionFields =
         columns && columns === "double" ? (
@@ -74,6 +85,7 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
                                 value={leftOption}
                                 index={i}
                                 onChange={onOptionsChange}
+                                onDelete={onDelete}
                             />
                         );
                     })}
@@ -99,6 +111,7 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
                                 value={rightOption}
                                 index={i}
                                 onChange={onOptionsChange}
+                                onDelete={onDelete}
                             />
                         );
                     })}
@@ -124,6 +137,7 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
                         value={currentOption}
                         index={i}
                         onChange={onOptionsChange}
+                        onDelete={onDelete}
                     />
                 ))}
                 <Button

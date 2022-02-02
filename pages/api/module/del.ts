@@ -16,4 +16,4 @@ const del = async (
     res.status(204).send({});
 };
 
-export { del };
+export default del;

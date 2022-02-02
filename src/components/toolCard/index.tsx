@@ -83,14 +83,24 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                             {published && <StarIcon boxSize="0.75em" />}
                         </Heading>
                         {published ? (
-                            <Button
-                                variant="default"
-                                onClick={(e) => {
-                                    onUnpublish(e);
-                                }}
-                            >
-                                Unpublish Tool
-                            </Button>
+                            <Flex justify="space-between" w="58%">
+                                <Button
+                                    variant="default"
+                                    onClick={(e) => {
+                                        onUnpublish(e);
+                                    }}
+                                >
+                                    Unpublish Tool
+                                </Button>
+                                <IconButton
+                                    aria-label="Delete tool"
+                                    variant="ghost"
+                                    icon={<DeleteIcon />}
+                                    onClick={(e) => {
+                                        onDelete(e, title, id, selfCheckId);
+                                    }}
+                                />
+                            </Flex>
                         ) : (
                             <Flex justify="space-between" w="58%">
                                 {module ? (

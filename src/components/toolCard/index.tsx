@@ -21,7 +21,7 @@ export interface ToolCardProps extends InputProps {
     title: string;
     creators: string[];
     updated: Date;
-    module: boolean;
+    module: string;
     published: boolean;
     image?: string;
     onLinkModule(event: any): any;
@@ -67,6 +67,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
     return (
         <SimpleGrid w="100%" columns={2} px={5} py={5} __css={styles.card}>
             <Flex
+                c
                 _hover={{ cursor: "pointer" }}
                 onClick={() => {
                     router.push({
@@ -108,6 +109,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                         <Button
                                             variant="outlineBlack"
                                             onClick={(e) => {
+                                                console.log(module);
                                                 onUnlinkModule(e);
                                             }}
                                         >

@@ -206,7 +206,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                                     ? "underline"
                                                     : "default"
                                             }
-                                            _hover={{ cursor: "pointer" }}
+                                            cursor="pointer"
                                             onClick={() => {
                                                 setCurrentRelatedLink(link);
                                                 setModalIndex(index);

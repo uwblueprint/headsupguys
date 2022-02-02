@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Stack,
     Flex,
     Text,
     Button,
+    Select,
     useDisclosure,
     Spacer,
     Spinner,
@@ -169,15 +170,42 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedTool, setSelectedTool] = useState("");
     const [selectedToolId, setSelectedToolId] = useState("");
+    const [selectedModuleId, setSelectedModuleId] = useState("");
     const [selectedSelfCheckId, setSelectedSelfCheckId] = useState("");
     const [modalMode, setModalMode] = useState("");
     const publishConfirmation = `Are you sure you want to publish ${selectedTool}? Your tool will be available to the public!`;
     const deleteConfirmation = `Are you sure you want to delete ${selectedTool}? This is a permanent action that cannot be undone.`;
     const unpublishConfirmation = `Are you sure you want to unpublish ${selectedTool}? This will make your tool unavailable to the public.`;
     const unlinkConfirmation = `Are you sure you want to unlink ${selectedTool}? This will remove the tool from the module.`;
-    const linkConfirmation = `Are you sure you want to link ${selectedTool}? This will add the tool to the module.`;
+    const linkConfirmation = `Select a module to link ${selectedTool} to.`;
     const [refresh, setRefresh] = useState(false);
-
+    const [allModules, setAllModules] = useState([]);
+    const getAllModules = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: "/api/module/getAll",
+            });
+            const newAllModules = [];
+            for (const module in response.data) {
+                newAllModules.push([
+                    response.data[module]._id,
+                    response.data[module].title,
+                    response.data[module].toolID,
+                ]);
+            }
+            setAllModules(newAllModules);
+        } catch (err) {
+            console.log(err);
+            //TODO: update error handling
+        }
+    };
+    useEffect(() => {
+        getAllModules();
+    }, []);
+    const unlinkedModules = allModules.filter((module) => {
+        return module[2] == null;
+    });
     const onEdit = (e, id, toolName, modalMode) => {
         setModalMode(modalMode);
         setSelectedTool(toolName);
@@ -202,6 +230,7 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
             data: changedField,
         });
         setRefresh(!refresh);
+        // setRefresh(!refresh);
         onClose();
     };
 
@@ -229,6 +258,27 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
     return (
         <>
             <Modal
+                children={
+                    modalMode === "link" ? (
+                        <Select
+                            placeholder={"Select option"}
+                            size={"lg"}
+                            p={2}
+                            onChange={(e) =>
+                                setSelectedModuleId(e.target.value)
+                            }
+                        >
+                            {unlinkedModules.map((moduleNames) => (
+                                <option
+                                    key={moduleNames[0]}
+                                    value={moduleNames[0]}
+                                >
+                                    {moduleNames[1]}
+                                </option>
+                            ))}
+                        </Select>
+                    ) : null
+                }
                 isOpen={isOpen}
                 onCancel={onClose}
                 onConfirm={() => {
@@ -239,9 +289,9 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                         : modalMode === "delete"
                         ? deleteTool()
                         : modalMode === "unlink"
-                        ? patchTool({ module: "" })
+                        ? patchTool({ linkedModuleID: "" })
                         : modalMode === "link"
-                        ? patchTool({ module: selectedToolId })
+                        ? patchTool({ linkedModuleID: selectedModuleId })
                         : null;
                 }}
                 header={
@@ -282,9 +332,6 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                         : modalMode === "link"
                         ? "Link"
                         : null
-                }
-                confirmButtonColorScheme={
-                    modalMode === "publish" ? `black` : `red`
                 }
             />
             <Stack>

@@ -139,20 +139,22 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                             hasArrow
                                             placement="top"
                                         >
-                                            <Button
-                                                variant="solid"
-                                                _hover={{
-                                                    bg: "black",
-                                                }}
-                                                color={"white"}
-                                                background={"black"}
-                                                isDisabled
-                                                onClick={(e) => {
-                                                    onPublish(e);
-                                                }}
-                                            >
-                                                Publish Tool
-                                            </Button>
+                                            <Box>
+                                                <Button
+                                                    variant="solid"
+                                                    _hover={{
+                                                        bg: "black",
+                                                    }}
+                                                    color={"white"}
+                                                    background={"black"}
+                                                    isDisabled
+                                                    onClick={(e) => {
+                                                        onPublish(e);
+                                                    }}
+                                                >
+                                                    Publish Tool
+                                                </Button>
+                                            </Box>
                                         </Tooltip>
                                     </>
                                 )}

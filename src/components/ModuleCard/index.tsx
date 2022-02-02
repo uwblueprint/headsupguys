@@ -20,7 +20,7 @@ export const ModuleCard: React.FC<{
     tool?: string;
     lastUpdated?: Date;
     author?: string;
-    onDelete(event: any, arg2: any, arg3: any): any;
+    onDelete(event: any, arg2: any, arg3: any, arg4: any): void;
 }> = (props) => {
     const { moduleId, tool, lastUpdated, author, title, onDelete } = props;
     const router = useRouter();

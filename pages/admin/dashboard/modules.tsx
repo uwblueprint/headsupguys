@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Flex,
     Text,
@@ -10,7 +10,7 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import Link from "next/link";
 import { isAuthenticated } from "src/utils/auth/authHelpers";
 import { GetServerSideProps } from "next";
@@ -79,6 +79,11 @@ const Modules: React.FC = () => {
             ? `Are you sure you want to delete the ${selectedModule} module? This action cannot be undone.`
             : `Are you sure you want to delete the ${selectedModule} module? This will unpublish the ${selectedModuleTool} tool and the ${selectedModule} module and cannot be undone.`;
 
+    const { mutate } = useSWRConfig();
+    const { data, error } = useSWR("/api/module/getAll", fetcher);
+    if (error) return <div>An error has occurred.</div>;
+    if (!data) return <Spinner color="brand.lime" size="xl" />;
+
     const onDelete = (e, moduleName, moduleId, moduleTool) => {
         setSelectedModule(moduleName);
         setSelectedModuleId(moduleId);
@@ -92,15 +97,12 @@ const Modules: React.FC = () => {
             method: "DELETE",
             url: `/api/module/del?id=${selectedModuleId}`,
         });
+        mutate("/api/module/getAll");
         setSelectedModule("");
         setSelectedModuleId("");
         setSelectedModuleTool("");
         onClose();
     };
-
-    const { data, error } = useSWR("/api/module/getAll", fetcher);
-    if (error) return <div>An error has occurred.</div>;
-    if (!data) return <Spinner color="brand.lime" size="xl" />;
 
     return (
         <>

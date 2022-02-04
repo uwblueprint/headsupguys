@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { SelfCheckGroup } from "database/models/selfCheckGroup";
+import connectDB from "../utils/mongoose";
 
 const delSelfCheckByID = async (
     req: NextApiRequest,
@@ -15,4 +16,4 @@ const delSelfCheckByID = async (
     }
 };
 
-export { delSelfCheckByID };
+export default connectDB(delSelfCheckByID);

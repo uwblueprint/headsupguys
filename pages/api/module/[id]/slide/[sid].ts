@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import connectDB from "pages/api/utils/mongoose";
-import { del } from "pages/api/slide/delete";
+import del from "pages/api/slide/delete";
 
 const index = async (
     req: NextApiRequest,

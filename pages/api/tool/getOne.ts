@@ -1,5 +1,6 @@
 import { Tool } from "database/models/tool";
 import { NextApiRequest, NextApiResponse } from "next";
+import connectDB from "../utils/mongoose";
 
 const getOne = async (
     req: NextApiRequest,
@@ -20,4 +21,4 @@ const getOne = async (
         .catch((err) => res.status(500).send(err));
 };
 
-export default getOne;
+export default connectDB(getOne);

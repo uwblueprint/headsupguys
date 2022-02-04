@@ -1,6 +1,8 @@
 import { Tool } from "database/models/tool";
 import { Module } from "database/models/module";
 import { NextApiRequest, NextApiResponse } from "next";
+import connectDB from "../utils/mongoose";
+
 const post = async (
     req: NextApiRequest,
     res: NextApiResponse,
@@ -33,4 +35,4 @@ const post = async (
     }
 };
 
-export default post;
+export default connectDB(post);

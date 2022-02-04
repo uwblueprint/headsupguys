@@ -230,8 +230,8 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
             url: `/api/tool/update?id=${selectedToolId}`,
             data: changedField,
         });
+        mutate("/api/tool");
         setRefresh(!refresh);
-        // setRefresh(!refresh);
         onClose();
     };
 

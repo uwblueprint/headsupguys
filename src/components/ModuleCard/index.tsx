@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { IoTrash } from "react-icons/io5";
-import { useRouter } from "next/router";
 import { formatDaysAgo } from "src/utils/datetime/formatDaysAgo";
 
 export const ModuleCard: React.FC<{
@@ -23,51 +22,47 @@ export const ModuleCard: React.FC<{
     onDelete(event: any, arg2: any, arg3: any, arg4: any): void;
 }> = (props) => {
     const { moduleId, tool, lastUpdated, author, title, onDelete } = props;
-    const router = useRouter();
     return (
-        <Flex
-            direction="column"
-            borderWidth="1px"
-            borderColor="background.dark"
-            borderRadius="lg"
-            overflow="hidden"
-            p={8}
-            _hover={{ cursor: "pointer" }}
-            onClick={() => {
-                router.push({
-                    pathname: `/admin/dashboard/builder`,
-                    query: { moduleId },
-                });
-            }}
-        >
-            <Flex mb={4} direction="row" alignItems="center">
-                <Heading size="lg">{title}</Heading>
+        <Link href={`builder?moduleId=${moduleId}`} passHref>
+            <Flex
+                direction="column"
+                borderWidth="1px"
+                borderColor="background.dark"
+                borderRadius="lg"
+                overflow="hidden"
+                p={8}
+                _hover={{ cursor: "pointer" }}
+            >
+                <Flex mb={4} direction="row" alignItems="center">
+                    <Heading size="lg">{title}</Heading>
+                    <Spacer />
+                    <IconButton
+                        aria-label="Delete module"
+                        icon={<IoTrash size={20} />}
+                        onClick={(e) => {
+                            const moduleTool = tool ? tool : "";
+                            onDelete(e, title, moduleId, moduleTool);
+                        }}
+                        variant="ghost"
+                    />
+                </Flex>
                 <Spacer />
-                <IconButton
-                    aria-label="Delete module"
-                    icon={<IoTrash size={20} />}
-                    onClick={(e) => {
-                        const moduleTool = tool ? tool : "";
-                        onDelete(e, title, moduleId, moduleTool);
-                    }}
-                    variant="ghost"
-                />
-            </Flex>
-            <Spacer />
-            <Stack w="100%" spacing={0}>
-                {tool ? (
-                    <Text mb={0} color="green">
-                        Linked To: {tool}
+                <Stack w="100%" spacing={0}>
+                    {tool ? (
+                        <Text mb={0} color="green">
+                            Linked To: {tool}
+                        </Text>
+                    ) : null}
+                    <Text mb={0} textTransform="capitalize">
+                        Last Updated:{" "}
+                        {lastUpdated && formatDaysAgo(lastUpdated)}
                     </Text>
-                ) : null}
-                <Text mb={0} textTransform="capitalize">
-                    Last Updated: {lastUpdated && formatDaysAgo(lastUpdated)}
-                </Text>
-                <Text>Created By: {author} </Text>
-            </Stack>
-            <Button mt={4} w="100%">
-                Link to a Tool
-            </Button>
-        </Flex>
+                    <Text>Created By: {author} </Text>
+                </Stack>
+                <Button mt={4} w="100%">
+                    Link to a Tool
+                </Button>
+            </Flex>
+        </Link>
     );
 };

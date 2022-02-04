@@ -9,12 +9,17 @@ import {
     Button,
     ButtonGroup,
     Flex,
+    Spacer,
+    IconButton,
+    useDisclosure,
 } from "@chakra-ui/react";
+import { IoTrash } from "react-icons/io5";
 import {
     MarkdownEditor,
     MultipleChoice,
     MultiSelect,
     ShortAnswer,
+    Modal,
 } from "@components";
 import { Section } from "pages/admin/dashboard/builder";
 
@@ -23,12 +28,13 @@ export interface ModuleSectionSelectProps {
     section: Section;
     setSection: (s: Section) => void; // TYPE IS SLIDE RIGHT ABOVE
     sectionNumber: number;
+    deleteSection: () => void;
 }
 
 export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
     props,
 ) => {
-    const { section, setSection, sectionNumber } = props;
+    const { section, setSection, sectionNumber, deleteSection } = props;
 
     const handleSelect = (e) => {
         setSection({ ...section, type: e.currentTarget.value });
@@ -79,10 +85,39 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
         });
     };
 
+    const handleDeleteSection = () => {
+        deleteSection();
+        onClose();
+    };
+
     const { type, markdown } = section;
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const deleteConfirmation = `Are you sure you want to delete Section #${
+        sectionNumber + 1
+    }? This action cannot be undone.`;
+
     return (
         <Box>
-            <Heading size="lg">Section {sectionNumber + 1}</Heading>
+            <Modal
+                bodyText={deleteConfirmation}
+                confirmButtonColorScheme={`red`}
+                confirmText={`Yes, delete`}
+                header={`Delete Section`}
+                isOpen={isOpen}
+                onCancel={onClose}
+                onConfirm={handleDeleteSection}
+            />
+            <Flex>
+                <Heading size="lg">Section {sectionNumber + 1}</Heading>
+                <IconButton
+                    aria-label="Delete module"
+                    color="gray.500"
+                    icon={<IoTrash size={20} />}
+                    ml="12px"
+                    onClick={onOpen}
+                    variant="ghost"
+                />
+            </Flex>
             <br />
             <Heading size="md">Select Content Type</Heading>
             <Select

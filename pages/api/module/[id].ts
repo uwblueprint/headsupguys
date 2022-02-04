@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import connectDB from "../utils/mongoose";
-import { del } from "./delete";
+import del from "./del";
 import { get } from "./get";
 import { patch } from "./patch";
 

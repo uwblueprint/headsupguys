@@ -66,6 +66,13 @@ const Editor = ({
                                                 payload: section,
                                             });
                                         }}
+                                        deleteSection={() => {
+                                            dispatch({
+                                                sectionIndex: idx,
+                                                slideIndex: state.currentSlide,
+                                                type: ModuleActionType.DELETE_SECTION,
+                                            });
+                                        }}
                                     />
                                 </React.Fragment>
                             ),

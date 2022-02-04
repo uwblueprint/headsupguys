@@ -6,6 +6,7 @@ import {
     Spacer,
     Text,
     Icon,
+    IconButton,
     Stack,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -18,8 +19,9 @@ export const ModuleCard: React.FC<{
     tool?: string;
     lastUpdated?: Date;
     author?: string;
+    onDelete(event: any, arg2: any, arg3: any, arg4: any): void;
 }> = (props) => {
-    const { moduleId, tool, lastUpdated, author, title } = props;
+    const { moduleId, tool, lastUpdated, author, title, onDelete } = props;
     return (
         <Link href={`builder?moduleId=${moduleId}`} passHref>
             <Flex
@@ -34,7 +36,15 @@ export const ModuleCard: React.FC<{
                 <Flex mb={4} direction="row" alignItems="center">
                     <Heading size="lg">{title}</Heading>
                     <Spacer />
-                    <Icon as={IoTrash} w={8} h={8}></Icon>
+                    <IconButton
+                        aria-label="Delete module"
+                        icon={<IoTrash size={20} />}
+                        onClick={(e) => {
+                            const moduleTool = tool ? tool : "";
+                            onDelete(e, title, moduleId, moduleTool);
+                        }}
+                        variant="ghost"
+                    />
                 </Flex>
                 <Spacer />
                 <Stack w="100%" spacing={0}>
@@ -50,7 +60,7 @@ export const ModuleCard: React.FC<{
                     <Text>Created By: {author} </Text>
                 </Stack>
                 <Button mt={4} w="100%">
-                    Link to A Tool
+                    Link to a Tool
                 </Button>
             </Flex>
         </Link>

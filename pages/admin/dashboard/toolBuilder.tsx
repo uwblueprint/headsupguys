@@ -22,6 +22,7 @@ import { AdminLayout } from "@components";
 import { SelfCheckQuestionCard, ToolHomePage } from "@components";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useSWRConfig } from "swr";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     if (process.env.NODE_ENV == "production") {
@@ -40,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
 //Self Check Questions React functional component
 const ToolBuilder: Page = () => {
+    const { mutate } = useSWRConfig();
     const router = useRouter();
     const toolID = router.query.toolID;
     const selfCheckID = router.query.selfCheckID;
@@ -223,7 +225,7 @@ const ToolBuilder: Page = () => {
                 url: `/api/self-check/${selfCheckID}`,
                 data: questionList,
             });
-            return true;
+            mutate("/api/tool");
         } catch (err) {
             console.log(err);
         }
@@ -549,7 +551,7 @@ const ToolBuilder: Page = () => {
     };
     const clearHiddenFilledFields = () => {
         /* In order to improve user experience, option fields are not cleared
-        when the user switched uestion type, they are simply not displayed on the screen
+        when the user switched question type, they are simply not displayed on the screen
         this allows the user to go back to their previous question type and still retain al
         their data. However, all of these options that can't be seen are presumably not needed
         anymore when the user chooses to fully submit their tool. So they are all cleared*/
@@ -712,9 +714,6 @@ const ToolBuilder: Page = () => {
                                 to the last saved tool or the empty tool*/
                                 disabledSave()
                             }
-                            //TODO: Send this output to the database
-                            //rather than just logging it in the console
-
                             onClick={() => {
                                 clearHiddenFilledFields();
                                 saveTool("Save ");

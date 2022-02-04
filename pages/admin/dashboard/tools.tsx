@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import { isAuthenticated } from "src/utils/auth/authHelpers";
 import { GetServerSideProps } from "next";
 import axios from "axios";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     if (process.env.NODE_ENV == "production") {
@@ -167,6 +167,7 @@ const ToolsHeader: React.FC<ToolsHeaderProps> = ({
 };
 
 const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
+    const { mutate } = useSWRConfig();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedTool, setSelectedTool] = useState("");
     const [selectedToolId, setSelectedToolId] = useState("");
@@ -243,6 +244,7 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
             method: "DELETE",
             url: `/api/self-check/${selectedSelfCheckId}`,
         });
+        mutate("/api/tool");
         setRefresh(!refresh);
         onClose();
     };

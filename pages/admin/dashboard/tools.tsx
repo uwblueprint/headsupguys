@@ -231,6 +231,7 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
             data: changedField,
         });
         mutate("/api/tool");
+        getAllModules();
         setRefresh(!refresh);
         onClose();
     };
@@ -245,6 +246,7 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
             url: `/api/self-check/${selectedSelfCheckId}`,
         });
         mutate("/api/tool");
+        getAllModules();
         setRefresh(!refresh);
         onClose();
     };

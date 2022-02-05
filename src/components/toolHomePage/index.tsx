@@ -70,7 +70,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
     ];
     const [currentRelatedLink, setCurrentRelatedLink] = useState(null);
     const unlinkedModules = allModules.filter((module) => {
-        return module[2] == null;
+        return module[2] == null || module[0] == linkedModuleID;
     });
     return (
         <Wrap spacing="30px">

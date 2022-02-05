@@ -89,6 +89,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                     onClick={(e) => {
                                         onUnpublish(e);
                                     }}
+                                    isTruncated
                                 >
                                     Unpublish Tool
                                 </Button>
@@ -110,6 +111,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                             onClick={(e) => {
                                                 onUnlinkModule(e);
                                             }}
+                                            isTruncated
                                         >
                                             Unlink Module
                                         </Button>
@@ -118,6 +120,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                             onClick={(e) => {
                                                 onPublish(e);
                                             }}
+                                            isTruncated
                                         >
                                             Publish Tool
                                         </Button>
@@ -129,6 +132,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                             onClick={(e) => {
                                                 onLinkModule(e);
                                             }}
+                                            isTruncated
                                         >
                                             Link Module
                                         </Button>
@@ -137,22 +141,23 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                             hasArrow
                                             placement="top"
                                         >
-                                            <Box>
-                                                <Button
-                                                    variant="solid"
-                                                    _hover={{
-                                                        bg: "black",
-                                                    }}
-                                                    color={"white"}
-                                                    background={"black"}
-                                                    isDisabled
-                                                    onClick={(e) => {
-                                                        onPublish(e);
-                                                    }}
-                                                >
-                                                    Publish Tool
-                                                </Button>
-                                            </Box>
+                                            <Button
+                                                _hover={{
+                                                    bg: "grey",
+                                                    cursor: "default",
+                                                }}
+                                                _active={{
+                                                    bg: "grey",
+                                                }}
+                                                color={"white"}
+                                                background={"grey"}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                }}
+                                                isTruncated
+                                            >
+                                                Publish Tool
+                                            </Button>
                                         </Tooltip>
                                     </>
                                 )}

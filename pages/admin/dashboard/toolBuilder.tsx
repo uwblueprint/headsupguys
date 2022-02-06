@@ -25,7 +25,7 @@ import axios from "axios";
 import { useSWRConfig } from "swr";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-    if (process.env.NODE_ENV == "production") {
+    if (process.env.USE_ADMIN_LOGIN === "true") {
         const authProps = await isAuthenticated(req, res, "/redirect", true); // TODO: change redirect to login page (once we have a login page that's deployed)
         return {
             props: {

@@ -1,5 +1,6 @@
 import { Module } from "database/models/module";
 import { NextApiRequest, NextApiResponse } from "next";
+import connectDB from "../utils/mongoose";
 
 const getAll = async (
     req: NextApiRequest,
@@ -13,4 +14,4 @@ const getAll = async (
     }
 };
 
-export default getAll;
+export default connectDB(getAll);

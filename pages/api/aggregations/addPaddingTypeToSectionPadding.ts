@@ -1,5 +1,6 @@
 import { Slide } from "database/models/slide";
 import { NextApiRequest, NextApiResponse } from "next";
+import connectDB from "../utils/mongoose";
 
 const addPaddingTypeToSectionPadding = async (
     req: NextApiRequest,
@@ -36,4 +37,4 @@ const addPaddingTypeToSectionPadding = async (
     ]);
     res.status(200).json(result);
 };
-export default addPaddingTypeToSectionPadding;
+export default connectDB(addPaddingTypeToSectionPadding);

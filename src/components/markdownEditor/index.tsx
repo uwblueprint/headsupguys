@@ -148,11 +148,16 @@ const rightAlignCommand: ICommand = {
         });
         const state1 = api.setSelectionRange(newSelectionRange);
         // Replaces the current selection with the left align mark up
-        const state2 = api.replaceSelection(`//${state1.selectedText}//`); // convention: right align is double //
-        // Adjust the selection to not contain the **
+        const state2 = api.replaceSelection(
+            `//${state1.selectedText.replace(/\\\\|\|\||\/\//g, "")}//`,
+        ); // convention: right align is double //
+        // Adjust the selection to not contain the //
         api.setSelectionRange({
-            start: state2.selection.end - 2 - state1.selectedText.length,
-            end: state2.selection.end - 2,
+            start:
+                state2.selection.end -
+                state1.selectedText.replace(/\\\\|\|\||\/\//g, "").length -
+                4,
+            end: state2.selection.end,
         });
     },
 };
@@ -178,11 +183,16 @@ const centerAlignCommand: ICommand = {
         });
         const state1 = api.setSelectionRange(newSelectionRange);
         // Replaces the current selection with the center align mark up
-        const state2 = api.replaceSelection(`||${state1.selectedText}||`); // convention: center align is double ||
-        // Adjust the selection to not contain the **
+        const state2 = api.replaceSelection(
+            `||${state1.selectedText.replace(/\\\\|\|\||\/\//g, "")}||`,
+        ); // convention: center align is double ||
+        // Adjust the selection to not contain the ||
         api.setSelectionRange({
-            start: state2.selection.end - 2 - state1.selectedText.length,
-            end: state2.selection.end - 2,
+            start:
+                state2.selection.end -
+                state1.selectedText.replace(/\\\\|\|\||\/\//g, "").length -
+                4,
+            end: state2.selection.end,
         });
     },
 };
@@ -208,11 +218,16 @@ const leftAlignCommand: ICommand = {
         });
         const state1 = api.setSelectionRange(newSelectionRange);
         // Replaces the current selection with the center align mark up
-        const state2 = api.replaceSelection(`\\\\${state1.selectedText}\\\\`); // convention: left align is double \\
-        // Adjust the selection to not contain the **
+        const state2 = api.replaceSelection(
+            `\\\\${state1.selectedText.replace(/\\\\|\|\||\/\//g, "")}\\\\`,
+        ); // convention: left align is double \\
+        // Adjust the selection to not contain the \\
         api.setSelectionRange({
-            start: state2.selection.end - 2 - state1.selectedText.length,
-            end: state2.selection.end - 2,
+            start:
+                state2.selection.end -
+                state1.selectedText.replace(/\\\\|\|\||\/\//g, "").length -
+                4,
+            end: state2.selection.end,
         });
     },
 };

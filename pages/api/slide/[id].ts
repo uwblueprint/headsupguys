@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import connectDB from "../utils/mongoose";
-import { del } from "./delete";
-import { get } from "./get";
-import { patch } from "./patch";
+import del from "./delete";
+import get from "./get";
+import patch from "./patch";
 
 const index = async (
     req: NextApiRequest,

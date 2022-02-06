@@ -1,5 +1,6 @@
 import { Tool } from "database/models/tool";
 import { NextApiRequest, NextApiResponse } from "next";
+import connectDB from "../utils/mongoose";
 
 const deleteOne = async (
     req: NextApiRequest,
@@ -12,4 +13,4 @@ const deleteOne = async (
         .catch((err) => res.status(500).send(err));
 };
 
-export default deleteOne;
+export default connectDB(deleteOne);

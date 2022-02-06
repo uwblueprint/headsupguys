@@ -26,7 +26,7 @@ import Header from "src/pages/module-builder/Header";
 import Toolbar from "src/pages/module-builder/Toolbar";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-    if (process.env.NODE_ENV == "production") {
+    if (process.env.USE_ADMIN_LOGIN === "true") {
         const authProps = await isAuthenticated(req, res, "/redirect", true); // TODO: change redirect to login page (once we have a login page that's deployed)
         return {
             props: {
@@ -51,6 +51,7 @@ export enum ModuleActionType {
     RESET_SLIDE,
     UPDATE_SECTION,
     UPDATE_LAST_SAVED_STATE,
+    DELETE_SECTION,
 }
 
 export type Option = {
@@ -171,6 +172,11 @@ export type ModuleAction =
     | {
           type: ModuleActionType.UPDATE_LAST_SAVED_STATE;
           stateChanged: boolean;
+      }
+    | {
+          type: ModuleActionType.DELETE_SECTION;
+          sectionIndex: number;
+          slideIndex: number;
       };
 function reducer(
     state: Readonly<ModuleState>,
@@ -279,6 +285,30 @@ function reducer(
             return {
                 ...state,
                 stateChanged: false,
+            };
+        }
+        case ModuleActionType.DELETE_SECTION: {
+            const newSlide = {
+                ...state.slides[action.slideIndex],
+                sections: [
+                    ...state.slides[action.slideIndex].sections.slice(
+                        0,
+                        action.sectionIndex,
+                    ),
+                    ...state.slides[action.slideIndex].sections.slice(
+                        action.sectionIndex + 1,
+                    ),
+                ],
+            };
+
+            return {
+                ...state,
+                slides: [
+                    ...state.slides.slice(0, action.slideIndex),
+                    newSlide,
+                    ...state.slides.slice(action.slideIndex + 1),
+                ],
+                stateChanged: true,
             };
         }
 

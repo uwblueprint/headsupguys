@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import { Module } from "../../../database/models/module";
 import { Slide, SlideInterface } from "../../../database/models/slide";
+import connectDB from "../utils/mongoose";
 
 const patch = async (
     req: NextApiRequest,
@@ -20,4 +21,4 @@ const patch = async (
         .catch((err) => res.status(500).send(err));
 };
 
-export { patch };
+export default connectDB(patch);

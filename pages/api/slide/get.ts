@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import { Slide, SlideInterface } from "../../../database/models/slide";
+import connectDB from "../utils/mongoose";
 
 const get = async (
     req: NextApiRequest,
@@ -17,4 +18,4 @@ const get = async (
     res.status(200).json(slide);
 };
 
-export { get };
+export default connectDB(get);

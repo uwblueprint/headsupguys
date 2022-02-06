@@ -1,21 +1,16 @@
 .markdown h1 {
     font-size: 48px;
     color: black;
-    background: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0) 55%,
-        #7cf952 55%
-    );
     text-decoration: underline;
-    text-decoration-thickness: 19px;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: 48px;
+    text-underline-offset: -40px;
     text-decoration-color: #7cf952;
-    display: inline;
 }
 
 .markdown h2 {
     font-size: 48px;
     color: black;
-    display: inline;
 }
 
 .markdown h3 {
@@ -61,11 +56,15 @@
 
 .markdown ul {
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: gray;
     margin-left: 30px;
 }
 
 .markdown ol {
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: gray;
     margin-left: 30px;
 }
 

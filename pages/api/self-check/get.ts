@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { SelfCheckGroup } from "database/models/selfCheckGroup";
+import connectDB from "../utils/mongoose";
 
 const getSelfCheckByID = async (
     req: NextApiRequest,
@@ -18,4 +19,4 @@ const getSelfCheckByID = async (
     res.status(200).json(selfCheck);
 };
 
-export { getSelfCheckByID };
+export default connectDB(getSelfCheckByID);

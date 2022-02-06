@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import { Module } from "../../../database/models/module";
 import { Slide } from "../../../database/models/slide";
+import connectDB from "../utils/mongoose";
 
 const del = async (
     req: NextApiRequest,
@@ -27,4 +28,4 @@ const del = async (
     return;
 };
 
-export { del };
+export default connectDB(del);

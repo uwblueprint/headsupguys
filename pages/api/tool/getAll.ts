@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import { Tool, ToolInterface } from "../../../database/models/tool";
+import connectDB from "../utils/mongoose";
 
 const getAll = async (
     req: NextApiRequest,
@@ -11,4 +12,4 @@ const getAll = async (
         .catch((err) => res.status(500).send(err));
 };
 
-export default getAll;
+export default connectDB(getAll);

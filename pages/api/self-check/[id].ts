@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../utils/mongoose";
-import { delSelfCheckByID } from "./delete";
-import { getSelfCheckByID } from "./get";
+import delSelfCheckByID from "./delete";
+import getSelfCheckByID from "./get";
 import patchSelfCheckByID from "./patch";
 
 const index = async (req: NextApiRequest, res: NextApiResponse) => {

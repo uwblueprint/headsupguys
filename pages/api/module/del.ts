@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import { Module } from "../../../database/models/module";
+import connectDB from "../utils/mongoose";
 
 const del = async (
     req: NextApiRequest,
@@ -16,4 +17,4 @@ const del = async (
     res.status(204).send({});
 };
 
-export default del;
+export default connectDB(del);

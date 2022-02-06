@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { post } from "pages/api/slide/post";
+import post from "pages/api/slide/post";
 import { ErrorResponse } from "types/ErrorResponse";
 import connectDB from "../../../utils/mongoose";
 

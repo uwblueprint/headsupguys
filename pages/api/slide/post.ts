@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import { Module } from "../../../database/models/module";
 import { Slide, SlideInterface } from "../../../database/models/slide";
+import connectDB from "../utils/mongoose";
 
 const post = async (
     req: NextApiRequest,
@@ -32,4 +33,4 @@ const post = async (
     res.status(200).json(slide);
 };
 
-export { post };
+export default connectDB(post);

@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { SelfCheckGroup } from "database/models/selfCheckGroup";
+import connectDB from "../utils/mongoose";
 
 const post = async (
     req: NextApiRequest,
@@ -19,4 +20,4 @@ const post = async (
     res.status(200).send(selfCheck);
 };
 
-export default post;
+export default connectDB(post);

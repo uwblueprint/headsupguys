@@ -290,11 +290,9 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
         for (let k = 0; k < checkQuestion.length; k++) {
             if (checkQuestion[k].question == "") {
                 //Checks the question title to ensure it isn't blank
-                needed.push(
-                    "Self Check Question " +
-                        checkQuestion[k].questionNumber.toString() +
-                        '\'s "Title"',
-                );
+                needed.push(" + 1 or more self check questions");
+                setStillNeeded(needed);
+                return needed;
             }
             if (
                 checkQuestion[k].type == "multiple_choice" ||
@@ -303,18 +301,14 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                 //checks multiple choice/multiselect fields to ensure they aren't blank
                 for (let l = 0; l < checkQuestion[k].options.length; l++) {
                     if (checkQuestion[k].options[l][0] == "") {
-                        needed.push(
-                            "Self Check Question " +
-                                checkQuestion[k].questionNumber.toString() +
-                                '\'s "User Facing Options"',
-                        );
+                        needed.push(" + 1 or more self check questions");
+                        setStillNeeded(needed);
+                        return needed;
                     }
                     if (checkQuestion[k].options[l][1] == "") {
-                        needed.push(
-                            "Self Check Question " +
-                                checkQuestion[k].questionNumber.toString() +
-                                '\'s "Corresponding Values"',
-                        );
+                        needed.push(" + 1 or more self check questions");
+                        setStillNeeded(needed);
+                        return needed;
                     }
                 }
             }

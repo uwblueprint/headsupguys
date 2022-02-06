@@ -28,6 +28,7 @@ const ModuleSchema = new Schema<ModuleInterface>(
         toolID: {
             type: Schema.Types.ObjectId,
             default: null,
+            ref: "Tool",
         },
         slides: {
             type: [{ type: Schema.Types.ObjectId, ref: "Slide" }],

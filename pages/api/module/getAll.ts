@@ -5,11 +5,16 @@ const getAll = async (
     req: NextApiRequest,
     res: NextApiResponse,
 ): Promise<void> => {
-    try {
-        const modules = await Module.find({});
-        res.status(200).json(modules);
-    } catch (err) {
-        res.status(500).json(err);
+    const { getToolTitles } = req.query;
+    if (getToolTitles) {
+        await Module.find({})
+            .populate("toolID", "title")
+            .then((modules) => res.status(200).json(modules))
+            .catch((err) => res.status(500).send(err));
+    } else {
+        await Module.find({})
+            .then((modules) => res.status(200).json(modules))
+            .catch((err) => res.status(500).send(err));
     }
 };
 

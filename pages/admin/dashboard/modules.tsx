@@ -80,7 +80,10 @@ const Modules: React.FC = () => {
             : `Are you sure you want to delete the ${selectedModule} module? This will unpublish the ${selectedModuleTool} tool and the ${selectedModule} module and cannot be undone.`;
 
     const { mutate } = useSWRConfig();
-    const { data, error } = useSWR("/api/module/getAll", fetcher);
+    const { data, error } = useSWR(
+        "/api/module/getAll?getToolTitles=1",
+        fetcher,
+    );
     if (error) return <div>An error has occurred.</div>;
     if (!data) return <Spinner color="brand.lime" size="xl" />;
 
@@ -123,7 +126,7 @@ const Modules: React.FC = () => {
                         key={_id}
                         moduleId={_id}
                         title={title}
-                        tool={toolID}
+                        tool={toolID ? toolID.title : toolID}
                         lastUpdated={lastUpdated}
                         author={createdBy.join(", ")}
                         onDelete={onDelete}
@@ -136,7 +139,7 @@ const Modules: React.FC = () => {
 
 const ModulesPage: Page = () => {
     return (
-        <Stack spacing={8}>
+        <Stack marginBottom="40px" spacing={8}>
             <ModulesHeader />
             <Modules />
         </Stack>

@@ -26,7 +26,7 @@ import Header from "src/pages/module-builder/Header";
 import Toolbar from "src/pages/module-builder/Toolbar";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-    if (process.env.NODE_ENV == "production") {
+    if (process.env.USE_ADMIN_LOGIN) {
         const authProps = await isAuthenticated(req, res, "/redirect", true); // TODO: change redirect to login page (once we have a login page that's deployed)
         return {
             props: {

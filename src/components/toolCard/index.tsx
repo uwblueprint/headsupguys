@@ -89,9 +89,8 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                     onClick={(e) => {
                                         onUnpublish(e);
                                     }}
-                                    isTruncated
                                 >
-                                    Unpublish Tool
+                                    <Text isTruncated>Unpublish Tool</Text>
                                 </Button>
                                 <IconButton
                                     aria-label="Delete tool"
@@ -111,18 +110,20 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                             onClick={(e) => {
                                                 onUnlinkModule(e);
                                             }}
-                                            isTruncated
                                         >
-                                            Unlink Module
+                                            <Text isTruncated>
+                                                Unlink Module
+                                            </Text>
                                         </Button>
                                         <Button
                                             variant="default"
                                             onClick={(e) => {
                                                 onPublish(e);
                                             }}
-                                            isTruncated
                                         >
-                                            Publish Tool
+                                            <Text isTruncated>
+                                                Publish Tool
+                                            </Text>
                                         </Button>
                                     </>
                                 ) : (
@@ -132,9 +133,8 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                             onClick={(e) => {
                                                 onLinkModule(e);
                                             }}
-                                            isTruncated
                                         >
-                                            Link Module
+                                            <Text isTruncated>Link Module</Text>
                                         </Button>
                                         <Tooltip
                                             label="Link a module to publish your tool!"
@@ -154,9 +154,10 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                 }}
-                                                isTruncated
                                             >
-                                                Publish Tool
+                                                <Text isTruncated>
+                                                    Publish Tool
+                                                </Text>
                                             </Button>
                                         </Tooltip>
                                     </>

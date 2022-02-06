@@ -168,6 +168,7 @@ const ToolsHeader: React.FC<ToolsHeaderProps> = ({
 
 const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
     const { mutate } = useSWRConfig();
+    const router = useRouter();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedTool, setSelectedTool] = useState("");
     const [selectedToolId, setSelectedToolId] = useState("");
@@ -181,6 +182,21 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
     const linkConfirmation = `Select a module to link ${selectedTool} to.`;
     const [refresh, setRefresh] = useState(false);
     const [allModules, setAllModules] = useState([]);
+
+    const openTool = async (toolID, selfCheckID) => {
+        try {
+            router.push({
+                pathname: "/admin/dashboard/toolBuilder",
+                query: {
+                    toolID: toolID,
+                    selfCheckID: selfCheckID,
+                },
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     const getAllModules = async () => {
         try {
             const response = await axios({
@@ -201,16 +217,128 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
             //TODO: update error handling
         }
     };
+
+    const getSelfCheck = async (id) => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: `/api/self-check/${id}`,
+            });
+            return response.data.questions;
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     useEffect(() => {
         getAllModules();
     }, []);
     const unlinkedModules = allModules.filter((module) => {
         return module[2] == null;
     });
+
+    const toolRequired = [
+        /*Specifies tools that are required in the first index of each array.
+        The second index specifies the beginning of the tooltip message shown
+        when hovering over the submit button to indicate which fields still need
+        to be filled by the user*/
+        ["title", 'The Home Page "Title"'],
+        ["type", 'The Home Page "Type"'],
+        ["thumbnail", 'The Home Page "Thumbnail"'],
+        ["description", 'The Home Page "Description"'],
+        ["linkedModuleID", 'The Home Page "Link Module"'],
+        ["relatedResources", 'The Home Page "Related Resources'],
+        ["relatedStories", 'The Home Page "Related Stories'],
+        ["externalResources", 'The Home Page "External Resources'],
+    ];
+
+    //The stillneeded variable defaults to the title
+    const [stillNeeded, setStillNeeded] = useState([]);
+    const checkRequiredFields = async (checkTool) => {
+        const checkQuestion = await getSelfCheck(checkTool.selfCheckGroupID);
+        const needed = [];
+        //Specifies the tool or question field that still needs to be filled
+        for (let i = 0; i < toolRequired.length; i++) {
+            if (typeof checkTool[toolRequired[i][0]] == "string") {
+                /*Checks if string is empty. Applies to all but the related
+                    resources, related stories and external resources.
+                    */
+                if (checkTool[toolRequired[i][0]] == "") {
+                    needed.push(toolRequired[i][1]);
+                }
+            } else {
+                /*First checks the text, then the value properties of the
+                    related resources, related stories and external resources fields.
+                    */
+                for (let j = 0; j < checkTool[toolRequired[i][0]].length; j++) {
+                    if (
+                        checkTool[toolRequired[i][0]][j][0] == "" &&
+                        checkTool[toolRequired[i][0]][j][1] != ""
+                    ) {
+                        needed.push(toolRequired[i][1] + ' Text"');
+                    }
+                    if (
+                        checkTool[toolRequired[i][0]][j][1] == "" &&
+                        checkTool[toolRequired[i][0]][j][0] != ""
+                    ) {
+                        needed.push(toolRequired[i][1] + ' Link"');
+                    }
+                }
+            }
+        }
+        //Checks the self check question fields
+        for (let k = 0; k < checkQuestion.length; k++) {
+            if (checkQuestion[k].question == "") {
+                //Checks the question title to ensure it isn't blank
+                needed.push(
+                    "Self Check Question " +
+                        checkQuestion[k].questionNumber.toString() +
+                        '\'s "Title"',
+                );
+            }
+            if (
+                checkQuestion[k].type == "multiple_choice" ||
+                checkQuestion[k].type == "multi_select"
+            ) {
+                //checks multiple choice/multiselect fields to ensure they aren't blank
+                for (let l = 0; l < checkQuestion[k].options.length; l++) {
+                    if (checkQuestion[k].options[l][0] == "") {
+                        needed.push(
+                            "Self Check Question " +
+                                checkQuestion[k].questionNumber.toString() +
+                                '\'s "User Facing Options"',
+                        );
+                    }
+                    if (checkQuestion[k].options[l][1] == "") {
+                        needed.push(
+                            "Self Check Question " +
+                                checkQuestion[k].questionNumber.toString() +
+                                '\'s "Corresponding Values"',
+                        );
+                    }
+                }
+            }
+        }
+        setStillNeeded(needed);
+        return needed;
+    };
+
     const onEdit = (e, id, toolName, modalMode) => {
-        setModalMode(modalMode);
+        if (modalMode == "publish") {
+            setSelectedToolId(id._id);
+            setSelectedSelfCheckId(id.selfCheckGroupID);
+            checkRequiredFields(id).then((needed) => {
+                if (needed.length > 1) {
+                    setModalMode("unpublishable");
+                } else {
+                    setModalMode(modalMode);
+                }
+            });
+        } else {
+            setModalMode(modalMode);
+            setSelectedToolId(id);
+        }
         setSelectedTool(toolName);
-        setSelectedToolId(id);
         onOpen();
         e.stopPropagation();
     };
@@ -222,6 +350,10 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
         setSelectedSelfCheckId(selfCheckId);
         onOpen();
         e.stopPropagation();
+    };
+
+    const publishTool = () => {
+        patchTool({ status: "published" });
     };
 
     const patchTool = async (changedField) => {
@@ -287,7 +419,9 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                 onCancel={onClose}
                 onConfirm={() => {
                     modalMode === "publish"
-                        ? patchTool({ status: "published" })
+                        ? publishTool()
+                        : modalMode === "unpublishable"
+                        ? openTool(selectedToolId, selectedSelfCheckId)
                         : modalMode === "draft"
                         ? patchTool({ status: "draft" })
                         : modalMode === "delete"
@@ -301,6 +435,8 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                 header={
                     modalMode === "publish"
                         ? `Publish ${selectedTool}`
+                        : modalMode === "unpublishable"
+                        ? `To publish ${selectedTool}, please fill the following fields:`
                         : modalMode === "delete"
                         ? `Delete ${selectedTool}`
                         : modalMode === "draft"
@@ -314,6 +450,8 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                 bodyText={
                     modalMode === "publish"
                         ? publishConfirmation
+                        : modalMode === "unpublishable"
+                        ? stillNeeded.join(", ")
                         : modalMode === "delete"
                         ? deleteConfirmation
                         : modalMode === "draft"
@@ -327,6 +465,8 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                 confirmText={
                     modalMode === "publish"
                         ? "Publish"
+                        : modalMode === "unpublishable"
+                        ? "Edit Tool"
                         : modalMode === "delete"
                         ? "Delete"
                         : modalMode === "draft"
@@ -361,7 +501,7 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                                 onEdit(e, tool._id, tool.title, "unlink");
                             }}
                             onPublish={(e) => {
-                                onEdit(e, tool._id, tool.title, "publish");
+                                onEdit(e, tool, tool.title, "publish");
                             }}
                             onUnpublish={(e) => {
                                 onEdit(e, tool._id, tool.title, "draft");

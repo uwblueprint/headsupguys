@@ -175,6 +175,7 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
     const [selectedModuleId, setSelectedModuleId] = useState("");
     const [selectedSelfCheckId, setSelectedSelfCheckId] = useState("");
     const enum modalModes {
+        "spinner",
         "publish",
         "delete",
         "draft",
@@ -182,7 +183,7 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
         "link",
         "unlink",
     }
-    const [modalMode, setModalMode] = useState(modalModes.publish);
+    const [modalMode, setModalMode] = useState(modalModes.spinner);
     const publishConfirmation = `Are you sure you want to publish ${selectedTool}? Your tool will be available to the public!`;
     const deleteConfirmation = `Are you sure you want to delete ${selectedTool}? This is a permanent action that cannot be undone.`;
     const unpublishConfirmation = `Are you sure you want to unpublish ${selectedTool}? This will make your tool unavailable to the public.`;
@@ -211,18 +212,9 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                 method: "GET",
                 url: "/api/module/getAll",
             });
-            const newAllModules = [];
-            for (const module in response.data) {
-                newAllModules.push([
-                    response.data[module]._id,
-                    response.data[module].title,
-                    response.data[module].toolID,
-                ]);
-            }
-            setAllModules(newAllModules);
+            setAllModules(response.data);
         } catch (err) {
             console.log(err);
-            //TODO: update error handling
         }
     };
 
@@ -241,9 +233,6 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
     useEffect(() => {
         getAllModules();
     }, []);
-    const unlinkedModules = allModules.filter((module) => {
-        return module[2] == null;
-    });
 
     const toolRequired = [
         /*Specifies tools that are required in the first index of each array.
@@ -406,15 +395,18 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                                 setSelectedModuleId(e.target.value)
                             }
                         >
-                            {unlinkedModules.map((moduleNames) => (
-                                <option
-                                    key={moduleNames[0]}
-                                    value={moduleNames[0]}
-                                >
-                                    {moduleNames[1]}
-                                </option>
-                            ))}
+                            {allModules
+                                .filter(({ toolID }) => {
+                                    return toolID == null;
+                                })
+                                .map(({ _id, title }) => (
+                                    <option key={_id} value={_id}>
+                                        {title}
+                                    </option>
+                                ))}
                         </Select>
+                    ) : modalMode === modalModes.spinner ? (
+                        <Spinner color="brand.lime" size="xl" />
                     ) : null
                 }
                 isOpen={isOpen}

@@ -10,11 +10,14 @@ const del = async (
     const { id } = req.query;
     const module = await Module.findByIdAndDelete(id);
 
-    if (!module)
-        return res
-            .status(404)
-            .send({ error: "The module with the given ID was not found." });
-    res.status(204).send({});
+    if (module) {
+        res.status(204).end();
+    } else {
+        res.status(404).send({
+            error: "The module with the given ID was not found.",
+        });
+    }
+    return;
 };
 
 export default connectDB(del);

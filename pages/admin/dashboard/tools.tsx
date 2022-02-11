@@ -174,7 +174,15 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
     const [selectedToolId, setSelectedToolId] = useState("");
     const [selectedModuleId, setSelectedModuleId] = useState("");
     const [selectedSelfCheckId, setSelectedSelfCheckId] = useState("");
-    const [modalMode, setModalMode] = useState("");
+    const enum modalModes {
+        "publish",
+        "delete",
+        "draft",
+        "unpublishable",
+        "link",
+        "unlink",
+    }
+    const [modalMode, setModalMode] = useState(modalModes.publish);
     const publishConfirmation = `Are you sure you want to publish ${selectedTool}? Your tool will be available to the public!`;
     const deleteConfirmation = `Are you sure you want to delete ${selectedTool}? This is a permanent action that cannot be undone.`;
     const unpublishConfirmation = `Are you sure you want to unpublish ${selectedTool}? This will make your tool unavailable to the public.`;
@@ -318,12 +326,12 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
     };
 
     const onEdit = (e, id, toolName, modalMode) => {
-        if (modalMode == "publish") {
+        if (modalMode == modalModes.publish) {
             setSelectedToolId(id._id);
             setSelectedSelfCheckId(id.selfCheckGroupID);
             checkRequiredFields(id).then((needed) => {
                 if (needed.length > 1) {
-                    setModalMode("unpublishable");
+                    setModalMode(modalModes.unpublishable);
                 } else {
                     setModalMode(modalMode);
                 }
@@ -338,7 +346,7 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
     };
 
     const onDelete = (e, toolName, id, selfCheckId) => {
-        setModalMode("delete");
+        setModalMode(modalModes.delete);
         setSelectedTool(toolName);
         setSelectedToolId(id);
         setSelectedSelfCheckId(selfCheckId);
@@ -389,7 +397,7 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
         <>
             <Modal
                 children={
-                    modalMode === "link" ? (
+                    modalMode === modalModes.link ? (
                         <Select
                             placeholder={"Select option"}
                             size={"lg"}
@@ -412,62 +420,62 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                 isOpen={isOpen}
                 onCancel={onClose}
                 onConfirm={() => {
-                    modalMode === "publish"
+                    modalMode === modalModes.publish
                         ? publishTool()
-                        : modalMode === "unpublishable"
+                        : modalMode === modalModes.unpublishable
                         ? openTool(selectedToolId, selectedSelfCheckId)
-                        : modalMode === "draft"
+                        : modalMode === modalModes.draft
                         ? patchTool({ status: "draft" })
-                        : modalMode === "delete"
+                        : modalMode === modalModes.delete
                         ? deleteTool()
-                        : modalMode === "unlink"
+                        : modalMode === modalModes.unlink
                         ? patchTool({ linkedModuleID: "" })
-                        : modalMode === "link"
+                        : modalMode === modalModes.link
                         ? patchTool({ linkedModuleID: selectedModuleId })
                         : null;
                 }}
                 header={
-                    modalMode === "publish"
+                    modalMode === modalModes.publish
                         ? `Publish ${selectedTool}`
-                        : modalMode === "unpublishable"
+                        : modalMode === modalModes.unpublishable
                         ? `To publish ${selectedTool}, please fill the following fields:`
-                        : modalMode === "delete"
+                        : modalMode === modalModes.delete
                         ? `Delete ${selectedTool}`
-                        : modalMode === "draft"
+                        : modalMode === modalModes.draft
                         ? `Unpublish ${selectedTool}`
-                        : modalMode === "unlink"
+                        : modalMode === modalModes.unlink
                         ? `Unlink ${selectedTool}`
-                        : modalMode === "link"
+                        : modalMode === modalModes.link
                         ? `Link ${selectedTool}`
                         : null
                 }
                 bodyText={
-                    modalMode === "publish"
+                    modalMode === modalModes.publish
                         ? publishConfirmation
-                        : modalMode === "unpublishable"
+                        : modalMode === modalModes.unpublishable
                         ? stillNeeded.join(", ")
-                        : modalMode === "delete"
+                        : modalMode === modalModes.delete
                         ? deleteConfirmation
-                        : modalMode === "draft"
+                        : modalMode === modalModes.draft
                         ? unpublishConfirmation
-                        : modalMode === "unlink"
+                        : modalMode === modalModes.unlink
                         ? unlinkConfirmation
-                        : modalMode === "link"
+                        : modalMode === modalModes.link
                         ? linkConfirmation
                         : null
                 }
                 confirmText={
-                    modalMode === "publish"
+                    modalMode === modalModes.publish
                         ? "Publish"
-                        : modalMode === "unpublishable"
+                        : modalMode === modalModes.unpublishable
                         ? "Edit Tool"
-                        : modalMode === "delete"
+                        : modalMode === modalModes.delete
                         ? "Delete"
-                        : modalMode === "draft"
+                        : modalMode === modalModes.draft
                         ? "Unpublish"
-                        : modalMode === "unlink"
+                        : modalMode === modalModes.unlink
                         ? "Unlink"
-                        : modalMode === "link"
+                        : modalMode === modalModes.link
                         ? "Link"
                         : null
                 }
@@ -489,16 +497,31 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                             module={tool.linkedModuleID || null}
                             published={tool.status === "published"}
                             onLinkModule={(e) => {
-                                onEdit(e, tool._id, tool.title, "link");
+                                onEdit(
+                                    e,
+                                    tool._id,
+                                    tool.title,
+                                    modalModes.link,
+                                );
                             }}
                             onUnlinkModule={(e) => {
-                                onEdit(e, tool._id, tool.title, "unlink");
+                                onEdit(
+                                    e,
+                                    tool._id,
+                                    tool.title,
+                                    modalModes.unlink,
+                                );
                             }}
                             onPublish={(e) => {
-                                onEdit(e, tool, tool.title, "publish");
+                                onEdit(e, tool, tool.title, modalModes.publish);
                             }}
                             onUnpublish={(e) => {
-                                onEdit(e, tool._id, tool.title, "draft");
+                                onEdit(
+                                    e,
+                                    tool._id,
+                                    tool.title,
+                                    modalModes.draft,
+                                );
                             }}
                             onDelete={onDelete}
                         />

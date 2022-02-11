@@ -81,7 +81,7 @@ const Modules: React.FC = () => {
 
     const { mutate } = useSWRConfig();
     const { data, error } = useSWR(
-        "/api/module/getAll?getToolTitles=1",
+        "/api/module/getAll?getToolTitles=true",
         fetcher,
     );
     if (error) return <div>An error has occurred.</div>;

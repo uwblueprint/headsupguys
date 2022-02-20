@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Stack,
     Flex,
     Text,
     Button,
+    Select,
     useDisclosure,
     Spacer,
     Spinner,
@@ -14,7 +15,7 @@ import { useRouter } from "next/router";
 import { isAuthenticated } from "src/utils/auth/authHelpers";
 import { GetServerSideProps } from "next";
 import axios from "axios";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     if (process.env.USE_ADMIN_LOGIN === "true") {
@@ -166,42 +167,196 @@ const ToolsHeader: React.FC<ToolsHeaderProps> = ({
 };
 
 const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
+    const { mutate } = useSWRConfig();
+    const router = useRouter();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedTool, setSelectedTool] = useState("");
     const [selectedToolId, setSelectedToolId] = useState("");
+    const [selectedModuleId, setSelectedModuleId] = useState("");
     const [selectedSelfCheckId, setSelectedSelfCheckId] = useState("");
-    // Modal can be of "publish" or "delete" mode
-    const [modalMode, setModalMode] = useState("");
+    const enum modalModes {
+        "spinner",
+        "publish",
+        "delete",
+        "draft",
+        "unpublishable",
+        "link",
+        "unlink",
+    }
+    const [modalMode, setModalMode] = useState(modalModes.spinner);
     const publishConfirmation = `Are you sure you want to publish ${selectedTool}? Your tool will be available to the public!`;
     const deleteConfirmation = `Are you sure you want to delete ${selectedTool}? This is a permanent action that cannot be undone.`;
+    const unpublishConfirmation = `Are you sure you want to unpublish ${selectedTool}? This will make your tool unavailable to the public.`;
+    const unlinkConfirmation = `Are you sure you want to unlink ${selectedTool}? This will remove the tool from the module.`;
+    const linkConfirmation = `Select a module to link ${selectedTool} to.`;
     const [refresh, setRefresh] = useState(false);
+    const [allModules, setAllModules] = useState([]);
 
-    const onLinkModule = (e) => {
-        e.stopPropagation();
+    const openTool = async (toolID, selfCheckID) => {
+        try {
+            router.push({
+                pathname: "/admin/dashboard/toolBuilder",
+                query: {
+                    toolID: toolID,
+                    selfCheckID: selfCheckID,
+                },
+            });
+        } catch (err) {
+            console.log(err);
+        }
     };
 
-    const onPublish = (e, toolName) => {
-        setModalMode("publish");
+    const getAllModules = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: "/api/module/getAll",
+            });
+            setAllModules(response.data);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const getSelfCheck = async (id) => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: `/api/self-check/${id}`,
+            });
+            return response.data.questions;
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getAllModules();
+    }, []);
+
+    const toolRequired = [
+        /*Specifies tools that are required in the first index of each array.
+        The second index specifies the beginning of the tooltip message shown
+        when hovering over the submit button to indicate which fields still need
+        to be filled by the user*/
+        ["title", 'The Home Page "Title"'],
+        ["type", 'The Home Page "Type"'],
+        ["thumbnail", 'The Home Page "Thumbnail"'],
+        ["description", 'The Home Page "Description"'],
+        ["linkedModuleID", 'The Home Page "Link Module"'],
+        ["relatedResources", 'The Home Page "Related Resources'],
+        ["relatedStories", 'The Home Page "Related Stories'],
+        ["externalResources", 'The Home Page "External Resources'],
+    ];
+
+    //The stillneeded variable defaults to the title
+    const [stillNeeded, setStillNeeded] = useState([]);
+    const checkRequiredFields = async (checkTool) => {
+        const checkQuestion = await getSelfCheck(checkTool.selfCheckGroupID);
+        const needed = [];
+        //Specifies the tool or question field that still needs to be filled
+        for (let i = 0; i < toolRequired.length; i++) {
+            if (typeof checkTool[toolRequired[i][0]] == "string") {
+                /*Checks if string is empty. Applies to all but the related
+                    resources, related stories and external resources.
+                    */
+                if (checkTool[toolRequired[i][0]] == "") {
+                    needed.push(toolRequired[i][1]);
+                }
+            } else {
+                /*First checks the text, then the value properties of the
+                    related resources, related stories and external resources fields.
+                    */
+                for (let j = 0; j < checkTool[toolRequired[i][0]].length; j++) {
+                    if (
+                        checkTool[toolRequired[i][0]][j][0] == "" &&
+                        checkTool[toolRequired[i][0]][j][1] != ""
+                    ) {
+                        needed.push(toolRequired[i][1] + ' Text"');
+                    }
+                    if (
+                        checkTool[toolRequired[i][0]][j][1] == "" &&
+                        checkTool[toolRequired[i][0]][j][0] != ""
+                    ) {
+                        needed.push(toolRequired[i][1] + ' Link"');
+                    }
+                }
+            }
+        }
+        //Checks the self check question fields
+        for (let k = 0; k < checkQuestion.length; k++) {
+            if (checkQuestion[k].question == "") {
+                //Checks the question title to ensure it isn't blank
+                needed.push(" + 1 or more self check questions");
+                setStillNeeded(needed);
+                return needed;
+            }
+            if (
+                checkQuestion[k].type == "multiple_choice" ||
+                checkQuestion[k].type == "multi_select"
+            ) {
+                //checks multiple choice/multiselect fields to ensure they aren't blank
+                for (let l = 0; l < checkQuestion[k].options.length; l++) {
+                    if (checkQuestion[k].options[l][0] == "") {
+                        needed.push(" + 1 or more self check questions");
+                        setStillNeeded(needed);
+                        return needed;
+                    }
+                    if (checkQuestion[k].options[l][1] == "") {
+                        needed.push(" + 1 or more self check questions");
+                        setStillNeeded(needed);
+                        return needed;
+                    }
+                }
+            }
+        }
+        setStillNeeded(needed);
+        return needed;
+    };
+
+    const onEdit = (e, id, toolName, modalMode) => {
+        if (modalMode == modalModes.publish) {
+            setSelectedToolId(id._id);
+            setSelectedSelfCheckId(id.selfCheckGroupID);
+            checkRequiredFields(id).then((needed) => {
+                if (needed.length > 1) {
+                    setModalMode(modalModes.unpublishable);
+                } else {
+                    setModalMode(modalMode);
+                }
+            });
+        } else {
+            setModalMode(modalMode);
+            setSelectedToolId(id);
+        }
         setSelectedTool(toolName);
         onOpen();
         e.stopPropagation();
-        //TODO: Implement publishing the tool in the db
-    };
-    const onUnpublish = (e, toolName) => {
-        setModalMode("draft");
-        setSelectedTool(toolName);
-        onOpen();
-        e.stopPropagation();
-        //TODO: Implement publishing the tool in the db
     };
 
     const onDelete = (e, toolName, id, selfCheckId) => {
-        setModalMode("delete");
+        setModalMode(modalModes.delete);
         setSelectedTool(toolName);
         setSelectedToolId(id);
         setSelectedSelfCheckId(selfCheckId);
         onOpen();
         e.stopPropagation();
+    };
+
+    const publishTool = () => {
+        patchTool({ status: "published" });
+    };
+
+    const patchTool = async (changedField) => {
+        await axios({
+            method: "PATCH",
+            url: `/api/tool/update?id=${selectedToolId}`,
+            data: changedField,
+        });
+        mutate("/api/tool");
+        getAllModules();
+        setRefresh(!refresh);
+        onClose();
     };
 
     const deleteTool = async () => {
@@ -213,6 +368,8 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
             method: "DELETE",
             url: `/api/self-check/${selectedSelfCheckId}`,
         });
+        mutate("/api/tool");
+        getAllModules();
         setRefresh(!refresh);
         onClose();
     };
@@ -228,24 +385,91 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
     return (
         <>
             <Modal
+                children={
+                    modalMode === modalModes.link ? (
+                        <Select
+                            placeholder={"Select option"}
+                            size={"lg"}
+                            p={2}
+                            onChange={(e) =>
+                                setSelectedModuleId(e.target.value)
+                            }
+                        >
+                            {allModules
+                                .filter(({ toolID }) => {
+                                    return toolID == null;
+                                })
+                                .map(({ _id, title }) => (
+                                    <option key={_id} value={_id}>
+                                        {title}
+                                    </option>
+                                ))}
+                        </Select>
+                    ) : modalMode === modalModes.spinner ? (
+                        <Spinner color="brand.lime" size="xl" />
+                    ) : null
+                }
                 isOpen={isOpen}
                 onCancel={onClose}
                 onConfirm={() => {
-                    deleteTool();
+                    modalMode === modalModes.publish
+                        ? publishTool()
+                        : modalMode === modalModes.unpublishable
+                        ? openTool(selectedToolId, selectedSelfCheckId)
+                        : modalMode === modalModes.draft
+                        ? patchTool({ status: "draft" })
+                        : modalMode === modalModes.delete
+                        ? deleteTool()
+                        : modalMode === modalModes.unlink
+                        ? patchTool({ linkedModuleID: "" })
+                        : modalMode === modalModes.link
+                        ? patchTool({ linkedModuleID: selectedModuleId })
+                        : null;
                 }}
                 header={
-                    modalMode === "publish"
+                    modalMode === modalModes.publish
                         ? `Publish ${selectedTool}`
-                        : `Delete ${selectedTool}`
+                        : modalMode === modalModes.unpublishable
+                        ? `To publish ${selectedTool}, please fill the following fields:`
+                        : modalMode === modalModes.delete
+                        ? `Delete ${selectedTool}`
+                        : modalMode === modalModes.draft
+                        ? `Unpublish ${selectedTool}`
+                        : modalMode === modalModes.unlink
+                        ? `Unlink ${selectedTool}`
+                        : modalMode === modalModes.link
+                        ? `Link ${selectedTool}`
+                        : null
                 }
                 bodyText={
-                    modalMode === "publish"
+                    modalMode === modalModes.publish
                         ? publishConfirmation
-                        : deleteConfirmation
+                        : modalMode === modalModes.unpublishable
+                        ? stillNeeded.join(", ")
+                        : modalMode === modalModes.delete
+                        ? deleteConfirmation
+                        : modalMode === modalModes.draft
+                        ? unpublishConfirmation
+                        : modalMode === modalModes.unlink
+                        ? unlinkConfirmation
+                        : modalMode === modalModes.link
+                        ? linkConfirmation
+                        : null
                 }
-                confirmText={modalMode === "publish" ? `Publish` : `Delete`}
-                confirmButtonColorScheme={
-                    modalMode === "publish" ? `black` : `red`
+                confirmText={
+                    modalMode === modalModes.publish
+                        ? "Publish"
+                        : modalMode === modalModes.unpublishable
+                        ? "Edit Tool"
+                        : modalMode === modalModes.delete
+                        ? "Delete"
+                        : modalMode === modalModes.draft
+                        ? "Unpublish"
+                        : modalMode === modalModes.unlink
+                        ? "Unlink"
+                        : modalMode === modalModes.link
+                        ? "Link"
+                        : null
                 }
             />
             <Stack>
@@ -265,16 +489,31 @@ const Tools: React.FC<ToolsProps> = ({ selectedTab }) => {
                             module={tool.linkedModuleID || null}
                             published={tool.status === "published"}
                             onLinkModule={(e) => {
-                                onLinkModule(e);
-                            }}
-                            onPublish={(e) => {
-                                onPublish(e, tool.title);
+                                onEdit(
+                                    e,
+                                    tool._id,
+                                    tool.title,
+                                    modalModes.link,
+                                );
                             }}
                             onUnlinkModule={(e) => {
-                                e.stopPropagation();
+                                onEdit(
+                                    e,
+                                    tool._id,
+                                    tool.title,
+                                    modalModes.unlink,
+                                );
+                            }}
+                            onPublish={(e) => {
+                                onEdit(e, tool, tool.title, modalModes.publish);
                             }}
                             onUnpublish={(e) => {
-                                onUnpublish(e, tool.title);
+                                onEdit(
+                                    e,
+                                    tool._id,
+                                    tool.title,
+                                    modalModes.draft,
+                                );
                             }}
                             onDelete={onDelete}
                         />

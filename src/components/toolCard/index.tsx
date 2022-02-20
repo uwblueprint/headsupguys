@@ -21,7 +21,7 @@ export interface ToolCardProps extends InputProps {
     title: string;
     creators: string[];
     updated: Date;
-    module: boolean;
+    module: string;
     published: boolean;
     image?: string;
     onLinkModule(event: any): any;
@@ -83,14 +83,24 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                             {published && <StarIcon boxSize="0.75em" />}
                         </Heading>
                         {published ? (
-                            <Button
-                                variant="default"
-                                onClick={(e) => {
-                                    onUnpublish(e);
-                                }}
-                            >
-                                Unpublish Tool
-                            </Button>
+                            <Flex justify="space-between" w="58%">
+                                <Button
+                                    variant="default"
+                                    onClick={(e) => {
+                                        onUnpublish(e);
+                                    }}
+                                >
+                                    <Text isTruncated>Unpublish Tool</Text>
+                                </Button>
+                                <IconButton
+                                    aria-label="Delete tool"
+                                    variant="ghost"
+                                    icon={<DeleteIcon />}
+                                    onClick={(e) => {
+                                        onDelete(e, title, id, selfCheckId);
+                                    }}
+                                />
+                            </Flex>
                         ) : (
                             <Flex justify="space-between" w="58%">
                                 {module ? (
@@ -101,7 +111,9 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                                 onUnlinkModule(e);
                                             }}
                                         >
-                                            Unlink Module
+                                            <Text isTruncated>
+                                                Unlink Module
+                                            </Text>
                                         </Button>
                                         <Button
                                             variant="default"
@@ -109,7 +121,9 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                                 onPublish(e);
                                             }}
                                         >
-                                            Publish Tool
+                                            <Text isTruncated>
+                                                Publish Tool
+                                            </Text>
                                         </Button>
                                     </>
                                 ) : (
@@ -120,7 +134,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                                 onLinkModule(e);
                                             }}
                                         >
-                                            Link Module
+                                            <Text isTruncated>Link Module</Text>
                                         </Button>
                                         <Tooltip
                                             label="Link a module to publish your tool!"
@@ -128,18 +142,22 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                                             placement="top"
                                         >
                                             <Button
-                                                variant="solid"
                                                 _hover={{
-                                                    bg: "black",
+                                                    bg: "grey",
+                                                    cursor: "default",
+                                                }}
+                                                _active={{
+                                                    bg: "grey",
                                                 }}
                                                 color={"white"}
-                                                background={"black"}
-                                                isDisabled
+                                                background={"grey"}
                                                 onClick={(e) => {
-                                                    onPublish(e);
+                                                    e.stopPropagation();
                                                 }}
                                             >
-                                                Publish Tool
+                                                <Text isTruncated>
+                                                    Publish Tool
+                                                </Text>
                                             </Button>
                                         </Tooltip>
                                     </>

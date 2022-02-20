@@ -31,7 +31,7 @@ export const ModuleCard: React.FC<{
                 borderRadius="lg"
                 overflow="hidden"
                 p={8}
-                _hover={{ cursor: "pointer" }}
+                cursor="pointer"
             >
                 <Flex mb={4} direction="row" alignItems="center">
                     <Heading size="lg">{title}</Heading>

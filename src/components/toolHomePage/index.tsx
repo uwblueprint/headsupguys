@@ -34,7 +34,7 @@ export interface ToolHomePageProps {
     relatedStories: string[][];
     externalResources: string[][];
     relatedToolsIDs: string[];
-    allModules: string[][];
+    allModules: Record<string, string>[];
     allTools: string[][];
     onChangeInput: (
         target: string | string[],
@@ -153,14 +153,15 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                             onChangeInput(e.target.value, "linkedModuleID");
                         }}
                     >
-                        {(allModules[1] ?? []).map((moduleNames, index) => (
-                            <option
-                                key={allModules[0][index]}
-                                value={allModules[0][index]}
-                            >
-                                {moduleNames}
-                            </option>
-                        ))}
+                        {allModules
+                            .filter(({ toolID, _id }) => {
+                                return toolID == null || _id == linkedModuleID;
+                            })
+                            .map(({ _id, title }) => (
+                                <option key={_id} value={_id}>
+                                    {title}
+                                </option>
+                            ))}
                     </Select>
                 </FormControl>
                 <FormControl>
@@ -206,7 +207,7 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                                                     ? "underline"
                                                     : "default"
                                             }
-                                            _hover={{ cursor: "pointer" }}
+                                            cursor="pointer"
                                             onClick={() => {
                                                 setCurrentRelatedLink(link);
                                                 setModalIndex(index);

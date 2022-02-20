@@ -24,9 +24,6 @@ export interface ModalProps {
     size?: string;
 }
 
-// to control modals:
-// const { isOpen, onOpen, onClose } = useDisclosure();
-
 export const Modal: React.FC<ModalProps> = (props) => {
     const {
         isOpen,

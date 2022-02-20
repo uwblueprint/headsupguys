@@ -99,7 +99,7 @@ const ToolBuilder: Page = () => {
         JSON.parse(JSON.stringify(defaultQuestions)),
     );
 
-    const [allModules, setAllModules] = useState([[], []]);
+    const [allModules, setAllModules] = useState([]);
     const [allTools, setAllTools] = useState([[], []]);
     //Remembers the last saved tool
     const [lastSavedTool, setLastSavedTool] = useState(
@@ -140,12 +140,7 @@ const ToolBuilder: Page = () => {
                 method: "GET",
                 url: "/api/module/getAll",
             });
-            const newAllModules = [[], []];
-            for (const module in response.data) {
-                newAllModules[0].push(response.data[module]._id);
-                newAllModules[1].push(response.data[module].title);
-            }
-            setAllModules(newAllModules);
+            setAllModules(response.data);
         } catch (err) {
             console.log(err);
             //TODO: update error handling
@@ -180,11 +175,15 @@ const ToolBuilder: Page = () => {
             toolList.title = "Untitled Tool";
         }
         try {
+            if (saveOrPublish == "Save ") {
+                toolList.status = "draft";
+            }
             await axios({
                 method: "PATCH",
                 url: `/api/tool/${toolID}`,
                 data: toolList,
             });
+
             toast({
                 title: saveOrPublish + "Successful",
                 status: "success",

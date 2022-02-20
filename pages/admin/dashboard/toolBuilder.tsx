@@ -140,15 +140,7 @@ const ToolBuilder: Page = () => {
                 method: "GET",
                 url: "/api/module/getAll",
             });
-            const newAllModules = [];
-            for (const module in response.data) {
-                newAllModules.push([
-                    response.data[module]._id,
-                    response.data[module].title,
-                    response.data[module].toolID,
-                ]);
-            }
-            setAllModules(newAllModules);
+            setAllModules(response.data);
         } catch (err) {
             console.log(err);
             //TODO: update error handling

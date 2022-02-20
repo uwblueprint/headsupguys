@@ -34,7 +34,7 @@ export interface ToolHomePageProps {
     relatedStories: string[][];
     externalResources: string[][];
     relatedToolsIDs: string[];
-    allModules: string[][];
+    allModules: Record<string, string>[];
     allTools: string[][];
     onChangeInput: (
         target: string | string[],
@@ -69,9 +69,6 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
         ["External Resources", "externalResources", externalResources],
     ];
     const [currentRelatedLink, setCurrentRelatedLink] = useState(null);
-    const unlinkedModules = allModules.filter((module) => {
-        return module[2] == null || module[0] == linkedModuleID;
-    });
     return (
         <Wrap spacing="30px">
             <WrapItem width={"full"}>
@@ -156,11 +153,15 @@ export const ToolHomePage: React.FC<ToolHomePageProps> = ({
                             onChangeInput(e.target.value, "linkedModuleID");
                         }}
                     >
-                        {unlinkedModules.map((moduleNames) => (
-                            <option key={moduleNames[0]} value={moduleNames[0]}>
-                                {moduleNames[1]}
-                            </option>
-                        ))}
+                        {allModules
+                            .filter(({ toolID, _id }) => {
+                                return toolID == null || _id == linkedModuleID;
+                            })
+                            .map(({ _id, title }) => (
+                                <option key={_id} value={_id}>
+                                    {title}
+                                </option>
+                            ))}
                     </Select>
                 </FormControl>
                 <FormControl>

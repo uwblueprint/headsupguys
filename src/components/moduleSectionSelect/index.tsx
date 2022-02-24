@@ -9,7 +9,6 @@ import {
     Button,
     ButtonGroup,
     Flex,
-    Spacer,
     IconButton,
     useDisclosure,
 } from "@chakra-ui/react";
@@ -140,6 +139,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                     />
                 ) : type == "multipleChoice" ? (
                     <MultipleChoice
+                        preview={false}
                         question={section.multipleChoice.question}
                         setQuestion={handleMultipleChoiceQuestionChange}
                         options={section.multipleChoice.options}

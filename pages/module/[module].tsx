@@ -107,6 +107,7 @@ const Module: Page = () => {
                     }
                     return (
                         <Container
+                            maxWidth="100%"
                             paddingTop={`${section?.padding.top}${paddingType}`}
                             paddingRight={`${section?.padding.right}${paddingType}`}
                             paddingBottom={`${section?.padding.bottom}${paddingType}`}

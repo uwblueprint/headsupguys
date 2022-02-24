@@ -45,7 +45,12 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
     return (
         <>
             {variant == "mobile" ? (
-                <Container>
+                <Container
+                    w={preview ? mobile.width : "100%"}
+                    h={preview ? mobile.height : "100%"}
+                    p={preview ? "20px" : "0px"}
+                    border={preview ? "1px solid #000" : "none"}
+                >
                     <Box w="100%" h="5%">
                         <Flex
                             alignItems="start"
@@ -128,7 +133,12 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                     </Box>
                 </Container>
             ) : (
-                <Container>
+                <Container
+                    w={preview ? desktop.width : "100%"}
+                    h={preview ? desktop.height : "100%"}
+                    p={preview ? "28px" : "0px"}
+                    border={preview ? "1px solid #000" : "none"}
+                >
                     <Flex
                         alignItems="start"
                         h="17px"

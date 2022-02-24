@@ -50,7 +50,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                         <Flex
                             alignItems="start"
                             h="17px"
-                            backgroundColor="black"
+                            backgroundColor="brand.lime"
                         >
                             <Box
                                 w={`${progressValue}%`}
@@ -129,7 +129,11 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                 </Container>
             ) : (
                 <Container>
-                    <Flex alignItems="start" h="17px" backgroundColor="black">
+                    <Flex
+                        alignItems="start"
+                        h="17px"
+                        backgroundColor="brand.lime"
+                    >
                         <Box
                             w={`${progressValue}%`}
                             h="100%"

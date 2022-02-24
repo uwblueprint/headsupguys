@@ -6,6 +6,7 @@ import {
     Heading,
     Input,
     Radio,
+    RadioGroup,
     Flex,
     Grid,
     CloseButton,
@@ -30,7 +31,7 @@ const MultipleChoiceOption: React.FC<MultipleChoiceOptionProps> = ({
     const { option, column } = value;
     return (
         <Flex>
-            <Radio mr={2} isReadOnly={preview} />
+            <Radio value={option} mr={2} isReadOnly={preview} />
             <Input
                 variant="flushed"
                 placeholder={`Multiple Choice Option ${index + 1}`}
@@ -204,7 +205,7 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
             <Box>
                 {leftColumnOptions.map(({ option }) => (
                     <Flex p={1}>
-                        <Radio mr={2} isReadOnly={preview} />
+                        <Radio value={option} mr={2} isReadOnly={preview} />
                         <Box>{option}</Box>
                     </Flex>
                 ))}
@@ -212,7 +213,7 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
             <Box>
                 {rightColumnOptions.map(({ option }) => (
                     <Flex p={1}>
-                        <Radio mr={2} isReadOnly={preview} />
+                        <Radio value={option} mr={2} isReadOnly={preview} />
                         <Box>{option}</Box>
                     </Flex>
                 ))}
@@ -220,12 +221,14 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
         </Grid>
     ) : (
         <Box>
-            {options.map(({ option }) => (
-                <Flex p={1}>
-                    <Radio mr={2} isReadOnly={preview} />
-                    <Box>{option}</Box>
-                </Flex>
-            ))}
+            <RadioGroup>
+                {options.map(({ option }) => (
+                    <Flex p={1}>
+                        <Radio value={option} mr={2} isReadOnly={preview} />
+                        <Box>{option}</Box>
+                    </Flex>
+                ))}
+            </RadioGroup>
         </Box>
     );
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Stack, Heading, Input, Flex } from "@chakra-ui/react";
+import { Box, Stack, Heading, Input, Flex, Textarea } from "@chakra-ui/react";
 
 export interface ShortAnswerProps {
     question: string;
@@ -66,7 +66,15 @@ export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
             <Flex p={1}>
                 <Stack width={"full"} pb={5}>
                     <Box>{question}</Box>
-                    <Input isReadOnly={preview} minHeight={100}></Input>
+                    <Textarea
+                        maxLength={500}
+                        width={"full"}
+                        size={"lg"}
+                        isRequired
+                        isReadOnly={preview}
+                        resize={preview ? "none" : "vertical"}
+                        minHeight={100}
+                    />
                 </Stack>
             </Flex>
         </Box>

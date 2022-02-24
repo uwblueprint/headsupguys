@@ -44,6 +44,7 @@ const Document = ({
                 align="center"
             >
                 <ModulePreview
+                    preview={true}
                     previous={
                         state.slides[state.currentSlide].buttons.previous
                             ? true

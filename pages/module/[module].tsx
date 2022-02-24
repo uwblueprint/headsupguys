@@ -58,6 +58,7 @@ const Module: Page = () => {
     } else {
         return (
             <ModulePreview
+                preview={false}
                 previous={data.slides[currentSlide].buttons.previous}
                 next={data.slides[currentSlide].buttons.next}
                 save={data.slides[currentSlide].buttons.save}

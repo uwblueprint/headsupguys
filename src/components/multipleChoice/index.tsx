@@ -39,7 +39,7 @@ const MultipleChoiceOption: React.FC<MultipleChoiceOptionProps> = ({
                     pointerEvents="none"
                     children={
                         <Circle
-                            size="18px"
+                            size="16px"
                             color="white"
                             borderWidth="2px"
                             borderColor="grey.200"
@@ -220,11 +220,16 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
             <Box>
                 {leftColumnOptions.map(({ option }) => (
                     <Flex p={1}>
-                        <Radio
-                            value={preview ? null : option}
-                            mr={2}
-                            isReadOnly={preview}
-                        />
+                        {preview && (
+                            <Circle
+                                size="16px"
+                                color="white"
+                                borderWidth="2px"
+                                borderColor="grey.200"
+                                mr={"6px"}
+                            ></Circle>
+                        )}
+                        {!preview && <Radio value={option} mr={2} />}
                         <Box>{option}</Box>
                     </Flex>
                 ))}
@@ -232,6 +237,16 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
             <Box>
                 {rightColumnOptions.map(({ option }) => (
                     <Flex p={1}>
+                        {preview && (
+                            <Circle
+                                size="16px"
+                                color="white"
+                                borderWidth="2px"
+                                borderColor="grey.200"
+                                mr={"6px"}
+                            ></Circle>
+                        )}
+                        {!preview && <Radio value={option} mr={2} />}
                         <Radio
                             value={preview ? null : option}
                             mr={2}
@@ -246,12 +261,17 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
         <Box>
             <RadioGroup>
                 {options.map(({ option }) => (
-                    <Flex p={1}>
-                        <Radio
-                            value={preview ? null : option}
-                            mr={2}
-                            isReadOnly={preview}
-                        />
+                    <Flex p={1} align="center">
+                        {preview && (
+                            <Circle
+                                size="16px"
+                                color="white"
+                                borderWidth="2px"
+                                borderColor="grey.200"
+                                mr={"6px"}
+                            ></Circle>
+                        )}
+                        {!preview && <Radio value={option} mr={2} />}
                         <Box>{option}</Box>
                     </Flex>
                 ))}

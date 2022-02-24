@@ -103,7 +103,6 @@ const Document = ({
                                     />
                                 );
                             } else if (section.type === "shortAnswer") {
-                                console.log(section);
                                 sectionPreview = (
                                     <ShortAnswerPreview
                                         preview={true}

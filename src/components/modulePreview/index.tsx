@@ -46,7 +46,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
         <>
             {variant == "mobile" ? (
                 <Container
-                    maxWidth={"100%"}
+                    maxWidth={preview ? null : ["342px", "342px", "555px"]}
                     w={preview ? mobile.width : "100%"}
                     h={preview ? mobile.height : "100%"}
                     p={preview ? "20px" : "0px"}
@@ -66,7 +66,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                         </Flex>
                     </Box>
 
-                    <Box w="100%" h="95%" overflow="auto" maxWidth={"100%"}>
+                    <Box w="100%" h="95%" overflow="auto">
                         <Box minHeight="77%">{props.children}</Box>
                         <Box w="100%">
                             {print && save ? (

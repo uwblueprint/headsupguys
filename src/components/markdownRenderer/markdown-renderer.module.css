@@ -1,6 +1,7 @@
 .markdown h1 {
     font-size: 48px;
     color: black;
+    text-align: center;
     text-decoration: underline;
     text-decoration-skip-ink: none;
     text-decoration-thickness: 48px;

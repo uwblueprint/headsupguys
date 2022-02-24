@@ -46,6 +46,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
         <>
             {variant == "mobile" ? (
                 <Container
+                    maxWidth={"100%"}
                     w={preview ? mobile.width : "100%"}
                     h={preview ? mobile.height : "100%"}
                     p={preview ? "20px" : "0px"}
@@ -55,7 +56,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                         <Flex
                             alignItems="start"
                             h="17px"
-                            backgroundColor="brand.lime"
+                            backgroundColor="black"
                         >
                             <Box
                                 w={`${progressValue}%`}
@@ -65,7 +66,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                         </Flex>
                     </Box>
 
-                    <Box w="100%" h="95%" overflow="auto">
+                    <Box w="100%" h="95%" overflow="auto" maxWidth={"100%"}>
                         <Box minHeight="77%">{props.children}</Box>
                         <Box w="100%">
                             {print && save ? (
@@ -134,6 +135,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                 </Container>
             ) : (
                 <Container
+                    maxWidth={"100%"}
                     w={preview ? desktop.width : "100%"}
                     h={preview ? desktop.height : "100%"}
                     p={preview ? "28px" : "0px"}

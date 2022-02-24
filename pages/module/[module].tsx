@@ -63,7 +63,7 @@ const Module: Page = () => {
                 next={data.slides[currentSlide].buttons.next}
                 save={data.slides[currentSlide].buttons.save}
                 print={data.slides[currentSlide].buttons.print}
-                progressValue={(currentSlide / data.slides.length) * 100}
+                progressValue={((currentSlide + 1) / data.slides.length) * 100}
                 variant="mobile"
                 goNextSlide={() => goNextSlide()}
                 goPrevSlide={() => goPrevSlide()}

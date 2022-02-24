@@ -46,7 +46,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
         <>
             {variant == "mobile" ? (
                 <Container
-                    maxWidth={preview ? null : ["342px", "342px", "555px"]}
+                    maxWidth={preview ? null : ["326px", "326px", "750px"]}
                     w={preview ? mobile.width : "100%"}
                     h={preview ? mobile.height : "100%"}
                     p={preview ? "20px" : "0px"}

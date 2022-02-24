@@ -11,7 +11,7 @@ import {
     ShortAnswerPreview,
 } from "@components";
 import useSWR from "swr";
-import { Spinner } from "@chakra-ui/react";
+import { Spinner, Container } from "@chakra-ui/react";
 
 const fetcher = async (url) => {
     const response = await axios({
@@ -69,6 +69,7 @@ const Module: Page = () => {
                 goPrevSlide={() => goPrevSlide()}
             >
                 {data.slides[currentSlide].sections.map((section) => {
+                    const paddingType = section?.padding.type || "%";
                     let sectionPreview;
                     if (section.type === "staticContent") {
                         sectionPreview = (
@@ -104,7 +105,15 @@ const Module: Page = () => {
                             />
                         );
                     }
-                    return sectionPreview;
+                    return (
+                        <Container
+                            paddingTop={`${section?.padding.top}${paddingType}`}
+                            paddingRight={`${section?.padding.right}${paddingType}`}
+                            paddingBottom={`${section?.padding.bottom}${paddingType}`}
+                            paddingLeft={`${section?.padding.left}${paddingType}`}
+                            children={sectionPreview}
+                        ></Container>
+                    );
                 }, "")}
             </ModulePreview>
         );

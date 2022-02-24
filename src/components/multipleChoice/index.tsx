@@ -220,7 +220,11 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
             <Box>
                 {leftColumnOptions.map(({ option }) => (
                     <Flex p={1}>
-                        <Radio value={option} mr={2} isReadOnly={preview} />
+                        <Radio
+                            value={preview ? null : option}
+                            mr={2}
+                            isReadOnly={preview}
+                        />
                         <Box>{option}</Box>
                     </Flex>
                 ))}
@@ -228,7 +232,11 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
             <Box>
                 {rightColumnOptions.map(({ option }) => (
                     <Flex p={1}>
-                        <Radio value={option} mr={2} isReadOnly={preview} />
+                        <Radio
+                            value={preview ? null : option}
+                            mr={2}
+                            isReadOnly={preview}
+                        />
                         <Box>{option}</Box>
                     </Flex>
                 ))}
@@ -239,7 +247,11 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
             <RadioGroup>
                 {options.map(({ option }) => (
                     <Flex p={1}>
-                        <Radio value={option} mr={2} isReadOnly={preview} />
+                        <Radio
+                            value={preview ? null : option}
+                            mr={2}
+                            isReadOnly={preview}
+                        />
                         <Box>{option}</Box>
                     </Flex>
                 ))}

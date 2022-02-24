@@ -135,7 +135,6 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                 </Container>
             ) : (
                 <Container
-                    maxWidth={"100%"}
                     w={preview ? desktop.width : "100%"}
                     h={preview ? desktop.height : "100%"}
                     p={preview ? "28px" : "0px"}

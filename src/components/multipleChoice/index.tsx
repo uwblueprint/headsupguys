@@ -5,6 +5,9 @@ import {
     Stack,
     Heading,
     Input,
+    InputGroup,
+    InputLeftElement,
+    Circle,
     Radio,
     RadioGroup,
     Flex,
@@ -31,15 +34,27 @@ const MultipleChoiceOption: React.FC<MultipleChoiceOptionProps> = ({
     const { option, column } = value;
     return (
         <Flex>
-            <Radio value={option} mr={2} isReadOnly={preview} />
-            <Input
-                variant="flushed"
-                placeholder={`Multiple Choice Option ${index + 1}`}
-                onChange={(e) => {
-                    onChange({ option: e.target.value, column }, index);
-                }}
-                value={option}
-            />
+            <InputGroup>
+                <InputLeftElement
+                    pointerEvents="none"
+                    children={
+                        <Circle
+                            size="18px"
+                            color="white"
+                            borderWidth="2px"
+                            borderColor="grey.200"
+                        ></Circle>
+                    }
+                />
+                <Input
+                    variant="flushed"
+                    placeholder={`Multi-Select Option ${index + 1}`}
+                    onChange={(e) => {
+                        onChange({ option: e.target.value, column }, index);
+                    }}
+                    value={option}
+                />
+            </InputGroup>
             <CloseButton mt="5px" onClick={() => onDelete(index)} />
         </Flex>
     );

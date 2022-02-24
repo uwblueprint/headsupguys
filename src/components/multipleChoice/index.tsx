@@ -12,14 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { Option } from "pages/admin/dashboard/builder";
 
-export interface MultipleChoiceProps {
-    question: string;
-    setQuestion: (newQuestion: string) => void;
-    options: Option[];
-    setOptions: (newOptions: Option[]) => void;
-    columns: string;
-}
 interface MultipleChoiceOptionProps {
+    preview: boolean;
     index: number;
     value: Option;
     onChange: (newOption: Option, index: number) => void;
@@ -27,6 +21,7 @@ interface MultipleChoiceOptionProps {
 }
 
 const MultipleChoiceOption: React.FC<MultipleChoiceOptionProps> = ({
+    preview,
     index,
     value,
     onChange,
@@ -35,7 +30,7 @@ const MultipleChoiceOption: React.FC<MultipleChoiceOptionProps> = ({
     const { option, column } = value;
     return (
         <Flex>
-            <Radio mr={2} isReadOnly />
+            <Radio mr={2} isReadOnly={preview} />
             <Input
                 variant="flushed"
                 placeholder={`Multiple Choice Option ${index + 1}`}
@@ -49,7 +44,16 @@ const MultipleChoiceOption: React.FC<MultipleChoiceOptionProps> = ({
     );
 };
 
+export interface MultipleChoiceProps {
+    preview: boolean;
+    question: string;
+    setQuestion: (newQuestion: string) => void;
+    options: Option[];
+    setOptions: (newOptions: Option[]) => void;
+    columns: string;
+}
 export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
+    preview,
     question,
     setQuestion,
     options,
@@ -81,6 +85,7 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
                         const i = options.indexOf(leftOption);
                         return (
                             <MultipleChoiceOption
+                                preview={preview}
                                 key={i}
                                 value={leftOption}
                                 index={i}
@@ -107,6 +112,7 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
                         const i = options.indexOf(rightOption);
                         return (
                             <MultipleChoiceOption
+                                preview={preview}
                                 key={i}
                                 value={rightOption}
                                 index={i}
@@ -133,6 +139,7 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
             <Box>
                 {options.map((currentOption, i) => (
                     <MultipleChoiceOption
+                        preview={preview}
                         key={i}
                         value={currentOption}
                         index={i}
@@ -170,6 +177,7 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
 };
 
 interface MultipleChoicePreviewProps {
+    preview: boolean;
     question: string;
     options: Option[];
     variant: string;
@@ -177,6 +185,7 @@ interface MultipleChoicePreviewProps {
 }
 
 export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
+    preview,
     question,
     options,
     variant,
@@ -195,7 +204,7 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
             <Box>
                 {leftColumnOptions.map(({ option }) => (
                     <Flex p={1}>
-                        <Radio mr={2} isReadOnly />
+                        <Radio mr={2} isReadOnly={preview} />
                         <Box>{option}</Box>
                     </Flex>
                 ))}
@@ -203,7 +212,7 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
             <Box>
                 {rightColumnOptions.map(({ option }) => (
                     <Flex p={1}>
-                        <Radio mr={2} isReadOnly />
+                        <Radio mr={2} isReadOnly={preview} />
                         <Box>{option}</Box>
                     </Flex>
                 ))}
@@ -213,7 +222,7 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
         <Box>
             {options.map(({ option }) => (
                 <Flex p={1}>
-                    <Radio mr={2} isReadOnly />
+                    <Radio mr={2} isReadOnly={preview} />
                     <Box>{option}</Box>
                 </Flex>
             ))}

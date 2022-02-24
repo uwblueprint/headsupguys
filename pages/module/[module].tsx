@@ -79,6 +79,7 @@ const Module: Page = () => {
                     } else if (section.type === "multipleChoice") {
                         sectionPreview = (
                             <MultipleChoicePreview
+                                preview={false}
                                 question={section.multipleChoice.question}
                                 options={section.multipleChoice.options}
                                 variant="mobile"
@@ -88,6 +89,7 @@ const Module: Page = () => {
                     } else if (section.type === "multiSelect") {
                         sectionPreview = (
                             <MultiSelectPreview
+                                preview={false}
                                 question={section.multiSelect.question}
                                 options={section.multiSelect.options}
                                 variant="mobile"
@@ -97,6 +99,7 @@ const Module: Page = () => {
                     } else if (section.type === "shortAnswer") {
                         sectionPreview = (
                             <ShortAnswerPreview
+                                preview={false}
                                 question={section.shortAnswer}
                             />
                         );

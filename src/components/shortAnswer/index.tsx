@@ -53,10 +53,12 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
 };
 
 interface ShortAnswerPreviewProps {
+    preview: boolean;
     question: string;
 }
 
 export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
+    preview,
     question,
 }) => {
     const questionFields = (
@@ -64,7 +66,7 @@ export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
             <Flex p={1}>
                 <Stack width={"full"} pb={5}>
                     <Box>{question}</Box>
-                    <Input isReadOnly minHeight={100}></Input>
+                    <Input isReadOnly={preview} minHeight={100}></Input>
                 </Stack>
             </Flex>
         </Box>

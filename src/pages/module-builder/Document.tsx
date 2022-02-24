@@ -83,6 +83,7 @@ const Document = ({
                             } else if (section.type === "multipleChoice") {
                                 sectionPreview = (
                                     <MultipleChoicePreview
+                                        preview={true}
                                         question={
                                             section.multipleChoice.question
                                         }
@@ -94,6 +95,7 @@ const Document = ({
                             } else if (section.type === "multiSelect") {
                                 sectionPreview = (
                                     <MultiSelectPreview
+                                        preview={true}
                                         question={section.multiSelect.question}
                                         options={section.multiSelect.options}
                                         variant={modulePreviewVariant}
@@ -104,6 +106,7 @@ const Document = ({
                                 console.log(section);
                                 sectionPreview = (
                                     <ShortAnswerPreview
+                                        preview={true}
                                         question={section.shortAnswer}
                                     />
                                 );

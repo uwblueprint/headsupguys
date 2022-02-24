@@ -1,7 +1,8 @@
 import React from "react";
-import { Box, Flex, Progress, Button } from "@chakra-ui/react";
+import { Box, Container, Flex, Button } from "@chakra-ui/react";
 
 export interface ModulePreviewProps {
+    preview: boolean;
     previous: boolean;
     next: boolean;
     save: boolean;
@@ -18,6 +19,7 @@ export interface ModulePreviewProps {
 
 export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
     const {
+        preview,
         previous,
         next,
         save,
@@ -43,12 +45,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
     return (
         <>
             {variant == "mobile" ? (
-                <Box
-                    w={mobile.width}
-                    h={mobile.height}
-                    p="20px"
-                    border="1px solid #000"
-                >
+                <Container>
                     <Box w="100%" h="5%">
                         <Flex
                             alignItems="start"
@@ -129,14 +126,9 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                             </Flex>
                         </Box>
                     </Box>
-                </Box>
+                </Container>
             ) : (
-                <Box
-                    w={desktop.width}
-                    h={desktop.height}
-                    p="28px"
-                    border="1px solid #000"
-                >
+                <Container>
                     <Flex alignItems="start" h="17px" backgroundColor="black">
                         <Box
                             w={`${progressValue}%`}
@@ -189,7 +181,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                             </Flex>
                         </Box>
                     </Box>
-                </Box>
+                </Container>
             )}
         </>
     );

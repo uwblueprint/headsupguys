@@ -132,6 +132,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                             h="55px"
                             mx={2}
                             disabled={!previous}
+                            onClick={() => goPrevSlide()}
                         >
                             {prevButton}
                         </Button>
@@ -161,6 +162,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                             h="55px"
                             mx={2}
                             disabled={!next}
+                            onClick={() => goNextSlide()}
                         >
                             {nextButton}
                         </Button>

@@ -5,8 +5,6 @@ import {
     Stack,
     Heading,
     Input,
-    InputGroup,
-    InputLeftElement,
     Circle,
     Radio,
     RadioGroup,
@@ -17,7 +15,6 @@ import {
 import { Option } from "pages/admin/dashboard/builder";
 
 interface MultipleChoiceOptionProps {
-    preview: boolean;
     index: number;
     value: Option;
     onChange: (newOption: Option, index: number) => void;
@@ -25,7 +22,6 @@ interface MultipleChoiceOptionProps {
 }
 
 const MultipleChoiceOption: React.FC<MultipleChoiceOptionProps> = ({
-    preview,
     index,
     value,
     onChange,
@@ -33,28 +29,22 @@ const MultipleChoiceOption: React.FC<MultipleChoiceOptionProps> = ({
 }) => {
     const { option, column } = value;
     return (
-        <Flex>
-            <InputGroup>
-                <InputLeftElement
-                    pointerEvents="none"
-                    children={
-                        <Circle
-                            size="16px"
-                            color="white"
-                            borderWidth="2px"
-                            borderColor="grey.200"
-                        ></Circle>
-                    }
-                />
-                <Input
-                    variant="flushed"
-                    placeholder={`Multi-Select Option ${index + 1}`}
-                    onChange={(e) => {
-                        onChange({ option: e.target.value, column }, index);
-                    }}
-                    value={option}
-                />
-            </InputGroup>
+        <Flex align="center">
+            <Circle
+                size="16px"
+                color="white"
+                borderWidth="2px"
+                borderColor="grey.200"
+                mr="5px"
+            ></Circle>
+            <Input
+                variant="flushed"
+                placeholder={`Multi-Select Option ${index + 1}`}
+                onChange={(e) => {
+                    onChange({ option: e.target.value, column }, index);
+                }}
+                value={option}
+            />
             <CloseButton mt="5px" onClick={() => onDelete(index)} />
         </Flex>
     );
@@ -69,7 +59,6 @@ export interface MultipleChoiceProps {
     columns: string;
 }
 export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
-    preview,
     question,
     setQuestion,
     options,
@@ -101,7 +90,6 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
                         const i = options.indexOf(leftOption);
                         return (
                             <MultipleChoiceOption
-                                preview={preview}
                                 key={i}
                                 value={leftOption}
                                 index={i}
@@ -128,7 +116,6 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
                         const i = options.indexOf(rightOption);
                         return (
                             <MultipleChoiceOption
-                                preview={preview}
                                 key={i}
                                 value={rightOption}
                                 index={i}
@@ -155,7 +142,6 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
             <Box>
                 {options.map((currentOption, i) => (
                     <MultipleChoiceOption
-                        preview={preview}
                         key={i}
                         value={currentOption}
                         index={i}
@@ -219,7 +205,7 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
         <Grid templateColumns="repeat(2, 1fr)" gap={3}>
             <Box>
                 {leftColumnOptions.map(({ option }) => (
-                    <Flex p={1}>
+                    <Flex p={1} align="center">
                         {preview && (
                             <Circle
                                 size="16px"
@@ -229,14 +215,16 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
                                 mr={"6px"}
                             ></Circle>
                         )}
-                        {!preview && <Radio value={option} mr={2} />}
+                        {!preview && (
+                            <Radio value={option} mr={2} cursor={"pointer"} />
+                        )}
                         <Box>{option}</Box>
                     </Flex>
                 ))}
             </Box>
             <Box>
                 {rightColumnOptions.map(({ option }) => (
-                    <Flex p={1}>
+                    <Flex p={1} align="center">
                         {preview && (
                             <Circle
                                 size="16px"
@@ -246,12 +234,10 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
                                 mr={"6px"}
                             ></Circle>
                         )}
-                        {!preview && <Radio value={option} mr={2} />}
-                        <Radio
-                            value={preview ? null : option}
-                            mr={2}
-                            isReadOnly={preview}
-                        />
+                        {!preview && (
+                            <Radio value={option} mr={2} cursor={"pointer"} />
+                        )}
+
                         <Box>{option}</Box>
                     </Flex>
                 ))}
@@ -267,11 +253,13 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
                                 size="16px"
                                 color="white"
                                 borderWidth="2px"
-                                borderColor="grey.200"
                                 mr={"6px"}
+                                borderColor="grey.200"
                             ></Circle>
                         )}
-                        {!preview && <Radio value={option} mr={2} />}
+                        {!preview && (
+                            <Radio value={option} mr={2} cursor={"pointer"} />
+                        )}
                         <Box>{option}</Box>
                     </Flex>
                 ))}

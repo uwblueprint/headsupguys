@@ -35,7 +35,7 @@ const MultiSelectOption: React.FC<MultiSelectOptionProps> = ({
     const { option, column } = value;
     return (
         <Flex>
-            <Checkbox mr={2} isReadOnly />
+            <Checkbox mr={2} isReadOnly pointerEvents="none" />
             <Input
                 variant="flushed"
                 placeholder={`Multi-Select Option ${index + 1}`}
@@ -197,7 +197,11 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
             <Box>
                 {leftColumnOptions.map(({ option }) => (
                     <Flex p={1}>
-                        <Checkbox mr={2} isReadOnly={preview} />
+                        <Checkbox
+                            mr={2}
+                            isReadOnly={preview}
+                            pointerEvents="none"
+                        />
                         <Box>{option}</Box>
                     </Flex>
                 ))}
@@ -205,7 +209,11 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
             <Box>
                 {rightColumnOptions.map(({ option }) => (
                     <Flex p={1}>
-                        <Checkbox mr={2} isReadOnly={preview} />
+                        <Checkbox
+                            mr={2}
+                            isReadOnly={preview}
+                            pointerEvents="none"
+                        />
                         <Box>{option}</Box>
                     </Flex>
                 ))}
@@ -215,7 +223,11 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
         <Box>
             {options.map(({ option }) => (
                 <Flex p={1}>
-                    <Checkbox mr={2} isReadOnly={preview} />
+                    <Checkbox
+                        mr={2}
+                        isReadOnly={preview}
+                        pointerEvents={preview ? "none" : "auto"}
+                    />
                     <Box>{option}</Box>
                 </Flex>
             ))}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, Button, useMediaQuery, Container } from "@chakra-ui/react";
+import { Box, Flex, Button, Container } from "@chakra-ui/react";
 
 export interface ModulePreviewProps {
     preview: boolean;
@@ -181,7 +181,10 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
             {variant == "desktop" ? desktopModule : mobileModule}
         </Box>
     ) : (
-        <Container w={variant == "desktop" ? desktop.width : mobile.width}>
+        <Container
+            maxWidth={"100%"}
+            w={variant == "desktop" ? desktop.width : mobile.width}
+        >
             {variant == "desktop" ? desktopModule : mobileModule}
         </Container>
     );

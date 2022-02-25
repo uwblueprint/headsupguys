@@ -26,7 +26,7 @@ const Module: Page = () => {
     const router = useRouter();
     const { module } = router.query;
     const { data, error } = useSWR(`/api/module/${module}`, fetcher);
-    const [variant] = useMediaQuery("(min-width: 800px)");
+    const [large] = useMediaQuery("(min-width: 800px)");
 
     function goNextSlide() {
         if (currentSlide < data.slides.length - 1) {
@@ -64,7 +64,7 @@ const Module: Page = () => {
                 save={data.slides[currentSlide].buttons.save}
                 print={data.slides[currentSlide].buttons.print}
                 progressValue={((currentSlide + 1) / data.slides.length) * 100}
-                variant={variant ? "desktop" : "mobile"}
+                variant={large ? "desktop" : "mobile"}
                 goNextSlide={() => goNextSlide()}
                 goPrevSlide={() => goPrevSlide()}
             >
@@ -83,7 +83,7 @@ const Module: Page = () => {
                                 preview={false}
                                 question={section.multipleChoice.question}
                                 options={section.multipleChoice.options}
-                                variant={variant ? "desktop" : "mobile"}
+                                variant={large ? "desktop" : "mobile"}
                                 columns={section.properties.columns}
                             />
                         );
@@ -93,7 +93,7 @@ const Module: Page = () => {
                                 preview={false}
                                 question={section.multiSelect.question}
                                 options={section.multiSelect.options}
-                                variant={variant ? "desktop" : "mobile"}
+                                variant={large ? "desktop" : "mobile"}
                                 columns={section.properties.columns}
                             />
                         );

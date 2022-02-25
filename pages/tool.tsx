@@ -15,6 +15,7 @@ import ResourcesAccordion from "src/pages/tool/ResourcesAccordion";
 import StartModuleSection from "src/pages/tool/StartModuleSection";
 import ToolCard from "src/pages/tool/ToolCard";
 import { getVariant } from "src/utils/media/mediaHelpers";
+import { Page } from "types/Page";
 
 const fetcher = async (url) => {
     const response = await axios({
@@ -38,7 +39,7 @@ const relatedToolsFetcher = async (relatedToolsIDs) => {
     return data;
 };
 
-const Tool: React.FC = () => {
+const Tool: Page = () => {
     const variant = getVariant();
     const progress = 100;
 

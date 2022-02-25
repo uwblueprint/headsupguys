@@ -1,7 +1,6 @@
 import { Tool } from "database/models/tool";
 import { Module } from "../../../database/models/module";
 import { NextApiRequest, NextApiResponse } from "next";
-import { ModifierFlags } from "typescript";
 import connectDB from "../utils/mongoose";
 
 const deleteOne = async (

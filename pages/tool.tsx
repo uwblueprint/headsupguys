@@ -39,10 +39,6 @@ const relatedToolsFetcher = async (relatedToolsIDs) => {
 };
 
 const Tool: React.FC = () => {
-    const handleRestart = () => {
-        onCloseRestart();
-    };
-
     const variant = getVariant();
     const progress = 100;
 
@@ -143,7 +139,6 @@ const Tool: React.FC = () => {
                     variant={variant}
                 />
                 <ModuleProgressSection
-                    handleRestart={handleRestart}
                     linkedModuleID={data.linkedModuleID}
                     progress={progress}
                     selfCheckGroupID={data.selfCheckGroupID}
@@ -162,7 +157,6 @@ const Tool: React.FC = () => {
                 variant={variant}
             />
             <ModuleProgressSection
-                handleRestart={handleRestart}
                 linkedModuleID={data.linkedModuleID}
                 progress={progress}
                 selfCheckGroupID={data.selfCheckGroupID}

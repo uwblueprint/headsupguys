@@ -39,13 +39,15 @@ const CertificateBanner = ({
                     {progress === 100
                         ? `Congrats on completing the ${title} learning module! You can download your certificate of completion `
                         : `Complete the ${title} module to receive a certificate of learning to share with your friends and family.`}
-                    <Link
-                        color="brand.lime"
-                        fontSize="sm"
-                        href={`/certificate?id=${id}`}
-                    >
-                        here
-                    </Link>
+                    {progress === 100 && (
+                        <Link
+                            color="brand.lime"
+                            fontSize="sm"
+                            href={`/certificate?id=${id}`}
+                        >
+                            here
+                        </Link>
+                    )}
                     {progress === 100 && `.`}
                 </Text>
             </Flex>

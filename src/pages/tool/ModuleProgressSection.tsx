@@ -13,19 +13,21 @@ import { MdChevronRight, MdRefresh } from "react-icons/md";
 import RestartModal from "src/pages/tool/RestartModal";
 
 const ModuleProgressSection = ({
-    handleRestart,
     linkedModuleID,
     progress,
     selfCheckGroupID,
     variant,
 }: {
-    handleRestart: () => void;
     linkedModuleID: string;
     progress: number;
     selfCheckGroupID: string;
     variant: string;
 }): React.ReactElement => {
     const { isOpen, onClose, onOpen } = useDisclosure();
+
+    const handleRestart = () => {
+        onClose();
+    };
 
     return progress !== 0 ? (
         <Box>

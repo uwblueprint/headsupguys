@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Flex, Image, Spacer, Text } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 const ToolCard = ({
     description,
@@ -16,6 +17,8 @@ const ToolCard = ({
     title: string;
     variant: string;
 }): React.ReactElement => {
+    const router = useRouter();
+
     return variant === "desktop" ? (
         <Flex
             backgroundColor="white"
@@ -63,7 +66,7 @@ const ToolCard = ({
                     variant="outlineBlack"
                     width="100%"
                 >
-                    Take Self Check
+                    Take Self-Check
                 </Button>
             </Flex>
         </Flex>
@@ -112,7 +115,7 @@ const ToolCard = ({
                     variant="outlineBlack"
                     width="100%"
                 >
-                    Take Self Check
+                    Take Self-Check
                 </Button>
             </Flex>
         </Flex>

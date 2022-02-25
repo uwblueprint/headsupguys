@@ -218,7 +218,7 @@ const Tool: React.FC = () => {
                         {relatedToolsData.map((toolData) => {
                             return (
                                 <ToolCard
-                                    id={toolData._id}
+                                    key={toolData._id}
                                     description={toolData.description}
                                     linkedModuleID={toolData.linkedModuleID}
                                     selfCheckGroupID={toolData.selfCheckGroupID}

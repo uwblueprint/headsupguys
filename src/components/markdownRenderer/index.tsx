@@ -96,7 +96,11 @@ const BaseRenderer: React.FC<{ content: string; variables?: any }> = ({
                         {content.includes("$[") ? (
                             <>
                                 <div>
-                                    <ReactPlayer controls url={rest.href} />
+                                    <ReactPlayer
+                                        maxwidth={"100%"}
+                                        controls
+                                        url={rest.href}
+                                    />
                                 </div>
                             </>
                         ) : content.includes("<>[") ? (

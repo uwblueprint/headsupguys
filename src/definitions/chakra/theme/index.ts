@@ -5,7 +5,7 @@ import styles from "./styles";
 import colors from "./foundations/colors";
 
 import fontSizes from "./foundations/fontSizes";
-import { Button } from "./components";
+import { AdminButton, Button } from "./components";
 import fonts from "./fonts";
 /**
  * This file is generated for providing a custom theme to Chakra UI
@@ -27,7 +27,7 @@ const overrides = {
 const adminOverrides = {
     ...styles,
     components: {
-        Button,
+        AdminButton,
     },
     colors,
     fontSizes,

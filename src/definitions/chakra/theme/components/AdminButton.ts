@@ -1,5 +1,5 @@
-const Button = {
-    baseStyle: { borderRadius: "0px", fontWeight: "normal" },
+const AdminButton = {
+    baseStyle: {},
     sizes: {},
     variants: {
         default: {
@@ -48,4 +48,4 @@ const Button = {
     },
 };
 
-export { Button };
+export { AdminButton };

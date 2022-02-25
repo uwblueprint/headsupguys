@@ -8,6 +8,7 @@ export default {
     },
     background: {
         light: "#F3F3F3",
+        mid: "#363535",
         dark: "#121310",
     },
     header: {

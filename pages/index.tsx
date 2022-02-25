@@ -18,7 +18,8 @@ import useSWR from "swr";
 import { UserToolCard } from "@components/userToolCard";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
-import { useMediaQuery } from "react-responsive";
+
+import { getVariant } from "src/utils/media/mediaHelpers";
 
 const fetcher = async (url) => {
     const response = await axios({
@@ -192,9 +193,7 @@ const Tools: React.FC<{ variant: string }> = ({ variant }) => {
 
 const Home: React.FC = () => {
     const [showAlert, setShowAlert] = useState(true);
-    const variant = useMediaQuery({ query: `(max-width: 925px)` })
-        ? "mobile"
-        : "desktop";
+    const variant = getVariant();
 
     return (
         <>

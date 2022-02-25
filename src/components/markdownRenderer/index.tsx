@@ -97,7 +97,7 @@ const BaseRenderer: React.FC<{ content: string; variables?: any }> = ({
                             <>
                                 <div>
                                     <ReactPlayer
-                                        maxwidth={"100%"}
+                                        width={"100%"}
                                         controls
                                         url={rest.href}
                                     />

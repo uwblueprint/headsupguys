@@ -1,9 +1,7 @@
-import { useMediaQuery } from "react-responsive";
+import { useMediaQuery } from "@chakra-ui/react";
 
-const getVariant = () => {
-    return useMediaQuery({ query: `(max-width: 925px)` })
-        ? "mobile"
-        : "desktop";
+const getIsDesktop = () => {
+    return useMediaQuery("(min-width: 925px)");
 };
 
-export { getVariant };
+export { getIsDesktop };

@@ -5,22 +5,22 @@ import CertificateBanner from "src/pages/tool/CertificateBanner";
 
 const Header = ({
     id,
+    isDesktop,
     progress,
     title,
     type,
-    variant,
 }: {
     id: string;
+    isDesktop: boolean;
     progress: number;
     title: string;
     type: string;
-    variant: string;
 }): React.ReactElement => {
     const { isOpen, onToggle } = useDisclosure();
 
     return (
         <Box>
-            {variant === "desktop" ? (
+            {isDesktop ? (
                 <Flex align="center" height="160px" justify="space-between">
                     <Flex
                         direction="column"
@@ -101,7 +101,7 @@ const Header = ({
                     </Flex>
                     <Flex
                         align="flex-end"
-                        flexShrink="0"
+                        flexShrink={0}
                         height="100%"
                         padding="20px 20px"
                     >
@@ -129,7 +129,7 @@ const Header = ({
                 isOpen={isOpen}
                 progress={progress}
                 title={title}
-                variant={variant}
+                isDesktop={isDesktop}
             />
         </Box>
     );

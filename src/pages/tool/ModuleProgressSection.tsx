@@ -13,15 +13,15 @@ import { MdChevronRight, MdRefresh } from "react-icons/md";
 import RestartModal from "src/pages/tool/RestartModal";
 
 const ModuleProgressSection = ({
+    isDesktop,
     linkedModuleID,
     progress,
     selfCheckGroupID,
-    variant,
 }: {
+    isDesktop: boolean;
     linkedModuleID: string;
     progress: number;
     selfCheckGroupID: string;
-    variant: string;
 }): React.ReactElement => {
     const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -35,9 +35,9 @@ const ModuleProgressSection = ({
                 handleRestart={handleRestart}
                 isOpen={isOpen}
                 onClose={onClose}
-                variant={variant}
+                isDesktop={isDesktop}
             />
-            {variant === "desktop" ? (
+            {isDesktop ? (
                 <Flex
                     backgroundColor="background.dark"
                     color="white"

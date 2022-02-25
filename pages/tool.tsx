@@ -14,7 +14,7 @@ import ModuleProgressSection from "src/pages/tool/ModuleProgressSection";
 import ResourcesAccordion from "src/pages/tool/ResourcesAccordion";
 import StartModuleSection from "src/pages/tool/StartModuleSection";
 import ToolCard from "src/pages/tool/ToolCard";
-import { getVariant } from "src/utils/media/mediaHelpers";
+import { getIsDesktop } from "src/utils/media/mediaHelpers";
 import { Page } from "types/Page";
 
 const fetcher = async (url) => {
@@ -40,7 +40,7 @@ const relatedToolsFetcher = async (relatedToolsIDs) => {
 };
 
 const Tool: Page = () => {
-    const variant = getVariant();
+    const [isDesktop] = getIsDesktop();
     const progress = 100;
 
     const router = useRouter();
@@ -67,14 +67,14 @@ const Tool: Page = () => {
         );
     }
 
-    return variant === "desktop" ? (
+    return isDesktop ? (
         <Flex direction="column">
             <Header
                 id={data._id}
                 progress={progress}
                 title={data.title}
                 type={data.type}
-                variant={variant}
+                isDesktop={isDesktop}
             />
             <Flex padding="30px calc(20vw - 120px)">
                 <Flex direction="column">
@@ -125,7 +125,7 @@ const Tool: Page = () => {
                                         }
                                         thumbnail={toolData.thumbnail}
                                         title={toolData.title}
-                                        variant={variant}
+                                        isDesktop={isDesktop}
                                     />
                                 );
                             })}
@@ -137,16 +137,16 @@ const Tool: Page = () => {
                     progress={progress}
                     selfCheckGroupID={data.selfCheckGroupID}
                     title={data.title}
-                    variant={variant}
+                    isDesktop={isDesktop}
                 />
                 <ModuleProgressSection
                     linkedModuleID={data.linkedModuleID}
                     progress={progress}
                     selfCheckGroupID={data.selfCheckGroupID}
-                    variant={variant}
+                    isDesktop={isDesktop}
                 />
             </Flex>
-            <Footer variant={variant} />
+            <Footer isDesktop={isDesktop} />
         </Flex>
     ) : (
         <Flex direction="column">
@@ -155,13 +155,13 @@ const Tool: Page = () => {
                 progress={progress}
                 title={data.title}
                 type={data.type}
-                variant={variant}
+                isDesktop={isDesktop}
             />
             <ModuleProgressSection
                 linkedModuleID={data.linkedModuleID}
                 progress={progress}
                 selfCheckGroupID={data.selfCheckGroupID}
-                variant={variant}
+                isDesktop={isDesktop}
             />
             <Flex direction="column" padding="30px 20px">
                 <ReactPlayer controls url={data.video} width="100%" />
@@ -172,7 +172,7 @@ const Tool: Page = () => {
                 progress={progress}
                 selfCheckGroupID={data.selfCheckGroupID}
                 title={data.title}
-                variant={variant}
+                isDesktop={isDesktop}
             />
             <Flex direction="column" padding="30px 20px">
                 <Text
@@ -225,14 +225,14 @@ const Tool: Page = () => {
                                     selfCheckGroupID={toolData.selfCheckGroupID}
                                     thumbnail={toolData.thumbnail}
                                     title={toolData.title}
-                                    variant={variant}
+                                    isDesktop={isDesktop}
                                 />
                             );
                         })}
                     </Carousel>
                 )}
             </Flex>
-            <Footer variant={variant} />
+            <Footer isDesktop={isDesktop} />
         </Flex>
     );
 };

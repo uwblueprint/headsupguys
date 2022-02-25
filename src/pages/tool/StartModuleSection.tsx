@@ -4,20 +4,20 @@ import Link from "next/link";
 import { MdChevronRight } from "react-icons/md";
 
 const StartModuleSection = ({
+    isDesktop,
     linkedModuleID,
     progress,
     selfCheckGroupID,
     title,
-    variant,
 }: {
+    isDesktop: boolean;
     linkedModuleID: string;
     progress: number;
     selfCheckGroupID: string;
     title: string;
-    variant: string;
 }): React.ReactElement => {
     return progress === 0 ? (
-        variant === "desktop" ? (
+        isDesktop ? (
             <Flex
                 backgroundColor="background.dark"
                 color="white"

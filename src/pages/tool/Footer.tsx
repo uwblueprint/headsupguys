@@ -1,13 +1,13 @@
 import React from "react";
 import { CloseButton, Flex, Link, Text, useDisclosure } from "@chakra-ui/react";
 
-const Footer = ({ variant }: { variant: string }): React.ReactElement => {
+const Footer = ({ isDesktop }: { isDesktop: boolean }): React.ReactElement => {
     const { isOpen, onClose } = useDisclosure({
         defaultIsOpen: true,
     });
 
     return isOpen ? (
-        variant === "desktop" ? (
+        isDesktop ? (
             <Flex
                 align="center"
                 backgroundColor="background.mid"

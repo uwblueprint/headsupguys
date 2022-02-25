@@ -3,19 +3,19 @@ import { Flex, Heading, Link, Text } from "@chakra-ui/react";
 
 const CertificateBanner = ({
     id,
+    isDesktop,
     isOpen,
     progress,
     title,
-    variant,
 }: {
     id: string;
+    isDesktop: boolean;
     isOpen: boolean;
     progress: number;
     title: string;
-    variant: string;
 }): React.ReactElement => {
     return isOpen ? (
-        variant === "desktop" ? (
+        isDesktop ? (
             <Flex
                 _before={{
                     borderColor: "transparent transparent #363535 transparent",

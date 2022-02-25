@@ -12,21 +12,21 @@ import {
 
 const RestartModal = ({
     handleRestart,
+    isDesktop,
     isOpen,
     onClose,
-    variant,
 }: {
     handleRestart: () => void;
+    isDesktop: boolean;
     isOpen: boolean;
     onClose: () => void;
-    variant: string;
 }): React.ReactElement => {
     return (
         <Modal
             isCentered
             isOpen={isOpen}
             onClose={onClose}
-            size={variant === "desktop" ? "lg" : "xs"}
+            size={isDesktop ? "lg" : "xs"}
         >
             <ModalOverlay />
             <ModalContent borderRadius="0px" padding="10px 0px">

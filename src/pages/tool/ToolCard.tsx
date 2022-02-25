@@ -4,27 +4,27 @@ import { useRouter } from "next/router";
 
 const ToolCard = ({
     description,
+    isDesktop,
     linkedModuleID,
     selfCheckGroupID,
     thumbnail,
     title,
-    variant,
 }: {
     description: string;
+    isDesktop: boolean;
     linkedModuleID: string;
     selfCheckGroupID: string;
     thumbnail: string;
     title: string;
-    variant: string;
 }): React.ReactElement => {
     const router = useRouter();
 
-    return variant === "desktop" ? (
+    return isDesktop ? (
         <Flex
             backgroundColor="white"
             color="black"
             direction="column"
-            flexGrow="1"
+            flexGrow={1}
             height="400px"
             justify="space-between"
             margin="12px"

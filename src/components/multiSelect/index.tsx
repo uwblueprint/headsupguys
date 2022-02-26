@@ -200,7 +200,7 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
                         <Checkbox
                             mr={2}
                             isReadOnly={preview}
-                            pointerEvents="none"
+                            pointerEvents={preview ? "none" : "auto"}
                         />
                         <Box>{option}</Box>
                     </Flex>
@@ -212,7 +212,7 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
                         <Checkbox
                             mr={2}
                             isReadOnly={preview}
-                            pointerEvents="none"
+                            pointerEvents={preview ? "none" : "auto"}
                         />
                         <Box>{option}</Box>
                     </Flex>

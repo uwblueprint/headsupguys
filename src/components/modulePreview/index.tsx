@@ -58,10 +58,20 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                 <Box w="100%">
                     {print && save ? (
                         <Flex justify="space-between" py={2}>
-                            <Button variant="moduleBlack" w="184px" h="55px">
+                            <Button
+                                variant="moduleBlack"
+                                w="184px"
+                                h="55px"
+                                pointerEvents={preview ? "none" : "auto"}
+                            >
                                 {printButton}
                             </Button>
-                            <Button variant="moduleBlack" w="184px" h="55px">
+                            <Button
+                                variant="moduleBlack"
+                                w="184px"
+                                h="55px"
+                                pointerEvents={preview ? "none" : "auto"}
+                            >
                                 {saveButton}
                             </Button>
                         </Flex>
@@ -73,6 +83,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                                     w="100%"
                                     h="55px"
                                     my={2}
+                                    pointerEvents={preview ? "none" : "auto"}
                                 >
                                     {printButton}
                                 </Button>
@@ -83,6 +94,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                                     w="100%"
                                     h="55px"
                                     my={2}
+                                    pointerEvents={preview ? "none" : "auto"}
                                 >
                                     {saveButton}
                                 </Button>
@@ -96,6 +108,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                             w="184px"
                             h="55px"
                             disabled={!previous}
+                            pointerEvents={preview ? "none" : "auto"}
                         >
                             {prevButton}
                         </Button>
@@ -105,6 +118,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                             w="184px"
                             h="55px"
                             disabled={!next}
+                            pointerEvents={preview ? "none" : "auto"}
                         >
                             {nextButton}
                         </Button>
@@ -133,6 +147,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                             mx={2}
                             disabled={!previous}
                             onClick={() => goPrevSlide()}
+                            pointerEvents={preview ? "none" : "auto"}
                         >
                             {prevButton}
                         </Button>
@@ -142,6 +157,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                                 w="184px"
                                 h="55px"
                                 mx={2}
+                                pointerEvents={preview ? "none" : "auto"}
                             >
                                 {printButton}
                             </Button>
@@ -152,6 +168,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                                 w="184px"
                                 h="55px"
                                 mx={2}
+                                pointerEvents={preview ? "none" : "auto"}
                             >
                                 {saveButton}
                             </Button>
@@ -163,6 +180,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                             mx={2}
                             disabled={!next}
                             onClick={() => goNextSlide()}
+                            pointerEvents={preview ? "none" : "auto"}
                         >
                             {nextButton}
                         </Button>

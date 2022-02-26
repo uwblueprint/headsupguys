@@ -1,5 +1,5 @@
 import React from "react";
-import { Center, Flex, Link, Spinner, Text } from "@chakra-ui/react";
+import { Box, Center, Flex, Spacer, Spinner, Text } from "@chakra-ui/react";
 import axios from "axios";
 import useSWR from "swr";
 import { useRouter } from "next/router";
@@ -17,7 +17,7 @@ import ToolCard from "src/pages/tool/ToolCard";
 import { getIsDesktop } from "src/utils/media/mediaHelpers";
 import { Page } from "types/Page";
 
-const fetcher = async (url) => {
+const fetcher = async (url: string) => {
     const response = await axios({
         method: "GET",
         url,
@@ -25,7 +25,7 @@ const fetcher = async (url) => {
     return response.data;
 };
 
-const relatedToolsFetcher = async (relatedToolsIDs) => {
+const relatedToolsFetcher = async (relatedToolsIDs: string[]) => {
     const data = [];
     for (const relatedToolId of relatedToolsIDs) {
         if (relatedToolId !== "") {
@@ -68,7 +68,7 @@ const Tool: Page = () => {
     }
 
     return isDesktop ? (
-        <Flex direction="column">
+        <Flex direction="column" minHeight="calc(100vh - 64px)">
             <Header
                 id={data._id}
                 progress={progress}
@@ -77,61 +77,61 @@ const Tool: Page = () => {
                 isDesktop={isDesktop}
             />
             <Flex padding="30px calc(20vw - 120px)">
-                <Flex direction="column">
-                    <ReactPlayer controls url={data.video} />
-                    <Flex direction="column" flex="0.1 1 auto" marginTop="24px">
-                        <Text>{data.description}</Text>
-                        <Text
-                            as="u"
-                            fontSize="2xl"
-                            marginTop="24px"
-                            textDecorationColor="brand.green"
-                            textDecorationThickness="2px"
-                            textUnderlineOffset="6px"
+                <Box flex="0.1 1 auto" width="100%">
+                    {data.video && (
+                        <Box marginBottom="24px">
+                            <ReactPlayer
+                                controls
+                                url={data.video}
+                                width="100%"
+                            />
+                        </Box>
+                    )}
+                    <Text>{data.description}</Text>
+                    <ResourcesAccordion
+                        externalResources={data.externalResources}
+                        relatedResources={data.relatedResources}
+                        relatedStories={data.relatedStories}
+                    />
+                    {relatedToolsData.length > 0 && (
+                        <Flex
+                            backgroundColor="background.dark"
+                            color="white"
+                            direction="column"
+                            marginTop="40px"
                         >
-                            Additional Resources
-                        </Text>
-                        <ResourcesAccordion
-                            externalResources={data.externalResources}
-                            relatedResources={data.relatedResources}
-                            relatedStories={data.relatedStories}
-                        />
-                    </Flex>
-                    <Flex
-                        backgroundColor="background.dark"
-                        color="white"
-                        direction="column"
-                        marginTop="60px"
-                    >
-                        <Text
-                            as="u"
-                            fontSize="2xl"
-                            margin="30px 24px 0px 24px"
-                            textDecorationColor="brand.green"
-                            textDecorationThickness="2px"
-                            textUnderlineOffset="6px"
-                        >
-                            Recommended Tools
-                        </Text>
-                        <Flex padding="12px 12px 24px 12px" wrap="wrap">
-                            {relatedToolsData.map((toolData) => {
-                                return (
-                                    <ToolCard
-                                        key={toolData._id}
-                                        description={toolData.description}
-                                        linkedModuleID={toolData.linkedModuleID}
-                                        selfCheckGroupID={
-                                            toolData.selfCheckGroupID
-                                        }
-                                        thumbnail={toolData.thumbnail}
-                                        title={toolData.title}
-                                        isDesktop={isDesktop}
-                                    />
-                                );
-                            })}
+                            <Text
+                                as="u"
+                                fontSize="2xl"
+                                margin="30px 24px 0px 24px"
+                                textDecorationColor="brand.green"
+                                textDecorationThickness="2px"
+                                textUnderlineOffset="6px"
+                            >
+                                Recommended Tools
+                            </Text>
+                            <Flex padding="12px 12px 24px 12px" wrap="wrap">
+                                {relatedToolsData.map((toolData) => {
+                                    return (
+                                        <ToolCard
+                                            key={toolData._id}
+                                            description={toolData.description}
+                                            linkedModuleID={
+                                                toolData.linkedModuleID
+                                            }
+                                            selfCheckGroupID={
+                                                toolData.selfCheckGroupID
+                                            }
+                                            thumbnail={toolData.thumbnail}
+                                            title={toolData.title}
+                                            isDesktop={isDesktop}
+                                        />
+                                    );
+                                })}
+                            </Flex>
                         </Flex>
-                    </Flex>
-                </Flex>
+                    )}
+                </Box>
                 <StartModuleSection
                     linkedModuleID={data.linkedModuleID}
                     progress={progress}
@@ -146,10 +146,11 @@ const Tool: Page = () => {
                     isDesktop={isDesktop}
                 />
             </Flex>
+            <Spacer />
             <Footer isDesktop={isDesktop} />
         </Flex>
     ) : (
-        <Flex direction="column">
+        <Flex direction="column" minHeight="calc(100vh - 64px)">
             <Header
                 id={data._id}
                 progress={progress}
@@ -163,75 +164,71 @@ const Tool: Page = () => {
                 selfCheckGroupID={data.selfCheckGroupID}
                 isDesktop={isDesktop}
             />
-            <Flex direction="column" padding="30px 20px">
-                <ReactPlayer controls url={data.video} width="100%" />
-                <Text marginTop="24px">{data.description}</Text>
-            </Flex>
-            <StartModuleSection
-                linkedModuleID={data.linkedModuleID}
-                progress={progress}
-                selfCheckGroupID={data.selfCheckGroupID}
-                title={data.title}
-                isDesktop={isDesktop}
-            />
-            <Flex direction="column" padding="30px 20px">
-                <Text
-                    as="u"
-                    fontSize="2xl"
-                    textDecorationColor="brand.green"
-                    textDecorationThickness="2px"
-                    textUnderlineOffset="6px"
-                >
-                    Additional Resources
-                </Text>
+            <Box padding="0px 20px">
+                {data.video && (
+                    <Box marginTop="30px">
+                        <ReactPlayer controls url={data.video} width="100%" />
+                    </Box>
+                )}
+                <Text margin="24px 0px">{data.description}</Text>
+                <StartModuleSection
+                    linkedModuleID={data.linkedModuleID}
+                    progress={progress}
+                    selfCheckGroupID={data.selfCheckGroupID}
+                    title={data.title}
+                    isDesktop={isDesktop}
+                />
                 <ResourcesAccordion
                     externalResources={data.externalResources}
                     relatedResources={data.relatedResources}
                     relatedStories={data.relatedStories}
                 />
-            </Flex>
-            <Flex
-                backgroundColor="background.dark"
-                color="white"
-                direction="column"
-                padding="30px 20px 0px 20px"
-            >
-                <Text
-                    as="u"
-                    fontSize="2xl"
-                    marginBottom="24px"
-                    textDecorationColor="brand.green"
-                    textDecorationThickness="2px"
-                    textUnderlineOffset="6px"
-                >
-                    Recommended Tools
-                </Text>
                 {relatedToolsData.length > 0 && (
-                    <Carousel
-                        centerMode
-                        centerSlidePercentage={85}
-                        emulateTouch
-                        infiniteLoop
-                        showArrows={false}
-                        showIndicators={false}
-                        showStatus={false}
+                    <Flex
+                        backgroundColor="background.dark"
+                        color="white"
+                        direction="column"
+                        marginBottom="30px"
+                        padding="30px 20px 0px 20px"
                     >
-                        {relatedToolsData.map((toolData) => {
-                            return (
-                                <ToolCard
-                                    key={toolData._id}
-                                    description={toolData.description}
-                                    linkedModuleID={toolData.linkedModuleID}
-                                    selfCheckGroupID={toolData.selfCheckGroupID}
-                                    thumbnail={toolData.thumbnail}
-                                    title={toolData.title}
-                                    isDesktop={isDesktop}
-                                />
-                            );
-                        })}
-                    </Carousel>
+                        <Text
+                            as="u"
+                            fontSize="2xl"
+                            marginBottom="24px"
+                            textDecorationColor="brand.green"
+                            textDecorationThickness="2px"
+                            textUnderlineOffset="6px"
+                        >
+                            Recommended Tools
+                        </Text>
+                        <Carousel
+                            centerMode
+                            centerSlidePercentage={85}
+                            showArrows={false}
+                            showIndicators={false}
+                            showStatus={false}
+                        >
+                            {relatedToolsData.map((toolData) => {
+                                return (
+                                    <ToolCard
+                                        key={toolData._id}
+                                        description={toolData.description}
+                                        isSingle={relatedToolsData.length === 1}
+                                        linkedModuleID={toolData.linkedModuleID}
+                                        selfCheckGroupID={
+                                            toolData.selfCheckGroupID
+                                        }
+                                        thumbnail={toolData.thumbnail}
+                                        title={toolData.title}
+                                        isDesktop={isDesktop}
+                                    />
+                                );
+                            })}
+                        </Carousel>
+                    </Flex>
                 )}
-            </Flex>
+            </Box>
+            <Spacer />
             <Footer isDesktop={isDesktop} />
         </Flex>
     );

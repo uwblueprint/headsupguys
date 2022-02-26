@@ -54,6 +54,11 @@ const Header = ({
                         padding="0px calc(20vw - 120px) 20px 10px"
                     >
                         <Image
+                            border="2px solid transparent"
+                            _hover={{
+                                border: "2px solid",
+                                borderColor: "brand.lime",
+                            }}
                             onClick={onToggle}
                             src={
                                 progress === 100
@@ -106,6 +111,11 @@ const Header = ({
                         padding="20px 20px"
                     >
                         <Image
+                            border="2px solid transparent"
+                            _hover={{
+                                border: "2px solid",
+                                borderColor: "brand.lime",
+                            }}
                             onClick={onToggle}
                             src={
                                 progress === 100

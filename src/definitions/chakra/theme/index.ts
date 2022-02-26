@@ -27,7 +27,7 @@ const overrides = {
 const adminOverrides = {
     ...styles,
     components: {
-        AdminButton,
+        Button: AdminButton,
     },
     colors,
     fontSizes,

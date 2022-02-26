@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, ChakraProvider, Flex, IconButton, Image } from "@chakra-ui/react";
 import { MdMenu } from "react-icons/md";
 
@@ -41,7 +41,9 @@ export const ToolLayout: React.FC = ({ children }) => {
                     </Flex>
                 </Flex>
             )}
-            <Box paddingTop="64px">{children}</Box>
+            <Box minHeight="100vh" paddingTop="64px">
+                {children}
+            </Box>
         </ChakraProvider>
     );
 };

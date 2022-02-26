@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 const ToolCard = ({
     description,
     isDesktop,
+    isSingle,
     linkedModuleID,
     selfCheckGroupID,
     thumbnail,
@@ -12,6 +13,7 @@ const ToolCard = ({
 }: {
     description: string;
     isDesktop: boolean;
+    isSingle?: boolean;
     linkedModuleID: string;
     selfCheckGroupID: string;
     thumbnail: string;
@@ -22,10 +24,15 @@ const ToolCard = ({
     return isDesktop ? (
         <Flex
             backgroundColor="white"
+            border="2px solid transparent"
             color="black"
             direction="column"
             flexGrow={1}
             height="400px"
+            _hover={{
+                border: "2px solid",
+                borderColor: "brand.lime",
+            }}
             justify="space-between"
             margin="12px"
             textAlign="left"
@@ -73,10 +80,15 @@ const ToolCard = ({
     ) : (
         <Flex
             backgroundColor="white"
+            border="2px solid transparent"
             color="black"
             direction="column"
             height="400px"
-            marginRight="20px"
+            _hover={{
+                border: "2px solid",
+                borderColor: "brand.lime",
+            }}
+            marginRight={isSingle ? "0px" : "20px"}
             textAlign="left"
         >
             <Image

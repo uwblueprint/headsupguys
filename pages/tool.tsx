@@ -54,7 +54,7 @@ const Tool: Page = () => {
         relatedToolsFetcher,
     );
 
-    if (error || relatedToolsError) {
+    if (error) {
         return (
             <Center height="200px" width="100%">
                 <Text>An error has occurred.</Text>
@@ -95,7 +95,7 @@ const Tool: Page = () => {
                         relatedResources={data.relatedResources}
                         relatedStories={data.relatedStories}
                     />
-                    {relatedToolsData.length > 0 && (
+                    {!relatedToolsError && relatedToolsData.length > 0 && (
                         <Flex
                             backgroundColor="background.dark"
                             color="white"

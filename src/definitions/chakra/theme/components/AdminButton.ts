@@ -1,4 +1,4 @@
-const Button = {
+const AdminButton = {
     baseStyle: {},
     sizes: {},
     variants: {
@@ -48,4 +48,4 @@ const Button = {
     },
 };
 
-export { Button };
+export { AdminButton };

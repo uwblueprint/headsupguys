@@ -4,6 +4,7 @@ export { SelfCheckQuestionCard } from "./toolSelfCheck";
 export { AdminLayout } from "./layouts/AdminLayout";
 export { BuilderLayout } from "./layouts/BuilderLayout";
 export { PublicLayout } from "./layouts/PublicLayout";
+export { ToolLayout } from "./layouts/ToolLayout";
 export { Layout } from "./Layout";
 export { Modal } from "./modal";
 export { TextInput } from "./textInput";

@@ -21,7 +21,13 @@ const Footer = ({ isDesktop }: { isDesktop: boolean }): React.ReactElement => {
                 <Text marginRight="12px">
                     Ready to prioritize your health? Find a mental health
                     professional with experience working with men{" "}
-                    <Link>near you</Link>.
+                    <Link
+                        href="https://headsupguys.org/take-action/find-a-therapist/"
+                        isExternal
+                    >
+                        near you
+                    </Link>
+                    .
                 </Text>
                 <CloseButton onClick={onClose} />
             </Flex>
@@ -37,7 +43,13 @@ const Footer = ({ isDesktop }: { isDesktop: boolean }): React.ReactElement => {
                 <Text marginRight="12px">
                     Ready to prioritize your health? Find a mental health
                     professional with experience working with men{" "}
-                    <Link>near you</Link>.
+                    <Link
+                        href="https://headsupguys.org/take-action/find-a-therapist/"
+                        isExternal
+                    >
+                        near you
+                    </Link>
+                    .
                 </Text>
                 <CloseButton onClick={onClose} />
             </Flex>

@@ -33,7 +33,9 @@ const relatedToolsFetcher = async (relatedToolsIDs: string[]) => {
                 method: "GET",
                 url: `/api/tool/${relatedToolId}`,
             });
-            data.push(response.data);
+            if (response.data.status === "published") {
+                data.push(response.data);
+            }
         }
     }
     return data;

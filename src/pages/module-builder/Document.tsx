@@ -33,7 +33,7 @@ const Document = ({
     return (
         <VStack flex="1" bg="gray.200">
             <Box
-                minH="80%"
+                h="90%"
                 border="1px"
                 borderColor="gray.700"
                 boxShadow="md"

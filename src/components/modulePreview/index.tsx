@@ -53,8 +53,16 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                 </Flex>
             </Box>
 
-            <Box w="100%" h="95%" overflow="auto">
-                <Box minHeight="77%">{props.children}</Box>
+            <Box w="100%" h="95%">
+                <Box
+                    minHeight={
+                        (print || save) && variant == "mobile"
+                            ? "76.5vh"
+                            : "85vh"
+                    }
+                >
+                    {props.children}
+                </Box>
                 <Box w="100%">
                     {print && save ? (
                         <Flex justify="space-between" py={2}>
@@ -136,10 +144,13 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                     backgroundColor="brand.lime"
                 ></Box>
             </Flex>
-            <Box w="100%" h="95%" overflow="auto">
-                <Box minHeight="88%">{props.children}</Box>
-                <Box w="100%" h="10%">
-                    <Flex justify="center" py={2}>
+            <Box
+                w="100%"
+                h={variant == "desktop" ? desktop.height : mobile.height}
+            >
+                <Box minHeight="91%">{props.children}</Box>
+                <Box w="100%">
+                    <Flex justify="space-between" py={2}>
                         <Button
                             variant="moduleGreen"
                             w="184px"
@@ -190,17 +201,12 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
         </>
     );
     return preview ? (
-        <Box
-            w={variant == "desktop" ? desktop.width : mobile.width}
-            h={variant == "desktop" ? desktop.height : mobile.height}
-            p={"20px"}
-            border={"1px solid #000"}
-        >
+        <Box w={variant == "desktop" ? desktop.width : mobile.width} p={"20px"}>
             {variant == "desktop" ? desktopModule : mobileModule}
         </Box>
     ) : (
         <Container
-            maxWidth={"100%"}
+            maxW={"100%"}
             w={variant == "desktop" ? desktop.width : mobile.width}
         >
             {variant == "desktop" ? desktopModule : mobileModule}

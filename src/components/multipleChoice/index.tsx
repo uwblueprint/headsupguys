@@ -5,20 +5,15 @@ import {
     Stack,
     Heading,
     Input,
+    Circle,
     Radio,
+    RadioGroup,
     Flex,
     Grid,
     CloseButton,
 } from "@chakra-ui/react";
 import { Option } from "pages/admin/dashboard/builder";
 
-export interface MultipleChoiceProps {
-    question: string;
-    setQuestion: (newQuestion: string) => void;
-    options: Option[];
-    setOptions: (newOptions: Option[]) => void;
-    columns: string;
-}
 interface MultipleChoiceOptionProps {
     index: number;
     value: Option;
@@ -34,11 +29,17 @@ const MultipleChoiceOption: React.FC<MultipleChoiceOptionProps> = ({
 }) => {
     const { option, column } = value;
     return (
-        <Flex>
-            <Radio mr={2} isReadOnly />
+        <Flex align="center">
+            <Circle
+                size="16px"
+                color="white"
+                borderWidth="2px"
+                borderColor="grey.200"
+                mr="5px"
+            ></Circle>
             <Input
                 variant="flushed"
-                placeholder={`Multiple Choice Option ${index + 1}`}
+                placeholder={`Multi-Select Option ${index + 1}`}
                 onChange={(e) => {
                     onChange({ option: e.target.value, column }, index);
                 }}
@@ -49,6 +50,14 @@ const MultipleChoiceOption: React.FC<MultipleChoiceOptionProps> = ({
     );
 };
 
+export interface MultipleChoiceProps {
+    preview: boolean;
+    question: string;
+    setQuestion: (newQuestion: string) => void;
+    options: Option[];
+    setOptions: (newOptions: Option[]) => void;
+    columns: string;
+}
 export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
     question,
     setQuestion,
@@ -170,6 +179,7 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({
 };
 
 interface MultipleChoicePreviewProps {
+    preview: boolean;
     question: string;
     options: Option[];
     variant: string;
@@ -177,6 +187,7 @@ interface MultipleChoicePreviewProps {
 }
 
 export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
+    preview,
     question,
     options,
     variant,
@@ -194,16 +205,39 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
         <Grid templateColumns="repeat(2, 1fr)" gap={3}>
             <Box>
                 {leftColumnOptions.map(({ option }) => (
-                    <Flex p={1}>
-                        <Radio mr={2} isReadOnly />
+                    <Flex p={1} align="center">
+                        {preview && (
+                            <Circle
+                                size="16px"
+                                color="white"
+                                borderWidth="2px"
+                                borderColor="grey.200"
+                                mr={"6px"}
+                            ></Circle>
+                        )}
+                        {!preview && (
+                            <Radio value={option} mr={2} cursor={"pointer"} />
+                        )}
                         <Box>{option}</Box>
                     </Flex>
                 ))}
             </Box>
             <Box>
                 {rightColumnOptions.map(({ option }) => (
-                    <Flex p={1}>
-                        <Radio mr={2} isReadOnly />
+                    <Flex p={1} align="center">
+                        {preview && (
+                            <Circle
+                                size="16px"
+                                color="white"
+                                borderWidth="2px"
+                                borderColor="grey.200"
+                                mr={"6px"}
+                            ></Circle>
+                        )}
+                        {!preview && (
+                            <Radio value={option} mr={2} cursor={"pointer"} />
+                        )}
+
                         <Box>{option}</Box>
                     </Flex>
                 ))}
@@ -211,12 +245,25 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
         </Grid>
     ) : (
         <Box>
-            {options.map(({ option }) => (
-                <Flex p={1}>
-                    <Radio mr={2} isReadOnly />
-                    <Box>{option}</Box>
-                </Flex>
-            ))}
+            <RadioGroup>
+                {options.map(({ option }) => (
+                    <Flex p={1} align="center">
+                        {preview && (
+                            <Circle
+                                size="16px"
+                                color="white"
+                                borderWidth="2px"
+                                mr={"6px"}
+                                borderColor="grey.200"
+                            ></Circle>
+                        )}
+                        {!preview && (
+                            <Radio value={option} mr={2} cursor={"pointer"} />
+                        )}
+                        <Box>{option}</Box>
+                    </Flex>
+                ))}
+            </RadioGroup>
         </Box>
     );
 

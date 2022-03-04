@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import CSS from 'csstype';
+import CSS from "csstype";
 import ReactMarkdown, { ReactNode } from "react-markdown";
 import React from "react";
 import style from "./markdown-renderer.module.css";
@@ -18,29 +18,41 @@ const stringConversionObj = {
 // aligns the text accordingly for p + h tags
 function alignCommand(children, tag): ReactNode {
     const Tag = tag as keyof JSX.IntrinsicElements;
-    
+
     let trimVal;
     let alignStyle;
-    if (children?.toString().startsWith("||") && children?.toString().endsWith("||")) {
+    if (
+        children?.toString().startsWith("||") &&
+        children?.toString().endsWith("||")
+    ) {
         trimVal = 2;
-        alignStyle = 'center';
-    } else if (children?.toString().startsWith("//") && children?.toString().endsWith("//")) {
+        alignStyle = "center";
+    } else if (
+        children?.toString().startsWith("//") &&
+        children?.toString().endsWith("//")
+    ) {
         trimVal = 2;
-        alignStyle = 'right';
-    } else if (children?.toString().startsWith("\\") && children?.toString().endsWith("\\")) {
+        alignStyle = "right";
+    } else if (
+        children?.toString().startsWith("\\") &&
+        children?.toString().endsWith("\\")
+    ) {
         trimVal = 1; // ReactMarkdown recognizes \\ as \ so only trim 1 character
-        alignStyle = 'left';
+        alignStyle = "left";
     } else {
-        return (
-            <Tag>{children}</Tag>
-        );
+        return <Tag>{children}</Tag>;
     }
 
     children[0] = children[0].slice(trimVal);
-    children[children.length - 1] = children[children.length - 1].slice(0, -trimVal);
+    children[children.length - 1] = children[children.length - 1].slice(
+        0,
+        -trimVal,
+    );
 
     return (
-        <Tag style={{ textAlign: alignStyle as CSS.Property.TextAlign }}>{children}</Tag>
+        <Tag style={{ textAlign: alignStyle as CSS.Property.TextAlign }}>
+            {children}
+        </Tag>
     );
 }
 
@@ -84,7 +96,11 @@ const BaseRenderer: React.FC<{ content: string; variables?: any }> = ({
                         {content.includes("$[") ? (
                             <>
                                 <div>
-                                    <ReactPlayer controls url={rest.href} />
+                                    <ReactPlayer
+                                        width={"100%"}
+                                        controls
+                                        url={rest.href}
+                                    />
                                 </div>
                             </>
                         ) : content.includes("<>[") ? (
@@ -117,12 +133,14 @@ const BaseRenderer: React.FC<{ content: string; variables?: any }> = ({
                         )}
                     </>
                 ),
-                strong: ({children}) => (
+                strong: ({ children }) => (
                     <>
                         {content.includes("__") ? (
                             <>
                                 {content.includes("**") ? (
-                                    <strong><u>{children}</u></strong>
+                                    <strong>
+                                        <u>{children}</u>
+                                    </strong>
                                 ) : (
                                     <u>{children}</u>
                                 )}
@@ -132,15 +150,16 @@ const BaseRenderer: React.FC<{ content: string; variables?: any }> = ({
                         )}
                     </>
                 ),
-                p: ({children}) => alignCommand(children, 'p'),
-                h2: ({children}) => alignCommand(children, 'h2'),
-                h3: ({children}) => alignCommand(children, 'h3'),
-                h4: ({children}) => alignCommand(children, 'h4'),
-                h5: ({children}) => alignCommand(children, 'h5'),
-                h6: ({children}) => alignCommand(children, 'h6'),
-                ul: ({children}) => (
-                    <ul style={{ textAlign: 'left' }}>{children}</ul>
-                )
+                p: ({ children }) => alignCommand(children, "p"),
+                h1: ({ children }) => alignCommand(children, "h1"),
+                h2: ({ children }) => alignCommand(children, "h2"),
+                h3: ({ children }) => alignCommand(children, "h3"),
+                h4: ({ children }) => alignCommand(children, "h4"),
+                h5: ({ children }) => alignCommand(children, "h5"),
+                h6: ({ children }) => alignCommand(children, "h6"),
+                ul: ({ children }) => (
+                    <ul style={{ textAlign: "left" }}>{children}</ul>
+                ),
             }}
             className={style.markdown + " right"}
         >

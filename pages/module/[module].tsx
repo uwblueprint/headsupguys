@@ -11,8 +11,7 @@ import {
     ShortAnswerPreview,
 } from "@components";
 import useSWR from "swr";
-import { Spinner } from "@chakra-ui/react";
-
+import { Spinner, Container, useMediaQuery } from "@chakra-ui/react";
 const fetcher = async (url) => {
     const response = await axios({
         method: "GET",
@@ -27,6 +26,7 @@ const Module: Page = () => {
     const router = useRouter();
     const { module } = router.query;
     const { data, error } = useSWR(`/api/module/${module}`, fetcher);
+    const [large] = useMediaQuery("(min-width: 800px)");
 
     function goNextSlide() {
         if (currentSlide < data.slides.length - 1) {
@@ -58,16 +58,18 @@ const Module: Page = () => {
     } else {
         return (
             <ModulePreview
+                preview={false}
                 previous={data.slides[currentSlide].buttons.previous}
                 next={data.slides[currentSlide].buttons.next}
                 save={data.slides[currentSlide].buttons.save}
                 print={data.slides[currentSlide].buttons.print}
-                progressValue={(currentSlide / data.slides.length) * 100}
-                variant="mobile"
+                progressValue={((currentSlide + 1) / data.slides.length) * 100}
+                variant={large ? "desktop" : "mobile"}
                 goNextSlide={() => goNextSlide()}
                 goPrevSlide={() => goPrevSlide()}
             >
                 {data.slides[currentSlide].sections.map((section) => {
+                    const paddingType = section?.padding.type || "%";
                     let sectionPreview;
                     if (section.type === "staticContent") {
                         sectionPreview = (
@@ -78,29 +80,41 @@ const Module: Page = () => {
                     } else if (section.type === "multipleChoice") {
                         sectionPreview = (
                             <MultipleChoicePreview
+                                preview={false}
                                 question={section.multipleChoice.question}
                                 options={section.multipleChoice.options}
-                                variant="mobile"
+                                variant={large ? "desktop" : "mobile"}
                                 columns={section.properties.columns}
                             />
                         );
                     } else if (section.type === "multiSelect") {
                         sectionPreview = (
                             <MultiSelectPreview
+                                preview={false}
                                 question={section.multiSelect.question}
                                 options={section.multiSelect.options}
-                                variant="mobile"
+                                variant={large ? "desktop" : "mobile"}
                                 columns={section.properties.columns}
                             />
                         );
                     } else if (section.type === "shortAnswer") {
                         sectionPreview = (
                             <ShortAnswerPreview
+                                preview={false}
                                 question={section.shortAnswer}
                             />
                         );
                     }
-                    return sectionPreview;
+                    return (
+                        <Container
+                            maxWidth="100%"
+                            paddingTop={`${section?.padding.top}${paddingType}`}
+                            paddingRight={`${section?.padding.right}${paddingType}`}
+                            paddingBottom={`${section?.padding.bottom}${paddingType}`}
+                            paddingLeft={`${section?.padding.left}${paddingType}`}
+                            children={sectionPreview}
+                        ></Container>
+                    );
                 }, "")}
             </ModulePreview>
         );

@@ -33,7 +33,7 @@ const Document = ({
     return (
         <VStack flex="1" bg="gray.200">
             <Box
-                minH="80%"
+                h="90%"
                 border="1px"
                 borderColor="gray.700"
                 boxShadow="md"
@@ -44,6 +44,7 @@ const Document = ({
                 align="center"
             >
                 <ModulePreview
+                    preview={true}
                     previous={
                         state.slides[state.currentSlide].buttons.previous
                             ? true
@@ -82,6 +83,7 @@ const Document = ({
                             } else if (section.type === "multipleChoice") {
                                 sectionPreview = (
                                     <MultipleChoicePreview
+                                        preview={true}
                                         question={
                                             section.multipleChoice.question
                                         }
@@ -93,6 +95,7 @@ const Document = ({
                             } else if (section.type === "multiSelect") {
                                 sectionPreview = (
                                     <MultiSelectPreview
+                                        preview={true}
                                         question={section.multiSelect.question}
                                         options={section.multiSelect.options}
                                         variant={modulePreviewVariant}
@@ -100,15 +103,16 @@ const Document = ({
                                     />
                                 );
                             } else if (section.type === "shortAnswer") {
-                                console.log(section);
                                 sectionPreview = (
                                     <ShortAnswerPreview
+                                        preview={true}
                                         question={section.shortAnswer}
                                     />
                                 );
                             }
                             return (
                                 <Container
+                                    // maxWidth="100%"
                                     paddingTop={`${section?.padding.top}${paddingType}`}
                                     paddingRight={`${section?.padding.right}${paddingType}`}
                                     paddingBottom={`${section?.padding.bottom}${paddingType}`}

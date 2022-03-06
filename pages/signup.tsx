@@ -297,7 +297,7 @@ const Signup: React.FC = () => {
             }
         } else if (currStage == stages.length - 2) {
             // Get Started stage
-            router.push("/protected"); // temporary link back to protected page
+            router.push("/"); // temporary link back to protected page
         } else if (currStage == stages.length - 1) {
             // Error state
             setCurrStage(2); // push back to password stage

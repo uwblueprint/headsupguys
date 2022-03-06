@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, Icon, Text } from "@chakra-ui/react";
+import { Flex, Icon, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { MdChevronRight } from "react-icons/md";
 

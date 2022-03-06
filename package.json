@@ -8,7 +8,7 @@
         "start": "next start --port ${PORT-3000}",
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
-        "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
+        "lint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
         "prettier": "prettier --write '**/*.{js,jsx,ts,tsx}'",
         "test": "jest -c test/jest.config.js",
         "seed": "node --loader ts-node/esm ./database/scripts/seed.ts"

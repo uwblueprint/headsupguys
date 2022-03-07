@@ -243,12 +243,13 @@ const ToolBuilder: Page = () => {
         );
 
     const addOneBreakpoint = () => {
+        console.log(breakpoints);
         const newBreakpoint = {
             _id: "tempId" + String(breakpoints.length + 1),
             num: breakpoints.length + 1,
             lastBreakpoint: false,
             lower: breakpoints
-                ? breakpoints[-1].lower + 1
+                ? breakpoints[breakpoints.length - 1].upper + 1
                 : getMinSum(selectedQuestions),
             upper: undefined,
             description: "",
@@ -282,7 +283,7 @@ const ToolBuilder: Page = () => {
                     error = true;
                     return bp;
                 }
-                bp.upper = newUpper;
+                bp.upper = newUpper !== undefined ? newUpper : bp.upper;
             }
             return bp;
         });
@@ -992,6 +993,7 @@ const ToolBuilder: Page = () => {
                                 rounded="md"
                                 bg="gray.50"
                                 p={10}
+                                mb={8}
                             >
                                 <Text fontSize={16} fontWeight={700} mr={6}>
                                     Select Questions used for the Self Check

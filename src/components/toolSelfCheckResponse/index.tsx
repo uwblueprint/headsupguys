@@ -32,7 +32,7 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
     setSecondaryDesc = undefined,
 }) => {
     return (
-        <Box borderRadius="lg" rounded="md" bg="gray.50" pt={10} px={10} my={8}>
+        <Box borderRadius="lg" rounded="md" bg="gray.50" pt={10} px={10} mb={8}>
             <Text fontSize={16} fontWeight={700} mr={6}>
                 Set Breakpoint Score {breakpointNum}
             </Text>
@@ -61,8 +61,12 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                     value={upperBound}
                     width="xsm"
                     display="inline-block"
-                    onChange={(str) =>
-                        setUpperbound(parseInt(str.target.value))
+                    onBlur={(str) =>
+                        setUpperbound(
+                            str.target.value
+                                ? parseInt(str.target.value)
+                                : undefined,
+                        )
                     }
                 />
             </Box>
@@ -79,7 +83,8 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                 Breakpoint Score {breakpointNum} Description
             </Text>
             <Text>
-                If their score is between {lowerBound} and {upperBound}
+                If their score is between {lowerBound} and{" "}
+                {upperBound ?? "[UPPER BOUND]"}
             </Text>
             <Box py={4}>
                 <Textarea
@@ -109,13 +114,20 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                     </Box>
                 </Box>
             ) : (
-                <Box py={4}>
-                    <Textarea
-                        placeholder="Description"
-                        bg="whiteAlpha"
-                        value={secondaryDesc}
-                        onChange={(str) => setSecondaryDesc(str.target.value)}
-                    />
+                <Box pt={8}>
+                    <Text>
+                        If their score is above {upperBound ?? "[UPPER BOUND]"}
+                    </Text>
+                    <Box py={4}>
+                        <Textarea
+                            placeholder="Description"
+                            bg="whiteAlpha"
+                            value={secondaryDesc}
+                            onChange={(str) =>
+                                setSecondaryDesc(str.target.value)
+                            }
+                        />
+                    </Box>
                 </Box>
             )}
         </Box>

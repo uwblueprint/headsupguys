@@ -62,8 +62,8 @@ const Header = ({
                             onClick={onToggle}
                             src={
                                 progress === 100
-                                    ? "assets/certificate-icon-complete.png"
-                                    : "assets/certificate-icon-incomplete.png"
+                                    ? "/assets/certificate-icon-complete.png"
+                                    : "/assets/certificate-icon-incomplete.png"
                             }
                         ></Image>
                     </Flex>
@@ -71,7 +71,7 @@ const Header = ({
                         height="160px"
                         objectFit="cover"
                         position="absolute"
-                        src="assets/tool-banner.png"
+                        src="/assets/tool-banner.png"
                         width="100%"
                         zIndex="-2"
                     ></Image>
@@ -119,8 +119,8 @@ const Header = ({
                             onClick={onToggle}
                             src={
                                 progress === 100
-                                    ? "assets/certificate-icon-complete.png"
-                                    : "assets/certificate-icon-incomplete.png"
+                                    ? "/assets/certificate-icon-complete.png"
+                                    : "/assets/certificate-icon-incomplete.png"
                             }
                         ></Image>
                     </Flex>
@@ -128,7 +128,7 @@ const Header = ({
                         height="150px"
                         objectFit="cover"
                         position="absolute"
-                        src="assets/tool-banner.png"
+                        src="/assets/tool-banner.png"
                         width="100%"
                         zIndex="-2"
                     ></Image>

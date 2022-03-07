@@ -29,7 +29,7 @@ const StartModuleSection = ({
                 padding="30px 20px"
             >
                 <Text>{`Interested in learning more about ${title.toLowerCase()}? Start learning about it now or take the ${title} Self-Check`}</Text>
-                <Link href={`/module?id=${linkedModuleID}`}>
+                <Link href={`/module/${linkedModuleID}`}>
                     <Flex
                         align="center"
                         backgroundColor="brand.green"
@@ -71,7 +71,7 @@ const StartModuleSection = ({
                 padding="30px 20px"
             >
                 <Text>{`Interested in learning more about ${title.toLowerCase()}? Start learning about it now or take the ${title} Self-Check`}</Text>
-                <Link href={`/module?id=${linkedModuleID}`}>
+                <Link href={`/module/${linkedModuleID}`}>
                     <Flex
                         align="center"
                         backgroundColor="brand.green"

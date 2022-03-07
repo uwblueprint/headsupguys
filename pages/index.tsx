@@ -59,7 +59,7 @@ const Tools: React.FC<{ variant: string }> = ({ variant }) => {
                                         title={title}
                                         description={description}
                                         onClickTool={() =>
-                                            router.push(`/tool?id=${_id}`)
+                                            router.push(`/tool/${_id}`)
                                         }
                                         onSelfCheck={() =>
                                             router.push(
@@ -92,7 +92,7 @@ const Tools: React.FC<{ variant: string }> = ({ variant }) => {
                                         title={title}
                                         description={description}
                                         onClickTool={() =>
-                                            router.push(`/tool?id=${_id}`)
+                                            router.push(`/tool/${_id}`)
                                         }
                                         onSelfCheck={() =>
                                             router.push(
@@ -133,7 +133,7 @@ const Tools: React.FC<{ variant: string }> = ({ variant }) => {
                                         title={title}
                                         description={description}
                                         onClickTool={() =>
-                                            router.push(`/tool?id=${_id}`)
+                                            router.push(`/tool/${_id}`)
                                         }
                                         onSelfCheck={() =>
                                             router.push(
@@ -171,7 +171,7 @@ const Tools: React.FC<{ variant: string }> = ({ variant }) => {
                                         title={title}
                                         description={description}
                                         onClickTool={() =>
-                                            router.push(`/tool?id=${_id}`)
+                                            router.push(`/tool/${_id}`)
                                         }
                                         onSelfCheck={() =>
                                             router.push(

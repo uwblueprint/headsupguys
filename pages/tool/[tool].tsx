@@ -46,8 +46,8 @@ const Tool: Page = () => {
     const progress = 100;
 
     const router = useRouter();
-    const { id } = router.query;
-    const fetchURL = id ? `/api/tool/${id}` : null;
+    const { tool } = router.query;
+    const fetchURL = tool ? `/api/tool/${tool}` : null;
     const { data, error } = useSWR(() => fetchURL, fetcher);
     const { data: relatedToolsData, error: relatedToolsError } = useSWR(
         data ? [data.relatedToolsIDs] : null,

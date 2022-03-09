@@ -4,11 +4,13 @@ import { Box, Button, Checkbox, Input, Textarea, Text } from "@chakra-ui/react";
 
 //Interface Props
 export interface SelfCheckResponseCardProps {
+    key: React.Key;
     breakpointNum: number;
     lowerBound: number;
     upperBound: number;
     setUpperbound: (upper: number) => void;
     lastBreakpoint: boolean;
+    breakpointAfter?: boolean;
     setLastBreakpoint: (last: boolean) => void;
     description: string;
     setDescription: (desc: string) => void;
@@ -24,6 +26,7 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
     upperBound,
     setUpperbound,
     lastBreakpoint,
+    breakpointAfter = false,
     setLastBreakpoint,
     description,
     setDescription,
@@ -44,7 +47,8 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                 <Input
                     isDisabled
                     placeholder={String(lowerBound)}
-                    width="xsm"
+                    textAlign="center"
+                    width="35%"
                     display="inline-block"
                 />
                 <Text
@@ -59,7 +63,8 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                     bg="whiteAlpha"
                     placeholder="Breakpoint Score"
                     value={upperBound}
-                    width="xsm"
+                    textAlign="center"
+                    width="35%"
                     display="inline-block"
                     onBlur={(str) =>
                         setUpperbound(
@@ -70,7 +75,9 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                     }
                 />
             </Box>
-            <hr></hr>
+            <Box width="65%">
+                <hr></hr>
+            </Box>
             <Checkbox
                 py={5}
                 size="sm"
@@ -90,11 +97,12 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                 <Textarea
                     placeholder="Description"
                     bg="whiteAlpha"
+                    width="65%"
                     value={description}
                     onChange={(str) => setDescription(str.target.value)}
                 />
             </Box>
-            {!lastBreakpoint ? (
+            {!lastBreakpoint && breakpointAfter ? (
                 <Box>
                     <hr></hr>
                     <Box py={4}>
@@ -113,7 +121,7 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                         </Button>
                     </Box>
                 </Box>
-            ) : (
+            ) : breakpointAfter ? (
                 <Box pt={8}>
                     <Text>
                         If their score is above {upperBound ?? "[UPPER BOUND]"}
@@ -129,6 +137,8 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                         />
                     </Box>
                 </Box>
+            ) : (
+                <></>
             )}
         </Box>
     );

@@ -23,6 +23,8 @@ import {
     ModalFooter,
     useDisclosure,
     useToast,
+    forwardRef,
+    ButtonProps,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Page } from "types/Page";
@@ -49,6 +51,17 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         };
     }
 };
+
+const OutlineButton = forwardRef<ButtonProps, "div">((props, ref) => (
+    <Button
+        variant="outline"
+        isFullWidth
+        bg="#ffffff"
+        textAlign="left"
+        ref={ref}
+        {...props}
+    />
+));
 
 //Self Check Questions React functional component
 const ToolBuilder: Page = () => {
@@ -219,7 +232,7 @@ const ToolBuilder: Page = () => {
                 (q) => q._id !== ques._id,
             );
             setSelectedQuestions(
-                newSelected.length !== selectedQuestions.length
+                newSelected.length !== selectedQuestions.length // 0 case
                     ? newSelected
                     : [...selectedQuestions, ques],
             );
@@ -227,10 +240,8 @@ const ToolBuilder: Page = () => {
             setSelectedQuestions([...selectedQuestions, ques]);
         }
 
-        const firstBreakpoint = breakpoints[0];
-        firstBreakpoint.lower = getMinSum(selectedQuestions);
         const newList = [...breakpoints];
-        newList[0] = firstBreakpoint;
+        newList[0].lower = getMinSum(selectedQuestions);
         setBreakpoints(newList);
     };
 
@@ -243,7 +254,13 @@ const ToolBuilder: Page = () => {
         );
 
     const addOneBreakpoint = () => {
-        console.log(breakpoints);
+        if (breakpoints[breakpoints.length - 1].upper === undefined) {
+            alert(
+                "You cannot add another breakpoint without defining the last's upper bound",
+            );
+            return;
+        }
+
         const newBreakpoint = {
             _id: "tempId" + String(breakpoints.length + 1),
             num: breakpoints.length + 1,
@@ -316,6 +333,23 @@ const ToolBuilder: Page = () => {
             return bp;
         });
         setBreakpoints(newList);
+    };
+
+    const getQuestionsList = () => {
+        if (!selectedQuestions.length) {
+            return "Select Options";
+        }
+
+        return selectedQuestions.length !== allValuedQuestions().length
+            ? selectedQuestions.reduce(
+                  (prev, curr, idx) =>
+                      prev +
+                      "Question " +
+                      curr.questionNumber +
+                      (idx !== selectedQuestions.length - 1 ? ", " : ""),
+                  "",
+              )
+            : "All Self Check Questions";
     };
 
     const saveTool = async (saveOrPublish) => {
@@ -999,24 +1033,15 @@ const ToolBuilder: Page = () => {
                                     Select Questions used for the Self Check
                                     Score (Select all that apply)
                                 </Text>
-                                <Box py={2} width={700}>
+                                <Box py={2} width="65%">
                                     <Menu matchWidth closeOnSelect={false}>
                                         <MenuButton
-                                            as={(props) => (
-                                                <Button
-                                                    variant="outline"
-                                                    isFullWidth
-                                                    bg="#ffffff"
-                                                    textAlign="left"
-                                                    {...props}
-                                                />
-                                            )}
+                                            as={OutlineButton}
                                             rightIcon={<ChevronDownIcon />}
                                         >
-                                            Select options
-                                            {/** TODO: ask about what to display if multiple qs */}
+                                            {getQuestionsList()}
                                         </MenuButton>
-                                        <MenuList width={700}>
+                                        <MenuList>
                                             <MenuItem>
                                                 <Checkbox
                                                     isChecked={
@@ -1044,7 +1069,7 @@ const ToolBuilder: Page = () => {
                                             </MenuItem>
                                             <MenuDivider />
                                             {questionList.map((ques) => (
-                                                <MenuItem>
+                                                <MenuItem key={ques._id}>
                                                     {ques.type ===
                                                         "multiple_choice" ||
                                                     ques.type ===
@@ -1059,7 +1084,10 @@ const ToolBuilder: Page = () => {
                                                                 )
                                                             }
                                                         >
-                                                            {ques.question}
+                                                            {"Question " +
+                                                                ques.questionNumber +
+                                                                ": " +
+                                                                ques.question}
                                                         </Checkbox>
                                                     ) : (
                                                         <Checkbox isDisabled>
@@ -1071,45 +1099,42 @@ const ToolBuilder: Page = () => {
                                         </MenuList>
                                     </Menu>
                                 </Box>
-                                <Box width={500} py={5}>
-                                    <Text display="inline-block" pr={150}>
-                                        <Text
-                                            fontSize={16}
-                                            fontWeight={700}
-                                            mr={6}
-                                            display="inline-block"
-                                            color="gray.300"
-                                        >
-                                            Minimum Score:
-                                        </Text>
-                                        <Text
-                                            fontSize={16}
-                                            display="inline-block"
-                                            color="gray.300"
-                                        >
-                                            {getMinSum(selectedQuestions)}
-                                        </Text>
+                                <Box py={5}>
+                                    <Text
+                                        fontSize={16}
+                                        fontWeight={700}
+                                        mr={6}
+                                        display="inline-block"
+                                        color="gray.300"
+                                    >
+                                        Minimum Score:
                                     </Text>
-                                    <Text display="inline-block">
-                                        <Text
-                                            fontSize={16}
-                                            fontWeight={700}
-                                            mr={6}
-                                            display="inline-block"
-                                            color="gray.300"
-                                        >
-                                            Maximum Score:
-                                        </Text>
-                                        <Text
-                                            fontSize={16}
-                                            display="inline-block"
-                                            color="gray.300"
-                                        >
-                                            {getMaxSum(selectedQuestions)}
-                                        </Text>
+                                    <Text
+                                        fontSize={16}
+                                        display="inline-block"
+                                        color="gray.300"
+                                        pr={150}
+                                    >
+                                        {getMinSum(selectedQuestions)}
+                                    </Text>
+                                    <Text
+                                        fontSize={16}
+                                        fontWeight={700}
+                                        mr={6}
+                                        display="inline-block"
+                                        color="gray.300"
+                                    >
+                                        Maximum Score:
+                                    </Text>
+                                    <Text
+                                        fontSize={16}
+                                        display="inline-block"
+                                        color="gray.300"
+                                    >
+                                        {getMaxSum(selectedQuestions)}
                                     </Text>
                                 </Box>
-                                <Box width={700}>
+                                <Box width="65%">
                                     <Text fontSize={16} fontWeight={700} mb={3}>
                                         Self Check Response Intro
                                     </Text>
@@ -1125,6 +1150,7 @@ const ToolBuilder: Page = () => {
                             </Box>
                             {breakpoints.map((bp) => (
                                 <SelfCheckResponseCard
+                                    key={bp._id}
                                     breakpointNum={bp.num}
                                     lowerBound={bp.lower}
                                     upperBound={bp.upper}
@@ -1143,6 +1169,10 @@ const ToolBuilder: Page = () => {
                                     }
                                     setUpperbound={(upper) =>
                                         updateUpper(bp._id, upper)
+                                    }
+                                    breakpointAfter={
+                                        bp.lastBreakpoint ||
+                                        bp.num === breakpoints.length
                                     }
                                 ></SelfCheckResponseCard>
                             ))}

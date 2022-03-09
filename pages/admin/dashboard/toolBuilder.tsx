@@ -1092,7 +1092,10 @@ const ToolBuilder: Page = () => {
                                                         </Checkbox>
                                                     ) : (
                                                         <Checkbox isDisabled>
-                                                            {ques.question}
+                                                            {"Question " +
+                                                                ques.questionNumber +
+                                                                ": " +
+                                                                ques.question}
                                                         </Checkbox>
                                                     )}
                                                 </MenuItem>

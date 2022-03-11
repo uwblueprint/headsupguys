@@ -20,7 +20,28 @@ const awsmobile = {
         "redirectSignOut": "http://localhost:3000/",
         "responseType": "code"
     },
-    "federationTarget": "COGNITO_USER_AND_IDENTITY_POOLS"
+    "federationTarget": "COGNITO_USER_AND_IDENTITY_POOLS",
+    "aws_cognito_username_attributes": [
+        "EMAIL"
+    ],
+    "aws_cognito_social_providers": [
+        "GOOGLE"
+    ],
+    "aws_cognito_signup_attributes": [
+        "EMAIL",
+        "NAME"
+    ],
+    "aws_cognito_mfa_configuration": "OFF",
+    "aws_cognito_mfa_types": [
+        "SMS"
+    ],
+    "aws_cognito_password_protection_settings": {
+        "passwordPolicyMinLength": 8,
+        "passwordPolicyCharacters": []
+    },
+    "aws_cognito_verification_mechanisms": [
+        "EMAIL"
+    ]
 };
 
 

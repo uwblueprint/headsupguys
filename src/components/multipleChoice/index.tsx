@@ -204,8 +204,8 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
     const optionFields = showDoubleColumns ? (
         <Grid templateColumns="repeat(2, 1fr)" gap={3}>
             <Box>
-                {leftColumnOptions.map(({ option }) => (
-                    <Flex p={1} align="center">
+                {leftColumnOptions.map(({ option }, idx) => (
+                    <Flex p={1} align="center" key={idx}>
                         {preview && (
                             <Circle
                                 size="16px"
@@ -223,8 +223,8 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
                 ))}
             </Box>
             <Box>
-                {rightColumnOptions.map(({ option }) => (
-                    <Flex p={1} align="center">
+                {rightColumnOptions.map(({ option }, idx) => (
+                    <Flex p={1} align="center" key={idx}>
                         {preview && (
                             <Circle
                                 size="16px"
@@ -246,8 +246,8 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
     ) : (
         <Box>
             <RadioGroup>
-                {options.map(({ option }) => (
-                    <Flex p={1} align="center">
+                {options.map(({ option }, idx) => (
+                    <Flex p={1} align="center" key={idx}>
                         {preview && (
                             <Circle
                                 size="16px"

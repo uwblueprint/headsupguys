@@ -175,6 +175,7 @@ interface MultiSelectPreviewProps {
     options: Option[];
     variant: string;
     columns: string;
+    onChange: (slide: number, section: number, value: string) => void;
 }
 
 export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
@@ -183,6 +184,7 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
     options,
     variant,
     columns,
+    onChange,
 }) => {
     let leftColumnOptions, rightColumnOptions;
     const showDoubleColumns =
@@ -195,8 +197,8 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
     const optionFields = showDoubleColumns ? (
         <Grid templateColumns="repeat(2, 1fr)" gap={3}>
             <Box>
-                {leftColumnOptions.map(({ option }) => (
-                    <Flex p={1}>
+                {leftColumnOptions.map(({ option }, idx) => (
+                    <Flex p={1} key={idx}>
                         <Checkbox
                             mr={2}
                             isReadOnly={preview}
@@ -207,8 +209,8 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
                 ))}
             </Box>
             <Box>
-                {rightColumnOptions.map(({ option }) => (
-                    <Flex p={1}>
+                {rightColumnOptions.map(({ option }, idx) => (
+                    <Flex p={1} key={idx}>
                         <Checkbox
                             mr={2}
                             isReadOnly={preview}
@@ -221,12 +223,16 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
         </Grid>
     ) : (
         <Box>
-            {options.map(({ option }) => (
-                <Flex p={1}>
+            {options.map(({ option }, idx) => (
+                <Flex p={1} key={idx}>
                     <Checkbox
                         mr={2}
                         isReadOnly={preview}
                         pointerEvents={preview ? "none" : "auto"}
+                        value={option}
+                        onChange={() => {
+                            onChange("option", option);
+                        }}
                     />
                     <Box>{option}</Box>
                 </Flex>

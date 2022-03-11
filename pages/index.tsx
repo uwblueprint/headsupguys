@@ -200,13 +200,12 @@ const Home: React.FC = () => {
         : "desktop";
 
     useEffect(() => {
-        Auth.currentAuthenticatedUser()
-            .then((currentUser) => {
-                setUser(currentUser);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
+        const getCurrentUser = async () => {
+            const currentUser = await Auth.currentAuthenticatedUser();
+            setUser(currentUser);
+        };
+
+        getCurrentUser().catch(console.error);
     }, []);
 
     return (

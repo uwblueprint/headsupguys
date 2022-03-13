@@ -94,7 +94,12 @@ const Module: Page = () => {
                                 options={section.multipleChoice.options}
                                 variant={large ? "desktop" : "mobile"}
                                 columns={section.properties.columns}
-                                onChange={changeUserInput}
+                                onChange={(value) =>
+                                    changeUserInput(currentSlide, idx, value)
+                                }
+                                userInput={
+                                    userInput[currentSlide]?.[idx]?.value
+                                }
                             />
                         );
                     } else if (section.type === "multiSelect") {
@@ -105,7 +110,10 @@ const Module: Page = () => {
                                 options={section.multiSelect.options}
                                 variant={large ? "desktop" : "mobile"}
                                 columns={section.properties.columns}
-                                onChange={changeUserInput}
+                                userInput={userInput[currentSlide]?.[idx]}
+                                onChange={(value) =>
+                                    changeUserInput(currentSlide, idx, value)
+                                }
                             />
                         );
                     } else if (section.type === "shortAnswer") {
@@ -114,6 +122,12 @@ const Module: Page = () => {
                                 key={idx}
                                 preview={false}
                                 question={section.shortAnswer}
+                                userInput={
+                                    userInput[currentSlide]?.[idx]?.value
+                                }
+                                onChange={(value) =>
+                                    changeUserInput(currentSlide, idx, value)
+                                }
                             />
                         );
                     }

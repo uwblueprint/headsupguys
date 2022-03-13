@@ -55,11 +55,15 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
 interface ShortAnswerPreviewProps {
     preview: boolean;
     question: string;
+    userInput: string;
+    onChange: (value: string) => void;
 }
 
 export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
     preview,
     question,
+    userInput,
+    onChange,
 }) => {
     const questionFields = (
         <Box>
@@ -67,6 +71,7 @@ export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
                 <Stack width={"full"} pb={5}>
                     <Box>{question}</Box>
                     <Textarea
+                        value={userInput}
                         maxLength={500}
                         width={"full"}
                         size={"lg"}
@@ -74,6 +79,9 @@ export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({
                         isReadOnly={preview}
                         resize={preview ? "none" : "vertical"}
                         minHeight={100}
+                        onChange={(e) => {
+                            onChange(e.target.value);
+                        }}
                     />
                 </Stack>
             </Flex>

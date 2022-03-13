@@ -184,6 +184,8 @@ interface MultipleChoicePreviewProps {
     options: Option[];
     variant: string;
     columns: string;
+    onChange(value: any): void;
+    userInput: string;
 }
 
 export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
@@ -192,6 +194,8 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
     options,
     variant,
     columns,
+    userInput,
+    onChange,
 }) => {
     let leftColumnOptions, rightColumnOptions;
     const showDoubleColumns =
@@ -245,7 +249,7 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
         </Grid>
     ) : (
         <Box>
-            <RadioGroup>
+            <RadioGroup value={userInput}>
                 {options.map(({ option }, idx) => (
                     <Flex p={1} align="center" key={idx}>
                         {preview && (
@@ -258,7 +262,14 @@ export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({
                             ></Circle>
                         )}
                         {!preview && (
-                            <Radio value={option} mr={2} cursor={"pointer"} />
+                            <Radio
+                                value={option}
+                                mr={2}
+                                cursor={"pointer"}
+                                onChange={(e) => {
+                                    onChange(e.target.value);
+                                }}
+                            />
                         )}
                         <Box>{option}</Box>
                     </Flex>

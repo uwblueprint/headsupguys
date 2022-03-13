@@ -175,7 +175,8 @@ interface MultiSelectPreviewProps {
     options: Option[];
     variant: string;
     columns: string;
-    onChange: (slide: number, section: number, value: string) => void;
+    userInput: any;
+    onChange: (value: string) => void;
 }
 
 export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
@@ -184,6 +185,7 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
     options,
     variant,
     columns,
+    userInput,
     onChange,
 }) => {
     let leftColumnOptions, rightColumnOptions;
@@ -226,12 +228,24 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
             {options.map(({ option }, idx) => (
                 <Flex p={1} key={idx}>
                     <Checkbox
+                        value={userInput?.[idx]}
                         mr={2}
                         isReadOnly={preview}
                         pointerEvents={preview ? "none" : "auto"}
-                        value={option}
                         onChange={() => {
-                            onChange("option", option);
+                            {
+                                onChange(
+                                    userInput && idx in userInput
+                                        ? {
+                                              ...userInput,
+                                              [idx]: false,
+                                          }
+                                        : {
+                                              ...userInput,
+                                              [idx]: option,
+                                          },
+                                );
+                            }
                         }}
                     />
                     <Box>{option}</Box>

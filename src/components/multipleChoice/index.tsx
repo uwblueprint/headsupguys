@@ -184,8 +184,8 @@ interface MultipleChoicePreviewProps {
     options: Option[];
     variant: string;
     columns: string;
-    onChange(value: any): void;
-    userInput: string;
+    onChange?(value: any): void;
+    userInput?: string;
 }
 
 export const MultipleChoicePreview: React.FC<MultipleChoicePreviewProps> = ({

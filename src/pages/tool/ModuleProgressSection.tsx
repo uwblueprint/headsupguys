@@ -79,7 +79,7 @@ const ModuleProgressSection = ({
                             onClick={onOpen}
                             size="lg"
                         />
-                        <Link href={`/module?id=${linkedModuleID}`}>
+                        <Link href={`/module/${linkedModuleID}`}>
                             <Flex
                                 align="center"
                                 backgroundColor="brand.green"
@@ -160,7 +160,7 @@ const ModuleProgressSection = ({
                             onClick={onOpen}
                             size="lg"
                         />
-                        <Link href={`/module?id=${linkedModuleID}`}>
+                        <Link href={`/module/${linkedModuleID}`}>
                             <Flex
                                 align="center"
                                 backgroundColor="brand.green"

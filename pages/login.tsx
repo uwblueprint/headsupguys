@@ -53,7 +53,7 @@ const Login: React.FC = () => {
         try {
             setPasswordInvalid({ isInvalid: false, reason: "" });
             await Auth.signIn(email, password);
-            router.push("/protected");
+            router.push("/");
         } catch (e) {
             setPasswordInvalid({
                 isInvalid: true,

@@ -60,7 +60,7 @@ const ToolCard = ({
                 </Text>
                 <Button
                     marginTop="10px"
-                    onClick={() => router.push(`/module?id=${linkedModuleID}`)}
+                    onClick={() => router.push(`/module/${linkedModuleID}`)}
                     width="100%"
                 >
                     Start Module
@@ -114,7 +114,7 @@ const ToolCard = ({
                 </Text>
                 <Button
                     marginTop="10px"
-                    onClick={() => router.push(`/module?id=${linkedModuleID}`)}
+                    onClick={() => router.push(`/module/${linkedModuleID}`)}
                     width="100%"
                 >
                     Start Module

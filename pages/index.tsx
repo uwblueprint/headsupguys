@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Text,
@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/router";
 import axios from "axios";
 import useSWR from "swr";
+import { Auth } from "aws-amplify";
 import { UserToolCard } from "@components/userToolCard";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
@@ -59,7 +60,7 @@ const Tools: React.FC<{ variant: string }> = ({ variant }) => {
                                         title={title}
                                         description={description}
                                         onClickTool={() =>
-                                            router.push(`/tool?id=${_id}`)
+                                            router.push(`/tool/${_id}`)
                                         }
                                         onSelfCheck={() =>
                                             router.push(
@@ -92,7 +93,7 @@ const Tools: React.FC<{ variant: string }> = ({ variant }) => {
                                         title={title}
                                         description={description}
                                         onClickTool={() =>
-                                            router.push(`/tool?id=${_id}`)
+                                            router.push(`/tool/${_id}`)
                                         }
                                         onSelfCheck={() =>
                                             router.push(
@@ -133,7 +134,7 @@ const Tools: React.FC<{ variant: string }> = ({ variant }) => {
                                         title={title}
                                         description={description}
                                         onClickTool={() =>
-                                            router.push(`/tool?id=${_id}`)
+                                            router.push(`/tool/${_id}`)
                                         }
                                         onSelfCheck={() =>
                                             router.push(
@@ -171,7 +172,7 @@ const Tools: React.FC<{ variant: string }> = ({ variant }) => {
                                         title={title}
                                         description={description}
                                         onClickTool={() =>
-                                            router.push(`/tool?id=${_id}`)
+                                            router.push(`/tool/${_id}`)
                                         }
                                         onSelfCheck={() =>
                                             router.push(
@@ -192,9 +193,20 @@ const Tools: React.FC<{ variant: string }> = ({ variant }) => {
 
 const Home: React.FC = () => {
     const [showAlert, setShowAlert] = useState(true);
+    const [user, setUser] = useState<any | null>(null);
+
     const variant = useMediaQuery({ query: `(max-width: 925px)` })
         ? "mobile"
         : "desktop";
+
+    useEffect(() => {
+        const getCurrentUser = async () => {
+            const currentUser = await Auth.currentAuthenticatedUser();
+            setUser(currentUser);
+        };
+
+        getCurrentUser().catch(console.error);
+    }, []);
 
     return (
         <>
@@ -204,11 +216,14 @@ const Home: React.FC = () => {
                     <Container maxW="container.lg" py="50px">
                         <Box h={50}>
                             <Heading
-                                fontSize={32}
                                 background="linear-gradient(180deg, rgba(255,255,255,0) 50%, #86FC2F 50%)"
                                 display="inline"
+                                fontSize={32}
+                                textTransform="uppercase"
                             >
-                                WELCOME TO YOUR TOOLKIT
+                                {user
+                                    ? `WELCOME TO YOUR TOOLKIT, ${user.attributes.name}`
+                                    : `WELCOME TO YOUR TOOLKIT`}
                             </Heading>
                         </Box>
                         <Grid
@@ -262,11 +277,14 @@ const Home: React.FC = () => {
                     <Box p={4}>
                         <Box>
                             <Heading
-                                fontSize={32}
                                 background="linear-gradient(180deg, rgba(255,255,255,0) 50%, #86FC2F 50%)"
                                 display="inline"
+                                fontSize={32}
+                                textTransform="uppercase"
                             >
-                                WELCOME TO YOUR TOOLKIT
+                                {user
+                                    ? `WELCOME TO YOUR TOOLKIT, ${user.attributes.name}`
+                                    : `WELCOME TO YOUR TOOLKIT`}
                             </Heading>
                         </Box>
                         <br />

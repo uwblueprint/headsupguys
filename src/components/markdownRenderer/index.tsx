@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import CSS from "csstype";
-import ReactMarkdown, { ReactNode } from "react-markdown";
-import React from "react";
+import ReactMarkdown from "react-markdown";
+import React, { ReactNode } from "react";
 import style from "./markdown-renderer.module.css";
 import ReactPlayer from "react-player";
 

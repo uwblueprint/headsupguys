@@ -18,7 +18,7 @@ export const ToolLayout: React.FC = ({ children }) => {
                     width="100%"
                     zIndex="2"
                 >
-                    <Image src="assets/hug-logo.png"></Image>
+                    <Image src="/assets/hug-logo.png"></Image>
                 </Flex>
             ) : (
                 <Flex
@@ -30,7 +30,7 @@ export const ToolLayout: React.FC = ({ children }) => {
                     width="100%"
                     zIndex="2"
                 >
-                    <Image src="assets/hug-logo.png"></Image>
+                    <Image src="/assets/hug-logo.png"></Image>
                     <Flex align="center">
                         <IconButton
                             aria-label="Open menu"

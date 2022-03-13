@@ -55,8 +55,8 @@ export const ShortAnswer: React.FC<ShortAnswerProps> = ({
 interface ShortAnswerPreviewProps {
     preview: boolean;
     question: string;
-    userInput: string;
-    onChange: (value: string) => void;
+    userInput?: string;
+    onChange?: (value: string) => void;
 }
 
 export const ShortAnswerPreview: React.FC<ShortAnswerPreviewProps> = ({

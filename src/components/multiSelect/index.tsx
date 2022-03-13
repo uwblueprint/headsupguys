@@ -175,8 +175,8 @@ interface MultiSelectPreviewProps {
     options: Option[];
     variant: string;
     columns: string;
-    userInput: Record<string, string>;
-    onChange: (value: Record<string, string>) => void;
+    userInput?: Record<string, string>;
+    onChange?: (value: Record<string, string>) => void;
 }
 
 export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({

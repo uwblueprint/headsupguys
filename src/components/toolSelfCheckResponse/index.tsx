@@ -1,6 +1,16 @@
-// import React, { useState } from "react";
 import { AddIcon } from "@chakra-ui/icons";
-import { Box, Button, Checkbox, Input, Textarea, Text } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Checkbox,
+    FormErrorMessage,
+    FormControl,
+    Input,
+    NumberInput,
+    NumberInputField,
+    Textarea,
+    Text,
+} from "@chakra-ui/react";
 
 //Interface Props
 export interface SelfCheckResponseCardProps {
@@ -34,6 +44,10 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
     secondaryDesc = "",
     setSecondaryDesc = undefined,
 }) => {
+    const handleUpperChange = (str) => {
+        setUpperbound(isNaN(parseInt(str)) ? parseInt(str) : undefined);
+    };
+
     return (
         <Box borderRadius="lg" rounded="md" bg="gray.50" pt={10} px={10} mb={8}>
             <Text fontSize={16} fontWeight={700} mr={6}>
@@ -59,21 +73,25 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                 >
                     to
                 </Text>
-                <Input
-                    bg="whiteAlpha"
-                    placeholder="Breakpoint Score"
-                    value={upperBound}
-                    textAlign="center"
-                    width="35%"
-                    display="inline-block"
-                    onBlur={(str) =>
-                        setUpperbound(
-                            str.target.value
-                                ? parseInt(str.target.value)
-                                : undefined,
-                        )
-                    }
-                />
+                <FormControl width="35%" display="inline-block">
+                    <NumberInput>
+                        <NumberInputField
+                            type="number"
+                            bg="whiteAlpha"
+                            placeholder="Breakpoint Score"
+                            value={upperBound}
+                            textAlign="center"
+                            onChange={handleUpperChange}
+                        />
+                    </NumberInput>
+                    {upperBound !== undefined && upperBound <= lowerBound ? (
+                        <FormErrorMessage>
+                            Upper bound must be larger than the lower bound.
+                        </FormErrorMessage>
+                    ) : (
+                        <></>
+                    )}
+                </FormControl>
             </Box>
             <Box width="65%">
                 <hr></hr>
@@ -106,19 +124,29 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                 <Box>
                     <hr></hr>
                     <Box py={4}>
-                        <Button
-                            leftIcon={
-                                <AddIcon fontSize={10} color="gray.400" />
-                            }
-                            onClick={addNewBreakpoint}
-                            py={5}
-                            size="sm"
-                            variant="ghost"
-                            textColor="gray.400"
-                            fontWeight="normal"
-                        >
-                            Add new breakpoint
-                        </Button>
+                        <FormControl>
+                            <Button
+                                leftIcon={
+                                    <AddIcon fontSize={10} color="gray.400" />
+                                }
+                                onClick={addNewBreakpoint}
+                                py={5}
+                                size="sm"
+                                variant="ghost"
+                                textColor="gray.400"
+                                fontWeight="normal"
+                            >
+                                Add new breakpoint
+                            </Button>
+                            {upperBound === undefined ? (
+                                <FormErrorMessage>
+                                    You cannot add a new breakpoint before
+                                    defining this one's upper bound.
+                                </FormErrorMessage>
+                            ) : (
+                                <></>
+                            )}
+                        </FormControl>
                     </Box>
                 </Box>
             ) : breakpointAfter ? (

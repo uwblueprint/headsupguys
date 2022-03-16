@@ -231,13 +231,33 @@ const ToolBuilder: Page = () => {
             const newSelected = selectedQuestions.filter(
                 (q) => q._id !== ques._id,
             );
-            setSelectedQuestions(
-                newSelected.length !== selectedQuestions.length // 0 case
-                    ? newSelected
-                    : [...selectedQuestions, ques],
+
+            if (newSelected.length !== selectedQuestions.length) {
+                setSelectedQuestions(newSelected);
+                return;
+            }
+
+            const findIndex = (elem, array) => {
+                for (let i = 0; i < array.length; i++) {
+                    if (array[i].questionNumber > elem.questionNumber) {
+                        return i - 1;
+                    }
+                }
+
+                return array.length - 1;
+            };
+
+            const newSelectedQuestions = [...selectedQuestions];
+
+            newSelectedQuestions.splice(
+                findIndex(ques, selectedQuestions) + 1,
+                0,
+                ques,
             );
+
+            setSelectedQuestions(newSelectedQuestions);
         } else {
-            setSelectedQuestions([...selectedQuestions, ques]);
+            setSelectedQuestions([ques]);
         }
 
         const newList = [...breakpoints];
@@ -248,10 +268,14 @@ const ToolBuilder: Page = () => {
     const shouldBeChecked = (ques) =>
         selectedQuestions.filter((q) => q === ques).length !== 0;
 
-    const allValuedQuestions = () =>
-        questionList.filter(
-            (q) => q.type === "multiple_choice" || q.type === "multi_select",
-        );
+    const isValued = (q) =>
+        !q.alphanumericInput &&
+        q.options.filter((op) => op[1] === "").length !== q.options.length &&
+        (q.type === "multi_select" ||
+            q.type === "multiple_choice" ||
+            q.type === "slider");
+
+    const allValuedQuestions = () => questionList.filter(isValued);
 
     const addOneBreakpoint = () => {
         if (breakpoints[breakpoints.length - 1].upper === undefined) {
@@ -556,9 +580,13 @@ const ToolBuilder: Page = () => {
             for (let j = 0; j < newMap.get(id).options.length; j++) {
                 newMap.get(id).options[j][1] = j.toString();
             }
+            newMap.get(id).alphanumericInput = false;
         }
         setQuestionList([...newMap.values()]);
         checkRequiredFields(toolList, [...newMap.values()]);
+        if (!isValued(newMap.get(id))) {
+            setSelectedQuestions(selectedQuestions.filter((q) => q._id !== id));
+        }
     };
     const changeQuestionInput = (id, target) => {
         const newMap = new Map(
@@ -1045,14 +1073,11 @@ const ToolBuilder: Page = () => {
                                             <MenuItem>
                                                 <Checkbox
                                                     isChecked={
-                                                        questionList.filter(
-                                                            (q) =>
-                                                                q.type ===
-                                                                    "multiple_choice" ||
-                                                                q.type ===
-                                                                    "multi_select",
-                                                        ).length ===
-                                                        selectedQuestions.length
+                                                        selectedQuestions.length !==
+                                                            0 &&
+                                                        allValuedQuestions()
+                                                            .length ===
+                                                            selectedQuestions.length
                                                     }
                                                     onChange={() =>
                                                         setSelectedQuestions(
@@ -1063,6 +1088,10 @@ const ToolBuilder: Page = () => {
                                                                 : [],
                                                         )
                                                     }
+                                                    isDisabled={
+                                                        allValuedQuestions.length !==
+                                                        0
+                                                    }
                                                 >
                                                     All Self Check Questions
                                                 </Checkbox>
@@ -1070,33 +1099,22 @@ const ToolBuilder: Page = () => {
                                             <MenuDivider />
                                             {questionList.map((ques) => (
                                                 <MenuItem key={ques._id}>
-                                                    {ques.type ===
-                                                        "multiple_choice" ||
-                                                    ques.type ===
-                                                        "multi_select" ? (
-                                                        <Checkbox
-                                                            isChecked={shouldBeChecked(
-                                                                ques,
-                                                            )}
-                                                            onChange={() =>
-                                                                handleSelected(
-                                                                    ques,
-                                                                )
-                                                            }
-                                                        >
-                                                            {"Question " +
-                                                                ques.questionNumber +
-                                                                ": " +
-                                                                ques.question}
-                                                        </Checkbox>
-                                                    ) : (
-                                                        <Checkbox isDisabled>
-                                                            {"Question " +
-                                                                ques.questionNumber +
-                                                                ": " +
-                                                                ques.question}
-                                                        </Checkbox>
-                                                    )}
+                                                    <Checkbox
+                                                        isChecked={shouldBeChecked(
+                                                            ques,
+                                                        )}
+                                                        onChange={() =>
+                                                            handleSelected(ques)
+                                                        }
+                                                        isDisabled={
+                                                            !isValued(ques)
+                                                        }
+                                                    >
+                                                        {"Question " +
+                                                            ques.questionNumber +
+                                                            ": " +
+                                                            ques.question}
+                                                    </Checkbox>
                                                 </MenuItem>
                                             ))}
                                         </MenuList>

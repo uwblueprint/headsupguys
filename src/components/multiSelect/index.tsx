@@ -235,7 +235,9 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
                         onChange={() => {
                             {
                                 onChange(
-                                    userInput && idx in userInput
+                                    userInput &&
+                                        idx in userInput &&
+                                        userInput[idx]
                                         ? {
                                               ...userInput,
                                               [idx]: false,

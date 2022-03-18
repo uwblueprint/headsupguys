@@ -4,8 +4,8 @@ export interface ProgressInterface {
     _id: Types.ObjectId;
     username: string;
     module: string;
-    completion: number;
-    input: Schema.Types.Mixed;
+    completion?: number;
+    input?: Schema.Types.Mixed;
 }
 
 const ProgressSchema = new Schema<ProgressInterface>(

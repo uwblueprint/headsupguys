@@ -175,6 +175,8 @@ interface MultiSelectPreviewProps {
     options: Option[];
     variant: string;
     columns: string;
+    userInput?: Record<string, string>;
+    onChange?: (value: Record<string, string>) => void;
 }
 
 export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
@@ -183,6 +185,8 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
     options,
     variant,
     columns,
+    userInput,
+    onChange,
 }) => {
     let leftColumnOptions, rightColumnOptions;
     const showDoubleColumns =
@@ -195,8 +199,8 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
     const optionFields = showDoubleColumns ? (
         <Grid templateColumns="repeat(2, 1fr)" gap={3}>
             <Box>
-                {leftColumnOptions.map(({ option }) => (
-                    <Flex p={1}>
+                {leftColumnOptions.map(({ option }, idx) => (
+                    <Flex p={1} key={idx}>
                         <Checkbox
                             mr={2}
                             isReadOnly={preview}
@@ -207,8 +211,8 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
                 ))}
             </Box>
             <Box>
-                {rightColumnOptions.map(({ option }) => (
-                    <Flex p={1}>
+                {rightColumnOptions.map(({ option }, idx) => (
+                    <Flex p={1} key={idx}>
                         <Checkbox
                             mr={2}
                             isReadOnly={preview}
@@ -221,12 +225,30 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
         </Grid>
     ) : (
         <Box>
-            {options.map(({ option }) => (
-                <Flex p={1}>
+            {options.map(({ option }, idx) => (
+                <Flex p={1} key={idx}>
                     <Checkbox
+                        value={userInput?.[idx]}
                         mr={2}
                         isReadOnly={preview}
                         pointerEvents={preview ? "none" : "auto"}
+                        onChange={() => {
+                            {
+                                onChange(
+                                    userInput &&
+                                        idx in userInput &&
+                                        userInput[idx]
+                                        ? {
+                                              ...userInput,
+                                              [idx]: false,
+                                          }
+                                        : {
+                                              ...userInput,
+                                              [idx]: option,
+                                          },
+                                );
+                            }
+                        }}
                     />
                     <Box>{option}</Box>
                 </Flex>

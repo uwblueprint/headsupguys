@@ -23,11 +23,20 @@ const fetcher = async (url) => {
 
 const Module: Page = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [userInput, setUserInput] = useState({});
     const router = useRouter();
     const { module } = router.query;
     const { data, error } = useSWR(`/api/module/${module}`, fetcher);
     const [large] = useMediaQuery("(min-width: 800px)");
-
+    const changeUserInput = (slide, section, value) => {
+        setUserInput({
+            ...userInput,
+            [slide]: {
+                ...userInput[slide],
+                [section]: value,
+            },
+        });
+    };
     function goNextSlide() {
         if (currentSlide < data.slides.length - 1) {
             setCurrentSlide(currentSlide + 1);
@@ -68,7 +77,7 @@ const Module: Page = () => {
                 goNextSlide={() => goNextSlide()}
                 goPrevSlide={() => goPrevSlide()}
             >
-                {data.slides[currentSlide].sections.map((section) => {
+                {data.slides[currentSlide].sections.map((section, idx) => {
                     const paddingType = section?.padding.type || "%";
                     let sectionPreview;
                     if (section.type === "staticContent") {
@@ -85,6 +94,12 @@ const Module: Page = () => {
                                 options={section.multipleChoice.options}
                                 variant={large ? "desktop" : "mobile"}
                                 columns={section.properties.columns}
+                                onChange={(value) =>
+                                    changeUserInput(currentSlide, idx, value)
+                                }
+                                userInput={
+                                    userInput[currentSlide]?.[idx]?.value
+                                }
                             />
                         );
                     } else if (section.type === "multiSelect") {
@@ -95,18 +110,30 @@ const Module: Page = () => {
                                 options={section.multiSelect.options}
                                 variant={large ? "desktop" : "mobile"}
                                 columns={section.properties.columns}
+                                userInput={userInput[currentSlide]?.[idx]}
+                                onChange={(value) =>
+                                    changeUserInput(currentSlide, idx, value)
+                                }
                             />
                         );
                     } else if (section.type === "shortAnswer") {
                         sectionPreview = (
                             <ShortAnswerPreview
+                                key={idx}
                                 preview={false}
                                 question={section.shortAnswer}
+                                userInput={
+                                    userInput[currentSlide]?.[idx]?.value
+                                }
+                                onChange={(value) =>
+                                    changeUserInput(currentSlide, idx, value)
+                                }
                             />
                         );
                     }
                     return (
                         <Container
+                            key={idx}
                             maxWidth="100%"
                             paddingTop={`${section?.padding.top}${paddingType}`}
                             paddingRight={`${section?.padding.right}${paddingType}`}

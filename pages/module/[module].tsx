@@ -9,6 +9,7 @@ import {
     MultipleChoicePreview,
     MultiSelectPreview,
     ShortAnswerPreview,
+    UserResponsePreview,
 } from "@components";
 import useSWR from "swr";
 import { Spinner } from "@chakra-ui/react";
@@ -97,6 +98,14 @@ const Module: Page = () => {
                         sectionPreview = (
                             <ShortAnswerPreview
                                 question={section.shortAnswer}
+                            />
+                        );
+                    } else if (section.type === "userResponse") {
+                        sectionPreview = (
+                            <UserResponsePreview
+                                slides={data.slides}
+                                slideIdx={section.userResponse.slideIdx}
+                                sectionIdx={section.userResponse.sectionIdx}
                             />
                         );
                     }

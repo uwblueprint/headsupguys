@@ -12,6 +12,7 @@ import {
     MultipleChoicePreview,
     MultiSelectPreview,
     ShortAnswerPreview,
+    UserResponsePreview,
 } from "@components";
 import { ModuleState } from "pages/admin/dashboard/builder";
 import React from "react";
@@ -104,6 +105,16 @@ const Document = ({
                                 sectionPreview = (
                                     <ShortAnswerPreview
                                         question={section.shortAnswer}
+                                    />
+                                );
+                            } else if (section.type === "userResponse") {
+                                sectionPreview = (
+                                    <UserResponsePreview
+                                        slides={state.slides}
+                                        slideIdx={section.userResponse.slideIdx}
+                                        sectionIdx={
+                                            section.userResponse.sectionIdx
+                                        }
                                     />
                                 );
                             }

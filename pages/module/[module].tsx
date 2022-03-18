@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Error from "next/error";
 import { Page } from "types/Page";
 import axios from "axios";
+import { Auth } from "aws-amplify";
 import {
     ModulePreview,
     MarkdownRenderer,
@@ -12,6 +13,7 @@ import {
 } from "@components";
 import useSWR from "swr";
 import { Spinner, Container, useMediaQuery } from "@chakra-ui/react";
+
 const fetcher = async (url) => {
     const response = await axios({
         method: "GET",
@@ -28,6 +30,15 @@ const Module: Page = () => {
     const { module } = router.query;
     const { data, error } = useSWR(`/api/module/${module}`, fetcher);
     const [large] = useMediaQuery("(min-width: 800px)");
+    const [user, setUser] = useState<any | null>(null);
+    useEffect(() => {
+        const getCurrentUser = async () => {
+            const currentUser = await Auth.currentAuthenticatedUser();
+            setUser(currentUser);
+        };
+
+        getCurrentUser().catch(console.error);
+    }, []);
     const changeUserInput = (slide, section, value) => {
         setUserInput({
             ...userInput,
@@ -70,7 +81,7 @@ const Module: Page = () => {
                 preview={false}
                 previous={data.slides[currentSlide].buttons.previous}
                 next={data.slides[currentSlide].buttons.next}
-                save={data.slides[currentSlide].buttons.save}
+                save={user ? false : data.slides[currentSlide].buttons.save}
                 print={data.slides[currentSlide].buttons.print}
                 progressValue={((currentSlide + 1) / data.slides.length) * 100}
                 variant={large ? "desktop" : "mobile"}

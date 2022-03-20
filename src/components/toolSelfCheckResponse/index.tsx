@@ -3,11 +3,9 @@ import {
     Box,
     Button,
     Checkbox,
-    FormErrorMessage,
     FormControl,
+    FormErrorMessage,
     Input,
-    NumberInput,
-    NumberInputField,
     Textarea,
     Text,
 } from "@chakra-ui/react";
@@ -18,14 +16,12 @@ export interface SelfCheckResponseCardProps {
     breakpointNum: number;
     lowerBound: number;
     upperBound: number;
-    setUpperbound: (upper: number) => void;
+    setUpperbound: (upper: string) => void;
     lastBreakpoint: boolean;
     breakpointAfter?: boolean;
     setLastBreakpoint: (last: boolean) => void;
-    description: string;
     setDescription: (desc: string) => void;
     addNewBreakpoint: () => void;
-    secondaryDesc?: string;
     setSecondaryDesc?: (desc: string) => void;
 }
 
@@ -38,16 +34,10 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
     lastBreakpoint,
     breakpointAfter = false,
     setLastBreakpoint,
-    description,
     setDescription,
     addNewBreakpoint,
-    secondaryDesc = "",
     setSecondaryDesc = undefined,
 }) => {
-    const handleUpperChange = (str) => {
-        setUpperbound(isNaN(parseInt(str)) ? parseInt(str) : undefined);
-    };
-
     return (
         <Box borderRadius="lg" rounded="md" bg="gray.50" pt={10} px={10} mb={8}>
             <Text fontSize={16} fontWeight={700} mr={6}>
@@ -57,42 +47,52 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                 If users score between these two values, what will you tell
                 them?
             </Text>
-            <Box pb={5} display="inline-block">
-                <Input
-                    isDisabled
-                    placeholder={String(lowerBound)}
-                    textAlign="center"
-                    width="35%"
-                    display="inline-block"
-                />
-                <Text
-                    fontSize={16}
-                    fontWeight={700}
-                    mx={6}
-                    display="inline-block"
-                >
-                    to
-                </Text>
-                <FormControl width="35%" display="inline-block">
-                    <NumberInput>
-                        <NumberInputField
-                            type="number"
-                            bg="whiteAlpha"
-                            placeholder="Breakpoint Score"
-                            value={upperBound}
-                            textAlign="center"
-                            onChange={handleUpperChange}
-                        />
-                    </NumberInput>
-                    {upperBound !== undefined && upperBound <= lowerBound ? (
-                        <FormErrorMessage>
-                            Upper bound must be larger than the lower bound.
-                        </FormErrorMessage>
-                    ) : (
-                        <></>
-                    )}
-                </FormControl>
-            </Box>
+            <FormControl
+                width="35%"
+                display="inline-block"
+                isInvalid={isNaN(upperBound) || upperBound < lowerBound}
+            >
+                <Box pb={5} display="inline-block">
+                    <Input
+                        isDisabled
+                        placeholder={String(lowerBound)}
+                        textAlign="center"
+                        width="35%"
+                        display="inline-block"
+                    />
+                    <Text
+                        fontSize={16}
+                        fontWeight={700}
+                        mx={6}
+                        display="inline-block"
+                    >
+                        to
+                    </Text>
+                    <Input
+                        type="number"
+                        bg="whiteAlpha"
+                        placeholder="Breakpoint Score"
+                        textAlign="center"
+                        width="35%"
+                        onChange={(str) => setUpperbound(str.target.value)}
+                    />
+                </Box>
+                {isNaN(upperBound) ? (
+                    <FormErrorMessage>
+                        Upper bound value not recognized
+                    </FormErrorMessage>
+                ) : (
+                    <></>
+                )}
+                {upperBound < lowerBound ? (
+                    <FormErrorMessage>
+                        Upper bound must be greater than or equal to the lower
+                        bound.
+                    </FormErrorMessage>
+                ) : (
+                    <></>
+                )}
+            </FormControl>
             <Box width="65%">
                 <hr></hr>
             </Box>
@@ -116,7 +116,6 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                     placeholder="Description"
                     bg="whiteAlpha"
                     width="65%"
-                    value={description}
                     onChange={(str) => setDescription(str.target.value)}
                 />
             </Box>
@@ -138,19 +137,11 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                             >
                                 Add new breakpoint
                             </Button>
-                            {upperBound === undefined ? (
-                                <FormErrorMessage>
-                                    You cannot add a new breakpoint before
-                                    defining this one's upper bound.
-                                </FormErrorMessage>
-                            ) : (
-                                <></>
-                            )}
                         </FormControl>
                     </Box>
                 </Box>
             ) : breakpointAfter ? (
-                <Box pt={8}>
+                <Box pt={8} width="65%">
                     <Text>
                         If their score is above {upperBound ?? "[UPPER BOUND]"}
                     </Text>
@@ -158,7 +149,6 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                         <Textarea
                             placeholder="Description"
                             bg="whiteAlpha"
-                            value={secondaryDesc}
                             onChange={(str) =>
                                 setSecondaryDesc(str.target.value)
                             }

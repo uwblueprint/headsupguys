@@ -311,29 +311,25 @@ const ToolBuilder: Page = () => {
     };
 
     const updateUpper = (id, newUpper) => {
+        newUpper = newUpper === "" ? undefined : parseInt(newUpper);
+        if (newUpper === undefined) return;
+
         if (newUpper > getMaxSum(selectedQuestions)) {
             alert("Please enter a value lower than the maximum");
             return;
         }
 
-        let error = false;
-
-        const newList = breakpoints.map((bp) => {
+        let changed = breakpoints.length;
+        const newList = breakpoints.map((bp, idx) => {
             if (bp._id === id) {
-                if (newUpper < bp.lower) {
-                    error = true;
-                    return bp;
-                }
                 bp.upper = newUpper !== undefined ? newUpper : bp.upper;
+                changed = idx;
             }
             return bp;
         });
 
-        if (error) {
-            alert(
-                "Please enter a value greater than the lower bound of the breakpoint.",
-            );
-            return;
+        if (changed < breakpoints.length - 1) {
+            breakpoints[changed + 1].lower = newUpper + 1;
         }
 
         setBreakpoints(newList);
@@ -1175,8 +1171,6 @@ const ToolBuilder: Page = () => {
                                     breakpointNum={bp.num}
                                     lowerBound={bp.lower}
                                     upperBound={bp.upper}
-                                    description={bp.description}
-                                    secondaryDesc={bp.secondaryDesc}
                                     lastBreakpoint={bp.lastBreakpoint}
                                     addNewBreakpoint={addOneBreakpoint}
                                     setDescription={(desc) =>

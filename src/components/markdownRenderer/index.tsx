@@ -114,8 +114,10 @@ const BaseRenderer: React.FC<{ content: string; variables?: any }> = ({
                                             ) : (
                                                 <ul>
                                                     {variables[rest.href].map(
-                                                        (item) => (
-                                                            <li>{item}</li>
+                                                        (item, idx) => (
+                                                            <li key={idx}>
+                                                                {item}
+                                                            </li>
                                                         ),
                                                     )}
                                                 </ul>

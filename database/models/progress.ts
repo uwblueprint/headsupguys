@@ -15,7 +15,8 @@ const ProgressSchema = new Schema<ProgressInterface>(
             required: true,
         },
         module: {
-            type: [{ type: Schema.Types.ObjectId, ref: "Module" }],
+            type: Schema.Types.ObjectId,
+            ref: "Module",
             required: true,
         },
         completion: { type: Number, default: 0 },

@@ -35,6 +35,8 @@ const Module: Page = () => {
         const getCurrentUser = async () => {
             const currentUser = await Auth.currentAuthenticatedUser();
             setUser(currentUser);
+            console.log(currentUser);
+            saveUserInput(currentUser);
         };
 
         getCurrentUser().catch(console.error);
@@ -48,16 +50,48 @@ const Module: Page = () => {
             },
         });
     };
+    const saveUserInput = async (currentUser) => {
+        // check if moduleId in db, if so call patch otherwise call post
+        // const handleGet = async () => {
+        //     const response = await axios({
+        //         method: "GET",
+        //         url: "/api/progress/get",
+        //         params: {
+        //             username: currentUser.username,
+        //             module: data,
+        //         },
+        //     });
+        //     console.log(response);
+        // };
+        // const response = await axios({
+        //     method: "PATCH",
+        //     url: "/api/progress/patch",
+        //     params: {
+        //         username: currentUser.username,
+        //         module: "",
+        //     },
+        //     data: {
+        //         username: currentUser.username,
+        //         module: "",
+        //         completion: 100,
+        //         input: [],
+        //     },
+        // });
+        console.log(data);
+    };
+    
     function goNextSlide() {
         if (currentSlide < data.slides.length - 1) {
             setCurrentSlide(currentSlide + 1);
         }
+        saveUserInput(user);
     }
 
     function goPrevSlide() {
         if (currentSlide != 0) {
             setCurrentSlide(currentSlide - 1);
         }
+        saveUserInput(user);
     }
 
     if (error) {

@@ -6,7 +6,7 @@ export interface MoodInterface {
     moods: [
         {
             day: Date;
-            mood: number;
+            moodScore: number;
             description: string;
         },
     ];
@@ -17,6 +17,8 @@ const MoodSchema = new Schema<MoodInterface>(
         username: {
             type: String,
             required: true,
+            index: true,
+            unique: true,
         },
         moods: {
             type: [
@@ -27,7 +29,7 @@ const MoodSchema = new Schema<MoodInterface>(
                         index: true,
                         unique: true,
                     },
-                    mood: { type: Number, required: true, min: 0, max: 4 },
+                    moodScore: { type: Number, required: true, min: 0, max: 4 },
                     description: { type: String, default: "" },
                 },
             ],

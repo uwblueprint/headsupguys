@@ -148,18 +148,29 @@ const Module: Page = () => {
         saveUserInput();
     };
     const renderFields = async () => {
-        if (data && !mounted) {
-            setMounted(true);
+        if (user) {
             const response = await getUserFields().catch(() => {
                 postUserFields();
             });
             setCurrentSlide(response ? response.recentSlide : 0);
-            setFields();
+        } else {
+            const unsaved = localStorage.getItem("unsaved");
+            if (unsaved) {
+                const [id, input] = unsaved.split(/:(.*)/s);
+                // console.log("id:", id, "inut:", input);
+                if (id === data._id) {
+                    setUserInput(JSON.parse(input));
+                }
+            }
         }
+        setMounted(true);
+        setFields();
     };
-    if (user) {
+
+    if (data && !mounted) {
         renderFields();
     }
+
     if (error) {
         return <Error statusCode={404} />;
     } else if (!data) {

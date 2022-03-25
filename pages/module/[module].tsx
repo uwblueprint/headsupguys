@@ -25,7 +25,7 @@ const fetcher = async (url) => {
 
 const Module: Page = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [userInput, setUserInput] = useState({ maxSlide: 0 });
+    const [userInput, setUserInput] = useState({ recentSlide: 0 });
     const router = useRouter();
     const { module } = router.query;
     const [mounted, setMounted] = useState(false);
@@ -136,10 +136,7 @@ const Module: Page = () => {
         if (currentSlide < data.slides.length - 1) {
             setCurrentSlide(currentSlide + 1);
         }
-        if (currentSlide + 1 > userInput.maxSlide) {
-            userInput.maxSlide = currentSlide + 1;
-            console.log("userInput", userInput);
-        }
+        userInput.recentSlide = currentSlide + 1;
         saveUserInput();
     };
 
@@ -147,6 +144,7 @@ const Module: Page = () => {
         if (currentSlide != 0) {
             setCurrentSlide(currentSlide - 1);
         }
+        userInput.recentSlide = currentSlide - 1;
         saveUserInput();
     };
     const renderFields = async () => {
@@ -155,7 +153,7 @@ const Module: Page = () => {
             const response = await getUserFields().catch(() => {
                 postUserFields();
             });
-            setCurrentSlide(response.maxSlide);
+            setCurrentSlide(response ? response.recentSlide : 0);
             setFields();
         }
     };
@@ -211,7 +209,7 @@ const Module: Page = () => {
                                 onChange={(value) => {
                                     changeUserInput(currentSlide, idx, value);
                                 }}
-                                userInput={userInput[currentSlide]?.[idx]}
+                                userInput={userInput?.[currentSlide]?.[idx]}
                             />
                         );
                     } else if (section.type === "multiSelect") {
@@ -222,7 +220,7 @@ const Module: Page = () => {
                                 options={section.multiSelect.options}
                                 variant={large ? "desktop" : "mobile"}
                                 columns={section.properties.columns}
-                                userInput={userInput[currentSlide]?.[idx]}
+                                userInput={userInput?.[currentSlide]?.[idx]}
                                 onChange={(value) => {
                                     changeUserInput(currentSlide, idx, value);
                                 }}
@@ -234,7 +232,7 @@ const Module: Page = () => {
                                 key={idx}
                                 preview={false}
                                 question={section.shortAnswer}
-                                userInput={userInput[currentSlide]?.[idx]}
+                                userInput={userInput?.[currentSlide]?.[idx]}
                                 onChange={(value) => {
                                     changeUserInput(currentSlide, idx, value);
                                 }}

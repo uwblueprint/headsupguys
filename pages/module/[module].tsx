@@ -79,6 +79,7 @@ const Module: Page = () => {
             },
         });
         setUserInput(response.data.input);
+        return response.data.input;
     };
 
     const patchUserFields = async () => {
@@ -131,31 +132,30 @@ const Module: Page = () => {
             : saveToLocalStorage();
     };
 
-    function goNextSlide() {
+    const goNextSlide = async () => {
         if (currentSlide < data.slides.length - 1) {
             setCurrentSlide(currentSlide + 1);
         }
         if (currentSlide + 1 > userInput.maxSlide) {
-            setUserInput({
-                ...userInput,
-                maxSlide: currentSlide + 1,
-            });
+            userInput.maxSlide = currentSlide + 1;
+            console.log("userInput", userInput);
         }
         saveUserInput();
-    }
+    };
 
-    function goPrevSlide() {
+    const goPrevSlide = async () => {
         if (currentSlide != 0) {
             setCurrentSlide(currentSlide - 1);
         }
         saveUserInput();
-    }
+    };
     const renderFields = async () => {
         if (data && !mounted) {
             setMounted(true);
-            getUserFields().catch(() => {
+            const response = await getUserFields().catch(() => {
                 postUserFields();
             });
+            setCurrentSlide(response.maxSlide);
             setFields();
         }
     };

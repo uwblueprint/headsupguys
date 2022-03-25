@@ -25,7 +25,7 @@ const fetcher = async (url) => {
 
 const Module: Page = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [userInput, setUserInput] = useState({});
+    const [userInput, setUserInput] = useState({ maxSlide: 0 });
     const router = useRouter();
     const { module } = router.query;
     const [mounted, setMounted] = useState(false);
@@ -109,9 +109,16 @@ const Module: Page = () => {
         });
     };
 
+    const saveToLocalStorage = () => {
+        localStorage.setItem(
+            "unsaved",
+            `${data._id}` + ":" + JSON.stringify(userInput),
+        );
+    };
+
     const saveUserInput = async () => {
         // check if moduleId in db, if so call patch otherwise call post
-
+        console.log("saving", userInput);
         user
             ? getUserFields()
                   .then(() => {
@@ -121,12 +128,18 @@ const Module: Page = () => {
                   .catch(() => {
                       postUserFields();
                   })
-            : getUserFields();
+            : saveToLocalStorage();
     };
 
     function goNextSlide() {
         if (currentSlide < data.slides.length - 1) {
             setCurrentSlide(currentSlide + 1);
+        }
+        if (currentSlide + 1 > userInput.maxSlide) {
+            setUserInput({
+                ...userInput,
+                maxSlide: currentSlide + 1,
+            });
         }
         saveUserInput();
     }
@@ -140,11 +153,15 @@ const Module: Page = () => {
     const renderFields = async () => {
         if (data && !mounted) {
             setMounted(true);
-            getUserFields();
+            getUserFields().catch(() => {
+                postUserFields();
+            });
             setFields();
         }
     };
-    renderFields();
+    if (user) {
+        renderFields();
+    }
     if (error) {
         return <Error statusCode={404} />;
     } else if (!data) {
@@ -172,6 +189,7 @@ const Module: Page = () => {
                 variant={large ? "desktop" : "mobile"}
                 goNextSlide={() => goNextSlide()}
                 goPrevSlide={() => goPrevSlide()}
+                saveModule={() => saveUserInput()}
             >
                 {data.slides[currentSlide].sections.map((section, idx) => {
                     const paddingType = section?.padding.type || "%";

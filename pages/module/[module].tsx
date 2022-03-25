@@ -28,6 +28,7 @@ const Module: Page = () => {
     const [userInput, setUserInput] = useState({});
     const router = useRouter();
     const { module } = router.query;
+    const [mounted, setMounted] = useState(false);
     const { data, error } = useSWR(`/api/module/${module}`, fetcher);
     const [large] = useMediaQuery("(min-width: 800px)");
     const [user, setUser] = useState<any | null>(null);
@@ -36,10 +37,6 @@ const Module: Page = () => {
             setUser(await Auth.currentAuthenticatedUser());
         };
         getCurrentUser().catch(console.error);
-        if (data) {
-            console.log("useeffect");
-            setFields();
-        }
     }, []);
     const changeUserInput = (slide, section, value) => {
         setUserInput({
@@ -49,93 +46,114 @@ const Module: Page = () => {
                 [section]: value,
             },
         });
-        // console.log(slide, section, value);
     };
     const setFields = async () => {
+        console.log("WOOOO", userInput, data);
         for (let i = 0; i < data.slides.length; i++) {
             for (let j = 0; j < data.slides[i].sections.length; j++) {
                 if (data.slides[i]?.sections[j]?.type === "shortAnswer") {
-                    console.log(userInput);
-                    changeUserInput(i, j, userInput?.[i]?.[j]);
+                    console.log("A", data.slides[i].sections[j]);
+
+                    if (userInput?.[i]?.[j]) {
+                        changeUserInput(i, j, userInput[i][j]);
+                    }
                 }
                 if (data.slides[i]?.sections[j]?.type === "multipleChoice") {
-                    console.log(userInput);
-                    changeUserInput(i, j, userInput?.[i]?.[j]);
+                    console.log("B");
+
+                    if (userInput?.[i]?.[j]) {
+                        changeUserInput(i, j, userInput[i][j]);
+                    }
                 }
                 if (data.slides[i]?.sections[j]?.type === "multiSelect") {
-                    console.log("val", userInput?.[i]);
-                    // changeUserInput(i, j, userInput?.[i]?.[j]);
+                    console.log("C");
+                    if (userInput?.[i]?.[j]) {
+                        changeUserInput(i, j, userInput[i][j]);
+                    }
                 }
             }
         }
     };
-    const saveUserInput = async (currentUser) => {
+
+    const getUserFields = async () => {
+        const response = await axios({
+            method: "GET",
+            url: "/api/progress/get",
+            params: {
+                username: user.username,
+                module: data._id,
+            },
+        });
+        console.log("response data input", response.data.input);
+        setUserInput(response.data.input);
+    };
+
+    const patchUserFields = async () => {
+        await axios({
+            method: "PATCH",
+            url: "/api/progress/patch",
+            params: {
+                username: user.username,
+                module: data._id,
+            },
+            data: {
+                username: user.username,
+                module: data._id,
+                completion: 100,
+                input: userInput,
+            },
+        });
+    };
+
+    const postUserFields = async () => {
+        await axios({
+            method: "POST",
+            url: "/api/progress/post",
+            data: {
+                username: user.username,
+                module: data._id,
+            },
+        });
+    };
+
+    const saveUserInput = async () => {
         // check if moduleId in db, if so call patch otherwise call post
-        const handleGet = async () => {
-            await axios({
-                method: "GET",
-                url: "/api/progress/get",
-                params: {
-                    username: currentUser.username,
-                    module: await data._id,
-                },
-            });
-        };
 
-        const handlePatch = async () => {
-            await axios({
-                method: "PATCH",
-                url: "/api/progress/patch",
-                params: {
-                    username: currentUser.username,
-                    module: await data._id,
-                },
-                data: {
-                    username: currentUser.username,
-                    module: data._id,
-                    completion: 100,
-                    input: userInput,
-                },
-            });
-        };
-
-        const handlePost = async () => {
-            await axios({
-                method: "POST",
-                url: "/api/progress/post",
-                data: {
-                    username: currentUser.username,
-                    module: await data._id,
-                },
-            });
-        };
-
-        currentUser
-            ? handleGet()
+        user
+            ? getUserFields()
                   .then(() => {
-                      handlePatch();
+                      patchUserFields();
                       setFields();
                   })
                   .catch(() => {
-                      handlePost();
+                      postUserFields();
                   })
-            : handleGet;
+            : getUserFields();
     };
 
     function goNextSlide() {
         if (currentSlide < data.slides.length - 1) {
             setCurrentSlide(currentSlide + 1);
         }
-        saveUserInput(user);
+        saveUserInput();
     }
 
     function goPrevSlide() {
         if (currentSlide != 0) {
             setCurrentSlide(currentSlide - 1);
         }
-        saveUserInput(user);
+        saveUserInput();
     }
-
+    const renderFields = async () => {
+        if (data && !mounted) {
+            setMounted(true);
+            getUserFields();
+            console.log(data);
+            // setUserInput
+            setFields();
+        }
+    };
+    renderFields();
     if (error) {
         return <Error statusCode={404} />;
     } else if (!data) {
@@ -197,10 +215,6 @@ const Module: Page = () => {
                                 columns={section.properties.columns}
                                 userInput={userInput[currentSlide]?.[idx]}
                                 onChange={(value) => {
-                                    console.log(
-                                        userInput[currentSlide]?.[idx],
-                                        value,
-                                    );
                                     changeUserInput(currentSlide, idx, value);
                                 }}
                             />

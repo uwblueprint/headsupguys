@@ -8,23 +8,31 @@ const getInRange = async (
     res: NextApiResponse<MoodInterface | ErrorResponse>,
 ): Promise<void> => {
     const username = req.query.username as string;
-    const startDate = req.query.startDate; // Date object
-    const endDate = req.query.endDate; // Date object
+    let startTimestamp = req.query.startTimestamp as string; // ISO format (time will be truncated)
+    let endTimestamp = req.query.endTimestamp as string; // ISO format (time will be truncated)
 
-    const userMood = await Mood.findOne({
+    startTimestamp = startTimestamp.substring(0, 10);
+    endTimestamp = endTimestamp.substring(0, 10);
+
+    const mood = await Mood.findOne({
         username: username,
     });
 
-    if (!userMood)
+    if (!mood) {
         return res.status(404).send({
             error: "The mood with the given username was not found.",
         });
+    }
 
-    const moodsInRange = userMood.moods.filter(
-        (mood) => mood.day >= startDate && mood.day <= endDate,
-    );
+    const entriesInRange = mood.entries.filter((entry) => {
+        const timestamp = entry.timestamp.toISOString().substring(0, 10);
+        return (
+            startTimestamp.localeCompare(timestamp) <= 0 &&
+            endTimestamp.localeCompare(timestamp) >= 0
+        );
+    });
 
-    res.status(200).json(moodsInRange);
+    res.status(200).json(entriesInRange);
 };
 
 export default connectDB(getInRange);

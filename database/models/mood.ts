@@ -3,9 +3,10 @@ import { model, models, Schema, Types } from "mongoose";
 export interface MoodInterface {
     _id: Types.ObjectId;
     username: string;
-    moods: [
+    entries: [
         {
-            day: Date;
+            date: number; // yyyymmdd format (for uniqueness)
+            timestamp: Date; // ISO format
             moodScore: number;
             description: string;
         },
@@ -20,14 +21,18 @@ const MoodSchema = new Schema<MoodInterface>(
             index: true,
             unique: true,
         },
-        moods: {
+        entries: {
             type: [
                 {
-                    day: {
-                        type: Date,
+                    date: {
+                        type: Number,
                         required: true,
                         index: true,
                         unique: true,
+                    },
+                    timestamp: {
+                        type: Date,
+                        required: true,
                     },
                     moodScore: { type: Number, required: true, min: 0, max: 4 },
                     description: { type: String, default: "" },

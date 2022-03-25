@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import connectDB from "../utils/mongoose";
-import patch from "./patch";
+import getInRange from "./getInRange";
 import post from "./post";
 
 const index = async (
@@ -9,8 +9,8 @@ const index = async (
     res: NextApiResponse<ErrorResponse>,
 ) => {
     switch (req.method) {
-        case "PATCH":
-            patch(req, res);
+        case "GET":
+            getInRange(req, res);
             break;
         case "POST":
             post(req, res);

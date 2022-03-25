@@ -8,23 +8,26 @@ const getInMonth = async (
     res: NextApiResponse<MoodInterface | ErrorResponse>,
 ): Promise<void> => {
     const username = req.query.username as string;
-    const month = req.query.month; // numeric month
-    const year = req.query.year; // numeric year
+    const month = req.query.month as string; // numeric month as string, e.g. "1"
+    const year = req.query.year as string; // numeric year as string, e.g. "2022"
 
-    const userMood = await Mood.findOne({
+    const mood = await Mood.findOne({
         username: username,
     });
 
-    if (!userMood)
-        return res.status(404).send({
+    if (!mood) {
+        res.status(404).send({
             error: "The mood with the given username was not found.",
         });
+    }
 
-    const moodsInMonth = userMood.moods.filter(
-        (mood) => mood.day.getMonth() === month && mood.day.getYear() === year,
-    );
+    const entriesInMonth = mood.entries.filter((entry) => {
+        const entryMonth = new Date(entry.timestamp).getMonth() + 1;
+        const entryYear = new Date(entry.timestamp).getFullYear();
+        return entryMonth.toString() === month && entryYear.toString() === year;
+    });
 
-    res.status(200).json(moodsInMonth);
+    res.status(200).json(entriesInMonth);
 };
 
 export default connectDB(getInMonth);

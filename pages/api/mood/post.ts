@@ -7,17 +7,42 @@ const post = async (
     req: NextApiRequest,
     res: NextApiResponse<MoodInterface | ErrorResponse>,
 ): Promise<void> => {
-    const { username, day, moodScore } = req.body;
+    const { username, moodScore } = req.body;
+    let { date, timestamp } = req.body;
 
-    const mood = new Mood({
-        username: username,
-        moods: [
-            {
-                day: day === "" ? new Date().toISOString() : day,
+    if (!date || date === "") {
+        date = new Date().toISOString().substring(0, 10).replace(/-/g, "");
+        date = parseInt(date);
+    }
+    if (!timestamp || timestamp === "") {
+        timestamp = new Date().toISOString();
+    }
+
+    let mood = await Mood.findOne({ username: username });
+
+    if (mood) {
+        const entry = mood.entries.find((entry) => entry.date === date);
+        if (entry) {
+            entry.moodScore = moodScore;
+        } else {
+            mood.entries.push({
+                date: date,
+                timestamp: timestamp,
                 moodScore: moodScore,
-            },
-        ],
-    });
+            });
+        }
+    } else {
+        mood = new Mood({
+            username: username,
+            entries: [
+                {
+                    date: date,
+                    timestamp: timestamp,
+                    moodScore: moodScore,
+                },
+            ],
+        });
+    }
 
     await mood
         .save()

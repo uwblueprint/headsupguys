@@ -33,13 +33,13 @@ const Module: Page = () => {
     const [user, setUser] = useState<any | null>(null);
     useEffect(() => {
         const getCurrentUser = async () => {
-            const currentUser = await Auth.currentAuthenticatedUser();
-            setUser(currentUser);
-            console.log(currentUser);
-            saveUserInput(currentUser);
+            setUser(await Auth.currentAuthenticatedUser());
         };
-
         getCurrentUser().catch(console.error);
+        if (data) {
+            console.log("useeffect");
+            setFields();
+        }
     }, []);
     const changeUserInput = (slide, section, value) => {
         setUserInput({
@@ -49,37 +49,79 @@ const Module: Page = () => {
                 [section]: value,
             },
         });
+        // console.log(slide, section, value);
+    };
+    const setFields = async () => {
+        for (let i = 0; i < data.slides.length; i++) {
+            for (let j = 0; j < data.slides[i].sections.length; j++) {
+                if (data.slides[i]?.sections[j]?.type === "shortAnswer") {
+                    console.log(userInput);
+                    changeUserInput(i, j, userInput?.[i]?.[j]);
+                }
+                if (data.slides[i]?.sections[j]?.type === "multipleChoice") {
+                    console.log(userInput);
+                    changeUserInput(i, j, userInput?.[i]?.[j]);
+                }
+                if (data.slides[i]?.sections[j]?.type === "multiSelect") {
+                    console.log("val", userInput?.[i]);
+                    // changeUserInput(i, j, userInput?.[i]?.[j]);
+                }
+            }
+        }
     };
     const saveUserInput = async (currentUser) => {
         // check if moduleId in db, if so call patch otherwise call post
-        // const handleGet = async () => {
-        //     const response = await axios({
-        //         method: "GET",
-        //         url: "/api/progress/get",
-        //         params: {
-        //             username: currentUser.username,
-        //             module: data,
-        //         },
-        //     });
-        //     console.log(response);
-        // };
-        // const response = await axios({
-        //     method: "PATCH",
-        //     url: "/api/progress/patch",
-        //     params: {
-        //         username: currentUser.username,
-        //         module: "",
-        //     },
-        //     data: {
-        //         username: currentUser.username,
-        //         module: "",
-        //         completion: 100,
-        //         input: [],
-        //     },
-        // });
-        console.log(data);
+        const handleGet = async () => {
+            await axios({
+                method: "GET",
+                url: "/api/progress/get",
+                params: {
+                    username: currentUser.username,
+                    module: await data._id,
+                },
+            });
+        };
+
+        const handlePatch = async () => {
+            await axios({
+                method: "PATCH",
+                url: "/api/progress/patch",
+                params: {
+                    username: currentUser.username,
+                    module: await data._id,
+                },
+                data: {
+                    username: currentUser.username,
+                    module: data._id,
+                    completion: 100,
+                    input: userInput,
+                },
+            });
+        };
+
+        const handlePost = async () => {
+            await axios({
+                method: "POST",
+                url: "/api/progress/post",
+                data: {
+                    username: currentUser.username,
+                    module: await data._id,
+                },
+            });
+        };
+
+        currentUser
+            ? handleGet()
+                  .then(() => {
+                      handlePatch();
+                      setFields();
+                  })
+                  .catch(() => {
+                      handlePost();
+                  })
+            : handleGet;
     };
-    
+
     function goNextSlide() {
         if (currentSlide < data.slides.length - 1) {
             setCurrentSlide(currentSlide + 1);
@@ -139,12 +181,10 @@ const Module: Page = () => {
                                 options={section.multipleChoice.options}
                                 variant={large ? "desktop" : "mobile"}
                                 columns={section.properties.columns}
-                                onChange={(value) =>
-                                    changeUserInput(currentSlide, idx, value)
-                                }
-                                userInput={
-                                    userInput[currentSlide]?.[idx]?.value
-                                }
+                                onChange={(value) => {
+                                    changeUserInput(currentSlide, idx, value);
+                                }}
+                                userInput={userInput[currentSlide]?.[idx]}
                             />
                         );
                     } else if (section.type === "multiSelect") {
@@ -156,9 +196,13 @@ const Module: Page = () => {
                                 variant={large ? "desktop" : "mobile"}
                                 columns={section.properties.columns}
                                 userInput={userInput[currentSlide]?.[idx]}
-                                onChange={(value) =>
-                                    changeUserInput(currentSlide, idx, value)
-                                }
+                                onChange={(value) => {
+                                    console.log(
+                                        userInput[currentSlide]?.[idx],
+                                        value,
+                                    );
+                                    changeUserInput(currentSlide, idx, value);
+                                }}
                             />
                         );
                     } else if (section.type === "shortAnswer") {
@@ -167,12 +211,10 @@ const Module: Page = () => {
                                 key={idx}
                                 preview={false}
                                 question={section.shortAnswer}
-                                userInput={
-                                    userInput[currentSlide]?.[idx]?.value
-                                }
-                                onChange={(value) =>
-                                    changeUserInput(currentSlide, idx, value)
-                                }
+                                userInput={userInput[currentSlide]?.[idx]}
+                                onChange={(value) => {
+                                    changeUserInput(currentSlide, idx, value);
+                                }}
                             />
                         );
                     }

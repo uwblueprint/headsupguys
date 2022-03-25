@@ -48,25 +48,19 @@ const Module: Page = () => {
         });
     };
     const setFields = async () => {
-        console.log("WOOOO", userInput, data);
         for (let i = 0; i < data.slides.length; i++) {
             for (let j = 0; j < data.slides[i].sections.length; j++) {
                 if (data.slides[i]?.sections[j]?.type === "shortAnswer") {
-                    console.log("A", data.slides[i].sections[j]);
-
                     if (userInput?.[i]?.[j]) {
                         changeUserInput(i, j, userInput[i][j]);
                     }
                 }
                 if (data.slides[i]?.sections[j]?.type === "multipleChoice") {
-                    console.log("B");
-
                     if (userInput?.[i]?.[j]) {
                         changeUserInput(i, j, userInput[i][j]);
                     }
                 }
                 if (data.slides[i]?.sections[j]?.type === "multiSelect") {
-                    console.log("C");
                     if (userInput?.[i]?.[j]) {
                         changeUserInput(i, j, userInput[i][j]);
                     }
@@ -84,7 +78,6 @@ const Module: Page = () => {
                 module: data._id,
             },
         });
-        console.log("response data input", response.data.input);
         setUserInput(response.data.input);
     };
 
@@ -148,8 +141,6 @@ const Module: Page = () => {
         if (data && !mounted) {
             setMounted(true);
             getUserFields();
-            console.log(data);
-            // setUserInput
             setFields();
         }
     };

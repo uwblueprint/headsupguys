@@ -9,7 +9,10 @@ import GeogrotesqueBold from "../../fonts/GeogrotesqueBold";
  *
  */
 
-function createCertificate(name: string, toolName: string): void {
+async function createCertificate(
+    name: string,
+    toolName: string,
+): Promise<void> {
     // Initialize document
     const doc = new jsPDF({
         orientation: "landscape",
@@ -29,6 +32,7 @@ function createCertificate(name: string, toolName: string): void {
     // display images
     const logo = new Image();
     logo.src = "/assets/hug-logo-2.png";
+    await logo.decode();
     doc.addImage(
         logo,
         "PNG",
@@ -40,10 +44,12 @@ function createCertificate(name: string, toolName: string): void {
 
     const graphic = new Image();
     graphic.src = "/assets/certificate-graphic.png";
+    await graphic.decode();
     doc.addImage(graphic, "PNG", 0, 91, 138, 425);
 
     const ubc = new Image();
     ubc.src = "/assets/ubc.png";
+    await ubc.decode();
     doc.addImage(
         ubc,
         "PNG",
@@ -55,6 +61,7 @@ function createCertificate(name: string, toolName: string): void {
 
     const signature = new Image();
     signature.src = "/assets/signature.png";
+    await signature.decode();
     doc.addImage(
         signature,
         "PNG",

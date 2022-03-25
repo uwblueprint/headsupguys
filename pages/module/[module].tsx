@@ -4,6 +4,8 @@ import Error from "next/error";
 import { Page } from "types/Page";
 import axios from "axios";
 import { Auth } from "aws-amplify";
+import { Modal } from "@components";
+
 import {
     ModulePreview,
     MarkdownRenderer,
@@ -12,7 +14,12 @@ import {
     ShortAnswerPreview,
 } from "@components";
 import useSWR from "swr";
-import { Spinner, Container, useMediaQuery } from "@chakra-ui/react";
+import {
+    Spinner,
+    Container,
+    useMediaQuery,
+    useDisclosure,
+} from "@chakra-ui/react";
 
 const fetcher = async (url) => {
     const response = await axios({
@@ -24,6 +31,7 @@ const fetcher = async (url) => {
 };
 
 const Module: Page = () => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const [currentSlide, setCurrentSlide] = useState(0);
     const [userInput, setUserInput] = useState({ recentSlide: 0 });
     const router = useRouter();
@@ -110,16 +118,8 @@ const Module: Page = () => {
         });
     };
 
-    const saveToLocalStorage = () => {
-        localStorage.setItem(
-            "unsaved",
-            `${data._id}` + ":" + JSON.stringify(userInput),
-        );
-    };
-
     const saveUserInput = async () => {
         // check if moduleId in db, if so call patch otherwise call post
-        console.log("saving", userInput);
         user
             ? getUserFields()
                   .then(() => {
@@ -129,7 +129,10 @@ const Module: Page = () => {
                   .catch(() => {
                       postUserFields();
                   })
-            : saveToLocalStorage();
+            : localStorage.setItem(
+                  "unsaved",
+                  `${data._id}` + ":" + JSON.stringify(userInput),
+              );
     };
 
     const goNextSlide = async () => {
@@ -148,25 +151,25 @@ const Module: Page = () => {
         saveUserInput();
     };
     const renderFields = async () => {
+        let newInput;
         if (user) {
-            const response = await getUserFields().catch(() => {
+            newInput = await getUserFields().catch(() => {
                 postUserFields();
             });
-            setCurrentSlide(response ? response.recentSlide : 0);
         } else {
             const unsaved = localStorage.getItem("unsaved");
             if (unsaved) {
-                const [id, input] = unsaved.split(/:(.*)/s);
-                // console.log("id:", id, "inut:", input);
+                const [id, input] = unsaved.split(/:(.*)/s); // Split by the first colon
                 if (id === data._id) {
-                    setUserInput(JSON.parse(input));
+                    newInput = JSON.parse(input);
+                    setUserInput(newInput);
                 }
             }
         }
+        setCurrentSlide(newInput ? newInput.recentSlide : 0);
         setMounted(true);
         setFields();
     };
-
     if (data && !mounted) {
         renderFields();
     }
@@ -188,81 +191,111 @@ const Module: Page = () => {
         );
     } else {
         return (
-            <ModulePreview
-                preview={false}
-                previous={data.slides[currentSlide].buttons.previous}
-                next={data.slides[currentSlide].buttons.next}
-                save={user ? false : data.slides[currentSlide].buttons.save}
-                print={data.slides[currentSlide].buttons.print}
-                progressValue={((currentSlide + 1) / data.slides.length) * 100}
-                variant={large ? "desktop" : "mobile"}
-                goNextSlide={() => goNextSlide()}
-                goPrevSlide={() => goPrevSlide()}
-                saveModule={() => saveUserInput()}
-            >
-                {data.slides[currentSlide].sections.map((section, idx) => {
-                    const paddingType = section?.padding.type || "%";
-                    let sectionPreview;
-                    if (section.type === "staticContent") {
-                        sectionPreview = (
-                            <MarkdownRenderer>
-                                {section.markdown}
-                            </MarkdownRenderer>
-                        );
-                    } else if (section.type === "multipleChoice") {
-                        sectionPreview = (
-                            <MultipleChoicePreview
-                                preview={false}
-                                question={section.multipleChoice.question}
-                                options={section.multipleChoice.options}
-                                variant={large ? "desktop" : "mobile"}
-                                columns={section.properties.columns}
-                                onChange={(value) => {
-                                    changeUserInput(currentSlide, idx, value);
-                                }}
-                                userInput={userInput?.[currentSlide]?.[idx]}
-                            />
-                        );
-                    } else if (section.type === "multiSelect") {
-                        sectionPreview = (
-                            <MultiSelectPreview
-                                preview={false}
-                                question={section.multiSelect.question}
-                                options={section.multiSelect.options}
-                                variant={large ? "desktop" : "mobile"}
-                                columns={section.properties.columns}
-                                userInput={userInput?.[currentSlide]?.[idx]}
-                                onChange={(value) => {
-                                    changeUserInput(currentSlide, idx, value);
-                                }}
-                            />
-                        );
-                    } else if (section.type === "shortAnswer") {
-                        sectionPreview = (
-                            <ShortAnswerPreview
-                                key={idx}
-                                preview={false}
-                                question={section.shortAnswer}
-                                userInput={userInput?.[currentSlide]?.[idx]}
-                                onChange={(value) => {
-                                    changeUserInput(currentSlide, idx, value);
-                                }}
-                            />
-                        );
+            <>
+                <Modal
+                    isOpen={isOpen}
+                    onCancel={onClose}
+                    onConfirm={() => {
+                        onClose();
+                    }}
+                    header={`Save Module`}
+                    bodyText={""}
+                    confirmText={`Yes, delete`}
+                    confirmButtonColorScheme={`red`}
+                />
+                <ModulePreview
+                    preview={false}
+                    previous={data.slides[currentSlide].buttons.previous}
+                    next={data.slides[currentSlide].buttons.next}
+                    save={user ? false : data.slides[currentSlide].buttons.save}
+                    print={data.slides[currentSlide].buttons.print}
+                    progressValue={
+                        ((currentSlide + 1) / data.slides.length) * 100
                     }
-                    return (
-                        <Container
-                            key={idx}
-                            maxWidth="100%"
-                            paddingTop={`${section?.padding.top}${paddingType}`}
-                            paddingRight={`${section?.padding.right}${paddingType}`}
-                            paddingBottom={`${section?.padding.bottom}${paddingType}`}
-                            paddingLeft={`${section?.padding.left}${paddingType}`}
-                            children={sectionPreview}
-                        ></Container>
-                    );
-                }, "")}
-            </ModulePreview>
+                    variant={large ? "desktop" : "mobile"}
+                    goNextSlide={() => goNextSlide()}
+                    goPrevSlide={() => goPrevSlide()}
+                    saveModule={() => {
+                        onOpen();
+                        saveUserInput();
+                    }}
+                >
+                    {data.slides[currentSlide].sections.map((section, idx) => {
+                        const paddingType = section?.padding.type || "%";
+                        let sectionPreview;
+                        if (section.type === "staticContent") {
+                            sectionPreview = (
+                                <MarkdownRenderer>
+                                    {section.markdown}
+                                </MarkdownRenderer>
+                            );
+                        } else if (section.type === "multipleChoice") {
+                            sectionPreview = (
+                                <MultipleChoicePreview
+                                    preview={false}
+                                    question={section.multipleChoice.question}
+                                    options={section.multipleChoice.options}
+                                    variant={large ? "desktop" : "mobile"}
+                                    columns={section.properties.columns}
+                                    onChange={(value) => {
+                                        changeUserInput(
+                                            currentSlide,
+                                            idx,
+                                            value,
+                                        );
+                                    }}
+                                    userInput={userInput?.[currentSlide]?.[idx]}
+                                />
+                            );
+                        } else if (section.type === "multiSelect") {
+                            sectionPreview = (
+                                <MultiSelectPreview
+                                    preview={false}
+                                    question={section.multiSelect.question}
+                                    options={section.multiSelect.options}
+                                    variant={large ? "desktop" : "mobile"}
+                                    columns={section.properties.columns}
+                                    userInput={userInput?.[currentSlide]?.[idx]}
+                                    onChange={(value) => {
+                                        changeUserInput(
+                                            currentSlide,
+                                            idx,
+                                            value,
+                                        );
+                                    }}
+                                />
+                            );
+                        } else if (section.type === "shortAnswer") {
+                            sectionPreview = (
+                                <ShortAnswerPreview
+                                    key={idx}
+                                    preview={false}
+                                    question={section.shortAnswer}
+                                    userInput={userInput?.[currentSlide]?.[idx]}
+                                    onChange={(value) => {
+                                        changeUserInput(
+                                            currentSlide,
+                                            idx,
+                                            value,
+                                        );
+                                    }}
+                                />
+                            );
+                        }
+                        return (
+                            <Container
+                                key={idx}
+                                maxWidth="100%"
+                                paddingTop={`${section?.padding.top}${paddingType}`}
+                                paddingRight={`${section?.padding.right}${paddingType}`}
+                                paddingBottom={`${section?.padding.bottom}${paddingType}`}
+                                paddingLeft={`${section?.padding.left}${paddingType}`}
+                                children={sectionPreview}
+                            ></Container>
+                        );
+                    }, "")}
+                </ModulePreview>
+            </>
         );
     }
 };

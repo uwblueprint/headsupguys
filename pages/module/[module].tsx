@@ -90,7 +90,7 @@ const Module: Page = () => {
         return response.data.input;
     };
 
-    const patchUserFields = async () => {
+    const patchUserFields = async (newUserInput = null) => {
         await axios({
             method: "PATCH",
             url: "/api/progress/patch",
@@ -102,12 +102,13 @@ const Module: Page = () => {
                 username: user.username,
                 module: data._id,
                 completion: 100,
-                input: userInput,
+                input: newUserInput ? newUserInput : userInput,
             },
         });
     };
 
     const postUserFields = async () => {
+        console.log("Posting user fields", data);
         await axios({
             method: "POST",
             url: "/api/progress/post",
@@ -152,12 +153,23 @@ const Module: Page = () => {
     };
     const renderFields = async () => {
         let newInput;
+        const unsaved = localStorage.getItem("unsaved");
+        setMounted(true);
         if (user) {
             newInput = await getUserFields().catch(() => {
-                postUserFields();
+                // If there is no user input in the database look in local storage
+                // Set it if it exists otherwise set database entry to empty object
+                if (unsaved) {
+                    const [id, input] = unsaved.split(/:(.*)/s); // Split by the first colon
+                    if (id === data._id) {
+                        newInput = JSON.parse(input);
+                        setUserInput(newInput);
+                    }
+                    postUserFields();
+                    patchUserFields(newInput);
+                }
             });
         } else {
-            const unsaved = localStorage.getItem("unsaved");
             if (unsaved) {
                 const [id, input] = unsaved.split(/:(.*)/s); // Split by the first colon
                 if (id === data._id) {
@@ -167,7 +179,6 @@ const Module: Page = () => {
             }
         }
         setCurrentSlide(newInput ? newInput.recentSlide : 0);
-        setMounted(true);
         setFields();
     };
     if (data && !mounted) {
@@ -195,13 +206,12 @@ const Module: Page = () => {
                 <Modal
                     isOpen={isOpen}
                     onCancel={onClose}
+                    header={`Create an Account to Save Your Progress`}
+                    confirmText={`Sign Up`}
+                    confirmButtonColorScheme={`green`}
                     onConfirm={() => {
-                        onClose();
+                        router.push("/signup");
                     }}
-                    header={`Save Module`}
-                    bodyText={""}
-                    confirmText={`Yes, delete`}
-                    confirmButtonColorScheme={`red`}
                 />
                 <ModulePreview
                     preview={false}

@@ -1,8 +1,9 @@
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
     Box,
     Button,
     Checkbox,
+    Flex,
     FormControl,
     FormErrorMessage,
     Input,
@@ -23,6 +24,7 @@ export interface SelfCheckResponseCardProps {
     setDescription: (desc: string) => void;
     addNewBreakpoint: () => void;
     setSecondaryDesc?: (desc: string) => void;
+    deleteCurrBreakpoint: (num: number) => void;
 }
 
 //Self check response card component
@@ -36,13 +38,30 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
     setLastBreakpoint,
     setDescription,
     addNewBreakpoint,
+    deleteCurrBreakpoint,
     setSecondaryDesc = undefined,
 }) => {
     return (
         <Box borderRadius="lg" rounded="md" bg="gray.50" pt={10} px={10} mb={8}>
-            <Text fontSize={16} fontWeight={700} mr={6}>
-                Set Breakpoint Score {breakpointNum}
-            </Text>
+            <Flex>
+                <Text fontSize={16} fontWeight={700} mr={6}>
+                    Set Breakpoint Score {breakpointNum}
+                </Text>
+                {breakpointNum != 1 ? (
+                    <Button
+                        rightIcon={<DeleteIcon />}
+                        size="sm"
+                        variant="ghost"
+                        textColor="gray.400"
+                        fontWeight="normal"
+                        onClick={() => deleteCurrBreakpoint(breakpointNum)}
+                    >
+                        Delete
+                    </Button>
+                ) : (
+                    <></>
+                )}
+            </Flex>
             <Text>
                 If users score between these two values, what will you tell
                 them?
@@ -74,12 +93,14 @@ export const SelfCheckResponseCard: React.FC<SelfCheckResponseCardProps> = ({
                         placeholder="Breakpoint Score"
                         textAlign="center"
                         width="35%"
+                        defaultValue={upperBound}
                         onChange={(str) => setUpperbound(str.target.value)}
+                        onWheel={(e) => e.currentTarget.blur()}
                     />
                 </Box>
                 {isNaN(upperBound) ? (
                     <FormErrorMessage>
-                        Upper bound value not recognized
+                        Upper bound value not recognized.
                     </FormErrorMessage>
                 ) : (
                     <></>

@@ -211,7 +211,9 @@ const ToolBuilder: Page = () => {
             (prev, curr) =>
                 prev +
                 Math.min(
-                    ...curr.options?.map((option) => parseInt(option[1]) ?? 0),
+                    ...curr.options?.map((option) =>
+                        option[1] == "" ? 0 : parseInt(option[1]),
+                    ),
                 ),
             0,
         ) ?? 0;
@@ -221,12 +223,15 @@ const ToolBuilder: Page = () => {
             (prev, curr) =>
                 prev +
                 Math.max(
-                    ...curr.options?.map((option) => parseInt(option[1]) ?? 0),
+                    ...curr.options?.map((option) =>
+                        option[1] == "" ? 0 : parseInt(option[1]),
+                    ),
                 ),
             0,
         ) ?? 0;
 
     const handleSelected = (ques) => {
+        const newList = [...breakpoints];
         if (selectedQuestions.length !== 0) {
             const newSelected = selectedQuestions.filter(
                 (q) => q._id !== ques._id,
@@ -234,6 +239,8 @@ const ToolBuilder: Page = () => {
 
             if (newSelected.length !== selectedQuestions.length) {
                 setSelectedQuestions(newSelected);
+                newList[0].lower = getMinSum(newSelected);
+                setBreakpoints(newList);
                 return;
             }
 
@@ -256,12 +263,24 @@ const ToolBuilder: Page = () => {
             );
 
             setSelectedQuestions(newSelectedQuestions);
+            newList[0].lower = getMinSum(newSelectedQuestions);
         } else {
             setSelectedQuestions([ques]);
+            newList[0].lower = getMinSum([ques]);
         }
+        setBreakpoints(newList);
+    };
 
+    const handleAllSelected = () => {
+        const allValued = allValuedQuestions();
         const newList = [...breakpoints];
-        newList[0].lower = getMinSum(selectedQuestions);
+        if (allValued.length !== selectedQuestions.length) {
+            setSelectedQuestions(allValued);
+            newList[0].lower = getMinSum(allValued);
+        } else {
+            setSelectedQuestions([]);
+            newList[0].lower = 0;
+        }
         setBreakpoints(newList);
     };
 
@@ -298,6 +317,17 @@ const ToolBuilder: Page = () => {
         };
 
         setBreakpoints([...breakpoints, newBreakpoint]);
+    };
+
+    const deleteBreakpoint = (id) => {
+        const newBreakpoints = [...breakpoints].filter((q) => q.num != id);
+        if (id < breakpoints.length) {
+            newBreakpoints[id - 1].lower = breakpoints[id - 1].lower;
+            for (let i = id - 1; i < newBreakpoints.length; i++) {
+                newBreakpoints[i].num--;
+            }
+        }
+        setBreakpoints(newBreakpoints);
     };
 
     const updateDescription = (id, newDesc) => {
@@ -583,6 +613,9 @@ const ToolBuilder: Page = () => {
         if (!isValued(newMap.get(id))) {
             setSelectedQuestions(selectedQuestions.filter((q) => q._id !== id));
         }
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = getMinSum([...newMap.values()]);
+        setBreakpoints(newBreakpoints);
     };
     const changeQuestionInput = (id, target) => {
         const newMap = new Map(
@@ -610,6 +643,9 @@ const ToolBuilder: Page = () => {
         newMap.get(id).alphanumericInput = target;
         checkRequiredFields(toolList, [...newMap.values()]);
         setQuestionList([...newMap.values()]);
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = getMinSum([...newMap.values()]);
+        setBreakpoints(newBreakpoints);
     };
     const changeOptionInput = (id, index, target, optionOrValue) => {
         const newMap = new Map(
@@ -621,6 +657,10 @@ const ToolBuilder: Page = () => {
         newMap.get(id).options[index][changeIndex] = target;
         checkRequiredFields(toolList, [...newMap.values()]);
         setQuestionList([...newMap.values()]);
+
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = getMinSum(selectedQuestions);
+        setBreakpoints(newBreakpoints);
     };
     const addOneOption = (id, target) => {
         //adds a new option to the question at the target location
@@ -649,6 +689,9 @@ const ToolBuilder: Page = () => {
         }
         checkRequiredFields(toolList, [...newMap.values()]);
         setQuestionList([...newMap.values()]);
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = getMinSum(selectedQuestions);
+        setBreakpoints(newBreakpoints);
     };
 
     const removeOneOption = (id, target) => {
@@ -660,6 +703,10 @@ const ToolBuilder: Page = () => {
         newMap.get(id).options.splice(target, 1);
         checkRequiredFields(toolList, [...newMap.values()]);
         setQuestionList([...newMap.values()]);
+
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = getMinSum(selectedQuestions);
+        setBreakpoints(newBreakpoints);
     };
 
     const changeSliderBounds = (id, target) => {
@@ -715,11 +762,20 @@ const ToolBuilder: Page = () => {
 
     const removeOneQuestion = (id) => {
         const newList = questionList.filter((item) => item._id !== id);
+        const newSelected = selectedQuestions.filter((q) => q._id !== id);
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = getMinSum(newSelected);
+        setSelectedQuestions(newSelected);
+        setBreakpoints(newBreakpoints);
         setQuestionList(newList);
         changeQuestionNumbers(newList);
     };
     const removeAllQuestions = () => {
         const newList = [];
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = 0;
+        setSelectedQuestions([]);
+        setBreakpoints(newBreakpoints);
         setQuestionList(newList);
         checkRequiredFields(toolList, newList);
     };
@@ -1061,6 +1117,7 @@ const ToolBuilder: Page = () => {
                                     <Menu matchWidth closeOnSelect={false}>
                                         <MenuButton
                                             as={OutlineButton}
+                                            isTruncated
                                             rightIcon={<ChevronDownIcon />}
                                         >
                                             {getQuestionsList()}
@@ -1075,15 +1132,7 @@ const ToolBuilder: Page = () => {
                                                             .length ===
                                                             selectedQuestions.length
                                                     }
-                                                    onChange={() =>
-                                                        setSelectedQuestions(
-                                                            allValuedQuestions()
-                                                                .length !==
-                                                                selectedQuestions.length
-                                                                ? allValuedQuestions()
-                                                                : [],
-                                                        )
-                                                    }
+                                                    onChange={handleAllSelected}
                                                     isDisabled={
                                                         allValuedQuestions.length !==
                                                         0
@@ -1173,6 +1222,7 @@ const ToolBuilder: Page = () => {
                                     upperBound={bp.upper}
                                     lastBreakpoint={bp.lastBreakpoint}
                                     addNewBreakpoint={addOneBreakpoint}
+                                    deleteCurrBreakpoint={deleteBreakpoint}
                                     setDescription={(desc) =>
                                         updateDescription(bp._id, desc)
                                     }

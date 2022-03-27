@@ -2,17 +2,15 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "types/ErrorResponse";
 import { Mood, MoodInterface } from "../../../database/models/mood";
 import connectDB from "../utils/mongoose";
+import { isBefore, isSameDay } from "date-fns";
 
 const getInRange = async (
     req: NextApiRequest,
     res: NextApiResponse<MoodInterface | ErrorResponse>,
 ): Promise<void> => {
     const username = req.query.username as string;
-    let startTimestamp = req.query.startTimestamp as string; // ISO format (time will be truncated)
-    let endTimestamp = req.query.endTimestamp as string; // ISO format (time will be truncated)
-
-    startTimestamp = startTimestamp.substring(0, 10);
-    endTimestamp = endTimestamp.substring(0, 10);
+    const startTimestamp = req.query.startTimestamp as string; // ISO format
+    const endTimestamp = req.query.endTimestamp as string; // ISO format
 
     const mood = await Mood.findOne({
         username: username,
@@ -25,10 +23,13 @@ const getInRange = async (
     }
 
     const entriesInRange = mood.entries.filter((entry) => {
-        const timestamp = entry.timestamp.toISOString().substring(0, 10);
+        const startDate = new Date(startTimestamp);
+        const endDate = new Date(endTimestamp);
+        const timestamp = new Date(entry.timestamp);
         return (
-            startTimestamp.localeCompare(timestamp) <= 0 &&
-            endTimestamp.localeCompare(timestamp) >= 0
+            (isBefore(startDate, timestamp) ||
+                isSameDay(startDate, timestamp)) &&
+            (isBefore(timestamp, endDate) || isSameDay(timestamp, endDate))
         );
     });
 

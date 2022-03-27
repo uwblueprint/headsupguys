@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
     Box,
-    Button,
     Text,
     Heading,
     Image,
@@ -200,58 +199,6 @@ const Home: React.FC = () => {
         ? "mobile"
         : "desktop";
 
-    const handleGetInMonth = async () => {
-        const response = await axios({
-            method: "GET",
-            url: "/api/mood/getInMonth",
-            params: {
-                username: "testing2",
-                month: 3,
-                year: 2022,
-            },
-        });
-        console.log(response);
-    };
-
-    const handleGetInRange = async () => {
-        const response = await axios({
-            method: "GET",
-            url: "/api/mood/getInRange",
-            params: {
-                username: "testing2",
-                startTimestamp: new Date().toISOString(),
-                endTimestamp: new Date().toISOString(),
-            },
-        });
-        console.log(response);
-    };
-
-    const handlePost0 = async () => {
-        const response = await axios({
-            method: "POST",
-            url: "/api/mood/post",
-            data: {
-                username: "testing2",
-                timestamp: new Date("Mar 30, 2022").toISOString(),
-                moodScore: 0,
-            },
-        });
-        console.log(response);
-    };
-
-    const handlePost4 = async () => {
-        const response = await axios({
-            method: "POST",
-            url: "/api/mood/post",
-            data: {
-                username: "testing2",
-                timestamp: new Date("Mar 30, 2022").toISOString(),
-                moodScore: 4,
-            },
-        });
-        console.log(response);
-    };
-
     useEffect(() => {
         const getCurrentUser = async () => {
             const currentUser = await Auth.currentAuthenticatedUser();
@@ -263,10 +210,6 @@ const Home: React.FC = () => {
 
     return (
         <>
-            <Button onClick={handleGetInMonth}>GET MO</Button>
-            <Button onClick={handleGetInRange}>GET RG</Button>
-            <Button onClick={handlePost0}>POST 0</Button>
-            <Button onClick={handlePost4}>POST 4</Button>
             <Image src="/assets/HUG_Banner_1.png" w="100%" />
             {variant === "desktop" ? (
                 <>

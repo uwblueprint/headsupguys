@@ -134,6 +134,7 @@ const ToolBuilder: Page = () => {
             secondaryDesc: "",
         },
     ]);
+    const [breakpointId, setBreakpointId] = useState(2);
 
     const [allModules, setAllModules] = useState([]);
     const [allTools, setAllTools] = useState([[], []]);
@@ -305,7 +306,7 @@ const ToolBuilder: Page = () => {
         }
 
         const newBreakpoint = {
-            _id: "tempId" + String(breakpoints.length + 1),
+            _id: "tempId" + String(breakpointId),
             num: breakpoints.length + 1,
             lastBreakpoint: false,
             lower: breakpoints
@@ -317,6 +318,7 @@ const ToolBuilder: Page = () => {
         };
 
         setBreakpoints([...breakpoints, newBreakpoint]);
+        setBreakpointId(breakpointId + 1);
     };
 
     const deleteBreakpoint = (id) => {

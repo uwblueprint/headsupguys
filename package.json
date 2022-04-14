@@ -29,6 +29,7 @@
         "axios": "^0.21.1",
         "faker": "^5.5.3",
         "framer-motion": "^3.2.1",
+        "jspdf": "^2.5.1",
         "lodash": "^4.17.21",
         "mongodb": "^3.6.9",
         "mongodb-client-encryption": "^1.2.6",

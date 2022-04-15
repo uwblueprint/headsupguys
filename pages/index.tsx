@@ -203,6 +203,7 @@ const Home: React.FC = () => {
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [showAlert, setShowAlert] = useState(true);
     const [user, setUser] = useState<any | null>(null);
+    const [showTrackMood, setShowTrackMood] = useState(true);
 
     const variant = useMediaQuery({ query: `(max-width: 925px)` })
         ? "mobile"
@@ -219,7 +220,11 @@ const Home: React.FC = () => {
 
     return (
         <>
-            <MoodTrackerModal isOpen={isOpen} onClose={onClose} />
+            <MoodTrackerModal
+                isOpen={isOpen}
+                onClose={onClose}
+                setShowTrackMood={setShowTrackMood}
+            />
             <Image src="/assets/HUG_Banner_1.png" w="100%" />
             {variant === "desktop" ? (
                 <>
@@ -280,29 +285,34 @@ const Home: React.FC = () => {
                                 </AspectRatio>
                             </GridItem>
                         </Grid>
-                        <Box backgroundColor="background.dark" padding="30px">
-                            <Text color="white">
-                                How are you today? Give your mind a HUG - start
-                                tracking your mood today!
-                            </Text>
-                            <Button
-                                backgroundColor="brand.green"
-                                height="48px"
-                                marginTop="20px"
-                                onClick={onOpen}
-                                padding="10px"
-                                width="300px"
+                        {showTrackMood && (
+                            <Box
+                                backgroundColor="background.dark"
+                                padding="30px"
                             >
-                                <Text>Track Mood</Text>
-                                <Box position="absolute" right="10px">
-                                    <Icon
-                                        as={MdChevronRight}
-                                        height={6}
-                                        width={6}
-                                    />
-                                </Box>
-                            </Button>
-                        </Box>
+                                <Text color="white">
+                                    How are you today? Give your mind a HUG -
+                                    start tracking your mood today!
+                                </Text>
+                                <Button
+                                    backgroundColor="brand.green"
+                                    height="48px"
+                                    marginTop="20px"
+                                    onClick={onOpen}
+                                    padding="10px"
+                                    width="300px"
+                                >
+                                    <Text>Track Mood</Text>
+                                    <Box position="absolute" right="10px">
+                                        <Icon
+                                            as={MdChevronRight}
+                                            height={6}
+                                            width={6}
+                                        />
+                                    </Box>
+                                </Button>
+                            </Box>
+                        )}
                         <br />
                         <Box p={4}>
                             <Heading
@@ -350,32 +360,34 @@ const Home: React.FC = () => {
                                 variant="ghost"
                             />
                         </Flex>
-                        <Box
-                            backgroundColor="background.dark"
-                            padding="32px 18px"
-                        >
-                            <Text color="white">
-                                How are you today? Give your mind a HUG - start
-                                tracking your mood today!
-                            </Text>
-                            <Button
-                                backgroundColor="brand.green"
-                                height="48px"
-                                marginTop="18px"
-                                onClick={onOpen}
-                                padding="10px"
-                                width="100%"
+                        {showTrackMood && (
+                            <Box
+                                backgroundColor="background.dark"
+                                padding="32px 18px"
                             >
-                                <Text>Track Mood</Text>
-                                <Box position="absolute" right="10px">
-                                    <Icon
-                                        as={MdChevronRight}
-                                        height={6}
-                                        width={6}
-                                    />
-                                </Box>
-                            </Button>
-                        </Box>
+                                <Text color="white">
+                                    How are you today? Give your mind a HUG -
+                                    start tracking your mood today!
+                                </Text>
+                                <Button
+                                    backgroundColor="brand.green"
+                                    height="48px"
+                                    marginTop="18px"
+                                    onClick={onOpen}
+                                    padding="10px"
+                                    width="100%"
+                                >
+                                    <Text>Track Mood</Text>
+                                    <Box position="absolute" right="10px">
+                                        <Icon
+                                            as={MdChevronRight}
+                                            height={6}
+                                            width={6}
+                                        />
+                                    </Box>
+                                </Button>
+                            </Box>
+                        )}
                         <br />
                         <Box p={4}>
                             <Text>

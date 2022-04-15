@@ -22,9 +22,11 @@ import { getIsDesktop } from "src/utils/media/mediaHelpers";
 const MoodTrackerModal = ({
     isOpen,
     onClose,
+    setShowTrackMood,
 }: {
     isOpen: boolean;
     onClose: () => void;
+    setShowTrackMood: (boolean) => void;
 }): React.ReactElement => {
     const [isDesktop] = getIsDesktop();
     const [mood, setMood] = useState(-1);
@@ -211,12 +213,17 @@ const MoodTrackerModal = ({
             }
             setMood(selectedOption.value);
             setMoods(await getMoods(month, year));
+            setShowTrackMood(false);
         }
     };
 
     useEffect(() => {
         const setMoodToday = async () => {
-            setMood(await getMoodToday());
+            const moodToday = await getMoodToday();
+            setMood(moodToday);
+            if (moodToday !== -1) {
+                setShowTrackMood(false);
+            }
         };
         setMoodToday();
     }, []);

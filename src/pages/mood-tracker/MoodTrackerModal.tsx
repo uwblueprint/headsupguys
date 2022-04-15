@@ -103,8 +103,8 @@ const MoodTrackerModal = ({
         }),
     };
 
-    const getCalendar = (month, year) => {
-        const moods = new Map();
+    const getDefaultMoods = (month, year) => {
+        const defaultMoods = new Map();
         let startDate = new Date(year, month + 1, 0);
         const endDate = new Date(year, month, 1);
         const today = new Date();
@@ -113,16 +113,16 @@ const MoodTrackerModal = ({
         }
 
         while (startDate >= endDate) {
-            moods.set(new Date(startDate), -1);
+            defaultMoods.set(new Date(startDate).setHours(0, 0, 0, 0), -1);
             startDate.setDate(startDate.getDate() - 1);
         }
-        return moods;
+        return defaultMoods;
     };
 
-    const [moods, setMoods] = useState(getCalendar(month, year));
+    const [moods, setMoods] = useState(getDefaultMoods(month, year));
 
     const getMoods = async (month, year) => {
-        const newMoods = getCalendar(month, year);
+        const newMoods = getDefaultMoods(month, year);
         console.log("newMoods:", newMoods);
 
         try {
@@ -131,13 +131,17 @@ const MoodTrackerModal = ({
                 url: "/api/mood/getInMonth",
                 params: {
                     username: "test",
-                    month: month,
+                    month: month + 1,
                     year: year,
                 },
             });
             for (const datum of data) {
-                newMoods.set(new Date(datum.timestamp), datum.moodScore);
+                newMoods.set(
+                    new Date(datum.timestamp).setHours(0, 0, 0, 0),
+                    datum.moodScore,
+                );
             }
+            console.log(month, year);
             console.log("data:", data);
             console.log("newMoods:", newMoods);
         } catch (error) {
@@ -195,9 +199,9 @@ const MoodTrackerModal = ({
             } catch (error) {
                 console.log(error);
             }
-            setMood(selectedOption.value);
-            setMoods(await getMoods(month + 1, year));
         }
+        setMood(selectedOption.value);
+        setMoods(await getMoods(month, year));
     };
 
     return (
@@ -352,7 +356,7 @@ const MoodTrackerModal = ({
                                     marginRight="10px"
                                     width="40px"
                                 >
-                                    {getDate(date)}
+                                    {getDate(new Date(date))}
                                 </Text>
                                 <Box
                                     backgroundColor={

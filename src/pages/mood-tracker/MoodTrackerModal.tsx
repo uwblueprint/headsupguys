@@ -144,6 +144,27 @@ const MoodTrackerModal = ({
         return newMoods;
     };
 
+    const getMoodToday = async () => {
+        let moodToday = -1;
+        try {
+            const { data } = await axios({
+                method: "GET",
+                url: "/api/mood/get",
+                params: {
+                    username: "test",
+                    timestamp: new Date().toISOString(),
+                },
+            });
+            if (data.length > 0) {
+                moodToday = data[0].moodScore;
+            }
+            console.log(moodToday);
+        } catch (error) {
+            console.log(error);
+        }
+        return moodToday;
+    };
+
     const getDate = (date) => {
         return `${`0${date.getMonth() + 1}`.slice(
             -2,
@@ -174,7 +195,7 @@ const MoodTrackerModal = ({
     };
 
     const handleChange = async (selectedOption) => {
-        if (mood !== -1) {
+        if (selectedOption.value !== -1) {
             try {
                 await axios({
                     method: "POST",
@@ -188,10 +209,17 @@ const MoodTrackerModal = ({
             } catch (error) {
                 console.log(error);
             }
+            setMood(selectedOption.value);
+            setMoods(await getMoods(month, year));
         }
-        setMood(selectedOption.value);
-        setMoods(await getMoods(month, year));
     };
+
+    useEffect(() => {
+        const setMoodToday = async () => {
+            setMood(await getMoodToday());
+        };
+        setMoodToday();
+    }, []);
 
     useEffect(() => {
         const setNewMoods = async () => {
@@ -219,14 +247,6 @@ const MoodTrackerModal = ({
                                 Hi, how are you today?
                             </Text>
                             <Select
-                                defaultValue={
-                                    mood < 0
-                                        ? {
-                                              value: -1,
-                                              label: "I'm feeling...",
-                                          }
-                                        : options[mood]
-                                }
                                 formatOptionLabel={(option) =>
                                     option.value < 0 ? (
                                         <Heading fontSize="3xl">
@@ -272,6 +292,14 @@ const MoodTrackerModal = ({
                                 onChange={handleChange}
                                 options={options}
                                 styles={selectStyles}
+                                value={
+                                    mood < 0
+                                        ? {
+                                              value: -1,
+                                              label: "I'm feeling...",
+                                          }
+                                        : options[mood]
+                                }
                             />
                         </Box>
                         <CloseButton onClick={onClose} />

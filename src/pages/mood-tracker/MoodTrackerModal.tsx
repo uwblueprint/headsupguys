@@ -79,7 +79,7 @@ const MoodTrackerModal = ({
     const selectStyles = {
         control: (provided) => ({
             ...provided,
-            width: "200px",
+            width: "220px",
             border: "none",
             boxShadow: "none",
         }),

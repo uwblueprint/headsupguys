@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     CloseButton,
@@ -111,7 +111,6 @@ const MoodTrackerModal = ({
         if (today < startDate) {
             startDate = today;
         }
-
         while (startDate >= endDate) {
             defaultMoods.set(new Date(startDate).setHours(0, 0, 0, 0), -1);
             startDate.setDate(startDate.getDate() - 1);
@@ -123,8 +122,6 @@ const MoodTrackerModal = ({
 
     const getMoods = async (month, year) => {
         const newMoods = getDefaultMoods(month, year);
-        console.log("newMoods:", newMoods);
-
         try {
             const { data } = await axios({
                 method: "GET",
@@ -141,11 +138,8 @@ const MoodTrackerModal = ({
                     datum.moodScore,
                 );
             }
-            console.log(month, year);
-            console.log("data:", data);
-            console.log("newMoods:", newMoods);
         } catch (error) {
-            console.log("error:", error);
+            console.log(error);
         }
         return newMoods;
     };
@@ -160,10 +154,8 @@ const MoodTrackerModal = ({
         if (month === 0) {
             setMonth(11);
             setYear(year - 1);
-            setMoods(await getMoods(11, year - 1));
         } else {
             setMonth(month - 1);
-            setMoods(await getMoods(month - 1, year));
         }
     };
 
@@ -175,10 +167,8 @@ const MoodTrackerModal = ({
             if (month === 11) {
                 setMonth(0);
                 setYear(year + 1);
-                setMoods(await getMoods(0, year - 1));
             } else {
                 setMonth(month + 1);
-                setMoods(await getMoods(month + 1, year));
             }
         }
     };
@@ -186,7 +176,7 @@ const MoodTrackerModal = ({
     const handleChange = async (selectedOption) => {
         if (mood !== -1) {
             try {
-                const response = await axios({
+                await axios({
                     method: "POST",
                     url: "/api/mood/post",
                     data: {
@@ -195,7 +185,6 @@ const MoodTrackerModal = ({
                         moodScore: mood,
                     },
                 });
-                console.log(response);
             } catch (error) {
                 console.log(error);
             }
@@ -203,6 +192,13 @@ const MoodTrackerModal = ({
         setMood(selectedOption.value);
         setMoods(await getMoods(month, year));
     };
+
+    useEffect(() => {
+        const setNewMoods = async () => {
+            setMoods(await getMoods(month, year));
+        };
+        setNewMoods();
+    }, [month, year]);
 
     return (
         <Modal

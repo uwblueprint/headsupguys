@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import Select from "react-select";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import axios from "axios";
 
 import { getIsDesktop } from "src/utils/media/mediaHelpers";
 
@@ -83,16 +84,16 @@ const MoodTrackerModal = ({
             border: "none",
             boxShadow: "none",
         }),
-        dropdownIndicator: (provided, state) => ({
+        dropdownIndicator: (provided) => ({
             ...provided,
             color: "black",
             padding: "0px",
         }),
-        indicatorSeparator: (provided, state) => ({
+        indicatorSeparator: (provided) => ({
             ...provided,
             display: "none",
         }),
-        singleValue: (provided, state) => ({
+        singleValue: (provided) => ({
             ...provided,
             margin: "0px",
         }),
@@ -102,19 +103,47 @@ const MoodTrackerModal = ({
         }),
     };
 
-    const getMoods = (month, year) => {
-        const moods = [];
-        const startDate = new Date(year, month + 1, 0);
+    const getCalendar = (month, year) => {
+        const moods = new Map();
+        let startDate = new Date(year, month + 1, 0);
         const endDate = new Date(year, month, 1);
+        const today = new Date();
+        if (today < startDate) {
+            startDate = today;
+        }
 
         while (startDate >= endDate) {
-            moods.push({
-                date: new Date(startDate),
-                moodScore: (startDate.getDate() % 6) - 1,
-            });
+            moods.set(new Date(startDate), -1);
             startDate.setDate(startDate.getDate() - 1);
         }
         return moods;
+    };
+
+    const [moods, setMoods] = useState(getCalendar(month, year));
+
+    const getMoods = async (month, year) => {
+        const newMoods = getCalendar(month, year);
+        console.log("newMoods:", newMoods);
+
+        try {
+            const { data } = await axios({
+                method: "GET",
+                url: "/api/mood/getInMonth",
+                params: {
+                    username: "test",
+                    month: month,
+                    year: year,
+                },
+            });
+            for (const datum of data) {
+                newMoods.set(new Date(datum.timestamp), datum.moodScore);
+            }
+            console.log("data:", data);
+            console.log("newMoods:", newMoods);
+        } catch (error) {
+            console.log("error:", error);
+        }
+        return newMoods;
     };
 
     const getDate = (date) => {
@@ -123,33 +152,53 @@ const MoodTrackerModal = ({
         )}/${`0${date.getDate()}`.slice(-2)}`;
     };
 
-    const setPrevMonth = () => {
+    const setPrevMonth = async () => {
         if (month === 0) {
             setMonth(11);
             setYear(year - 1);
-            setMoods(getMoods(11, year - 1));
+            setMoods(await getMoods(11, year - 1));
         } else {
             setMonth(month - 1);
-            setMoods(getMoods(month - 1, year));
+            setMoods(await getMoods(month - 1, year));
         }
     };
 
-    const setNextMonth = () => {
-        if (month === 11) {
-            setMonth(0);
-            setYear(year + 1);
-            setMoods(getMoods(0, year - 1));
-        } else {
-            setMonth(month + 1);
-            setMoods(getMoods(month + 1, year));
+    const setNextMonth = async () => {
+        if (
+            year < new Date().getFullYear() ||
+            (month < new Date().getMonth() && year === new Date().getFullYear())
+        ) {
+            if (month === 11) {
+                setMonth(0);
+                setYear(year + 1);
+                setMoods(await getMoods(0, year - 1));
+            } else {
+                setMonth(month + 1);
+                setMoods(await getMoods(month + 1, year));
+            }
         }
     };
 
-    const handleChange = (selectedOption) => {
-        setMood(selectedOption.value);
+    const handleChange = async (selectedOption) => {
+        if (mood !== -1) {
+            try {
+                const response = await axios({
+                    method: "POST",
+                    url: "/api/mood/post",
+                    data: {
+                        username: "test",
+                        timestamp: new Date().toISOString(),
+                        moodScore: mood,
+                    },
+                });
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+            setMood(selectedOption.value);
+            setMoods(await getMoods(month + 1, year));
+        }
     };
-
-    const [moods, setMoods] = useState(getMoods(month, year));
 
     return (
         <Modal
@@ -290,7 +339,7 @@ const MoodTrackerModal = ({
                         paddingRight="20px"
                         width="100%"
                     >
-                        {moods.map((mood, i) => (
+                        {[...moods].map(([date, mood], i) => (
                             <Flex
                                 align="center"
                                 key={`mood-${i}`}
@@ -298,37 +347,27 @@ const MoodTrackerModal = ({
                                 width="100%"
                             >
                                 <Text
-                                    color={
-                                        mood.moodScore < 0
-                                            ? "gray.400"
-                                            : "gray.600"
-                                    }
+                                    color={mood < 0 ? "gray.400" : "gray.600"}
                                     fontSize="sm"
                                     marginRight="10px"
                                     width="40px"
                                 >
-                                    {getDate(mood.date)}
+                                    {getDate(date)}
                                 </Text>
                                 <Box
                                     backgroundColor={
-                                        mood.moodScore < 0
-                                            ? "gray.100"
-                                            : colors[mood.moodScore]
+                                        mood < 0 ? "gray.100" : colors[mood]
                                     }
                                     borderRadius="0px 5px 5px 0px"
                                     height="28px"
                                     width={
                                         isDesktop
-                                            ? mood.moodScore < 1
+                                            ? mood < 1
                                                 ? "12px"
-                                                : `calc(${
-                                                      21.5 * mood.moodScore
-                                                  }% + 12px)`
-                                            : mood.moodScore < 1
+                                                : `calc(${21.5 * mood}% + 12px)`
+                                            : mood < 1
                                             ? "8px"
-                                            : `calc(${
-                                                  20.1 * mood.moodScore
-                                              }% + 8px)`
+                                            : `calc(${20.1 * mood}% + 8px)`
                                     }
                                 ></Box>
                             </Flex>

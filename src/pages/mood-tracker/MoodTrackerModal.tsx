@@ -182,7 +182,7 @@ const MoodTrackerModal = ({
                     data: {
                         username: "test",
                         timestamp: new Date().toISOString(),
-                        moodScore: mood,
+                        moodScore: selectedOption.value,
                     },
                 });
             } catch (error) {

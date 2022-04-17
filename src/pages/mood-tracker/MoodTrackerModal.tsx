@@ -23,10 +23,12 @@ const MoodTrackerModal = ({
     isOpen,
     onClose,
     setShowTrackMood,
+    user,
 }: {
     isOpen: boolean;
     onClose: () => void;
     setShowTrackMood: (boolean) => void;
+    user: any;
 }): React.ReactElement => {
     const [isDesktop] = getIsDesktop();
     const [mood, setMood] = useState(-1);
@@ -129,7 +131,7 @@ const MoodTrackerModal = ({
                 method: "GET",
                 url: "/api/mood/getInMonth",
                 params: {
-                    username: "test",
+                    username: user.username,
                     month: month + 1,
                     year: year,
                 },
@@ -153,7 +155,7 @@ const MoodTrackerModal = ({
                 method: "GET",
                 url: "/api/mood/get",
                 params: {
-                    username: "test",
+                    username: user.username,
                     timestamp: new Date().toISOString(),
                 },
             });
@@ -197,13 +199,13 @@ const MoodTrackerModal = ({
     };
 
     const handleChange = async (selectedOption) => {
-        if (selectedOption.value !== -1) {
+        if (selectedOption.value !== -1 && user) {
             try {
                 await axios({
                     method: "POST",
                     url: "/api/mood/post",
                     data: {
-                        username: "test",
+                        username: user.username,
                         timestamp: new Date().toISOString(),
                         moodScore: selectedOption.value,
                     },
@@ -225,15 +227,27 @@ const MoodTrackerModal = ({
                 setShowTrackMood(false);
             }
         };
-        setMoodToday();
-    }, []);
+        if (user) {
+            try {
+                setMoodToday();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }, [user]);
 
     useEffect(() => {
         const setNewMoods = async () => {
             setMoods(await getMoods(month, year));
         };
-        setNewMoods();
-    }, [month, year]);
+        if (user) {
+            try {
+                setNewMoods();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }, [month, year, user]);
 
     return (
         <Modal

@@ -224,6 +224,7 @@ const Home: React.FC = () => {
                 isOpen={isOpen}
                 onClose={onClose}
                 setShowTrackMood={setShowTrackMood}
+                user={user}
             />
             <Image src="/assets/HUG_Banner_1.png" w="100%" />
             {variant === "desktop" ? (
@@ -240,19 +241,21 @@ const Home: React.FC = () => {
                                     ? `WELCOME TO YOUR TOOLKIT, ${user.attributes.name}`
                                     : `WELCOME TO YOUR TOOLKIT`}
                             </Heading>
-                            <IconButton
-                                aria-label="Track mood"
-                                icon={
-                                    <Image
-                                        alt="Track mood"
-                                        src="/icons/track-mood.svg"
-                                        height="24px"
-                                        width="24px"
-                                    />
-                                }
-                                onClick={onOpen}
-                                variant="ghost"
-                            />
+                            {user && (
+                                <IconButton
+                                    aria-label="Track mood"
+                                    icon={
+                                        <Image
+                                            alt="Track mood"
+                                            src="/icons/track-mood.svg"
+                                            height="24px"
+                                            width="24px"
+                                        />
+                                    }
+                                    onClick={onOpen}
+                                    variant="ghost"
+                                />
+                            )}
                         </Flex>
                         <Grid
                             py="50px"
@@ -285,7 +288,7 @@ const Home: React.FC = () => {
                                 </AspectRatio>
                             </GridItem>
                         </Grid>
-                        {showTrackMood && (
+                        {user && showTrackMood && (
                             <Box
                                 backgroundColor="background.dark"
                                 padding="30px"
@@ -346,21 +349,23 @@ const Home: React.FC = () => {
                                     ? `WELCOME TO YOUR TOOLKIT, ${user.attributes.name}`
                                     : `WELCOME TO YOUR TOOLKIT`}
                             </Heading>
-                            <IconButton
-                                aria-label="Track mood"
-                                icon={
-                                    <Image
-                                        alt="Track mood"
-                                        src="/icons/track-mood.svg"
-                                        height="24px"
-                                        width="24px"
-                                    />
-                                }
-                                onClick={onOpen}
-                                variant="ghost"
-                            />
+                            {user && (
+                                <IconButton
+                                    aria-label="Track mood"
+                                    icon={
+                                        <Image
+                                            alt="Track mood"
+                                            src="/icons/track-mood.svg"
+                                            height="24px"
+                                            width="24px"
+                                        />
+                                    }
+                                    onClick={onOpen}
+                                    variant="ghost"
+                                />
+                            )}
                         </Flex>
-                        {showTrackMood && (
+                        {user && showTrackMood && (
                             <Box
                                 backgroundColor="background.dark"
                                 padding="32px 18px"

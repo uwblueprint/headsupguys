@@ -87,6 +87,7 @@ const MoodTrackerModal = ({
             width: "220px",
             border: "none",
             boxShadow: "none",
+            cursor: "pointer",
         }),
         dropdownIndicator: (provided) => ({
             ...provided,
@@ -96,6 +97,10 @@ const MoodTrackerModal = ({
         indicatorSeparator: (provided) => ({
             ...provided,
             display: "none",
+        }),
+        option: (provided) => ({
+            ...provided,
+            cursor: "pointer",
         }),
         singleValue: (provided) => ({
             ...provided,

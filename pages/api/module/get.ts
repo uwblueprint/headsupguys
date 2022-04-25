@@ -8,8 +8,10 @@ const get = async (
     req: NextApiRequest,
     res: NextApiResponse<ModuleInterface | ErrorResponse>,
 ): Promise<void> => {
-    const { id, includeSlide } = req.query;
-    const module = await Module.findById(id);
+    const { id, includeSlide, includeTool } = req.query;
+    const module = includeTool
+        ? await Module.findById(id).populate("toolID")
+        : await Module.findById(id);
     if (includeSlide) {
         // Slide model must be loaded in order to populate
         // TODO: find workaround/cleaner soln :/

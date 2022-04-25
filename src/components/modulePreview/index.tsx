@@ -15,6 +15,7 @@ export interface ModulePreviewProps {
     variant: string;
     goNextSlide?: () => void;
     goPrevSlide?: () => void;
+    header?: React.ReactNode;
 }
 
 export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
@@ -32,6 +33,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
         printText,
         goNextSlide,
         goPrevSlide,
+        header,
     } = props;
 
     const prevButton = prevText ? prevText : "PREV";
@@ -57,8 +59,8 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                 <Box
                     minHeight={
                         (print || save) && variant == "mobile"
-                            ? "76.5vh"
-                            : "85vh"
+                            ? "71.5vh"
+                            : "80vh"
                     }
                 >
                     {props.children}
@@ -148,7 +150,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                 w="100%"
                 h={variant == "desktop" ? desktop.height : mobile.height}
             >
-                <Box minHeight="91%">{props.children}</Box>
+                <Box minHeight="86%">{props.children}</Box>
                 <Box w="100%">
                     <Flex justify="space-between" py={2}>
                         <Button
@@ -209,6 +211,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
             maxW={"100%"}
             w={variant == "desktop" ? desktop.width : mobile.width}
         >
+            {header}
             {variant == "desktop" ? desktopModule : mobileModule}
         </Container>
     );

@@ -807,7 +807,7 @@ const ToolBuilder: Page = () => {
     };
     const clearHiddenFilledFields = () => {
         /* In order to improve user experience, option fields are not cleared
-        when the user switched uestion type, they are simply not displayed on the screen
+        when the user switched question type, they are simply not displayed on the screen
         this allows the user to go back to their previous question type and still retain al
         their data. However, all of these options that can't be seen are presumably not needed
         anymore when the user chooses to fully submit their tool. So they are all cleared*/

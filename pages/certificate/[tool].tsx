@@ -17,8 +17,10 @@ const fetcher = async (url: string) => {
     return response.data;
 };
 
-const BASE_URL = `http://localhost:3000/`;
-// const BASE_URL = `https://headsupguys.vercel.app/`;
+const BASE_URL =
+    process.env.NODE_ENV === "production"
+        ? "https://headsupguys.vercel.app/"
+        : "http://localhost:3000/";
 
 const CertificatePage: Page = () => {
     const large = useBreakpointValue({ lg: true });

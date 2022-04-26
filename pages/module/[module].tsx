@@ -25,8 +25,10 @@ const fetcher = async (url) => {
     return response.data;
 };
 
-const BASE_URL = `http://localhost:3000/`;
-// const BASE_URL = `https://headsupguys.vercel.app/`;
+const BASE_URL =
+    process.env.NODE_ENV === "production"
+        ? "https://headsupguys.vercel.app/"
+        : "http://localhost:3000/";
 
 const Module: Page = () => {
     const [currentSlide, setCurrentSlide] = useState(0);

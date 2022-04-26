@@ -34,7 +34,12 @@ const CertificatePage: Page = () => {
             data?.title || "HeadsUpGuys Tool",
         );
     };
-    const handleShare = () => {};
+    const handleShare = () => {
+        createCertificate(
+            user?.attributes?.name || "",
+            data?.title || "HeadsUpGuys Tool",
+        );
+    };
     const handleBack = () => {
         router.push("/");
     };

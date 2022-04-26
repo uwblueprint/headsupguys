@@ -45,6 +45,8 @@ const Module: Page = () => {
     function goNextSlide() {
         if (currentSlide < data.slides.length - 1) {
             setCurrentSlide(currentSlide + 1);
+        } else {
+            router.push(`/certificate/${data.toolID._id}`);
         }
     }
 
@@ -76,6 +78,11 @@ const Module: Page = () => {
                     preview={false}
                     previous={data.slides[currentSlide].buttons.previous}
                     next={data.slides[currentSlide].buttons.next}
+                    nextText={
+                        currentSlide == data.slides.length - 1
+                            ? "Finish"
+                            : "Next"
+                    }
                     save={data.slides[currentSlide].buttons.save}
                     print={data.slides[currentSlide].buttons.print}
                     progressValue={

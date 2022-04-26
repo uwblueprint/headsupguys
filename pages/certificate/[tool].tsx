@@ -64,7 +64,7 @@ const CertificatePage: Page = () => {
                 />
                 <Flex flexDirection={"row"} justifyContent={"center"}>
                     <Box
-                        mt={large ? "80px" : "40px"}
+                        mt={large ? "30px" : "20px"}
                         fontFamily={"Inter"}
                         w={"100%"}
                         maxW={"800px"}

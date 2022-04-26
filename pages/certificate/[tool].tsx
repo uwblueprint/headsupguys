@@ -4,6 +4,9 @@ import axios from "axios";
 import useSWR from "swr";
 import { Box, Button, Flex, Image, useBreakpointValue } from "@chakra-ui/react";
 import { ModuleHeader } from "@components/moduleHeader";
+import { createCertificate } from "src/utils/certificates";
+import { Auth } from "aws-amplify";
+import { useState, useEffect } from "react";
 
 const fetcher = async (url: string) => {
     const response = await axios({
@@ -20,12 +23,28 @@ const CertificatePage: Page = () => {
     const large = useBreakpointValue({ lg: true });
     const router = useRouter();
     const { tool } = router.query;
+    const [user, setUser] = useState<any | null>(null);
     const fetchURL = tool ? `/api/tool/${tool}` : null;
     const { data, error } = useSWR(() => fetchURL, fetcher);
 
-    const handleDownload = () => {};
+    const handleDownload = () => {
+        createCertificate(
+            user?.attributes?.name || "",
+            data?.title || "HeadsUpGuys Tool",
+        );
+    };
     const handleShare = () => {};
-    const handleBack = () => {};
+    const handleBack = () => {
+        router.push("/");
+    };
+
+    useEffect(() => {
+        const getCurrentUser = async () => {
+            const currentUser = await Auth.currentAuthenticatedUser();
+            setUser(currentUser);
+        };
+        getCurrentUser();
+    }, []);
 
     return (
         <Flex justifyContent="center">

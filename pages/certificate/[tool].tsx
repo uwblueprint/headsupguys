@@ -78,7 +78,6 @@ const CertificatePage: Page = () => {
                             >
                                 <Flex
                                     flexDirection={large ? "row" : "column"}
-                                    // w={"100%"}
                                     justifyContent={
                                         large ? "flex-start" : "center"
                                     }
@@ -105,8 +104,6 @@ const CertificatePage: Page = () => {
                                         Share
                                     </Button>
                                 </Flex>
-                                {/* </Box> */}
-                                {/* <Box> */}
                                 <Flex
                                     flexDirection={"row"}
                                     w={"100%"}

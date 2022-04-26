@@ -73,7 +73,7 @@ const CertificatePage: Page = () => {
                             Congratulations! You’ve finished the{" "}
                             {data?.title || ""} Tool.{" "}
                         </Box>
-                        <Box mb={"50px"}>
+                        <Box mb={"10px"}>
                             As a testament to your effort and hard work, we’re
                             proud to present this certificate to you.
                         </Box>
@@ -81,14 +81,24 @@ const CertificatePage: Page = () => {
                             <Flex
                                 justifyContent={large ? "flex-start" : "center"}
                             >
-                                <Image src="/assets/certificate-preview.svg" />
+                                <Image
+                                    src="/assets/certificate-preview.svg"
+                                    w="50%"
+                                    minW="300px"
+                                    maxW="100%"
+                                />
                             </Flex>
                         </Box>
                         <Box mt={"10px"}>
-                            Access your personalized certificate:
+                            <Flex
+                                justifyContent={large ? "flex-start" : "center"}
+                            >
+                                Access your personalized certificate:
+                            </Flex>
                         </Box>
                         <Box
-                            my={large ? "60px" : "20px"}
+                            mt={large ? "40px" : "20px"}
+                            mb={"10px"}
                             w={"100%"}
                             justifyContent={large ? "flex-start" : "center"}
                         >
@@ -127,7 +137,7 @@ const CertificatePage: Page = () => {
                                 <Flex
                                     flexDirection={"row"}
                                     w={"100%"}
-                                    mt={large ? "80px" : "40px"}
+                                    mt={large ? "40px" : "20px"}
                                     justifyContent={
                                         large ? "flex-end" : "center"
                                     }

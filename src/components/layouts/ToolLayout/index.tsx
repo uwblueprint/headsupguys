@@ -14,6 +14,7 @@ export const ToolLayout: React.FC = ({ children }) => {
         <Image
             onClick={() => router.push("/")}
             src="/assets/hug-logo.png"
+            cursor={"pointer"}
         ></Image>
     );
 

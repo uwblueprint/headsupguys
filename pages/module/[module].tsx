@@ -11,6 +11,8 @@ import {
     ShortAnswerPreview,
 } from "@components";
 import useSWR from "swr";
+import { ToolLayout } from "@components";
+
 import { Spinner, Container, useMediaQuery } from "@chakra-ui/react";
 import { ModuleHeader } from "@components/moduleHeader";
 
@@ -190,5 +192,7 @@ const Module: Page = () => {
         );
     }
 };
+
+Module.layout = ToolLayout;
 
 export default Module;

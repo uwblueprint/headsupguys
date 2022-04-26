@@ -2,6 +2,7 @@ import { Page } from "types/Page";
 import { useRouter } from "next/router";
 import axios from "axios";
 import useSWR from "swr";
+import { ToolLayout } from "@components";
 import { Box, Button, Flex, Image, useBreakpointValue } from "@chakra-ui/react";
 import { ModuleHeader } from "@components/moduleHeader";
 import { createCertificate } from "src/utils/certificates";
@@ -148,5 +149,7 @@ const CertificatePage: Page = () => {
         </Flex>
     );
 };
+
+CertificatePage.layout = ToolLayout;
 
 export default CertificatePage;

@@ -42,6 +42,14 @@ const Button = {
             borderRadius: 0,
             textTransform: "uppercase",
         },
+        moduleWhite: {
+            bg: "white",
+            color: "black",
+            borderRadius: 0,
+            textTransform: "uppercase",
+            borderColor: "gray.300",
+            borderWidth: "1px",
+        },
     },
     defaultProps: {
         variant: "default",

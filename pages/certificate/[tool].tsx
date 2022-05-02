@@ -17,11 +17,6 @@ const fetcher = async (url: string) => {
     return response.data;
 };
 
-const BASE_URL =
-    process.env.NODE_ENV === "production"
-        ? "https://headsupguys.vercel.app/"
-        : "http://localhost:3000/";
-
 const CertificatePage: Page = () => {
     const large = useBreakpointValue({ lg: true });
     const router = useRouter();
@@ -61,11 +56,11 @@ const CertificatePage: Page = () => {
                     links={[
                         {
                             name: "Toolkit",
-                            url: `${BASE_URL}`,
+                            url: `/`,
                         },
                         {
                             name: data?.title || "",
-                            url: `${BASE_URL}tool/${data?._id || ""}`,
+                            url: `/tool/${data?._id || ""}`,
                         },
                     ]}
                 />

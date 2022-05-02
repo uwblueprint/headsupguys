@@ -41,7 +41,7 @@ const CertificatePage: Page = () => {
         );
     };
     const handleBack = () => {
-        router.push("/");
+        user ? router.push("/") : setShowLoginPrompt(true);
     };
 
     useEffect(() => {

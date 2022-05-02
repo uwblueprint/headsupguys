@@ -20,8 +20,10 @@ import { UserToolCard } from "@components/userToolCard";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { useMediaQuery } from "react-responsive";
-import { ToolLayout } from "@components";
+import { Modal, ToolLayout } from "@components";
 import { Page } from "types/Page";
+import { LoginPromptBar } from "@components/loginPromptBar";
+import { LoginPromptModal } from "@components/loginPromptModal";
 
 const fetcher = async (url) => {
     const response = await axios({
@@ -212,6 +214,7 @@ const Home: Page = () => {
 
     return (
         <>
+            {!user && <LoginPromptBar />}
             <Image src="/assets/HUG_Banner_1.png" w="100%" />
             {variant === "desktop" ? (
                 <>

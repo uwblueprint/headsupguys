@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Error from "next/error";
 import { Page } from "types/Page";
@@ -15,6 +15,8 @@ import { ToolLayout } from "@components";
 
 import { Spinner, Container, useMediaQuery } from "@chakra-ui/react";
 import { ModuleHeader } from "@components/moduleHeader";
+import { LoginPromptModal } from "@components/loginPromptModal";
+import { Auth } from "aws-amplify";
 
 const fetcher = async (url) => {
     const response = await axios({
@@ -28,10 +30,23 @@ const fetcher = async (url) => {
 const Module: Page = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [userInput, setUserInput] = useState({});
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
     const router = useRouter();
     const { module } = router.query;
     const { data, error } = useSWR(`/api/module/${module}`, fetcher);
     const [large] = useMediaQuery("(min-width: 800px)");
+
+    const [user, setUser] = useState<any | null>(null);
+
+    useEffect(() => {
+        const getCurrentUser = async () => {
+            const currentUser = await Auth.currentAuthenticatedUser();
+            setUser(currentUser);
+        };
+
+        getCurrentUser().catch(console.error);
+    }, []);
+
     const changeUserInput = (slide, section, value) => {
         setUserInput({
             ...userInput,
@@ -73,6 +88,10 @@ const Module: Page = () => {
     } else {
         return (
             <>
+                <LoginPromptModal
+                    isOpen={showLoginPrompt}
+                    onCancel={() => setShowLoginPrompt(false)}
+                />
                 <ModulePreview
                     preview={false}
                     previous={data.slides[currentSlide].buttons.previous}
@@ -102,7 +121,11 @@ const Module: Page = () => {
                                     url: `/tool/${data.toolID._id}`,
                                 },
                             ]}
-                            overrideClick={undefined}
+                            overrideClick={
+                                user
+                                    ? undefined
+                                    : () => setShowLoginPrompt(true)
+                            }
                         />
                     }
                 >

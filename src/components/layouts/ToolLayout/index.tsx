@@ -24,7 +24,7 @@ export const ToolLayout: React.FC = ({ children }) => {
                 <Flex
                     backgroundColor="black"
                     height="64px"
-                    padding="24px calc(20vw - 120px)"
+                    padding="24px"
                     position="fixed"
                     width="100%"
                     zIndex="2"

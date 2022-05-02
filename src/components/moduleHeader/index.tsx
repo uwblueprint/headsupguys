@@ -19,7 +19,10 @@ export const ModuleHeader: FC<ModuleHeaderProps> = ({
                 <Box color={"brand.green"} onClick={overrideClick}>
                     {links.map(({ name, url }, i) => (
                         <>
-                            <Link href={!overrideClick ? url : undefined}>
+                            <Link
+                                replace
+                                href={!overrideClick ? url : undefined}
+                            >
                                 {name}
                             </Link>
                             {i !== links.length - 1 && " > "}

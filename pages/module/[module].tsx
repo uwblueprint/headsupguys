@@ -25,11 +25,6 @@ const fetcher = async (url) => {
     return response.data;
 };
 
-const BASE_URL =
-    process.env.NODE_ENV === "production"
-        ? "https://headsupguys.vercel.app/"
-        : "http://localhost:3000/";
-
 const Module: Page = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [userInput, setUserInput] = useState({});
@@ -100,11 +95,11 @@ const Module: Page = () => {
                             links={[
                                 {
                                     name: "Toolkit",
-                                    url: `${BASE_URL}`,
+                                    url: `/`,
                                 },
                                 {
                                     name: data.toolID.title,
-                                    url: `${BASE_URL}tool/${data.toolID._id}`,
+                                    url: `/tool/${data.toolID._id}`,
                                 },
                             ]}
                             overrideClick={undefined}

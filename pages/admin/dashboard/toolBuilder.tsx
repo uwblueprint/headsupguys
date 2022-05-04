@@ -7,7 +7,14 @@ import {
     SimpleGrid,
     Button,
     Box,
+    Checkbox,
     Tooltip,
+    Textarea,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    MenuDivider,
     Modal,
     ModalBody,
     ModalContent,
@@ -16,16 +23,22 @@ import {
     ModalFooter,
     useDisclosure,
     useToast,
+    forwardRef,
+    ButtonProps,
 } from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Page } from "types/Page";
 import { AdminLayout } from "@components";
-import { SelfCheckQuestionCard, ToolHomePage } from "@components";
+import {
+    SelfCheckQuestionCard,
+    SelfCheckResponseCard,
+    ToolHomePage,
+} from "@components";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { useSWRConfig } from "swr";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-    if (process.env.USE_ADMIN_LOGIN === "true") {
+    if (process.env.NODE_ENV == "production") {
         const authProps = await isAuthenticated(req, res, "/redirect", true); // TODO: change redirect to login page (once we have a login page that's deployed)
         return {
             props: {
@@ -39,9 +52,19 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     }
 };
 
+const OutlineButton = forwardRef<ButtonProps, "div">((props, ref) => (
+    <Button
+        variant="outline"
+        isFullWidth
+        bg="#ffffff"
+        textAlign="left"
+        ref={ref}
+        {...props}
+    />
+));
+
 //Self Check Questions React functional component
 const ToolBuilder: Page = () => {
-    const { mutate } = useSWRConfig();
     const router = useRouter();
     const toolID = router.query.toolID;
     const selfCheckID = router.query.selfCheckID;
@@ -98,6 +121,20 @@ const ToolBuilder: Page = () => {
     const [lastSavedQuestions, setLastSavedQuestions] = useState(
         JSON.parse(JSON.stringify(defaultQuestions)),
     );
+    const [selectedQuestions, setSelectedQuestions] = useState([]);
+    const [description, setDescription] = useState("");
+    const [breakpoints, setBreakpoints] = useState([
+        {
+            _id: "tempId" + String(1),
+            num: 1,
+            lastBreakpoint: false,
+            lower: 0,
+            upper: undefined,
+            description: "",
+            secondaryDesc: "",
+        },
+    ]);
+    const [breakpointId, setBreakpointId] = useState(2);
 
     const [allModules, setAllModules] = useState([]);
     const [allTools, setAllTools] = useState([[], []]);
@@ -170,6 +207,203 @@ const ToolBuilder: Page = () => {
         getAllTools();
     }, []);
 
+    const getMinSum = (questions) =>
+        questions.reduce(
+            (prev, curr) =>
+                prev +
+                Math.min(
+                    ...curr.options?.map((option) =>
+                        option[1] == "" ? 0 : parseInt(option[1]),
+                    ),
+                ),
+            0,
+        ) ?? 0;
+
+    const getMaxSum = (questions) =>
+        questions.reduce(
+            (prev, curr) =>
+                prev +
+                Math.max(
+                    ...curr.options?.map((option) =>
+                        option[1] == "" ? 0 : parseInt(option[1]),
+                    ),
+                ),
+            0,
+        ) ?? 0;
+
+    const handleSelected = (ques) => {
+        const newList = [...breakpoints];
+        if (selectedQuestions.length !== 0) {
+            const newSelected = selectedQuestions.filter(
+                (q) => q._id !== ques._id,
+            );
+
+            if (newSelected.length !== selectedQuestions.length) {
+                setSelectedQuestions(newSelected);
+                newList[0].lower = getMinSum(newSelected);
+                setBreakpoints(newList);
+                return;
+            }
+
+            const findIndex = (elem, array) => {
+                for (let i = 0; i < array.length; i++) {
+                    if (array[i].questionNumber > elem.questionNumber) {
+                        return i - 1;
+                    }
+                }
+
+                return array.length - 1;
+            };
+
+            const newSelectedQuestions = [...selectedQuestions];
+
+            newSelectedQuestions.splice(
+                findIndex(ques, selectedQuestions) + 1,
+                0,
+                ques,
+            );
+
+            setSelectedQuestions(newSelectedQuestions);
+            newList[0].lower = getMinSum(newSelectedQuestions);
+        } else {
+            setSelectedQuestions([ques]);
+            newList[0].lower = getMinSum([ques]);
+        }
+        setBreakpoints(newList);
+    };
+
+    const handleAllSelected = () => {
+        const allValued = allValuedQuestions();
+        const newList = [...breakpoints];
+        if (allValued.length !== selectedQuestions.length) {
+            setSelectedQuestions(allValued);
+            newList[0].lower = getMinSum(allValued);
+        } else {
+            setSelectedQuestions([]);
+            newList[0].lower = 0;
+        }
+        setBreakpoints(newList);
+    };
+
+    const shouldBeChecked = (ques) =>
+        selectedQuestions.filter((q) => q === ques).length !== 0;
+
+    const isValued = (q) =>
+        !q.alphanumericInput &&
+        q.options.filter((op) => op[1] === "").length !== q.options.length &&
+        (q.type === "multi_select" ||
+            q.type === "multiple_choice" ||
+            q.type === "slider");
+
+    const allValuedQuestions = () => questionList.filter(isValued);
+
+    const addOneBreakpoint = () => {
+        if (breakpoints[breakpoints.length - 1].upper === undefined) {
+            alert(
+                "You cannot add another breakpoint without defining the last's upper bound",
+            );
+            return;
+        }
+
+        const newBreakpoint = {
+            _id: "tempId" + String(breakpointId),
+            num: breakpoints.length + 1,
+            lastBreakpoint: false,
+            lower: breakpoints
+                ? breakpoints[breakpoints.length - 1].upper + 1
+                : getMinSum(selectedQuestions),
+            upper: undefined,
+            description: "",
+            secondaryDesc: "",
+        };
+
+        setBreakpoints([...breakpoints, newBreakpoint]);
+        setBreakpointId(breakpointId + 1);
+    };
+
+    const deleteBreakpoint = (id) => {
+        const newBreakpoints = [...breakpoints].filter((q) => q.num != id);
+        if (id < breakpoints.length) {
+            newBreakpoints[id - 1].lower = breakpoints[id - 1].lower;
+            for (let i = id - 1; i < newBreakpoints.length; i++) {
+                newBreakpoints[i].num--;
+            }
+        }
+        setBreakpoints(newBreakpoints);
+    };
+
+    const updateDescription = (id, newDesc) => {
+        const newList = breakpoints.map((bp) => {
+            if (bp._id === id) {
+                bp.description = newDesc;
+            }
+            return bp;
+        });
+        setBreakpoints(newList);
+    };
+
+    const updateUpper = (id, newUpper) => {
+        newUpper = newUpper === "" ? undefined : parseInt(newUpper);
+        if (newUpper === undefined) return;
+
+        if (newUpper > getMaxSum(selectedQuestions)) {
+            alert("Please enter a value lower than the maximum");
+            return;
+        }
+
+        let changed = breakpoints.length;
+        const newList = breakpoints.map((bp, idx) => {
+            if (bp._id === id) {
+                bp.upper = newUpper !== undefined ? newUpper : bp.upper;
+                changed = idx;
+            }
+            return bp;
+        });
+
+        if (changed < breakpoints.length - 1) {
+            breakpoints[changed + 1].lower = newUpper + 1;
+        }
+
+        setBreakpoints(newList);
+    };
+
+    const updateLastBreakpoint = (id, newLastBp) => {
+        const newList = breakpoints.map((bp) => {
+            if (bp._id === id) {
+                bp.lastBreakpoint = newLastBp;
+            }
+            return bp;
+        });
+        setBreakpoints(newList);
+    };
+
+    const updateSecondaryDesc = (id, newDesc) => {
+        const newList = breakpoints.map((bp) => {
+            if (bp._id === id) {
+                bp.secondaryDesc = newDesc;
+            }
+            return bp;
+        });
+        setBreakpoints(newList);
+    };
+
+    const getQuestionsList = () => {
+        if (!selectedQuestions.length) {
+            return "Select Options";
+        }
+
+        return selectedQuestions.length !== allValuedQuestions().length
+            ? selectedQuestions.reduce(
+                  (prev, curr, idx) =>
+                      prev +
+                      "Question " +
+                      curr.questionNumber +
+                      (idx !== selectedQuestions.length - 1 ? ", " : ""),
+                  "",
+              )
+            : "All Self Check Questions";
+    };
+
     const saveTool = async (saveOrPublish) => {
         if (toolList.title == "") {
             toolList.title = "Untitled Tool";
@@ -217,7 +451,7 @@ const ToolBuilder: Page = () => {
                 url: `/api/self-check/${selfCheckID}`,
                 data: questionList,
             });
-            mutate("/api/tool");
+            return true;
         } catch (err) {
             console.log(err);
         }
@@ -374,9 +608,16 @@ const ToolBuilder: Page = () => {
             for (let j = 0; j < newMap.get(id).options.length; j++) {
                 newMap.get(id).options[j][1] = j.toString();
             }
+            newMap.get(id).alphanumericInput = false;
         }
         setQuestionList([...newMap.values()]);
         checkRequiredFields(toolList, [...newMap.values()]);
+        if (!isValued(newMap.get(id))) {
+            setSelectedQuestions(selectedQuestions.filter((q) => q._id !== id));
+        }
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = getMinSum([...newMap.values()]);
+        setBreakpoints(newBreakpoints);
     };
     const changeQuestionInput = (id, target) => {
         const newMap = new Map(
@@ -404,6 +645,9 @@ const ToolBuilder: Page = () => {
         newMap.get(id).alphanumericInput = target;
         checkRequiredFields(toolList, [...newMap.values()]);
         setQuestionList([...newMap.values()]);
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = getMinSum([...newMap.values()]);
+        setBreakpoints(newBreakpoints);
     };
     const changeOptionInput = (id, index, target, optionOrValue) => {
         const newMap = new Map(
@@ -415,6 +659,10 @@ const ToolBuilder: Page = () => {
         newMap.get(id).options[index][changeIndex] = target;
         checkRequiredFields(toolList, [...newMap.values()]);
         setQuestionList([...newMap.values()]);
+
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = getMinSum(selectedQuestions);
+        setBreakpoints(newBreakpoints);
     };
     const addOneOption = (id, target) => {
         //adds a new option to the question at the target location
@@ -443,6 +691,9 @@ const ToolBuilder: Page = () => {
         }
         checkRequiredFields(toolList, [...newMap.values()]);
         setQuestionList([...newMap.values()]);
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = getMinSum(selectedQuestions);
+        setBreakpoints(newBreakpoints);
     };
 
     const removeOneOption = (id, target) => {
@@ -454,6 +705,10 @@ const ToolBuilder: Page = () => {
         newMap.get(id).options.splice(target, 1);
         checkRequiredFields(toolList, [...newMap.values()]);
         setQuestionList([...newMap.values()]);
+
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = getMinSum(selectedQuestions);
+        setBreakpoints(newBreakpoints);
     };
 
     const changeSliderBounds = (id, target) => {
@@ -509,11 +764,20 @@ const ToolBuilder: Page = () => {
 
     const removeOneQuestion = (id) => {
         const newList = questionList.filter((item) => item._id !== id);
+        const newSelected = selectedQuestions.filter((q) => q._id !== id);
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = getMinSum(newSelected);
+        setSelectedQuestions(newSelected);
+        setBreakpoints(newBreakpoints);
         setQuestionList(newList);
         changeQuestionNumbers(newList);
     };
     const removeAllQuestions = () => {
         const newList = [];
+        const newBreakpoints = [...breakpoints];
+        newBreakpoints[0].lower = 0;
+        setSelectedQuestions([]);
+        setBreakpoints(newBreakpoints);
         setQuestionList(newList);
         checkRequiredFields(toolList, newList);
     };
@@ -571,6 +835,8 @@ const ToolBuilder: Page = () => {
         setQuestionList(newList);
         checkRequiredFields(toolList, newList);
     };
+
+    const [qOrResActive, setQOrResActive] = useState(0);
 
     const selfCheckQuestionSize = questionList.length;
     //Controls the modal
@@ -706,6 +972,9 @@ const ToolBuilder: Page = () => {
                                 to the last saved tool or the empty tool*/
                                 disabledSave()
                             }
+                            //TODO: Send this output to the database
+                            //rather than just logging it in the console
+
                             onClick={() => {
                                 clearHiddenFilledFields();
                                 saveTool("Save ");
@@ -742,7 +1011,7 @@ const ToolBuilder: Page = () => {
                     Tool Self Check
                 </Button>
             </Flex>
-            <SimpleGrid columns={1} spacing={0} px={10} py={10}>
+            <SimpleGrid columns={1} spacing={0} px={10} pt={10}>
                 {page == "home" && (
                     <ToolHomePage
                         key={toolList._id}
@@ -765,43 +1034,217 @@ const ToolBuilder: Page = () => {
             </SimpleGrid>
             {page == "self check" && (
                 <>
-                    <SimpleGrid columns={1} spacing={0} px={10}>
+                    <Flex alignItems="center" justifyContent="center" pb={5}>
                         <Button
-                            onClick={() => addOneQuestion(-1)}
-                            borderWidth="2px"
-                            borderRadius="lg"
-                            p={3}
-                            mb={5}
-                            variant="outlineBlue"
-                            width={"full"}
-                            fontWeight={600}
+                            variant="link"
+                            size="sm"
+                            isActive={qOrResActive == 0}
+                            onClick={() => setQOrResActive(0)}
                         >
-                            + Question
+                            Question
                         </Button>
+                        <Box
+                            px={5}
+                            style={{
+                                height: "100%",
+                                width: 1,
+                                backgroundColor: "#ffffff",
+                            }}
+                        ></Box>
+                        <Button
+                            variant="link"
+                            size="sm"
+                            isActive={qOrResActive == 1}
+                            onClick={() => setQOrResActive(1)}
+                        >
+                            Response
+                        </Button>
+                    </Flex>
+                    {!qOrResActive ? (
+                        <SimpleGrid columns={1} spacing={0} px={10}>
+                            <Button
+                                onClick={() => addOneQuestion(-1)}
+                                borderWidth="2px"
+                                borderRadius="lg"
+                                p={3}
+                                mb={5}
+                                variant="outlineBlue"
+                                width={"full"}
+                                fontWeight={600}
+                            >
+                                + Question
+                            </Button>
 
-                        {questionList.map((listQuestion, index) => (
-                            <SelfCheckQuestionCard
-                                alphanumeric={listQuestion.alphanumericInput}
-                                type={listQuestion.type}
-                                options={listQuestion.options}
-                                question={listQuestion.question}
-                                questionId={String(listQuestion._id)}
-                                questionIndex={index}
-                                selfCheckQuestionSize={selfCheckQuestionSize}
-                                key={index + String(listQuestion._id)}
-                                onAddOption={addOneOption}
-                                onRemoveOption={removeOneOption}
-                                onChangeOptionInput={changeOptionInput}
-                                onChangeAlphanumeric={changeAlphanumeric}
-                                onAddQuestion={addOneQuestion}
-                                onRemoveQuestion={removeOneQuestion}
-                                onMoveQuestion={moveQuestion}
-                                onChangeQuestionInput={changeQuestionInput}
-                                onChangeQuestionType={changeQuestionType}
-                                onChangeSliderBounds={changeSliderBounds}
-                            />
-                        ))}
-                    </SimpleGrid>
+                            {questionList.map((listQuestion, index) => (
+                                <SelfCheckQuestionCard
+                                    alphanumeric={
+                                        listQuestion.alphanumericInput
+                                    }
+                                    type={listQuestion.type}
+                                    options={listQuestion.options}
+                                    question={listQuestion.question}
+                                    questionId={String(listQuestion._id)}
+                                    questionIndex={index}
+                                    selfCheckQuestionSize={
+                                        selfCheckQuestionSize
+                                    }
+                                    key={index + String(listQuestion._id)}
+                                    onAddOption={addOneOption}
+                                    onRemoveOption={removeOneOption}
+                                    onChangeOptionInput={changeOptionInput}
+                                    onChangeAlphanumeric={changeAlphanumeric}
+                                    onAddQuestion={addOneQuestion}
+                                    onRemoveQuestion={removeOneQuestion}
+                                    onMoveQuestion={moveQuestion}
+                                    onChangeQuestionInput={changeQuestionInput}
+                                    onChangeQuestionType={changeQuestionType}
+                                    onChangeSliderBounds={changeSliderBounds}
+                                />
+                            ))}
+                        </SimpleGrid>
+                    ) : (
+                        <SimpleGrid>
+                            <Box
+                                borderRadius="lg"
+                                rounded="md"
+                                bg="gray.50"
+                                p={10}
+                                mb={8}
+                            >
+                                <Text fontSize={16} fontWeight={700} mr={6}>
+                                    Select Questions used for the Self Check
+                                    Score (Select all that apply)
+                                </Text>
+                                <Box py={2} width="65%">
+                                    <Menu matchWidth closeOnSelect={false}>
+                                        <MenuButton
+                                            as={OutlineButton}
+                                            isTruncated
+                                            rightIcon={<ChevronDownIcon />}
+                                        >
+                                            {getQuestionsList()}
+                                        </MenuButton>
+                                        <MenuList>
+                                            <MenuItem>
+                                                <Checkbox
+                                                    isChecked={
+                                                        selectedQuestions.length !==
+                                                            0 &&
+                                                        allValuedQuestions()
+                                                            .length ===
+                                                            selectedQuestions.length
+                                                    }
+                                                    onChange={handleAllSelected}
+                                                    isDisabled={
+                                                        allValuedQuestions.length !==
+                                                        0
+                                                    }
+                                                >
+                                                    All Self Check Questions
+                                                </Checkbox>
+                                            </MenuItem>
+                                            <MenuDivider />
+                                            {questionList.map((ques) => (
+                                                <MenuItem key={ques._id}>
+                                                    <Checkbox
+                                                        isChecked={shouldBeChecked(
+                                                            ques,
+                                                        )}
+                                                        onChange={() =>
+                                                            handleSelected(ques)
+                                                        }
+                                                        isDisabled={
+                                                            !isValued(ques)
+                                                        }
+                                                    >
+                                                        {"Question " +
+                                                            ques.questionNumber +
+                                                            ": " +
+                                                            ques.question}
+                                                    </Checkbox>
+                                                </MenuItem>
+                                            ))}
+                                        </MenuList>
+                                    </Menu>
+                                </Box>
+                                <Box py={5}>
+                                    <Text
+                                        fontSize={16}
+                                        fontWeight={700}
+                                        mr={6}
+                                        display="inline-block"
+                                        color="gray.300"
+                                    >
+                                        Minimum Score:
+                                    </Text>
+                                    <Text
+                                        fontSize={16}
+                                        display="inline-block"
+                                        color="gray.300"
+                                        pr={150}
+                                    >
+                                        {getMinSum(selectedQuestions)}
+                                    </Text>
+                                    <Text
+                                        fontSize={16}
+                                        fontWeight={700}
+                                        mr={6}
+                                        display="inline-block"
+                                        color="gray.300"
+                                    >
+                                        Maximum Score:
+                                    </Text>
+                                    <Text
+                                        fontSize={16}
+                                        display="inline-block"
+                                        color="gray.300"
+                                    >
+                                        {getMaxSum(selectedQuestions)}
+                                    </Text>
+                                </Box>
+                                <Box width="65%">
+                                    <Text fontSize={16} fontWeight={700} mb={3}>
+                                        Self Check Response Intro
+                                    </Text>
+                                    <Textarea
+                                        bg="whiteAlpha"
+                                        value={description}
+                                        onChange={(str) =>
+                                            setDescription(str.target.value)
+                                        }
+                                        placeholder="Description"
+                                    />
+                                </Box>
+                            </Box>
+                            {breakpoints.map((bp) => (
+                                <SelfCheckResponseCard
+                                    key={bp._id}
+                                    breakpointNum={bp.num}
+                                    lowerBound={bp.lower}
+                                    upperBound={bp.upper}
+                                    lastBreakpoint={bp.lastBreakpoint}
+                                    addNewBreakpoint={addOneBreakpoint}
+                                    deleteCurrBreakpoint={deleteBreakpoint}
+                                    setDescription={(desc) =>
+                                        updateDescription(bp._id, desc)
+                                    }
+                                    setSecondaryDesc={(desc) =>
+                                        updateSecondaryDesc(bp._id, desc)
+                                    }
+                                    setLastBreakpoint={(last) =>
+                                        updateLastBreakpoint(bp._id, last)
+                                    }
+                                    setUpperbound={(upper) =>
+                                        updateUpper(bp._id, upper)
+                                    }
+                                    breakpointAfter={
+                                        bp.lastBreakpoint ||
+                                        bp.num === breakpoints.length
+                                    }
+                                ></SelfCheckResponseCard>
+                            ))}
+                        </SimpleGrid>
+                    )}
                 </>
             )}
         </Flex>

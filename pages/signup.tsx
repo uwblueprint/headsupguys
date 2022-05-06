@@ -19,6 +19,7 @@ import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 
 const Signup: React.FC = () => {
     const router = useRouter();
+    const { moduleId } = router.query["moduleId"] ? router.query : "";
     const [currStage, setCurrStage] = useState(0);
     const [email, setEmail] = useState("");
     const [emailInvalid, setEmailInvalid] = useState({
@@ -287,7 +288,12 @@ const Signup: React.FC = () => {
                     }
                 }
                 if (termsAgreement.participateSurvey) {
-                    router.push("/demographic"); // jump to demographic survey
+                    moduleId
+                        ? router.push({
+                              pathname: "/demographic",
+                              query: { moduleId: moduleId },
+                          })
+                        : router.push("/demographic"); // jump to demographic survey
                 } else {
                     setCanContinue(true);
                     setCurrStage(currStage + 1); // jump to next stage
@@ -297,7 +303,7 @@ const Signup: React.FC = () => {
             }
         } else if (currStage == stages.length - 2) {
             // Get Started stage
-            router.push("/"); // temporary link back to protected page
+            moduleId ? router.push(`/module/${moduleId}`) : router.push("/"); // temporary link back to protected page
         } else if (currStage == stages.length - 1) {
             // Error state
             setCurrStage(2); // push back to password stage

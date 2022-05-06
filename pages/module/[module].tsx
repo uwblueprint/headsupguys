@@ -47,6 +47,7 @@ const Module: Page = () => {
         getCurrentUser().catch(console.error);
     }, []);
     const changeUserInput = (slide, section, value) => {
+        console.log("user Input", userInput, slide, section, value);
         setUserInput({
             ...userInput,
             [slide]: {
@@ -86,6 +87,7 @@ const Module: Page = () => {
                 module: data._id,
             },
         });
+        console.log("getUserFields", response.data.input);
         setUserInput(response.data.input);
         return response.data.input;
     };
@@ -101,13 +103,13 @@ const Module: Page = () => {
             data: {
                 username: user.username,
                 module: data._id,
-                completion: 100,
+                completion: 100, //change completion
                 input: newUserInput ? newUserInput : userInput,
             },
         });
     };
 
-    const postUserFields = async () => {
+    const postUserFields = async (newUserInput = null) => {
         console.log("Posting user fields", data);
         await axios({
             method: "POST",
@@ -115,6 +117,8 @@ const Module: Page = () => {
             data: {
                 username: user.username,
                 module: data._id,
+                completion: 100, //change completion
+                input: newUserInput ? newUserInput : userInput,
             },
         });
     };
@@ -156,10 +160,13 @@ const Module: Page = () => {
         const unsaved = localStorage.getItem("unsaved");
         setMounted(true);
         if (user) {
+            console.log("AAA", newInput);
             newInput = await getUserFields().catch(() => {
                 // If there is no user input in the database look in local storage
                 // Set it if it exists otherwise set database entry to empty object
                 if (unsaved) {
+                    console.log("BBB", unsaved);
+
                     const [id, input] = unsaved.split(/:(.*)/s); // Split by the first colon
                     if (id === data._id) {
                         newInput = JSON.parse(input);
@@ -169,6 +176,7 @@ const Module: Page = () => {
                     patchUserFields(newInput);
                 }
             });
+            console.log("BBB", newInput);
         } else {
             if (unsaved) {
                 const [id, input] = unsaved.split(/:(.*)/s); // Split by the first colon
@@ -178,6 +186,7 @@ const Module: Page = () => {
                 }
             }
         }
+        console.log("newInput", newInput);
         setCurrentSlide(newInput ? newInput.recentSlide : 0);
         setFields();
     };
@@ -206,11 +215,14 @@ const Module: Page = () => {
                 <Modal
                     isOpen={isOpen}
                     onCancel={onClose}
-                    header={`Create an Account to Save Your Progress`}
-                    confirmText={`Sign Up`}
+                    header={`Log In to Save Your Progress`}
+                    confirmText={`Log In`}
                     confirmButtonColorScheme={`green`}
                     onConfirm={() => {
-                        router.push("/signup");
+                        router.push({
+                            pathname: "/login",
+                            query: { moduleId: data._id },
+                        });
                     }}
                 />
                 <ModulePreview

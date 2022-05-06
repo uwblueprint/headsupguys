@@ -10,6 +10,7 @@ import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 
 const Login: React.FC = () => {
     const router = useRouter();
+    const moduleId = router.query["moduleId"] ? router.query : "";
     const [currStage, setCurrStage] = useState(0);
     const [email, setEmail] = useState("");
     const [emailInvalid, setEmailInvalid] = useState({
@@ -53,7 +54,8 @@ const Login: React.FC = () => {
         try {
             setPasswordInvalid({ isInvalid: false, reason: "" });
             await Auth.signIn(email, password);
-            router.push("/");
+            console.log("Logged in", moduleId);
+            moduleId ? router.push(`/module/${moduleId}`) : router.push("/");
         } catch (e) {
             setPasswordInvalid({
                 isInvalid: true,
@@ -153,7 +155,14 @@ const Login: React.FC = () => {
             {currStage == 0 && (
                 <Flex direction="row" m={10} h="0vh" paddingTop="15%">
                     <Text>Don't have an account?</Text>
-                    <Link href="/signup" style={{ fontWeight: "bold" }}>
+                    <Link
+                        href={
+                            moduleId
+                                ? `/signup?moduleId=${moduleId}`
+                                : "/signup"
+                        }
+                        style={{ fontWeight: "bold" }}
+                    >
                         {" "}
                         Sign Up
                     </Link>

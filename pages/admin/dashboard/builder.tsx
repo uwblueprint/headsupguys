@@ -81,6 +81,10 @@ export type Section = {
     multipleChoice?: OptionsQuestion;
     multiSelect?: OptionsQuestion;
     shortAnswer?: string;
+    userResponse?: {
+        slideIdx: number;
+        sectionIdx: number;
+    };
     alignment?: string; //on frontend this will be a dropdown
     properties?: {
         variableName?: string;
@@ -128,12 +132,17 @@ const DEFAULT_SECTION: Section = {
     }, //stores ms content, only applies to ms component
     shortAnswer: "",
     //stores sa content, only applies to sa component
+    userResponse: {
+        slideIdx: null,
+        sectionIdx: null
+    },
     alignment: "align-left", //on frontend this will be a dropdown
     properties: {
         variableName: "",
         dataType: "string",
         columns: "single", //NOTE: for now, manually change to double to test
     },
+
 };
 
 const DEFAULT_SLIDE = {
@@ -209,7 +218,6 @@ function reducer(
                 ...state.slides.slice(0, action.index),
                 ...state.slides.slice(action.index + 1),
             ];
-            console.log(newSlides);
             if (newSlides.length === 0) {
                 newSlides = [DEFAULT_SLIDE];
             }

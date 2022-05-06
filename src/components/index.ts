@@ -22,3 +22,4 @@ export { ModuleSectionSelect } from "./moduleSectionSelect";
 export { MultipleChoice, MultipleChoicePreview } from "./multipleChoice";
 export { ShortAnswer, ShortAnswerPreview } from "./shortAnswer";
 export { MultiSelect, MultiSelectPreview } from "./multiSelect";
+export { UserResponse, UserResponsePreview } from "./userResponse";

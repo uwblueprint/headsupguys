@@ -19,11 +19,13 @@ import {
     MultiSelect,
     ShortAnswer,
     Modal,
+    UserResponse,
 } from "@components";
-import { Section } from "pages/admin/dashboard/builder";
+import { Section, Slide } from "pages/admin/dashboard/builder";
 
 export interface ModuleSectionSelectProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    slides: Slide[];
     section: Section;
     setSection: (s: Section) => void; // TYPE IS SLIDE RIGHT ABOVE
     sectionNumber: number;
@@ -84,6 +86,13 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
         });
     };
 
+    const handleUserResponseChange = (slideIdx, sectionIdx) => {
+        setSection({
+            ...section,
+            userResponse: { slideIdx, sectionIdx },
+        });
+    };
+
     const handleDeleteSection = () => {
         deleteSection();
         onClose();
@@ -130,6 +139,7 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                 <option value="multipleChoice">Multiple Choice</option>
                 <option value="multiSelect">Multi-Select</option>
                 <option value="shortAnswer">Short Answer</option>
+                <option value="userResponse">User Response</option>
             </Select>
             <Stack spacing={2}>
                 {type == "staticContent" ? (
@@ -158,6 +168,11 @@ export const ModuleSectionSelect: React.FC<ModuleSectionSelectProps> = (
                     <ShortAnswer
                         question={section.shortAnswer}
                         setQuestion={handleShortAnswerQuestionChange}
+                    />
+                ) : section.type == "userResponse" ? (
+                    <UserResponse
+                        slides={props.slides}
+                        setQuestion={handleUserResponseChange}
                     />
                 ) : (
                     <></>

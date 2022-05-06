@@ -9,6 +9,7 @@ import {
     MultipleChoicePreview,
     MultiSelectPreview,
     ShortAnswerPreview,
+    UserResponsePreview,
 } from "@components";
 import useSWR from "swr";
 import { Spinner, Container, useMediaQuery } from "@chakra-ui/react";
@@ -128,6 +129,14 @@ const Module: Page = () => {
                                 onChange={(value) =>
                                     changeUserInput(currentSlide, idx, value)
                                 }
+                            />
+                        );
+                    } else if (section.type === "userResponse") {
+                        sectionPreview = (
+                            <UserResponsePreview
+                                slides={data.slides}
+                                slideIdx={section.userResponse.slideIdx}
+                                sectionIdx={section.userResponse.sectionIdx}
                             />
                         );
                     }

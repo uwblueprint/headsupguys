@@ -56,6 +56,7 @@ const Editor = ({
                                         </Box>
                                     ) : null}
                                     <ModuleSectionSelect
+                                        slides={state.slides}
                                         section={section}
                                         sectionNumber={idx}
                                         setSection={(section) => {

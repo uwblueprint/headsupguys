@@ -109,8 +109,8 @@ const Module: Page = () => {
         });
     };
 
+    console.log("Posting user fields", data);
     const postUserFields = async (newUserInput = null) => {
-        console.log("Posting user fields", data);
         await axios({
             method: "POST",
             url: "/api/progress/post",
@@ -160,7 +160,6 @@ const Module: Page = () => {
         const unsaved = localStorage.getItem("unsaved");
         setMounted(true);
         if (user) {
-            console.log("AAA", newInput);
             newInput = await getUserFields().catch(() => {
                 // If there is no user input in the database look in local storage
                 // Set it if it exists otherwise set database entry to empty object
@@ -172,8 +171,9 @@ const Module: Page = () => {
                         newInput = JSON.parse(input);
                         setUserInput(newInput);
                     }
-                    postUserFields();
-                    patchUserFields(newInput);
+                    postUserFields().then(() => {
+                        patchUserFields(newInput);
+                    });
                 }
             });
             console.log("BBB", newInput);

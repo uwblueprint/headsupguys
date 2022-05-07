@@ -158,7 +158,7 @@ const Login: React.FC = () => {
                     <Link
                         href={
                             moduleId
-                                ? `/signup?moduleId=${moduleId}`
+                                ? `/signup?moduleId=${moduleId.moduleId}`
                                 : "/signup"
                         }
                         style={{ fontWeight: "bold" }}

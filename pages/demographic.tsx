@@ -161,7 +161,7 @@ const Demographic: React.FC = () => {
                         isFullWidth
                         onClick={() => {
                             moduleId
-                                ? router.push(`/module/${moduleId}`)
+                                ? router.push(`/module/${moduleId.moduleId}`)
                                 : router.push("/");
                         }}
                     >

@@ -55,7 +55,9 @@ const Login: React.FC = () => {
             setPasswordInvalid({ isInvalid: false, reason: "" });
             await Auth.signIn(email, password);
             console.log("Logged in", moduleId);
-            moduleId ? router.push(`/module/${moduleId}`) : router.push("/");
+            moduleId
+                ? router.push(`/module/${moduleId.moduleId}`)
+                : router.push("/");
         } catch (e) {
             setPasswordInvalid({
                 isInvalid: true,

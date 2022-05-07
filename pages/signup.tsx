@@ -387,7 +387,9 @@ const Signup: React.FC = () => {
             }
         } else if (currStage == stages.length - 2) {
             // Get Started stage
-            moduleId ? router.push(`/module/${moduleId}`) : router.push("/"); // temporary link back to protected page
+            moduleId || newModuleId
+                ? router.push(`/module/${moduleId ? moduleId : newModuleId}`)
+                : router.push("/"); // temporary link back to protected page
         } else if (currStage == stages.length - 1) {
             // Error state
             setCurrStage(2); // push back to password stage

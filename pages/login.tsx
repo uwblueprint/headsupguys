@@ -68,11 +68,13 @@ const Login: React.FC = () => {
         <>
             <AuthButton
                 text={"Login with Google"}
-                onClick={() =>
+                onClick={() => {
+                    console.log(moduleId);
                     Auth.federatedSignIn({
                         provider: CognitoHostedUIIdentityProvider.Google,
-                    })
-                }
+                        customState: String(moduleId.moduleId),
+                    });
+                }}
             ></AuthButton>
 
             <Text m={5}>OR</Text>
@@ -96,11 +98,13 @@ const Login: React.FC = () => {
         <>
             <AuthButton
                 text={"Login with Google"}
-                onClick={() =>
+                onClick={() => {
+                    console.log(moduleId);
                     Auth.federatedSignIn({
                         provider: CognitoHostedUIIdentityProvider.Google,
-                    })
-                }
+                        customState: String(moduleId.moduleId),
+                    });
+                }}
             ></AuthButton>
             <PasswordInput
                 fontFamily="Geogrotesque"

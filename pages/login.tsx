@@ -74,7 +74,7 @@ const Login: React.FC = () => {
                     console.log(moduleId);
                     Auth.federatedSignIn({
                         provider: CognitoHostedUIIdentityProvider.Google,
-                        customState: String(moduleId.moduleId),
+                        customState: moduleId ? String(moduleId.moduleId) : "",
                     });
                 }}
             ></AuthButton>
@@ -104,7 +104,7 @@ const Login: React.FC = () => {
                     console.log(moduleId);
                     Auth.federatedSignIn({
                         provider: CognitoHostedUIIdentityProvider.Google,
-                        customState: String(moduleId.moduleId),
+                        customState: moduleId ? String(moduleId.moduleId) : "",
                     });
                 }}
             ></AuthButton>

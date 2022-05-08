@@ -7,7 +7,7 @@ const get = async (
     req: NextApiRequest,
     res: NextApiResponse<ProgressInterface | ErrorResponse>,
 ): Promise<void> => {
-    const username = req.query.username as string; // TODO: is this ok
+    const username = req.query.username as string;
     const module = req.query.module as string;
 
     const progress = await Progress.findOne({

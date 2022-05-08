@@ -123,7 +123,6 @@ const Signup: React.FC = () => {
         // setModuleId(router.query["moduleId"] ? router.query : "");
 
         if (router.query["GoogleFlow"]) {
-            console.log(router.query["state"]);
             setNewModuleId(
                 customStateToId(String(router.query["state"]).split("-")[1]),
             ),
@@ -189,7 +188,6 @@ const Signup: React.FC = () => {
             <AuthButton
                 text={"Sign Up with Google"}
                 onClick={() => {
-                    console.log(moduleId);
                     Auth.federatedSignIn({
                         provider: CognitoHostedUIIdentityProvider.Google,
                         customState: moduleId,
@@ -382,8 +380,8 @@ const Signup: React.FC = () => {
                     setCanContinue(true);
                     setCurrStage(currStage + 1); // jump to next stage
                 }
-            } catch (e) {
-                // console.log("nothing");
+            } catch (err) {
+                console.log(err);
             }
         } else if (currStage == stages.length - 2) {
             // Get Started stage

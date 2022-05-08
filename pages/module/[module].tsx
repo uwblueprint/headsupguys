@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import Error from "next/error";
 import { Page } from "types/Page";
@@ -30,6 +30,20 @@ const fetcher = async (url) => {
     return response.data;
 };
 
+const useUnload = (fn) => {
+    const cb = useRef(fn); // init with fn, so that type checkers won't assume that current might be undefined
+    useEffect(() => {
+        cb.current = fn;
+    }, [fn]);
+
+    useEffect(() => {
+        const onUnload = (...args) => cb.current?.(...args);
+
+        window.addEventListener("beforeunload", onUnload);
+
+        return () => window.removeEventListener("beforeunload", onUnload);
+    }, []);
+};
 const Module: Page = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -40,14 +54,24 @@ const Module: Page = () => {
     const { data, error } = useSWR(`/api/module/${module}`, fetcher);
     const [large] = useMediaQuery("(min-width: 800px)");
     const [user, setUser] = useState<any | null>(null);
+
+    useUnload((e) => {
+        if (userInput != { recentSlide: 0 } && !user) {
+            onOpen();
+            saveUserInput();
+            e.preventDefault();
+            e.returnValue = "";
+        }
+    });
+
     useEffect(() => {
         const getCurrentUser = async () => {
             setUser(await Auth.currentAuthenticatedUser());
         };
         getCurrentUser().catch(console.error);
     }, []);
+
     const changeUserInput = (slide, section, value) => {
-        console.log("user Input", userInput, slide, section, value);
         setUserInput({
             ...userInput,
             [slide]: {
@@ -87,7 +111,6 @@ const Module: Page = () => {
                 module: data._id,
             },
         });
-        console.log("getUserFields", response.data.input);
         setUserInput(response.data.input);
         return response.data.input;
     };
@@ -109,7 +132,6 @@ const Module: Page = () => {
         });
     };
 
-    console.log("Posting user fields", data);
     const postUserFields = async (newUserInput = null) => {
         await axios({
             method: "POST",
@@ -164,8 +186,6 @@ const Module: Page = () => {
                 // If there is no user input in the database look in local storage
                 // Set it if it exists otherwise set database entry to empty object
                 if (unsaved) {
-                    console.log("BBB", unsaved);
-
                     const [id, input] = unsaved.split(/:(.*)/s); // Split by the first colon
                     if (id === data._id) {
                         newInput = JSON.parse(input);
@@ -174,9 +194,9 @@ const Module: Page = () => {
                     postUserFields().then(() => {
                         patchUserFields(newInput);
                     });
+                    localStorage.removeItem("unsaved");
                 }
             });
-            console.log("BBB", newInput);
         } else {
             if (unsaved) {
                 const [id, input] = unsaved.split(/:(.*)/s); // Split by the first colon
@@ -186,7 +206,6 @@ const Module: Page = () => {
                 }
             }
         }
-        console.log("newInput", newInput);
         setCurrentSlide(newInput ? newInput.recentSlide : 0);
         setFields();
     };

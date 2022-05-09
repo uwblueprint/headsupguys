@@ -108,7 +108,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                                     onClick={() => saveModule()}
                                     pointerEvents={preview ? "none" : "auto"}
                                 >
-                                    {"a"}
+                                    {saveButton}
                                 </Button>
                             )}
                         </>

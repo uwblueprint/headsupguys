@@ -10,7 +10,7 @@ import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 
 const Login: React.FC = () => {
     const router = useRouter();
-    const moduleId = router.query["moduleId"] ? router.query : "";
+    const moduleId = router.query["moduleId"] ? router.query["moduleId"] : "";
     const [currStage, setCurrStage] = useState(0);
     const [email, setEmail] = useState("");
     const [emailInvalid, setEmailInvalid] = useState({
@@ -55,9 +55,7 @@ const Login: React.FC = () => {
             setPasswordInvalid({ isInvalid: false, reason: "" });
             await Auth.signIn(email, password);
             console.log("Logged in", moduleId);
-            moduleId
-                ? router.push(`/module/${moduleId.moduleId}`)
-                : router.push("/");
+            moduleId ? router.push(`/module/${moduleId}`) : router.push("/");
         } catch (e) {
             setPasswordInvalid({
                 isInvalid: true,
@@ -74,7 +72,7 @@ const Login: React.FC = () => {
                     console.log(moduleId);
                     Auth.federatedSignIn({
                         provider: CognitoHostedUIIdentityProvider.Google,
-                        customState: moduleId ? String(moduleId.moduleId) : "",
+                        customState: moduleId ? String(moduleId) : "",
                     });
                 }}
             ></AuthButton>
@@ -104,7 +102,7 @@ const Login: React.FC = () => {
                     console.log(moduleId);
                     Auth.federatedSignIn({
                         provider: CognitoHostedUIIdentityProvider.Google,
-                        customState: moduleId ? String(moduleId.moduleId) : "",
+                        customState: moduleId ? String(moduleId) : "",
                     });
                 }}
             ></AuthButton>
@@ -164,7 +162,7 @@ const Login: React.FC = () => {
                     <Link
                         href={
                             moduleId
-                                ? `/signup?moduleId=${moduleId.moduleId}`
+                                ? `/signup?moduleId=${moduleId}`
                                 : "/signup"
                         }
                         style={{ fontWeight: "bold" }}

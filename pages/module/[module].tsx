@@ -57,10 +57,10 @@ const Module: Page = () => {
 
     useUnload((e) => {
         if (userInput != { recentSlide: 0 } && !user) {
-            onOpen();
-            saveUserInput();
             e.preventDefault();
             e.returnValue = "";
+            onOpen();
+            saveUserInput();
         }
     });
 

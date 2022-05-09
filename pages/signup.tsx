@@ -19,7 +19,7 @@ import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 
 const Signup: React.FC = () => {
     const router = useRouter();
-    const { moduleId } = router.query["moduleId"] ? router.query : "";
+    const moduleId = router.query["moduleId"] ? router.query["moduleId"] : "";
     const [newModuleId, setNewModuleId] = useState(moduleId);
     const [currStage, setCurrStage] = useState(0);
     const [email, setEmail] = useState("");
@@ -190,7 +190,7 @@ const Signup: React.FC = () => {
                 onClick={() => {
                     Auth.federatedSignIn({
                         provider: CognitoHostedUIIdentityProvider.Google,
-                        customState: moduleId,
+                        customState: String(moduleId),
                     });
                 }}
             ></AuthButton>

@@ -122,6 +122,7 @@ const CertificatePage: Page = () => {
                                         my="5px"
                                         mx="10px"
                                         onClick={handleDownload}
+                                        loading={!data}
                                     >
                                         Download
                                     </Button>

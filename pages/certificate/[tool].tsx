@@ -131,7 +131,11 @@ const CertificatePage: Page = () => {
                                         h="55px"
                                         my="5px"
                                         mx="10px"
-                                        onClick={handleDownload}
+                                        onClick={
+                                            user
+                                                ? handleDownload
+                                                : () => setShowLoginPrompt(true)
+                                        }
                                         loading={!data}
                                     >
                                         Download

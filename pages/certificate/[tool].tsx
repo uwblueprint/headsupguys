@@ -31,12 +31,12 @@ const CertificatePage: Page = () => {
             data?.title || "HeadsUpGuys Tool",
         );
     };
-    const handleShare = () => {
-        createCertificate(
-            user?.attributes?.name || "",
-            data?.title || "HeadsUpGuys Tool",
-        );
-    };
+    // const handleShare = () => {
+    //     createCertificate(
+    //         user?.attributes?.name || "",
+    //         data?.title || "HeadsUpGuys Tool",
+    //     );
+    // };
     const handleBack = () => {
         router.push("/");
     };
@@ -125,7 +125,7 @@ const CertificatePage: Page = () => {
                                     >
                                         Download
                                     </Button>
-                                    <Button
+                                    {/* <Button
                                         variant="moduleWhite"
                                         w="184px"
                                         h="55px"
@@ -134,7 +134,7 @@ const CertificatePage: Page = () => {
                                         onClick={handleShare}
                                     >
                                         Share
-                                    </Button>
+                                    </Button> */}
                                 </Flex>
                                 <Flex
                                     flexDirection={"row"}

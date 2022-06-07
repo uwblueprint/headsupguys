@@ -34,12 +34,12 @@ const CertificatePage: Page = () => {
             data?.title || "HeadsUpGuys Tool",
         );
     };
-    const handleShare = () => {
-        createCertificate(
-            user?.attributes?.name || "",
-            data?.title || "HeadsUpGuys Tool",
-        );
-    };
+    // const handleShare = () => {
+    //     createCertificate(
+    //         user?.attributes?.name || "",
+    //         data?.title || "HeadsUpGuys Tool",
+    //     );
+    // };
     const handleBack = () => {
         user ? router.push("/") : setShowLoginPrompt(true);
     };
@@ -132,10 +132,11 @@ const CertificatePage: Page = () => {
                                         my="5px"
                                         mx="10px"
                                         onClick={handleDownload}
+                                        loading={!data}
                                     >
                                         Download
                                     </Button>
-                                    <Button
+                                    {/* <Button
                                         variant="moduleWhite"
                                         w="184px"
                                         h="55px"
@@ -144,7 +145,7 @@ const CertificatePage: Page = () => {
                                         onClick={handleShare}
                                     >
                                         Share
-                                    </Button>
+                                    </Button> */}
                                 </Flex>
                                 <Flex
                                     flexDirection={"row"}

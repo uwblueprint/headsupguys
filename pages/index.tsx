@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
 import {
-    Box,
-    Text,
-    Heading,
-    Image,
-    AspectRatio,
     Alert,
+    AspectRatio,
+    Box,
+    Button,
     CloseButton,
     Container,
+    Flex,
     Grid,
     GridItem,
+    Heading,
+    Icon,
+    IconButton,
+    Image,
     Spinner,
+    Text,
+    useDisclosure,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -24,6 +29,9 @@ import { Modal, ToolLayout } from "@components";
 import { Page } from "types/Page";
 import { LoginPromptBar } from "@components/loginPromptBar";
 import { LoginPromptModal } from "@components/loginPromptModal";
+import { MdChevronRight } from "react-icons/md";
+
+import MoodTrackerModal from "src/pages/mood-tracker/MoodTrackerModal";
 
 const fetcher = async (url) => {
     const response = await axios({
@@ -196,8 +204,10 @@ const Tools: React.FC<{ variant: string }> = ({ variant }) => {
 };
 
 const Home: Page = () => {
+    const { isOpen, onClose, onOpen } = useDisclosure();
     const [showAlert, setShowAlert] = useState(true);
     const [user, setUser] = useState<any | null>(null);
+    const [showTrackMood, setShowTrackMood] = useState(true);
 
     const variant = useMediaQuery({ query: `(max-width: 925px)` })
         ? "mobile"
@@ -215,11 +225,17 @@ const Home: Page = () => {
     return (
         <>
             {!user && <LoginPromptBar />}
+            <MoodTrackerModal
+                isOpen={isOpen}
+                onClose={onClose}
+                setShowTrackMood={setShowTrackMood}
+                user={user}
+            />
             <Image src="/assets/HUG_Banner_1.png" w="100%" />
             {variant === "desktop" ? (
                 <>
                     <Container maxW="container.lg" py="50px">
-                        <Box h={50}>
+                        <Flex align="center" justify="space-between">
                             <Heading
                                 background="linear-gradient(180deg, rgba(255,255,255,0) 50%, #86FC2F 50%)"
                                 display="inline"
@@ -230,7 +246,22 @@ const Home: Page = () => {
                                     ? `WELCOME TO YOUR TOOLKIT, ${user.attributes.name}`
                                     : `WELCOME TO YOUR TOOLKIT`}
                             </Heading>
-                        </Box>
+                            {user && (
+                                <IconButton
+                                    aria-label="Track mood"
+                                    icon={
+                                        <Image
+                                            alt="Track mood"
+                                            src="/icons/track-mood.svg"
+                                            height="24px"
+                                            width="24px"
+                                        />
+                                    }
+                                    onClick={onOpen}
+                                    variant="ghost"
+                                />
+                            )}
+                        </Flex>
                         <Grid
                             py="50px"
                             templateColumns="repeat(6, 1fr)"
@@ -262,6 +293,34 @@ const Home: Page = () => {
                                 </AspectRatio>
                             </GridItem>
                         </Grid>
+                        {user && showTrackMood && (
+                            <Box
+                                backgroundColor="background.dark"
+                                padding="30px"
+                            >
+                                <Text color="white">
+                                    How are you today? Give your mind a HUG -
+                                    start tracking your mood today!
+                                </Text>
+                                <Button
+                                    backgroundColor="brand.green"
+                                    height="48px"
+                                    marginTop="20px"
+                                    onClick={onOpen}
+                                    padding="10px"
+                                    width="300px"
+                                >
+                                    <Text>Track Mood</Text>
+                                    <Box position="absolute" right="10px">
+                                        <Icon
+                                            as={MdChevronRight}
+                                            height={6}
+                                            width={6}
+                                        />
+                                    </Box>
+                                </Button>
+                            </Box>
+                        )}
                         <br />
                         <Box p={4}>
                             <Heading
@@ -279,8 +338,12 @@ const Home: Page = () => {
                 </>
             ) : (
                 <>
-                    <Box p={4}>
-                        <Box>
+                    <Box>
+                        <Flex
+                            align="center"
+                            justify="space-between"
+                            padding="20px"
+                        >
                             <Heading
                                 background="linear-gradient(180deg, rgba(255,255,255,0) 50%, #86FC2F 50%)"
                                 display="inline"
@@ -291,9 +354,52 @@ const Home: Page = () => {
                                     ? `WELCOME TO YOUR TOOLKIT, ${user.attributes.name}`
                                     : `WELCOME TO YOUR TOOLKIT`}
                             </Heading>
-                        </Box>
+                            {user && (
+                                <IconButton
+                                    aria-label="Track mood"
+                                    icon={
+                                        <Image
+                                            alt="Track mood"
+                                            src="/icons/track-mood.svg"
+                                            height="24px"
+                                            width="24px"
+                                        />
+                                    }
+                                    onClick={onOpen}
+                                    variant="ghost"
+                                />
+                            )}
+                        </Flex>
+                        {user && showTrackMood && (
+                            <Box
+                                backgroundColor="background.dark"
+                                padding="32px 18px"
+                            >
+                                <Text color="white">
+                                    How are you today? Give your mind a HUG -
+                                    start tracking your mood today!
+                                </Text>
+                                <Button
+                                    backgroundColor="brand.green"
+                                    height="48px"
+                                    marginTop="18px"
+                                    onClick={onOpen}
+                                    padding="10px"
+                                    width="100%"
+                                >
+                                    <Text>Track Mood</Text>
+                                    <Box position="absolute" right="10px">
+                                        <Icon
+                                            as={MdChevronRight}
+                                            height={6}
+                                            width={6}
+                                        />
+                                    </Box>
+                                </Button>
+                            </Box>
+                        )}
                         <br />
-                        <Box>
+                        <Box p={4}>
                             <Text>
                                 Lorem ipsum dolor sit amet, consectetur
                                 adipiscing elit. Praesent laoreet feugiat velit,

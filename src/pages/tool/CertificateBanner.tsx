@@ -43,7 +43,7 @@ const CertificateBanner = ({
                         <Link
                             color="brand.lime"
                             fontSize="sm"
-                            href={`/certificate?id=${id}`}
+                            href={`/certificate/${id}`}
                         >
                             here
                         </Link>

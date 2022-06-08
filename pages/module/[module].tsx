@@ -11,12 +11,16 @@ import {
     ShortAnswerPreview,
 } from "@components";
 import useSWR from "swr";
+import { ToolLayout } from "@components";
+
 import { Spinner, Container, useMediaQuery } from "@chakra-ui/react";
+import { ModuleHeader } from "@components/moduleHeader";
+
 const fetcher = async (url) => {
     const response = await axios({
         method: "GET",
         url,
-        params: { includeSlide: true },
+        params: { includeSlide: true, includeTool: true },
     });
     return response.data;
 };
@@ -40,6 +44,8 @@ const Module: Page = () => {
     function goNextSlide() {
         if (currentSlide < data.slides.length - 1) {
             setCurrentSlide(currentSlide + 1);
+        } else {
+            router.push(`/certificate/${data.toolID._id}`);
         }
     }
 
@@ -66,86 +72,124 @@ const Module: Page = () => {
         );
     } else {
         return (
-            <ModulePreview
-                preview={false}
-                previous={data.slides[currentSlide].buttons.previous}
-                next={data.slides[currentSlide].buttons.next}
-                save={data.slides[currentSlide].buttons.save}
-                print={data.slides[currentSlide].buttons.print}
-                progressValue={((currentSlide + 1) / data.slides.length) * 100}
-                variant={large ? "desktop" : "mobile"}
-                goNextSlide={() => goNextSlide()}
-                goPrevSlide={() => goPrevSlide()}
-            >
-                {data.slides[currentSlide].sections.map((section, idx) => {
-                    const paddingType = section?.padding.type || "%";
-                    let sectionPreview;
-                    if (section.type === "staticContent") {
-                        sectionPreview = (
-                            <MarkdownRenderer>
-                                {section.markdown}
-                            </MarkdownRenderer>
-                        );
-                    } else if (section.type === "multipleChoice") {
-                        sectionPreview = (
-                            <MultipleChoicePreview
-                                preview={false}
-                                question={section.multipleChoice.question}
-                                options={section.multipleChoice.options}
-                                variant={large ? "desktop" : "mobile"}
-                                columns={section.properties.columns}
-                                onChange={(value) =>
-                                    changeUserInput(currentSlide, idx, value)
-                                }
-                                userInput={
-                                    userInput[currentSlide]?.[idx]?.value
-                                }
-                            />
-                        );
-                    } else if (section.type === "multiSelect") {
-                        sectionPreview = (
-                            <MultiSelectPreview
-                                preview={false}
-                                question={section.multiSelect.question}
-                                options={section.multiSelect.options}
-                                variant={large ? "desktop" : "mobile"}
-                                columns={section.properties.columns}
-                                userInput={userInput[currentSlide]?.[idx]}
-                                onChange={(value) =>
-                                    changeUserInput(currentSlide, idx, value)
-                                }
-                            />
-                        );
-                    } else if (section.type === "shortAnswer") {
-                        sectionPreview = (
-                            <ShortAnswerPreview
-                                key={idx}
-                                preview={false}
-                                question={section.shortAnswer}
-                                userInput={
-                                    userInput[currentSlide]?.[idx]?.value
-                                }
-                                onChange={(value) =>
-                                    changeUserInput(currentSlide, idx, value)
-                                }
-                            />
-                        );
+            <>
+                <ModulePreview
+                    preview={false}
+                    previous={data.slides[currentSlide].buttons.previous}
+                    next={data.slides[currentSlide].buttons.next}
+                    nextText={
+                        currentSlide == data.slides.length - 1
+                            ? "Finish"
+                            : "Next"
                     }
-                    return (
-                        <Container
-                            key={idx}
-                            maxWidth="100%"
-                            paddingTop={`${section?.padding.top}${paddingType}`}
-                            paddingRight={`${section?.padding.right}${paddingType}`}
-                            paddingBottom={`${section?.padding.bottom}${paddingType}`}
-                            paddingLeft={`${section?.padding.left}${paddingType}`}
-                            children={sectionPreview}
-                        ></Container>
-                    );
-                }, "")}
-            </ModulePreview>
+                    save={data.slides[currentSlide].buttons.save}
+                    print={data.slides[currentSlide].buttons.print}
+                    progressValue={
+                        ((currentSlide + 1) / data.slides.length) * 100
+                    }
+                    variant={large ? "desktop" : "mobile"}
+                    goNextSlide={() => goNextSlide()}
+                    goPrevSlide={() => goPrevSlide()}
+                    header={
+                        <ModuleHeader
+                            links={[
+                                {
+                                    name: "Toolkit",
+                                    url: `/`,
+                                },
+                                {
+                                    name: data.toolID.title,
+                                    url: `/tool/${data.toolID._id}`,
+                                },
+                            ]}
+                            overrideClick={undefined}
+                        />
+                    }
+                >
+                    {data.slides[currentSlide].sections.map((section, idx) => {
+                        const paddingType = section?.padding.type || "%";
+                        let sectionPreview;
+                        if (section.type === "staticContent") {
+                            sectionPreview = (
+                                <MarkdownRenderer>
+                                    {section.markdown}
+                                </MarkdownRenderer>
+                            );
+                        } else if (section.type === "multipleChoice") {
+                            sectionPreview = (
+                                <MultipleChoicePreview
+                                    preview={false}
+                                    question={section.multipleChoice.question}
+                                    options={section.multipleChoice.options}
+                                    variant={large ? "desktop" : "mobile"}
+                                    columns={section.properties.columns}
+                                    onChange={(value) =>
+                                        changeUserInput(
+                                            currentSlide,
+                                            idx,
+                                            value,
+                                        )
+                                    }
+                                    userInput={
+                                        userInput[currentSlide]?.[idx]?.value
+                                    }
+                                />
+                            );
+                        } else if (section.type === "multiSelect") {
+                            sectionPreview = (
+                                <MultiSelectPreview
+                                    preview={false}
+                                    question={section.multiSelect.question}
+                                    options={section.multiSelect.options}
+                                    variant={large ? "desktop" : "mobile"}
+                                    columns={section.properties.columns}
+                                    userInput={userInput[currentSlide]?.[idx]}
+                                    onChange={(value) =>
+                                        changeUserInput(
+                                            currentSlide,
+                                            idx,
+                                            value,
+                                        )
+                                    }
+                                />
+                            );
+                        } else if (section.type === "shortAnswer") {
+                            sectionPreview = (
+                                <ShortAnswerPreview
+                                    key={idx}
+                                    preview={false}
+                                    question={section.shortAnswer}
+                                    userInput={
+                                        userInput[currentSlide]?.[idx]?.value
+                                    }
+                                    onChange={(value) =>
+                                        changeUserInput(
+                                            currentSlide,
+                                            idx,
+                                            value,
+                                        )
+                                    }
+                                />
+                            );
+                        }
+                        return (
+                            <Container
+                                key={idx}
+                                maxWidth="100%"
+                                paddingTop={`${section?.padding.top}${paddingType}`}
+                                paddingRight={`${section?.padding.right}${paddingType}`}
+                                paddingBottom={`${section?.padding.bottom}${paddingType}`}
+                                paddingLeft={`${section?.padding.left}${paddingType}`}
+                                children={sectionPreview}
+                            ></Container>
+                        );
+                    }, "")}
+                </ModulePreview>
+            </>
         );
     }
 };
+
+Module.layout = ToolLayout;
 
 export default Module;

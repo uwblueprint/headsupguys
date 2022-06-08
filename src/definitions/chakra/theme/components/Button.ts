@@ -35,12 +35,23 @@ const Button = {
             color: "black",
             borderRadius: 0,
             textTransform: "uppercase",
+            fontFamily: "Inter",
         },
         moduleBlack: {
             bg: "black",
             color: "white",
             borderRadius: 0,
             textTransform: "uppercase",
+            fontFamily: "Inter",
+        },
+        moduleWhite: {
+            bg: "white",
+            color: "black",
+            borderRadius: 0,
+            textTransform: "uppercase",
+            borderColor: "gray.300",
+            borderWidth: "1px",
+            fontFamily: "Inter",
         },
     },
     defaultProps: {

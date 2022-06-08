@@ -1,12 +1,23 @@
 import React from "react";
 import { Box, ChakraProvider, Flex, IconButton, Image } from "@chakra-ui/react";
 import { MdMenu } from "react-icons/md";
+import { useRouter } from "next/router";
 
 import { defaultTheme } from "@definitions/chakra/theme";
 import { getIsDesktop } from "src/utils/media/mediaHelpers";
 
 export const ToolLayout: React.FC = ({ children }) => {
     const [isDesktop] = getIsDesktop();
+    const router = useRouter();
+
+    const Logo = () => (
+        <Image
+            onClick={() => router.push("/")}
+            src="/assets/hug-logo.png"
+            cursor={"pointer"}
+        ></Image>
+    );
+
     return (
         <ChakraProvider theme={defaultTheme}>
             {isDesktop ? (
@@ -18,7 +29,7 @@ export const ToolLayout: React.FC = ({ children }) => {
                     width="100%"
                     zIndex="2"
                 >
-                    <Image src="/assets/hug-logo.png"></Image>
+                    <Logo />
                 </Flex>
             ) : (
                 <Flex
@@ -30,7 +41,7 @@ export const ToolLayout: React.FC = ({ children }) => {
                     width="100%"
                     zIndex="2"
                 >
-                    <Image src="/assets/hug-logo.png"></Image>
+                    <Logo />
                     <Flex align="center">
                         <IconButton
                             aria-label="Open menu"

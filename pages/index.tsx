@@ -25,6 +25,10 @@ import { UserToolCard } from "@components/userToolCard";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { useMediaQuery } from "react-responsive";
+import { Modal, ToolLayout } from "@components";
+import { Page } from "types/Page";
+import { LoginPromptBar } from "@components/loginPromptBar";
+import { LoginPromptModal } from "@components/loginPromptModal";
 import { MdChevronRight } from "react-icons/md";
 
 import MoodTrackerModal from "src/pages/mood-tracker/MoodTrackerModal";
@@ -199,7 +203,7 @@ const Tools: React.FC<{ variant: string }> = ({ variant }) => {
     );
 };
 
-const Home: React.FC = () => {
+const Home: Page = () => {
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [showAlert, setShowAlert] = useState(true);
     const [user, setUser] = useState<any | null>(null);
@@ -220,6 +224,7 @@ const Home: React.FC = () => {
 
     return (
         <>
+            {!user && <LoginPromptBar />}
             <MoodTrackerModal
                 isOpen={isOpen}
                 onClose={onClose}
@@ -444,4 +449,7 @@ const Home: React.FC = () => {
         </>
     );
 };
+
+Home.layout = ToolLayout;
+
 export default Home;

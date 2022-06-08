@@ -20,12 +20,16 @@ import {
     useMediaQuery,
     useDisclosure,
 } from "@chakra-ui/react";
+import { ToolLayout } from "@components";
+
+import { ModuleHeader } from "@components/moduleHeader";
+import { LoginPromptModal } from "@components/loginPromptModal";
 
 const fetcher = async (url) => {
     const response = await axios({
         method: "GET",
         url,
-        params: { includeSlide: true },
+        params: { includeSlide: true, includeTool: true },
     });
     return response.data;
 };
@@ -48,12 +52,12 @@ const Module: Page = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [currentSlide, setCurrentSlide] = useState(0);
     const [userInput, setUserInput] = useState({ recentSlide: 0 });
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
     const router = useRouter();
     const { module } = router.query;
     const [mounted, setMounted] = useState(false);
     const { data, error } = useSWR(`/api/module/${module}`, fetcher);
     const [large] = useMediaQuery("(min-width: 800px)");
-    const [user, setUser] = useState<any | null>(null);
 
     useUnload((e) => {
         if (userInput != { recentSlide: 0 } && !user) {
@@ -64,10 +68,15 @@ const Module: Page = () => {
         }
     });
 
+
+    const [user, setUser] = useState<any | null>(null);
+
     useEffect(() => {
         const getCurrentUser = async () => {
-            setUser(await Auth.currentAuthenticatedUser());
+            const currentUser = await Auth.currentAuthenticatedUser();
+            setUser(currentUser);
         };
+
         getCurrentUser().catch(console.error);
     }, []);
 
@@ -165,6 +174,8 @@ const Module: Page = () => {
     const goNextSlide = async () => {
         if (currentSlide < data.slides.length - 1) {
             setCurrentSlide(currentSlide + 1);
+        } else {
+            router.push(`/certificate/${data.toolID._id}`);
         }
         userInput.recentSlide = currentSlide + 1;
         saveUserInput();
@@ -243,12 +254,20 @@ const Module: Page = () => {
                             query: { moduleId: data._id },
                         });
                     }}
+                <LoginPromptModal
+                    isOpen={showLoginPrompt}
+                    onCancel={() => setShowLoginPrompt(false)}
                 />
                 <ModulePreview
                     preview={false}
                     previous={data.slides[currentSlide].buttons.previous}
                     next={data.slides[currentSlide].buttons.next}
                     save={user ? false : data.slides[currentSlide].buttons.save}
+                    nextText={
+                        currentSlide == data.slides.length - 1
+                            ? "Finish"
+                            : "Next"
+                    }
                     print={data.slides[currentSlide].buttons.print}
                     progressValue={
                         ((currentSlide + 1) / data.slides.length) * 100
@@ -260,6 +279,25 @@ const Module: Page = () => {
                         onOpen();
                         saveUserInput();
                     }}
+                    header={
+                        <ModuleHeader
+                            links={[
+                                {
+                                    name: "Toolkit",
+                                    url: `/`,
+                                },
+                                {
+                                    name: data.toolID.title,
+                                    url: `/tool/${data.toolID._id}`,
+                                },
+                            ]}
+                            overrideClick={
+                                user
+                                    ? undefined
+                                    : () => setShowLoginPrompt(true)
+                            }
+                        />
+                    }
                 >
                     {data.slides[currentSlide].sections.map((section, idx) => {
                         const paddingType = section?.padding.type || "%";
@@ -340,5 +378,7 @@ const Module: Page = () => {
         );
     }
 };
+
+Module.layout = ToolLayout;
 
 export default Module;

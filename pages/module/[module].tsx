@@ -68,7 +68,6 @@ const Module: Page = () => {
         }
     });
 
-
     const [user, setUser] = useState<any | null>(null);
 
     useEffect(() => {
@@ -254,6 +253,7 @@ const Module: Page = () => {
                             query: { moduleId: data._id },
                         });
                     }}
+                />
                 <LoginPromptModal
                     isOpen={showLoginPrompt}
                     onCancel={() => setShowLoginPrompt(false)}

@@ -8,6 +8,7 @@ import { ModuleHeader } from "@components/moduleHeader";
 import { createCertificate } from "src/utils/certificates";
 import { Auth } from "aws-amplify";
 import { useState, useEffect } from "react";
+import { LoginPromptModal } from "@components/loginPromptModal";
 
 const fetcher = async (url: string) => {
     const response = await axios({
@@ -22,6 +23,8 @@ const CertificatePage: Page = () => {
     const router = useRouter();
     const { tool } = router.query;
     const [user, setUser] = useState<any | null>(null);
+
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
     const fetchURL = tool ? `/api/tool/${tool}` : null;
     const { data, error } = useSWR(() => fetchURL, fetcher);
 
@@ -38,7 +41,7 @@ const CertificatePage: Page = () => {
     //     );
     // };
     const handleBack = () => {
-        router.push("/");
+        user ? router.push("/") : setShowLoginPrompt(true);
     };
 
     useEffect(() => {
@@ -52,6 +55,10 @@ const CertificatePage: Page = () => {
     return (
         <Flex justifyContent="center">
             <Box mx={"15px"} maxW={"1500px"} w={"100%"}>
+                <LoginPromptModal
+                    isOpen={showLoginPrompt}
+                    onCancel={() => setShowLoginPrompt(false)}
+                />
                 <ModuleHeader
                     links={[
                         {
@@ -63,6 +70,9 @@ const CertificatePage: Page = () => {
                             url: `/tool/${data?._id || ""}`,
                         },
                     ]}
+                    overrideClick={
+                        user ? undefined : () => setShowLoginPrompt(true)
+                    }
                 />
                 <Flex flexDirection={"row"} justifyContent={"center"}>
                     <Box
@@ -121,7 +131,11 @@ const CertificatePage: Page = () => {
                                         h="55px"
                                         my="5px"
                                         mx="10px"
-                                        onClick={handleDownload}
+                                        onClick={
+                                            user
+                                                ? handleDownload
+                                                : () => setShowLoginPrompt(true)
+                                        }
                                         loading={!data}
                                     >
                                         Download

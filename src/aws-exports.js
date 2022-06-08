@@ -16,8 +16,8 @@ const awsmobile = {
             "profile",
             "aws.cognito.signin.user.admin"
         ],
-        "redirectSignIn": "http://localhost:3000/signup?GoogleFlow=true/",
-        "redirectSignOut": "http://localhost:3000/",
+        "redirectSignIn": "https://headsupguys.vercel.app/signup?GoogleFlow=true/",
+        "redirectSignOut": "https://headsupguys.vercel.app/",
         "responseType": "code"
     },
     "federationTarget": "COGNITO_USER_AND_IDENTITY_POOLS",

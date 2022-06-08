@@ -15,6 +15,7 @@ export interface ModulePreviewProps {
     variant: string;
     goNextSlide?: () => void;
     goPrevSlide?: () => void;
+    saveModule?: () => void;
     header?: React.ReactNode;
 }
 
@@ -33,6 +34,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
         printText,
         goNextSlide,
         goPrevSlide,
+        saveModule,
         header,
     } = props;
 
@@ -81,6 +83,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                                 w="184px"
                                 h="55px"
                                 pointerEvents={preview ? "none" : "auto"}
+                                onClick={() => saveModule()}
                             >
                                 {saveButton}
                             </Button>
@@ -104,6 +107,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                                     w="100%"
                                     h="55px"
                                     my={2}
+                                    onClick={() => saveModule()}
                                     pointerEvents={preview ? "none" : "auto"}
                                 >
                                     {saveButton}
@@ -181,6 +185,7 @@ export const ModulePreview: React.FC<ModulePreviewProps> = (props) => {
                                 w="184px"
                                 h="55px"
                                 mx={2}
+                                onClick={() => saveModule()}
                                 pointerEvents={preview ? "none" : "auto"}
                             >
                                 {saveButton}

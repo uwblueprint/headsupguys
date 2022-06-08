@@ -202,6 +202,7 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
                 {leftColumnOptions.map(({ option }, idx) => (
                     <Flex p={1} key={idx}>
                         <Checkbox
+                            value={userInput?.[idx]}
                             mr={2}
                             isReadOnly={preview}
                             pointerEvents={preview ? "none" : "auto"}
@@ -214,6 +215,7 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
                 {rightColumnOptions.map(({ option }, idx) => (
                     <Flex p={1} key={idx}>
                         <Checkbox
+                            value={userInput?.[idx]}
                             mr={2}
                             isReadOnly={preview}
                             pointerEvents={preview ? "none" : "auto"}
@@ -229,6 +231,7 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
                 <Flex p={1} key={idx}>
                     <Checkbox
                         value={userInput?.[idx]}
+                        isChecked={userInput?.[idx] != undefined}
                         mr={2}
                         isReadOnly={preview}
                         pointerEvents={preview ? "none" : "auto"}
@@ -240,7 +243,7 @@ export const MultiSelectPreview: React.FC<MultiSelectPreviewProps> = ({
                                         userInput[idx]
                                         ? {
                                               ...userInput,
-                                              [idx]: false,
+                                              [idx]: undefined,
                                           }
                                         : {
                                               ...userInput,

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import {
     Input,
@@ -26,7 +27,9 @@ const Demographic: React.FC = () => {
     const [completed, setCompleted] = useState(false);
     const [inputNeeded, setInputNeeded] = useState(false);
     // Text input
-    const [textIput, setTextInput] = useState("");
+    const [textInput, setTextInput] = useState("");
+    const router = useRouter();
+    const moduleId = router.query["moduleId"] ? router.query : "";
 
     // Set questions to be the demographicQuestions array
     useEffect(() => {
@@ -45,8 +48,8 @@ const Demographic: React.FC = () => {
 
     const nextPage = () => {
         // Update answers if there's a textInput
-        if (textIput != "") {
-            updateAnswers(textIput);
+        if (textInput != "") {
+            updateAnswers(textInput);
             setTextInput("");
         }
         setInputNeeded(false);
@@ -125,7 +128,7 @@ const Demographic: React.FC = () => {
                         <Button
                             disabled={buttonDisabled}
                             colorScheme="blue"
-                            marginTop="20px"
+                            my="20px"
                             onClick={nextPage}
                             isFullWidth
                         >
@@ -152,7 +155,16 @@ const Demographic: React.FC = () => {
                         You're all set
                     </Heading>
                     <Text size="xl">Thank you for completing the survey!</Text>
-                    <Button colorScheme="blue" marginTop="20px" isFullWidth>
+                    <Button
+                        colorScheme="blue"
+                        marginTop="20px"
+                        isFullWidth
+                        onClick={() => {
+                            moduleId
+                                ? router.push(`/module/${moduleId.moduleId}`)
+                                : router.push("/");
+                        }}
+                    >
                         Get Started
                     </Button>
                     <Button
@@ -160,6 +172,12 @@ const Demographic: React.FC = () => {
                         marginTop="20px"
                         variant="outline"
                         isFullWidth
+                        onClick={() => {
+                            setQuestionIndex(0);
+                            setCompleted(false);
+                            setInputNeeded(false);
+                            setButtonDisabled(true);
+                        }}
                     >
                         Change Answers
                     </Button>

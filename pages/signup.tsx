@@ -19,6 +19,8 @@ import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 
 const Signup: React.FC = () => {
     const router = useRouter();
+    const moduleId = router.query["moduleId"] ? router.query["moduleId"] : "";
+    const [newModuleId, setNewModuleId] = useState(moduleId);
     const [currStage, setCurrStage] = useState(0);
     const [email, setEmail] = useState("");
     const [emailInvalid, setEmailInvalid] = useState({
@@ -39,14 +41,92 @@ const Signup: React.FC = () => {
     const [canContinue, setCanContinue] = useState(false);
     const [fromGoogle, setFromGoogle] = useState(false);
 
+    const customStateToId = (state) => {
+        const conversionMap = {
+            "41": "A",
+            "42": "B",
+            "43": "C",
+            "44": "D",
+            "45": "E",
+            "46": "F",
+            "47": "G",
+            "48": "H",
+            "49": "I",
+            "4a": "J",
+            "4b": "K",
+            "4c": "L",
+            "4d": "M",
+            "4e": "N",
+            "4f": "O",
+            "50": "P",
+            "51": "Q",
+            "52": "R",
+            "53": "S",
+            "54": "T",
+            "55": "U",
+            "56": "V",
+            "57": "W",
+            "58": "X",
+            "59": "Y",
+            "5a": "Z",
+            "61": "a",
+            "62": "b",
+            "63": "c",
+            "64": "d",
+            "65": "e",
+            "66": "f",
+            "67": "g",
+            "68": "h",
+            "69": "i",
+            "6a": "j",
+            "6b": "k",
+            "6c": "l",
+            "6d": "m",
+            "6e": "n",
+            "6f": "o",
+            "70": "p",
+            "71": "q",
+            "72": "r",
+            "73": "s",
+            "74": "t",
+            "75": "u",
+            "76": "v",
+            "77": "w",
+            "78": "x",
+            "79": "y",
+            "7a": "z",
+            "30": "0",
+            "31": "1",
+            "32": "2",
+            "33": "3",
+            "34": "4",
+            "35": "5",
+            "36": "6",
+            "37": "7",
+            "38": "8",
+            "39": "9",
+        };
+        let id = "";
+        if (state) {
+            for (let i = 0; i < state.length; i += 2) {
+                id += conversionMap[state.substring(i, i + 2)];
+            }
+        }
+        return id;
+    };
     useEffect(() => {
         // Go directly to the TOS if coming from the google flow
         if (!router.isReady) {
             // router not ready yet
             // TODO: add spinner
         }
+        // setModuleId(router.query["moduleId"] ? router.query : "");
+
         if (router.query["GoogleFlow"]) {
-            setFromGoogle(true);
+            setNewModuleId(
+                customStateToId(String(router.query["state"]).split("-")[1]),
+            ),
+                setFromGoogle(true);
             setCurrStage(3);
         } else {
             setFromGoogle(false);
@@ -107,11 +187,12 @@ const Signup: React.FC = () => {
         <>
             <AuthButton
                 text={"Sign Up with Google"}
-                onClick={() =>
+                onClick={() => {
                     Auth.federatedSignIn({
                         provider: CognitoHostedUIIdentityProvider.Google,
-                    })
-                }
+                        customState: String(moduleId),
+                    });
+                }}
             ></AuthButton>
             <Text m={5}>OR</Text>
             <TextInput
@@ -287,17 +368,26 @@ const Signup: React.FC = () => {
                     }
                 }
                 if (termsAgreement.participateSurvey) {
-                    router.push("/demographic"); // jump to demographic survey
+                    moduleId || newModuleId
+                        ? router.push({
+                              pathname: "/demographic",
+                              query: {
+                                  moduleId: moduleId ? moduleId : newModuleId,
+                              },
+                          })
+                        : router.push("/demographic"); // jump to demographic survey
                 } else {
                     setCanContinue(true);
                     setCurrStage(currStage + 1); // jump to next stage
                 }
-            } catch (e) {
-                // console.log("nothing");
+            } catch (err) {
+                console.log(err);
             }
         } else if (currStage == stages.length - 2) {
             // Get Started stage
-            router.push("/"); // temporary link back to protected page
+            moduleId || newModuleId
+                ? router.push(`/module/${moduleId ? moduleId : newModuleId}`)
+                : router.push("/"); // temporary link back to protected page
         } else if (currStage == stages.length - 1) {
             // Error state
             setCurrStage(2); // push back to password stage
